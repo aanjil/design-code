@@ -1,3 +1,4 @@
+import { CaretLeft } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 
 /**
@@ -31,13 +32,26 @@ export function PageLayout({ children }: { children: React.ReactNode }) {
 export function PageHeader({
   title,
   actions,
+  onBack,
 }: {
   title: string
   actions?: React.ReactNode
+  /** Renders a back chevron before the title (detail/form pages). */
+  onBack?: () => void
 }) {
   return (
     <div className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-border-highlight py-[11px] pr-4 pl-1">
       <div className="flex min-w-0 items-center px-3 py-1">
+        {onBack && (
+          <button
+            type="button"
+            aria-label="Back"
+            onClick={onBack}
+            className="mr-1 flex size-7 shrink-0 items-center justify-center rounded-lg text-text-primary transition-colors hover:bg-background-highlight"
+          >
+            <CaretLeft className="size-4" />
+          </button>
+        )}
         <h1 className="truncate px-1 text-label-md">{title}</h1>
       </div>
       {actions && <div className="flex shrink-0 items-center gap-3">{actions}</div>}

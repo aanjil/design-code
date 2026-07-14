@@ -60,6 +60,26 @@ export function AppNav() {
             className="data-vertical:h-5 data-vertical:self-center"
           />
 
+          <Link
+            to="/"
+            activeOptions={{ exact: true }}
+            className="flex h-8 items-center rounded-full px-3 text-label-sm text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+            activeProps={{
+              className: 'bg-background-highlight text-text-primary',
+            }}
+          >
+            Experiments
+          </Link>
+          <Link
+            to="/docs"
+            className="flex h-8 items-center rounded-full px-3 text-label-sm text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+            activeProps={{
+              className: 'bg-background-highlight text-text-primary',
+            }}
+          >
+            Docs
+          </Link>
+
           <DropdownMenu>
             <DropdownMenuTrigger
               render={<Button variant="outline" size="sm" className="min-w-0" />}

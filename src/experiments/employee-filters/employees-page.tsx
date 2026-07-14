@@ -15,6 +15,7 @@ import {
   Export,
   FunnelSimple,
   Globe,
+  MagnifyingGlass,
   MapPin,
   UsersThree,
 } from '@phosphor-icons/react'
@@ -187,6 +188,7 @@ export function EmployeesPage({
   initialDisplay?: DisplayConfig
 }) {
   const [search, setSearch] = useState('')
+  const [searchExpanded, setSearchExpanded] = useState(false)
   const [conditions, setConditions] =
     useState<Array<FilterCondition>>(initialConditions)
   const [display, setDisplay] = useState<DisplayConfig>(initialDisplay)
@@ -315,64 +317,115 @@ export function EmployeesPage({
             }
           />
           <PageBody className="flex flex-col gap-3">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <SearchField
-                  value={search}
-                  onChange={(value) => {
-                    setSearch(value)
-                    setPage(1)
-                  }}
-                  placeholder="Search in employee"
-                />
-                <ToolbarIconButton label="Refresh">
-                  <ArrowsCounterClockwise className="size-[18px]" />
-                </ToolbarIconButton>
-                {savedViews.length > 0 && (
-                  <DropdownMenu>
-                    <DropdownMenuTrigger
-                      render={<Button variant="ghost" className="text-text-muted" />}
+            {/* Toolbar — a container query, not a media query: windows on the
+                canvas resize independent of the viewport. Button labels drop
+                below 48rem; search collapses to an icon below 36rem. */}
+            <div className="@container/toolbar">
+              {searchExpanded ? (
+                <div className="flex items-center gap-2">
+                  <SearchField
+                    value={search}
+                    onChange={(value) => {
+                      setSearch(value)
+                      setPage(1)
+                    }}
+                    placeholder="Search in employee"
+                    className="w-auto flex-1"
+                    autoFocus
+                    showKbd={false}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Escape') setSearchExpanded(false)
+                    }}
+                  />
+                  <Button
+                    variant="ghost"
+                    onClick={() => setSearchExpanded(false)}
+                  >
+                    <span className="px-1">Cancel</span>
+                  </Button>
+                </div>
+              ) : (
+                <div className="flex items-center justify-between gap-3">
+                  <div className="flex min-w-0 items-center gap-3">
+                    <SearchField
+                      value={search}
+                      onChange={(value) => {
+                        setSearch(value)
+                        setPage(1)
+                      }}
+                      placeholder="Search in employee"
+                      className="@max-xl/toolbar:hidden"
+                    />
+                    <ToolbarIconButton
+                      label="Search"
+                      className="relative hidden @max-xl/toolbar:flex"
+                      onClick={() => setSearchExpanded(true)}
                     >
-                      <BookmarkSimple />
-                      <span className="px-1">Views · {savedViews.length}</span>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent align="start" className="w-80 bg-surface-2">
-                      {savedViews.map((view, i) => (
-                        <DropdownMenuItem
-                          key={i}
-                          onClick={() => updateConditions(view.conditions)}
+                      <MagnifyingGlass className="size-4.5" />
+                      {search.trim() !== '' && (
+                        <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-brand-primary" />
+                      )}
+                    </ToolbarIconButton>
+                    <ToolbarIconButton label="Refresh">
+                      <ArrowsCounterClockwise className="size-4.5" />
+                    </ToolbarIconButton>
+                    {savedViews.length > 0 && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger
+                          render={
+                            <Button
+                              variant="ghost"
+                              className="text-text-muted"
+                              aria-label={`Views (${savedViews.length})`}
+                              title="Views"
+                            />
+                          }
                         >
-                          <BookmarkSimple className="text-text-muted" />
-                          <span className="min-w-0 flex-1 truncate">{view.name}</span>
-                        </DropdownMenuItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                )}
-              </div>
-              <div className="flex items-center gap-4">
-                <FilterMenu
-                  fields={EMPLOYEE_FILTER_FIELDS}
-                  conditions={conditions}
-                  onUpsert={upsert}
-                  onRemove={remove}
-                />
-                
-                <DisplayMenu
-                  groupOptions={GROUP_OPTIONS}
-                  sortOptions={SORT_OPTIONS}
-                  columns={COLUMNS}
-                  value={display}
-                  defaults={DEFAULT_DISPLAY}
-                  onApply={setDisplay}
-                />
-                <ToolbarDivider />
-                <Button variant="secondary">
-                  <Export />
-                  <span className="px-1">Export</span>
-                </Button>
-              </div>
+                          <BookmarkSimple />
+                          <span className="px-1 @max-3xl/toolbar:hidden">
+                            Views · {savedViews.length}
+                          </span>
+                          <span className="hidden h-4 min-w-4 items-center justify-center rounded-full bg-brand-muted px-1 text-caption-md text-brand-text @max-3xl/toolbar:inline-flex">
+                            {savedViews.length}
+                          </span>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="start" className="w-80 bg-surface-2">
+                          {savedViews.map((view, i) => (
+                            <DropdownMenuItem
+                              key={i}
+                              onClick={() => updateConditions(view.conditions)}
+                            >
+                              <BookmarkSimple className="text-text-muted" />
+                              <span className="min-w-0 flex-1 truncate">{view.name}</span>
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <FilterMenu
+                      fields={EMPLOYEE_FILTER_FIELDS}
+                      conditions={conditions}
+                      onUpsert={upsert}
+                      onRemove={remove}
+                    />
+                    <DisplayMenu
+                      groupOptions={GROUP_OPTIONS}
+                      sortOptions={SORT_OPTIONS}
+                      columns={COLUMNS}
+                      value={display}
+                      defaults={DEFAULT_DISPLAY}
+                      onApply={setDisplay}
+                    />
+                    <ToolbarDivider />
+                    <Button variant="secondary" aria-label="Export" title="Export">
+                      <Export />
+                      <span className="px-1 @max-3xl/toolbar:hidden">Export</span>
+                    </Button>
+                  </div>
+                </div>
+              )}
             </div>
 
             <FilterBar
@@ -388,7 +441,7 @@ export function EmployeesPage({
             />
 
             {/* Table */}
-            <div className="min-w-0 border border-border-base rounded-xl overflow-x-auto">
+            <div className="min-w-0 shadow-card rounded-xl overflow-x-auto">
               <table className="w-full shadow min-w-[1080px] border-collapse">
                 <thead className="bg-surface-1 sticky top-0 z-10">
                   <tr className="border-b border-border-base">
@@ -462,7 +515,7 @@ export function EmployeesPage({
                       {rowsPerPage}
                       <CaretUpDown className="size-4" />
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent align="end" className="min-w-24 bg-surface-2">
+                    <DropdownMenuContent align="end" className="min-w-24 ">
                       {[10, 25, 50].map((n) => (
                         <DropdownMenuItem
                           key={n}
@@ -563,7 +616,7 @@ function HeaderCell({
   return (
     <th
       className={cn(
-        'px-5 py-2.5 text-left text-label-sm font-[530] text-text-muted',
+        'px-5 py-2.5 text-left whitespace-nowrap text-label-sm font-[530] text-text-muted',
         column.value === 'compensation' && 'text-right',
       )}
     >
@@ -716,7 +769,7 @@ function RowMenu({ employee }: { employee: Employee }) {
       >
         <DotsThreeVertical className="size-4" weight="bold" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-44 bg-surface-2">
+      <DropdownMenuContent align="end" className="w-44 ">
         <DropdownMenuItem>View profile</DropdownMenuItem>
         <DropdownMenuItem>Edit details</DropdownMenuItem>
         <DropdownMenuItem variant="destructive">Offboard</DropdownMenuItem>

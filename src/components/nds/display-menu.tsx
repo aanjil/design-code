@@ -23,10 +23,25 @@ import {
 import { cn } from '@/lib/utils'
 
 /**
- * "Display" button → Table Customization panel (Figma 9816:17483):
+ * "Display" button → Display options panel (Figma 9816:17483):
  * group by, sort by + direction, column visibility chips, Apply/Reset.
  * Draft state commits on Apply.
  */
+
+/*
+ * Fields and chips here sit on the flyout surface, so the form-field tokens
+ * (background-base fill + shadow-button-gray ring) read as floating cutouts.
+ * They need their own hairline treatment instead.
+ * TODO: Fix color — rgba values below are hardcoded until proper
+ * on-flyout surface/border tokens exist in foundations.
+ */
+const flyoutControl =
+  'border border-[rgba(20,20,22,0.1)] bg-transparent hover:bg-[rgba(20,20,22,0.03)] dark:border-[rgba(255,255,255,0.12)] dark:hover:bg-[rgba(255,255,255,0.05)]'
+// TODO: Fix color — chip fills on flyout surface, same story as above.
+const chipOn =
+  'border-transparent bg-[rgba(20,20,22,0.07)] text-text-primary hover:bg-[rgba(20,20,22,0.11)] dark:bg-[rgba(255,255,255,0.1)] dark:hover:bg-[rgba(255,255,255,0.15)]'
+const chipOff =
+  'border-[rgba(20,20,22,0.1)] bg-transparent text-text-muted hover:bg-[rgba(20,20,22,0.03)] hover:text-text-primary dark:border-[rgba(255,255,255,0.12)] dark:hover:bg-[rgba(255,255,255,0.05)]'
 
 export interface DisplayOption {
   value: string
@@ -66,100 +81,98 @@ export function DisplayMenu({
         if (next) setDraft(value)
       }}
     >
-      <PopoverTrigger render={<Button variant="secondary" />}>
+      <PopoverTrigger
+        render={<Button variant="secondary" aria-label="Display" title="Display" />}
+      >
         <SlidersHorizontal />
-        <span className="px-1">Display</span>
+        {/* label drops when the toolbar container narrows (employees page toolbar) */}
+        <span className="px-1 @max-3xl/toolbar:hidden">Display</span>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-[352px] bg-surface-2 p-0">
-        <div className="flex flex-col gap-8 p-5">
-          <p className="text-label-md text-text-primary">Table customization</p>
+      <PopoverContent align="end" className="w-[352px] gap-7 p-5">
+        <p className="text-label-lg text-text-primary">Display options</p>
 
-          <div className="flex flex-col gap-5">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center justify-between gap-3">
-                <span className="flex items-center gap-2 text-label-sm text-text-muted">
-                  <List className="size-4" />
-                  Group by
-                </span>
-                <OptionSelect
-                  options={groupOptions}
-                  value={draft.groupBy}
-                  onChange={(groupBy) => setDraft((d) => ({ ...d, groupBy }))}
-                />
-              </div>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between gap-3">
+            <span className="flex items-center gap-2 text-label-sm text-text-primary">
+              <List className="size-4 text-text-muted" />
+              Group by
+            </span>
+            <OptionSelect
+              options={groupOptions}
+              value={draft.groupBy}
+              onChange={(groupBy) => setDraft((d) => ({ ...d, groupBy }))}
+            />
+          </div>
 
-              <div className="flex items-center justify-between gap-3">
-                <span className="flex items-center gap-2 text-label-sm text-text-muted">
-                  <ArrowsDownUp className="size-4" />
-                  Sort by
-                </span>
-                <div className="flex items-center gap-2">
-                  <OptionSelect
-                    options={sortOptions}
-                    value={draft.sortBy}
-                    onChange={(sortBy) => setDraft((d) => ({ ...d, sortBy }))}
-                  />
-                  <button
-                    type="button"
-                    aria-label={`Sort ${draft.sortDir === 'asc' ? 'ascending' : 'descending'} — click to flip`}
-                    onClick={() =>
-                      setDraft((d) => ({
-                        ...d,
-                        sortDir: d.sortDir === 'asc' ? 'desc' : 'asc',
-                      }))
-                    }
-                    className="flex size-[34px] items-center justify-center rounded-btn bg-background-base text-text-primary shadow-button-gray"
-                  >
-                    {draft.sortDir === 'asc' ? (
-                      <SortAscending className="size-4" />
-                    ) : (
-                      <SortDescending className="size-4" />
-                    )}
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div className="border-t border-dashed border-border-base" />
-
-            <div className="flex flex-col gap-2.5">
-              <p className="text-label-sm text-text-muted">Table columns</p>
-              <div className="flex flex-wrap gap-2">
-                {columns.map((column) => {
-                  const visible = draft.visibleColumns.includes(column.value)
-                  return (
-                    <button
-                      key={column.value}
-                      type="button"
-                      aria-pressed={visible}
-                      onClick={() =>
-                        setDraft((d) => ({
-                          ...d,
-                          visibleColumns: visible
-                            ? d.visibleColumns.filter((c) => c !== column.value)
-                            : [...d.visibleColumns, column.value],
-                        }))
-                      }
-                      className={cn(
-                        'flex h-8 items-center rounded-full px-3 text-paragraph-sm shadow-button-gray transition-colors',
-                        visible
-                          ? 'bg-background-highlight text-text-primary'
-                          : 'bg-background-base text-text-muted',
-                      )}
-                    >
-                      {column.label}
-                    </button>
-                  )
-                })}
-              </div>
+          <div className="flex items-center justify-between gap-3">
+            <span className="flex items-center gap-2 text-label-sm text-text-primary">
+              <ArrowsDownUp className="size-4 text-text-muted" />
+              Sort by
+            </span>
+            <div className="flex items-center gap-2">
+              <OptionSelect
+                options={sortOptions}
+                value={draft.sortBy}
+                onChange={(sortBy) => setDraft((d) => ({ ...d, sortBy }))}
+              />
+              <button
+                type="button"
+                aria-label={`Sort ${draft.sortDir === 'asc' ? 'ascending' : 'descending'} — click to flip`}
+                onClick={() =>
+                  setDraft((d) => ({
+                    ...d,
+                    sortDir: d.sortDir === 'asc' ? 'desc' : 'asc',
+                  }))
+                }
+                className={cn(
+                  'flex size-9 shrink-0 items-center justify-center rounded-[10px] text-text-primary transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                  flyoutControl,
+                )}
+              >
+                {draft.sortDir === 'asc' ? (
+                  <SortAscending className="size-4" />
+                ) : (
+                  <SortDescending className="size-4" />
+                )}
+              </button>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-3 border-t border-border-base px-5 py-4">
+        <div className="flex flex-col gap-3">
+          <p className="text-label-sm text-text-muted">Table columns</p>
+          <div className="flex flex-wrap gap-2">
+            {columns.map((column) => {
+              const visible = draft.visibleColumns.includes(column.value)
+              return (
+                <button
+                  key={column.value}
+                  type="button"
+                  aria-pressed={visible}
+                  onClick={() =>
+                    setDraft((d) => ({
+                      ...d,
+                      visibleColumns: visible
+                        ? d.visibleColumns.filter((c) => c !== column.value)
+                        : [...d.visibleColumns, column.value],
+                    }))
+                  }
+                  className={cn(
+                    'flex h-9 items-center rounded-full border px-3.5 text-paragraph-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                    visible ? chipOn : chipOff,
+                  )}
+                >
+                  {column.label}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 pt-1">
           <Button
             variant="secondary"
-            className="flex-1"
+            className="h-10 flex-1"
             onClick={() => {
               onApply(draft)
               setOpen(false)
@@ -169,7 +182,7 @@ export function DisplayMenu({
           </Button>
           <Button
             variant="ghost-destructive"
-            className="flex-1"
+            className="h-10 flex-1"
             onClick={() => setDraft(defaults)}
           >
             <span className="px-1">Reset</span>
@@ -192,11 +205,17 @@ function OptionSelect({
   const current = options.find((o) => o.value === value)
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex h-[34px] items-center gap-2 rounded-btn bg-background-base pr-3 pl-4 text-paragraph-sm text-text-muted shadow-button-gray">
+      {/* TODO: Fix color — open-state fill is hardcoded like flyoutControl above */}
+      <DropdownMenuTrigger
+        className={cn(
+          'flex h-9 items-center gap-2 rounded-[10px] pr-2.5 pl-3.5 text-paragraph-sm text-text-primary transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 data-[popup-open]:bg-[rgba(20,20,22,0.05)] dark:data-[popup-open]:bg-[rgba(255,255,255,0.07)]',
+          flyoutControl,
+        )}
+      >
         {current?.label ?? value}
-        <CaretDown className="size-4" />
+        <CaretDown className="size-4 text-text-muted" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-44 bg-surface-2">
+      <DropdownMenuContent align="end" className="w-44 ">
         {options.map((option) => (
           <DropdownMenuItem
             key={option.value}

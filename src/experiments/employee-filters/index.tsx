@@ -16,20 +16,20 @@ export function EmployeeFilters() {
           id: 'default',
           title: 'Default — no filters',
           url: 'nexus.niural.com/people/employees',
-          x: 32,
-          y: 72,
-          width: 1160,
-          height: 720,
+          x: 700,
+          y: 420,
+          width: 1512,
+          height: 910,
           content: <EmployeesPage />,
         },
         {
           id: 'applied',
           title: 'Applied — editable filter chips',
           url: 'nexus.niural.com/people/employees?filter=job-title',
-          x: 620,
-          y: 240,
-          width: 1160,
-          height: 720,
+          x: 1244,
+          y: 745,
+          width: 1512,
+          height: 910,
           content: (
             <EmployeesPage
               initialConditions={[
@@ -42,10 +42,10 @@ export function EmployeeFilters() {
           id: 'display',
           title: 'Display — grouped by location',
           url: 'nexus.niural.com/people/employees?view=by-location',
-          x: 1240,
-          y: 420,
-          width: 1160,
-          height: 720,
+          x: 1788,
+          y: 1070,
+          width: 1512,
+          height: 910,
           content: (
             <EmployeesPage
               initialDisplay={{

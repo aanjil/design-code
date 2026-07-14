@@ -12,11 +12,17 @@ export function SearchField({
   onChange,
   placeholder = 'Search',
   className,
+  autoFocus,
+  showKbd = true,
+  onKeyDown,
 }: {
   value: string
   onChange: (value: string) => void
   placeholder?: string
   className?: string
+  autoFocus?: boolean
+  showKbd?: boolean
+  onKeyDown?: (event: React.KeyboardEvent<HTMLInputElement>) => void
 }) {
   return (
     <label
@@ -31,9 +37,11 @@ export function SearchField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
+        autoFocus={autoFocus}
+        onKeyDown={onKeyDown}
         className="min-w-0 flex-1 bg-transparent px-1 text-paragraph-sm text-text-primary outline-none placeholder:text-text-muted"
       />
-      <Kbd className="rounded-kbd px-2 py-[3px]">⌘</Kbd>
+      {showKbd && <Kbd className="rounded-kbd px-2 py-[3px]">⌘</Kbd>}
     </label>
   )
 }
@@ -90,5 +98,59 @@ export function StatusPill({
       </span>
       <span className="px-1 text-label-xs text-text-primary">{children}</span>
     </span>
+  )
+}
+
+/* ---------- Form primitives (FormLayout pages, expanded table rows) ---------- */
+
+export function FieldLabel({
+  children,
+  required,
+  htmlFor,
+}: {
+  children: React.ReactNode
+  required?: boolean
+  htmlFor?: string
+}) {
+  return (
+    <label
+      htmlFor={htmlFor}
+      className="flex items-center gap-1 text-label-sm text-text-primary"
+    >
+      {children}
+      {required && <span className="text-text-error-base">*</span>}
+    </label>
+  )
+}
+
+export function TextInput({
+  className,
+  invalid,
+  ...props
+}: React.ComponentProps<'input'> & { invalid?: boolean }) {
+  return (
+    <input
+      className={cn(
+        'h-9 w-full rounded-btn bg-background-base px-3 text-paragraph-sm text-text-primary shadow-button-gray transition-shadow outline-none placeholder:text-text-muted focus:shadow-border-focus disabled:bg-background-disabled disabled:text-text-muted',
+        invalid && 'shadow-border-error focus:shadow-border-error',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
+export function TextArea({
+  className,
+  ...props
+}: React.ComponentProps<'textarea'>) {
+  return (
+    <textarea
+      className={cn(
+        'min-h-20 w-full resize-y rounded-btn bg-background-base px-3 py-2 text-paragraph-sm text-text-primary shadow-button-gray transition-shadow outline-none placeholder:text-text-muted focus:shadow-border-focus',
+        className,
+      )}
+      {...props}
+    />
   )
 }

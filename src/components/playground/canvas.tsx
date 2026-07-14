@@ -2,11 +2,14 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react'
 import {
   Broom,
+  Camera,
+  ChatTeardropText,
   CornersIn,
   CornersOut,
   FrameCorners,
@@ -14,14 +17,21 @@ import {
   Minus,
   Plus,
 } from '@phosphor-icons/react'
+import type { CanvasPin } from './canvas-pins'
+import { PinMarker } from './canvas-pins'
+import { CanvasRulers } from './canvas-rulers'
+import { WindowsPanel } from './windows-panel'
+import { PortalContainerContext } from '@/components/ui/portal-context'
 import { cn } from '@/lib/utils'
 
 /**
- * Experiment canvas: a zoomable, pannable surface (Figma-style) holding
- * Safari-style browser windows — drag via titlebar, resize via corner,
- * green traffic light maximizes one window to ~98vw/98vh for presenting.
- * Zoom: controls bottom-left (next to the minimap), ⌘/Ctrl +/−/0, and
- * pinch / Ctrl-scroll zooming toward the cursor.
+ * Experiment canvas: a zoomable, pannable blueprint surface (Figma-style)
+ * holding Safari-style browser windows — drag via titlebar, resize via
+ * corner, double-click the titlebar (or green light / corners button) to
+ * present one window at ~98vw/98vh. Rulers + per-window dimension readouts,
+ * a top-right windows panel with DOM snapshots, and click-placed design-note
+ * pins that feed the dock's Notes sheet. Popovers portal INSIDE each window
+ * (see ui/portal-context) so they scale with the canvas zoom.
  */
 
 export interface CanvasWindowDef {
@@ -43,6 +53,13 @@ interface WindowGeometry {
   z: number
 }
 
+interface SnapshotDef {
+  id: string
+  title: string
+  url: string
+  html: string
+}
+
 const MIN_WIDTH = 480
 const MIN_HEIGHT = 320
 const SURFACE_W = 4000
@@ -54,6 +71,17 @@ const ZOOM_STEP = 1.25
 const MINIMAP_W = 176
 
 const clampZoom = (z: number) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z))
+
+/* Blueprint grid: fine 20px lines + stronger 100px majors, token-driven. */
+const BLUEPRINT_BG: React.CSSProperties = {
+  backgroundImage: [
+    'linear-gradient(var(--border-base) 1px, transparent 1px)',
+    'linear-gradient(90deg, var(--border-base) 1px, transparent 1px)',
+    'linear-gradient(var(--border-highlight) 1px, transparent 1px)',
+    'linear-gradient(90deg, var(--border-highlight) 1px, transparent 1px)',
+  ].join(', '),
+  backgroundSize: '100px 100px, 100px 100px, 20px 20px, 20px 20px',
+}
 
 export function PlaygroundCanvas({
   windows,
@@ -84,6 +112,48 @@ export function PlaygroundCanvas({
   const pendingScroll = useRef<{ left: number; top: number } | null>(null)
   const [viewport, setViewport] = useState({ left: 0, top: 0, cw: 0, ch: 0 })
 
+  /* ---------- snapshots ---------- */
+
+  const [snapshots, setSnapshots] = useState<Array<SnapshotDef>>([])
+  const snapCounter = useRef(0)
+  const contentEls = useRef<Map<string, HTMLElement>>(new Map())
+
+  /* ---------- pins (design notes) ---------- */
+
+  const [pins, setPins] = useState<Array<CanvasPin>>([])
+  const pinCounter = useRef(0)
+  const [annotateMode, setAnnotateMode] = useState(false)
+  const [openPinId, setOpenPinId] = useState<string | null>(null)
+  const [zenMode, setZenMode] = useState(false)
+  /** Live DOM elements behind 'element' pins (⌘-click); measured each render. */
+  const pinEls = useRef<Map<string, Element>>(new Map())
+  const [measureTick, setMeasureTick] = useState(0)
+  const surfaceRef = useRef<HTMLDivElement>(null)
+
+  /** Windows + frozen snapshot windows, rendered identically. */
+  const combined = useMemo(
+    () => [
+      ...windows.map((w) => ({ ...w, kind: 'window' as const })),
+      ...snapshots.map((s) => ({
+        id: s.id,
+        title: s.title,
+        url: s.url,
+        x: 0,
+        y: 0,
+        width: 0,
+        height: 0,
+        kind: 'snapshot' as const,
+        content: (
+          <div
+            className="pointer-events-none select-none"
+            dangerouslySetInnerHTML={{ __html: s.html }}
+          />
+        ),
+      })),
+    ],
+    [windows, snapshots],
+  )
+
   /* ---------- window state ---------- */
 
   const bringToFront = useCallback((id: string) => {
@@ -107,6 +177,75 @@ export function PlaygroundCanvas({
   useEffect(() => {
     onFullscreenChange?.(fullscreenId !== null)
   }, [fullscreenId, onFullscreenChange])
+
+  const setContentEl = useCallback((id: string, el: HTMLElement | null) => {
+    if (el) contentEls.current.set(id, el)
+    else contentEls.current.delete(id)
+  }, [])
+
+  /** Freeze the window's current DOM (incl. open popovers) as a new window. */
+  const takeSnapshot = useCallback(
+    (id: string) => {
+      const el = contentEls.current.get(id)
+      const src = windows.find((w) => w.id === id)
+      const g = geometryRef.current[id]
+      if (!el || !src || !g) return
+      snapCounter.current += 1
+      const snapId = `snap-${snapCounter.current}`
+      setSnapshots((prev) => [
+        ...prev,
+        {
+          id: snapId,
+          title: `Snap ${snapCounter.current} · ${src.title.split('—')[0]?.trim()}`,
+          url: src.url,
+          html: el.innerHTML,
+        },
+      ])
+      zCounter.current += 1
+      setGeometry((prev) => ({
+        ...prev,
+        [snapId]: {
+          x: g.x + 64,
+          y: g.y + 64,
+          width: g.width,
+          height: g.height,
+          z: zCounter.current,
+        },
+      }))
+      setFocusedId(snapId)
+    },
+    [windows],
+  )
+
+  const removeSnapshot = useCallback((id: string) => {
+    setSnapshots((prev) => prev.filter((s) => s.id !== id))
+    setGeometry((prev) => {
+      const next = { ...prev }
+      delete next[id]
+      return next
+    })
+    setPins((prev) => prev.filter((p) => p.windowId !== id))
+    setFocusedId((prev) => (prev === id ? null : prev))
+    setFullscreenId((prev) => (prev === id ? null : prev))
+    setOpenPinId(null)
+  }, [])
+
+  /** Bring a window to front and smooth-scroll the viewport onto it. */
+  const jumpTo = useCallback(
+    (id: string) => {
+      bringToFront(id)
+      const scroller = scrollerRef.current
+      const g = geometryRef.current[id]
+      if (!scroller || !g) return
+      const z = zoomRef.current
+      scroller.scrollTo({
+        left: (g.x + g.width / 2) * z - scroller.clientWidth / 2,
+        top: (g.y + g.height / 2) * z - scroller.clientHeight / 2,
+        behavior: 'smooth',
+      })
+    },
+    [bringToFront],
+  )
 
   /* ---------- zoom ---------- */
 
@@ -198,7 +337,7 @@ export function PlaygroundCanvas({
     requestAnimationFrame(() => fitToContent())
   }, [fitToContent])
 
-  /* ---------- viewport tracking (minimap) ---------- */
+  /* ---------- viewport tracking (minimap + rulers) ---------- */
 
   const syncViewport = useCallback(() => {
     const scroller = scrollerRef.current
@@ -248,7 +387,7 @@ export function PlaygroundCanvas({
     syncViewport()
   }, [syncViewport])
 
-  /* ---------- wheel + keyboard zoom ---------- */
+  /* ---------- wheel + keyboard ---------- */
 
   const fullscreenRef = useRef(fullscreenId)
   fullscreenRef.current = fullscreenId
@@ -272,10 +411,81 @@ export function PlaygroundCanvas({
     return () => scroller.removeEventListener('wheel', onWheel)
   }, [zoomAt])
 
+  const annotateRef = useRef(annotateMode)
+  annotateRef.current = annotateMode
+  const openPinRef = useRef(openPinId)
+  openPinRef.current = openPinId
+  const zenRef = useRef(zenMode)
+  zenRef.current = zenMode
+  const focusedRef = useRef(focusedId)
+  focusedRef.current = focusedId
+  const combinedIdsRef = useRef<Array<string>>([])
+  useEffect(() => {
+    combinedIdsRef.current = combined.map((w) => w.id)
+  }, [combined])
+
+  /** Zoom + scroll so one window fills the viewport (with padding). */
+  const fitToWindow = useCallback((id: string) => {
+    const scroller = scrollerRef.current
+    const g = geometryRef.current[id]
+    if (!scroller || !g) return
+    const pad = 40
+    const target = clampZoom(
+      Math.min(
+        scroller.clientWidth / (g.width + pad * 2),
+        scroller.clientHeight / (g.height + pad * 2),
+      ),
+    )
+    pendingScroll.current = {
+      left: (g.x + g.width / 2) * target - scroller.clientWidth / 2,
+      top: (g.y + g.height / 2) * target - scroller.clientHeight / 2,
+    }
+    if (target === zoomRef.current) syncScrollNow()
+    else setZoom(target)
+  }, [])
+
+  /** `n` / `shift+n`: focus the next/previous window and fit it on screen. */
+  const cycleWindow = useCallback(
+    (dir: 1 | -1) => {
+      const ids = combinedIdsRef.current
+      if (ids.length === 0) return
+      const idx = ids.indexOf(focusedRef.current ?? '')
+      const next = ids[(idx + dir + ids.length) % ids.length]
+      bringToFront(next)
+      fitToWindow(next)
+    },
+    [bringToFront, fitToWindow],
+  )
+
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape' && fullscreenRef.current) {
-        toggleFullscreen(fullscreenRef.current)
+      const target = e.target as HTMLElement | null
+      const inEditable = !!target?.closest(
+        'input, textarea, select, [contenteditable="true"]',
+      )
+
+      if (e.code === 'Space' && !e.metaKey && !e.ctrlKey && !e.altKey && !inEditable) {
+        e.preventDefault()
+        setZenMode((v) => !v)
+        return
+      }
+
+      if (e.key.toLowerCase() === 'n' && !e.metaKey && !e.ctrlKey && !e.altKey) {
+        if (inEditable || fullscreenRef.current) return
+        e.preventDefault()
+        cycleWindow(e.shiftKey ? -1 : 1)
+        return
+      }
+      if (e.key === 'Escape') {
+        if (openPinRef.current) {
+          setOpenPinId(null)
+          return
+        }
+        if (annotateRef.current) {
+          setAnnotateMode(false)
+          return
+        }
+        if (fullscreenRef.current) toggleFullscreen(fullscreenRef.current)
         return
       }
       if (!(e.metaKey || e.ctrlKey) || fullscreenRef.current) return
@@ -292,7 +502,174 @@ export function PlaygroundCanvas({
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [toggleFullscreen, zoomAt])
+  }, [cycleWindow, toggleFullscreen, zoomAt])
+
+  /* ---------- pins ---------- */
+
+  // re-measure element pins when anything scrolls inside a window
+  useEffect(() => {
+    const surf = surfaceRef.current
+    if (!surf) return
+    const onAnyScroll = () => setMeasureTick((t) => t + 1)
+    surf.addEventListener('scroll', onAnyScroll, true)
+    return () => surf.removeEventListener('scroll', onAnyScroll, true)
+  }, [])
+
+  const resolvedPins = useMemo(() => {
+    void measureTick
+    void viewport
+    const surf = surfaceRef.current
+    return pins.flatMap((pin) => {
+      // element pins: measure the live DOM node while it exists
+      if (pin.kind === 'element' && surf) {
+        const el = pinEls.current.get(pin.id)
+        if (el?.isConnected) {
+          const rect = el.getBoundingClientRect()
+          const surfRect = surf.getBoundingClientRect()
+          return [
+            {
+              pin,
+              ax: (rect.left - surfRect.left) / zoom,
+              ay: (rect.top - surfRect.top) / zoom,
+              rw: rect.width / zoom,
+              rh: rect.height / zoom,
+            },
+          ]
+        }
+      }
+      if (!pin.windowId)
+        return [{ pin, ax: pin.rx, ay: pin.ry, rw: pin.rw, rh: pin.rh }]
+      const g = geometry[pin.windowId]
+      if (!g) return []
+      return [
+        { pin, ax: g.x + pin.rx, ay: g.y + pin.ry, rw: pin.rw, rh: pin.rh },
+      ]
+    })
+  }, [pins, geometry, zoom, viewport, measureTick])
+
+  /** ⌘/Ctrl-click a DOM element inside a window → region pin with highlight. */
+  const createElementPin = useCallback((windowId: string, el: Element) => {
+    const surf = surfaceRef.current
+    const g = geometryRef.current[windowId]
+    if (!surf || !g) return
+    const z = zoomRef.current
+    const rect = el.getBoundingClientRect()
+    const surfRect = surf.getBoundingClientRect()
+    const lx = (rect.left - surfRect.left) / z
+    const ly = (rect.top - surfRect.top) / z
+    pinCounter.current += 1
+    const id = `pin-${pinCounter.current}`
+    pinEls.current.set(id, el)
+    setPins((prev) => [
+      ...prev,
+      {
+        id,
+        n: pinCounter.current,
+        kind: 'element',
+        windowId,
+        rx: lx - g.x,
+        ry: ly - g.y,
+        rw: rect.width / z,
+        rh: rect.height / z,
+        text: '',
+      },
+    ])
+    setOpenPinId(id)
+  }, [])
+
+  const removePin = useCallback((id: string) => {
+    setPins((prev) => prev.filter((p) => p.id !== id))
+    pinEls.current.delete(id)
+    setOpenPinId((prev) => (prev === id ? null : prev))
+  }, [])
+
+  /** Center the viewport on a pin and open its card (panel row click). */
+  const jumpToPin = useCallback(
+    (id: string) => {
+      const scroller = scrollerRef.current
+      const resolved = resolvedPins.find((r) => r.pin.id === id)
+      if (!scroller || !resolved) return
+      const z = zoomRef.current
+      scroller.scrollTo({
+        left: resolved.ax * z - scroller.clientWidth / 2,
+        top: resolved.ay * z - scroller.clientHeight / 2,
+        behavior: 'smooth',
+      })
+      setOpenPinId(id)
+    },
+    [resolvedPins],
+  )
+
+  const onSurfaceCapture = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (!(e.metaKey || e.ctrlKey) || fullscreenRef.current) return
+      const target = e.target as HTMLElement
+      if (!target.closest('[data-window-content]')) return
+      const section = target.closest('[data-window-id]')
+      if (!section) return
+      e.preventDefault()
+      e.stopPropagation()
+      createElementPin(section.getAttribute('data-window-id')!, target)
+    },
+    [createElementPin],
+  )
+
+  function placePin(e: React.PointerEvent<HTMLDivElement>) {
+    if (e.metaKey || e.ctrlKey) return // ⌘-clicks are element pins (capture phase)
+    e.preventDefault()
+    const rect = e.currentTarget.getBoundingClientRect()
+    const lx = (e.clientX - rect.left) / zoom
+    const ly = (e.clientY - rect.top) / zoom
+    // clicking near an existing pin opens it instead of stacking a new one
+    const near = resolvedPins.find(
+      (r) => Math.hypot(r.ax - lx, r.ay - ly) < 14 / zoom,
+    )
+    if (near) {
+      setOpenPinId(near.pin.id)
+      return
+    }
+    // click-away from an open card closes it before placing anything new
+    if (openPinId) {
+      setOpenPinId(null)
+      return
+    }
+    const hit = combined
+      .map((w) => ({ id: w.id, g: geometry[w.id] }))
+      .filter(
+        ({ g }) =>
+          g &&
+          lx >= g.x &&
+          lx <= g.x + g.width &&
+          ly >= g.y &&
+          ly <= g.y + g.height,
+      )
+      .sort((a, b) => b.g.z - a.g.z)[0]
+    pinCounter.current += 1
+    const id = `pin-${pinCounter.current}`
+    setPins((prev) => [
+      ...prev,
+      hit
+        ? {
+            id,
+            n: pinCounter.current,
+            kind: 'point' as const,
+            windowId: hit.id,
+            rx: lx - hit.g.x,
+            ry: ly - hit.g.y,
+            text: '',
+          }
+        : {
+            id,
+            n: pinCounter.current,
+            kind: 'point' as const,
+            windowId: null,
+            rx: lx,
+            ry: ly,
+            text: '',
+          },
+    ])
+    setOpenPinId(id)
+  }
 
   /* ---------- fullscreen geometry (inside the scaled layer) ---------- */
 
@@ -321,10 +698,13 @@ export function PlaygroundCanvas({
       >
         {/* scroll extent at current zoom */}
         <div style={{ width: SURFACE_W * zoom, height: SURFACE_H * zoom }}>
-          {/* scaled surface */}
+          {/* scaled blueprint surface */}
           <div
-            className="relative [background-image:radial-gradient(var(--border-base)_1px,transparent_1px)] [background-size:20px_20px]"
+            ref={surfaceRef}
+            onPointerDownCapture={onSurfaceCapture}
+            className="relative"
             style={{
+              ...BLUEPRINT_BG,
               width: SURFACE_W,
               height: SURFACE_H,
               transform: `scale(${zoom})`,
@@ -344,38 +724,129 @@ export function PlaygroundCanvas({
                 onPointerDown={() => toggleFullscreen(fullscreenId)}
               />
             )}
-            {windows.map((window) => (
-              <BrowserWindow
-                key={window.id}
-                def={window}
-                geometry={geometry[window.id]}
-                zoom={zoom}
-                focused={focusedId === window.id}
-                fullscreen={fullscreenId === window.id}
-                fullscreenStyle={
-                  fullscreenId === window.id ? fullscreenStyle : undefined
+
+            {combined.map((window) => {
+              const g = geometry[window.id]
+              if (!g) return null
+              return (
+                <BrowserWindow
+                  key={window.id}
+                  def={window}
+                  kind={window.kind}
+                  geometry={g}
+                  zoom={zoom}
+                  focused={focusedId === window.id}
+                  fullscreen={fullscreenId === window.id}
+                  fullscreenStyle={
+                    fullscreenId === window.id ? fullscreenStyle : undefined
+                  }
+                  onFocus={() => bringToFront(window.id)}
+                  onGeometry={(patch) => updateGeometry(window.id, patch)}
+                  onToggleFullscreen={() => toggleFullscreen(window.id)}
+                  onSnapshot={
+                    window.kind === 'window'
+                      ? () => takeSnapshot(window.id)
+                      : undefined
+                  }
+                  onContentEl={setContentEl}
+                />
+              )
+            })}
+
+            {/* design-note pins */}
+            {resolvedPins.map(({ pin, ax, ay, rw, rh }) => (
+              <PinMarker
+                key={pin.id}
+                pin={pin}
+                ax={ax}
+                ay={ay}
+                rw={rw}
+                rh={rh}
+                open={openPinId === pin.id}
+                onToggle={() =>
+                  setOpenPinId((prev) => (prev === pin.id ? null : pin.id))
                 }
-                onFocus={() => bringToFront(window.id)}
-                onGeometry={(patch) => updateGeometry(window.id, patch)}
-                onToggleFullscreen={() => toggleFullscreen(window.id)}
+                onChange={(text) =>
+                  setPins((prev) =>
+                    prev.map((p) => (p.id === pin.id ? { ...p, text } : p)),
+                  )
+                }
+                onDelete={() => removePin(pin.id)}
               />
             ))}
+
+            {/* annotate mode: click anywhere to pin a note */}
+            {annotateMode && !fullscreenId && (
+              <div
+                className="absolute inset-0 cursor-crosshair"
+                style={{ zIndex: 7000 }}
+                onPointerDown={placePin}
+              />
+            )}
           </div>
         </div>
       </div>
 
-      {/* Minimap + zoom controls */}
+      {/* rulers */}
       {!fullscreenId && (
-        <div className="absolute bottom-4 left-4 z-40 flex flex-col gap-2">
+        <div
+          className={cn(
+            'pointer-events-none absolute inset-0 z-30 transition-opacity duration-200',
+            zenMode ? 'opacity-0' : 'opacity-100',
+          )}
+        >
+          <CanvasRulers
+            viewport={viewport}
+            zoom={zoom}
+            surfaceW={SURFACE_W}
+            surfaceH={SURFACE_H}
+          />
+        </div>
+      )}
+
+      {/* Windows stack — top-left */}
+      {!fullscreenId && (
+        <CanvasWindowsStack
+          windows={windows.map((w) => ({ id: w.id, title: w.title }))}
+          snapshots={snapshots.map((s) => ({ id: s.id, title: s.title }))}
+          notes={pins.map((p) => ({ id: p.id, n: p.n, text: p.text }))}
+          focusedId={focusedId}
+          onJump={jumpTo}
+          onRemoveSnapshot={removeSnapshot}
+          onJumpToNote={jumpToPin}
+          onRemoveNote={removePin}
+          zenMode={zenMode}
+        />
+      )}
+
+      {/* Minimap — bottom-left */}
+      {!fullscreenId && (
+        <div
+          className={cn(
+            'absolute bottom-4 left-4 z-40 transition-opacity duration-200',
+            zenMode ? 'pointer-events-none opacity-0' : 'opacity-100',
+          )}
+        >
           <Minimap
-            windows={windows}
+            windows={combined}
             geometry={geometry}
             focusedId={focusedId}
             viewport={viewport}
             zoom={zoom}
             scrollerRef={scrollerRef}
           />
-          <div className="flex items-center gap-0.5 self-start rounded-full bg-background-base/90 p-1 shadow-flyout backdrop-blur">
+        </div>
+      )}
+
+      {/* Zoom controls — bottom-center */}
+      {!fullscreenId && (
+        <div
+          className={cn(
+            'absolute bottom-4 left-1/2 z-40 -translate-x-1/2 transition-opacity duration-200',
+            zenMode ? 'pointer-events-none opacity-0' : 'opacity-100',
+          )}
+        >
+          <div className="flex items-center gap-0.5 rounded-full bg-background-base/90 p-1 shadow-flyout backdrop-blur">
             <button
               type="button"
               aria-label="Zoom out (⌘−)"
@@ -419,6 +890,22 @@ export function PlaygroundCanvas({
             >
               <Broom className="size-3.5" />
             </button>
+            <span className="mx-0.5 h-3 w-px bg-border-muted" />
+            <button
+              type="button"
+              aria-label="Annotate — click anywhere to pin a design note"
+              aria-pressed={annotateMode}
+              title="Annotate — click anywhere to pin a note (Esc exits)"
+              onClick={() => setAnnotateMode((m) => !m)}
+              className={cn(
+                'flex size-7 items-center justify-center rounded-full transition-colors',
+                annotateMode
+                  ? 'bg-brand-primary text-text-on-color'
+                  : 'text-text-primary hover:bg-background-highlight',
+              )}
+            >
+              <ChatTeardropText className="size-3.5" />
+            </button>
           </div>
         </div>
       )}
@@ -436,7 +923,7 @@ function Minimap({
   zoom,
   scrollerRef,
 }: {
-  windows: Array<CanvasWindowDef>
+  windows: Array<{ id: string }>
   geometry: Record<string, WindowGeometry>
   focusedId: string | null
   viewport: { left: number; top: number; cw: number; ch: number }
@@ -481,6 +968,7 @@ function Minimap({
     >
       {windows.map((w) => {
         const g = geometry[w.id]
+        if (!g) return null
         return (
           <span
             key={w.id}
@@ -516,6 +1004,7 @@ function Minimap({
 
 function BrowserWindow({
   def,
+  kind,
   geometry,
   zoom,
   focused,
@@ -524,8 +1013,11 @@ function BrowserWindow({
   onFocus,
   onGeometry,
   onToggleFullscreen,
+  onSnapshot,
+  onContentEl,
 }: {
   def: CanvasWindowDef
+  kind: 'window' | 'snapshot'
   geometry: WindowGeometry
   zoom: number
   focused: boolean
@@ -534,8 +1026,19 @@ function BrowserWindow({
   onFocus: () => void
   onGeometry: (patch: Partial<WindowGeometry>) => void
   onToggleFullscreen: () => void
+  onSnapshot?: () => void
+  onContentEl: (id: string, el: HTMLElement | null) => void
 }) {
   const [interacting, setInteracting] = useState(false)
+  const [portalEl, setPortalEl] = useState<HTMLElement | null>(null)
+
+  const contentRef = useCallback(
+    (el: HTMLElement | null) => {
+      setPortalEl(el)
+      onContentEl(def.id, el)
+    },
+    [def.id, onContentEl],
+  )
 
   function startDrag(e: React.PointerEvent<HTMLDivElement>) {
     if (fullscreen) return
@@ -593,93 +1096,237 @@ function BrowserWindow({
   }
 
   return (
-    <section
-      aria-label={def.title}
-      onPointerDown={onFocus}
-      className={cn(
-        'absolute flex flex-col overflow-hidden rounded-xl bg-background-base shadow-flyout',
-        focused && !fullscreen && 'shadow-border-active',
-        interacting && 'select-none',
-      )}
-      style={
-        fullscreen && fullscreenStyle
-          ? fullscreenStyle
-          : {
-              left: geometry.x,
-              top: geometry.y,
-              width: geometry.width,
-              height: geometry.height,
-              zIndex: geometry.z,
-            }
-      }
-    >
-      {/* Safari-style chrome — drag me */}
-      <div
-        onPointerDown={startDrag}
-        className={cn(
-          'flex h-9 shrink-0 items-center gap-2 border-b border-border-highlight bg-surface-1 px-3 select-none',
-          fullscreen ? 'cursor-default' : interacting ? 'cursor-grabbing' : 'cursor-grab',
-        )}
-        title={def.title}
-      >
-        <span className="flex shrink-0 items-center gap-1.5" data-no-drag>
-          <span className="size-3 rounded-full bg-background-error-base" />
-          <span className="size-3 rounded-full bg-background-warning-base" />
-          <button
-            type="button"
-            aria-label={
-              fullscreen ? 'Exit fullscreen preview' : 'Fullscreen preview'
-            }
-            title={fullscreen ? 'Exit fullscreen (Esc)' : 'Fullscreen preview'}
-            onClick={onToggleFullscreen}
-            className="size-3 cursor-pointer rounded-full bg-background-success-base transition-transform hover:scale-110"
-          />
-        </span>
-        <span className="flex min-w-0 flex-1 justify-center">
-          <span className="flex h-6 max-w-[60%] min-w-[220px] items-center justify-center gap-1 truncate rounded-lg bg-background-highlight px-3 text-caption text-text-muted">
-            <Lock className="size-3 shrink-0" weight="fill" />
-            <span className="truncate">{def.url}</span>
-          </span>
-        </span>
-        <span className="flex shrink-0 items-center gap-1" data-no-drag>
-          <span className="max-w-[96px] truncate text-caption text-text-muted">
-            {def.title.split('—')[0]?.trim()}
-          </span>
-          <button
-            type="button"
-            aria-label={
-              fullscreen ? 'Exit app view' : 'Open as app (fills the screen)'
-            }
-            title={
-              fullscreen
-                ? 'Exit app view (Esc)'
-                : 'Open as app — 98% of the screen'
-            }
-            onClick={onToggleFullscreen}
-            className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
-          >
-            {fullscreen ? (
-              <CornersIn className="size-3.5" />
-            ) : (
-              <CornersOut className="size-3.5" />
-            )}
-          </button>
-        </span>
-      </div>
-
-      {/* Preview content */}
-      <div className="min-h-0 flex-1 overflow-auto">{def.content}</div>
-
-      {/* Resize handle */}
+    <>
+      {/* blueprint readout: content viewport size + position */}
       {!fullscreen && (
         <div
-          onPointerDown={startResize}
-          aria-hidden
-          className="absolute right-0 bottom-0 z-10 size-4 cursor-nwse-resize"
+          className="pointer-events-none absolute flex items-baseline gap-2 font-mono text-caption whitespace-nowrap"
+          style={{
+            left: geometry.x + 2,
+            top: geometry.y - 22,
+            zIndex: geometry.z,
+          }}
         >
-          <span className="absolute right-1 bottom-1 block size-2 rounded-[2px] border-r-2 border-b-2 border-border-muted" />
+          <span className={focused ? 'text-brand-text' : 'text-text-muted'}>
+            {Math.round(geometry.width)} × {Math.round(geometry.height - 36)}
+          </span>
+          <span className="text-text-muted/70">
+            x{Math.round(geometry.x)} · y{Math.round(geometry.y)}
+          </span>
         </div>
       )}
-    </section>
+
+      <section
+        aria-label={def.title}
+        data-window-id={def.id}
+        onPointerDown={onFocus}
+        className={cn(
+          'absolute flex flex-col overflow-hidden rounded-xl bg-background-base shadow-flyout',
+          focused && !fullscreen && 'shadow-border-active',
+          interacting && 'select-none',
+        )}
+        style={
+          fullscreen && fullscreenStyle
+            ? fullscreenStyle
+            : {
+                left: geometry.x,
+                top: geometry.y,
+                width: geometry.width,
+                height: geometry.height,
+                zIndex: geometry.z,
+              }
+        }
+      >
+        {/* Safari-style chrome — drag me, double-click for app view */}
+        <div
+          onPointerDown={startDrag}
+          onDoubleClick={onToggleFullscreen}
+          className={cn(
+            'flex h-9 shrink-0 items-center gap-2 border-b border-border-highlight bg-surface-1 px-3 select-none',
+            fullscreen
+              ? 'cursor-default'
+              : interacting
+                ? 'cursor-grabbing'
+                : 'cursor-grab',
+          )}
+          title={`${def.title} — double-click to toggle app view`}
+        >
+          <span className="flex shrink-0 items-center gap-1.5" data-no-drag>
+            <span className="size-3 rounded-full bg-background-error-base" />
+            <span className="size-3 rounded-full bg-background-warning-base" />
+            <button
+              type="button"
+              aria-label={
+                fullscreen ? 'Exit fullscreen preview' : 'Fullscreen preview'
+              }
+              title={fullscreen ? 'Exit fullscreen (Esc)' : 'Fullscreen preview'}
+              onClick={onToggleFullscreen}
+              className="size-3 cursor-pointer rounded-full bg-background-success-base transition-transform hover:scale-110"
+            />
+          </span>
+          <span className="flex min-w-0 flex-1 justify-center">
+            <span className="flex h-6 max-w-[60%] min-w-[220px] items-center justify-center gap-1 truncate rounded-lg bg-background-highlight px-3 text-caption text-text-muted">
+              {kind === 'snapshot' ? (
+                <Camera className="size-3 shrink-0 text-brand-text" />
+              ) : (
+                <Lock className="size-3 shrink-0" weight="fill" />
+              )}
+              <span className="truncate">{def.url}</span>
+            </span>
+          </span>
+          <span className="flex shrink-0 items-center gap-1" data-no-drag>
+            <span className="max-w-[96px] truncate text-caption text-text-muted">
+              {def.title.split('—')[0]?.trim()}
+            </span>
+            {onSnapshot && !fullscreen && (
+              <button
+                type="button"
+                aria-label="Snapshot this window"
+                title="Snapshot — freeze this state as a new window"
+                onClick={onSnapshot}
+                className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+              >
+                <Camera className="size-3.5" />
+              </button>
+            )}
+            <button
+              type="button"
+              aria-label={
+                fullscreen ? 'Exit app view' : 'Open as app (fills the screen)'
+              }
+              title={
+                fullscreen
+                  ? 'Exit app view (Esc)'
+                  : 'Open as app — 98% of the screen'
+              }
+              onClick={onToggleFullscreen}
+              className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+            >
+              {fullscreen ? (
+                <CornersIn className="size-3.5" />
+              ) : (
+                <CornersOut className="size-3.5" />
+              )}
+            </button>
+          </span>
+        </div>
+
+        {/* Preview content — popovers portal in here so they scale with zoom */}
+        <div
+          ref={contentRef}
+          data-window-content=""
+          className="relative min-h-0 flex-1 overflow-auto"
+        >
+          <PortalContainerContext.Provider value={portalEl}>
+            {def.content}
+          </PortalContainerContext.Provider>
+        </div>
+
+        {/* Resize handle */}
+        {!fullscreen && (
+          <div
+            onPointerDown={startResize}
+            aria-hidden
+            className="absolute right-0 bottom-0 z-10 size-4 cursor-nwse-resize"
+          >
+            <span className="absolute right-1 bottom-1 block size-2 rounded-[2px] border-r-2 border-b-2 border-border-muted" />
+          </div>
+        )}
+      </section>
+    </>
+  )
+}
+
+/* ---------- CanvasWindowsStack ------------------------------------------------
+   Top-left collapsed widget: stacked card thumbnails → expand to full list.
+   Space bar toggles zen mode (hides this + all other chrome).
+-------------------------------------------------------------------------- */
+
+function CanvasWindowsStack({
+  windows,
+  snapshots,
+  notes,
+  focusedId,
+  onJump,
+  onRemoveSnapshot,
+  onJumpToNote,
+  onRemoveNote,
+  zenMode,
+}: {
+  windows: Array<{ id: string; title: string }>
+  snapshots: Array<{ id: string; title: string }>
+  notes: Array<{ id: string; n: number; text: string }>
+  focusedId: string | null
+  onJump: (id: string) => void
+  onRemoveSnapshot: (id: string) => void
+  onJumpToNote: (id: string) => void
+  onRemoveNote: (id: string) => void
+  zenMode: boolean
+}) {
+  const [open, setOpen] = useState(false)
+  const count = windows.length + snapshots.length
+  const stackDepth = Math.min(3, Math.max(1, count))
+
+  return (
+    <div
+      className={cn(
+        'absolute top-4 left-4 z-40 transition-opacity duration-200',
+        zenMode ? 'pointer-events-none opacity-0' : 'opacity-100',
+      )}
+    >
+      {/* Trigger pill */}
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        title={open ? 'Collapse windows list' : 'Expand windows list (Space = zen mode)'}
+        className="flex items-center gap-2 rounded-xl bg-background-base/90 px-2.5 py-2 shadow-border-base backdrop-blur transition-colors hover:bg-background-base"
+      >
+        {/* Stacked card thumbnails */}
+        <span
+          className="relative shrink-0"
+          style={{ width: 8 + stackDepth * 5, height: 16 }}
+        >
+          {Array.from({ length: stackDepth }).map((_, i) => (
+            <span
+              key={i}
+              className="absolute rounded-[3px] border border-border-base"
+              style={{
+                width: 16,
+                height: 12,
+                left: (stackDepth - 1 - i) * 4,
+                top: (stackDepth - 1 - i) * 2,
+                background:
+                  i === stackDepth - 1
+                    ? 'var(--background-emphasis)'
+                    : 'var(--surface-1)',
+                opacity: 0.55 + i * 0.22,
+              }}
+            />
+          ))}
+        </span>
+        <span className="tabular-nums text-label-xs text-text-muted">{count}</span>
+        {open ? (
+          <CornersIn className="size-3 shrink-0 text-text-muted" />
+        ) : (
+          <CornersOut className="size-3 shrink-0 text-text-muted" />
+        )}
+      </button>
+
+      {/* Expanded panel — rendered below the trigger */}
+      {open && (
+        <div className="absolute top-full left-0 mt-2">
+          <WindowsPanel
+            windows={windows}
+            snapshots={snapshots}
+            notes={notes}
+            focusedId={focusedId}
+            onJump={(id) => { onJump(id); setOpen(false) }}
+            onRemoveSnapshot={onRemoveSnapshot}
+            onJumpToNote={onJumpToNote}
+            onRemoveNote={onRemoveNote}
+          />
+        </div>
+      )}
+    </div>
   )
 }

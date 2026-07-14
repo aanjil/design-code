@@ -34,7 +34,7 @@ export function FilterBar({
   if (conditions.length === 0) return null
 
   return (
-    <div className="flex items-center gap-4 rounded-xl bg-background-base p-2.5 shadow-button-gray">
+    <div className="flex items-center gap-4 rounded-xl bg-background-highlight/50 shadow-border-base p-2.5 ">
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
         {conditions.map((condition) => {
           const field = fields.find((f) => f.id === condition.fieldId)
@@ -99,13 +99,13 @@ function FilterChip({
   const [editing, setEditing] = useState(false)
 
   return (
-    <div className="flex h-9 items-stretch overflow-hidden rounded-md bg-background-base shadow-button-gray">
-      <span className="flex items-center gap-1.5 px-2 text-label-sm text-text-primary">
+    <div className="flex h-9 shrink-0 items-stretch overflow-hidden rounded-md bg-background-muted shadow-button-gray">
+      <span className="flex items-center gap-1.5 px-2 text-label-sm whitespace-nowrap text-text-primary">
         <field.icon className="size-4 shrink-0" />
         {field.label}
       </span>
       <ChipDivider />
-      <span className="flex items-center px-2 text-label-xs text-text-muted">
+      <span className="flex items-center px-2 text-label-xs whitespace-nowrap text-text-muted">
         {condition.operator === 'is' ? 'is' : 'is any of'}
       </span>
       <ChipDivider />

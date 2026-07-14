@@ -105,12 +105,35 @@ Card recipe: `rounded-xl bg-background-base p-3 shadow-card hover:shadow-card-ho
   (`btn-gradient-primary|gray` utilities), `rounded-btn` 9px, `rounded-kbd` 6px,
   `shadow-button-{gray|primary}`, `shadow-pagination`. Flyout panels: menu `rounded-xl`
   p-1 on surface-2; combobox/value panels `rounded-2xl` on base; items h-[34px] rounded-lg.
+  Menu/select item highlight (hover + arrow keys + open submenu) = `background-muted`
+  via Base UI's `data-highlighted`/`data-popup-open` attributes — never `bg-accent`:
+  accent maps to `background-highlight`, which IS the menu panel bg (invisible highlight).
 - Filters (`nds/filters/`): `FilterMenu` (button → field list → nested submenu value panel
   with search + multi-select + Reset/Apply), `FilterBar` (applied container: segmented
   editable chips `[icon field | is | values | ×]` h-9 rounded-md, AI prompt entry, save-view,
   Clear), `parsePromptToConditions` = deterministic mock AI (options + synonyms).
-- `DisplayMenu`: table customization panel (group by, sort by + direction, column chips,
-  Apply/Reset draft flow).
+- `DisplayMenu`: "Display options" panel (group by, sort by + direction, column chips,
+  Apply/Reset draft flow). Controls ON the flyout surface (selects, sort button, chips)
+  don't use form-field tokens (white fill + ring reads as a cutout) — they use hairline
+  borders + faint fills, currently **hardcoded rgba marked `TODO: Fix color`** until
+  on-flyout tokens exist. Chips: h-9 rounded-full pills — on = faint solid fill,
+  off = hairline border + muted text.
+- Responsive toolbar (employees page): the toolbar wraps in `@container/toolbar`
+  (container query, NOT media query — canvas windows resize independent of viewport).
+  Button labels get `@max-3xl/toolbar:hidden` (icon-only below 768px; add `aria-label`
+  + `title` + keep count badges visible), search swaps to an icon button below 36rem
+  (`@max-xl/toolbar`) that expands to a full-row field (autofocus, Esc/Cancel collapse,
+  brand dot on the icon when a query is active).
+- Editable table (`nds/editable-table.tsx`, Figma 9738:11698): CSS grid + subgrid rows
+  with `gap-px` over `bg-border-base` = grid lines; cells 44px `px-3 py-1.5`
+  Paragraph/Small (numbers right-aligned, **Inter not mono — pattern-level DS spec**),
+  headers 32px highlight bg Label/XSmall. States: hover `bg-background-highlight`,
+  editing `focus-within:shadow-border-brand`, open select `shadow-border-active`.
+  Cell types: Text, Number (2dp on blur), SelectAndType (unit select, DS default
+  unit-first), Select, Date, Icon (48px), Caret (40px). `ExpandedRowPanel` =
+  col-span-full highlight surface with form fields; `AddRowFooter` = ghost brand
+  ListPlus row. Form primitives: FieldLabel/TextInput/TextArea (controls) +
+  SelectField — 36px, `shadow-button-gray`, focus `shadow-border-focus`.
 - Table recipe: rows 54px, cells px-5, header Label/Small muted + CaretUpDown sort,
   IDs/amounts in `font-mono text-mono-xs`, `StatusPill` (white pill + ring + status dot),
   pagination = circular 36px buttons + rows-per-page pill (`shadow-pagination`).
@@ -125,11 +148,45 @@ Card recipe: `rounded-xl bg-background-base p-3 shadow-card hover:shadow-card-ho
   and pinch / Ctrl-scroll toward the cursor; "Fit all windows" reframes everything;
   "Tidy up" (broom) arranges windows in a centered left→right row and refits; the
   bottom-left minimap shows window rects + a draggable brand-outlined viewport. The view
-  auto-centers on the windows at mount. The **green traffic light** or the **corners
-  button on the titlebar** presents one window at ~98vw/98vh at crisp 1:1 regardless of
-  canvas zoom, preserving that window's interaction state ("app view") — Escape,
-  backdrop, corners button, or green light exits. Dock/minimap/zoom hide while
-  presenting. Surface is 4000×2400.
+  auto-centers on the windows at mount. The **green traffic light**, the **corners
+  button**, or **double-clicking the titlebar** presents one window at ~98vw/98vh at
+  crisp 1:1 regardless of canvas zoom, preserving that window's interaction state
+  ("app view") — Escape, backdrop, corners button, or green light exits. All canvas
+  chrome hides while presenting. Surface is 4000×2400.
+- Blueprint tooling: 20/100px line grid, edge rulers with adaptive logical-px labels,
+  and a per-window readout above each titlebar (`w × h` of the content viewport +
+  `x · y`) for eyeballing responsive sizes. (Ruler/readout use 10–12px mono — a
+  deliberate canvas-tooling exception to the type scale.)
+- Windows panel (top-right): lists source windows and snapshots; click to jump/focus,
+  `×` removes a snapshot. The **camera button** on a window's chrome freezes its
+  current DOM (open popovers included) as an inert snapshot window — use snapshots to
+  narrate stages/steps of a flow.
+- Design-note pins: the speech-bubble toggle (bottom-left cluster) enters annotate
+  mode — click anywhere (window or canvas) to drop a numbered pin with an editable
+  note card; **⌘/Ctrl-click any DOM element inside a window** (works outside annotate
+  mode too) pins that element's region with a dashed brand highlight that tracks the
+  element live (scroll/drag/filter changes). Pins travel with their window, register
+  into the dock's Notes sheet, Esc closes/exits. Popovers/menus inside windows portal
+  into the window (see `ui/portal-context`), so they zoom with the canvas and appear
+  in snapshots.
+- Hotkeys: `n` / `shift+n` cycle focus through windows (incl. snapshots) and zoom-fit
+  each one; ⌘+/−/0 zoom; `a` toggles markers; Esc exits card → annotate mode →
+  app view, in that order. Default window size for new experiments: **1512×910**
+  (MacBook-class viewport).
+
+## Docs site (`/docs`)
+
+Live, token-driven NDS documentation for designers/developers: Colors,
+Typography, Spacing, Elevation, Layout & sizes + a Components overview stub.
+Pages render from the real tokens (`src/routes/docs/*`, primitives in
+`src/docs/doc-kit.tsx`) — swatches measure resolved values at runtime, so
+they follow the theme. Swatch class lists must be LITERAL strings (Tailwind
+JIT can't see `bg-${x}`). When tokens change, these pages follow automatically;
+when token NAMES change, update the literal lists. Full per-component
+variant/prop docs are the next milestone. Experiments stay a separate catalog
+(`/`), and all experiments share the same playground machinery
+(`CanvasExperiment` — windows/zoom/minimap/pins/snapshots are common; only the
+window contents differ per experiment).
 
 ## Playground structure
 
@@ -155,6 +212,10 @@ Card recipe: `rounded-xl bg-background-base p-3 shadow-card hover:shadow-card-ho
 - `border-hightlight` typo in colors.md → implemented as `border-highlight`.
 - `assets.md`: icon library unspecified in foundations → Phosphor chosen for the playground.
 - Card/popover dark surfaces: provisional (base / gray-800) until surface usage is specified.
+- On-flyout control surfaces (selects/chips/buttons sitting on popover surfaces): no
+  tokens yet — hardcoded rgba hairlines/fills in `display-menu.tsx`, marked
+  `TODO: Fix color`. Mint `--border-on-flyout` / `--background-on-flyout-*` style tokens
+  and replace.
 
 When foundations change: re-copy into `docs/foundations/`, update `src/styles.css` tokens,
 then update this file. All three must stay in sync.

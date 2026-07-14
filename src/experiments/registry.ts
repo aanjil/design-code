@@ -25,6 +25,16 @@ export interface ExperimentMeta {
  */
 export const experiments: Array<ExperimentMeta> = [
   {
+    slug: 'editable-invoice',
+    title: 'Editable table — create invoice',
+    description:
+      'Spreadsheet-style line items on the Niural Pay create-invoice page: editable cells (text, number, unit-select, tax select), expandable rows with detail fields, add/remove rows, and live computed totals.',
+    status: 'wip',
+    tags: ['editable-table', 'form', 'invoice', 'figma'],
+    to: '/e/editable-invoice',
+    added: '2026-07-10',
+  },
+  {
     slug: 'employee-filters',
     title: 'Employee directory — filters',
     description:

@@ -9,18 +9,42 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as DocsRouteImport } from './routes/docs'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DocsIndexRouteImport } from './routes/docs/index'
 import { Route as EEmployeeFiltersRouteImport } from './routes/e/employee-filters'
+import { Route as EEditableInvoiceRouteImport } from './routes/e/editable-invoice'
 import { Route as EDemoAnnotationsRouteImport } from './routes/e/demo-annotations'
+import { Route as DocsTypographyRouteImport } from './routes/docs/typography'
+import { Route as DocsSpacingRouteImport } from './routes/docs/spacing'
+import { Route as DocsLayoutRouteImport } from './routes/docs/layout'
+import { Route as DocsElevationRouteImport } from './routes/docs/elevation'
+import { Route as DocsComponentsRouteImport } from './routes/docs/components'
+import { Route as DocsColorsRouteImport } from './routes/docs/colors'
 
+const DocsRoute = DocsRouteImport.update({
+  id: '/docs',
+  path: '/docs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsIndexRoute = DocsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DocsRoute,
+} as any)
 const EEmployeeFiltersRoute = EEmployeeFiltersRouteImport.update({
   id: '/e/employee-filters',
   path: '/e/employee-filters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EEditableInvoiceRoute = EEditableInvoiceRouteImport.update({
+  id: '/e/editable-invoice',
+  path: '/e/editable-invoice',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EDemoAnnotationsRoute = EDemoAnnotationsRouteImport.update({
@@ -28,39 +52,140 @@ const EDemoAnnotationsRoute = EDemoAnnotationsRouteImport.update({
   path: '/e/demo-annotations',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DocsTypographyRoute = DocsTypographyRouteImport.update({
+  id: '/typography',
+  path: '/typography',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsSpacingRoute = DocsSpacingRouteImport.update({
+  id: '/spacing',
+  path: '/spacing',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsLayoutRoute = DocsLayoutRouteImport.update({
+  id: '/layout',
+  path: '/layout',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsElevationRoute = DocsElevationRouteImport.update({
+  id: '/elevation',
+  path: '/elevation',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsComponentsRoute = DocsComponentsRouteImport.update({
+  id: '/components',
+  path: '/components',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsColorsRoute = DocsColorsRouteImport.update({
+  id: '/colors',
+  path: '/colors',
+  getParentRoute: () => DocsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/docs': typeof DocsRouteWithChildren
+  '/docs/colors': typeof DocsColorsRoute
+  '/docs/components': typeof DocsComponentsRoute
+  '/docs/elevation': typeof DocsElevationRoute
+  '/docs/layout': typeof DocsLayoutRoute
+  '/docs/spacing': typeof DocsSpacingRoute
+  '/docs/typography': typeof DocsTypographyRoute
   '/e/demo-annotations': typeof EDemoAnnotationsRoute
+  '/e/editable-invoice': typeof EEditableInvoiceRoute
   '/e/employee-filters': typeof EEmployeeFiltersRoute
+  '/docs/': typeof DocsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/docs/colors': typeof DocsColorsRoute
+  '/docs/components': typeof DocsComponentsRoute
+  '/docs/elevation': typeof DocsElevationRoute
+  '/docs/layout': typeof DocsLayoutRoute
+  '/docs/spacing': typeof DocsSpacingRoute
+  '/docs/typography': typeof DocsTypographyRoute
   '/e/demo-annotations': typeof EDemoAnnotationsRoute
+  '/e/editable-invoice': typeof EEditableInvoiceRoute
   '/e/employee-filters': typeof EEmployeeFiltersRoute
+  '/docs': typeof DocsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/docs': typeof DocsRouteWithChildren
+  '/docs/colors': typeof DocsColorsRoute
+  '/docs/components': typeof DocsComponentsRoute
+  '/docs/elevation': typeof DocsElevationRoute
+  '/docs/layout': typeof DocsLayoutRoute
+  '/docs/spacing': typeof DocsSpacingRoute
+  '/docs/typography': typeof DocsTypographyRoute
   '/e/demo-annotations': typeof EDemoAnnotationsRoute
+  '/e/editable-invoice': typeof EEditableInvoiceRoute
   '/e/employee-filters': typeof EEmployeeFiltersRoute
+  '/docs/': typeof DocsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/e/demo-annotations' | '/e/employee-filters'
+  fullPaths:
+    | '/'
+    | '/docs'
+    | '/docs/colors'
+    | '/docs/components'
+    | '/docs/elevation'
+    | '/docs/layout'
+    | '/docs/spacing'
+    | '/docs/typography'
+    | '/e/demo-annotations'
+    | '/e/editable-invoice'
+    | '/e/employee-filters'
+    | '/docs/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/e/demo-annotations' | '/e/employee-filters'
-  id: '__root__' | '/' | '/e/demo-annotations' | '/e/employee-filters'
+  to:
+    | '/'
+    | '/docs/colors'
+    | '/docs/components'
+    | '/docs/elevation'
+    | '/docs/layout'
+    | '/docs/spacing'
+    | '/docs/typography'
+    | '/e/demo-annotations'
+    | '/e/editable-invoice'
+    | '/e/employee-filters'
+    | '/docs'
+  id:
+    | '__root__'
+    | '/'
+    | '/docs'
+    | '/docs/colors'
+    | '/docs/components'
+    | '/docs/elevation'
+    | '/docs/layout'
+    | '/docs/spacing'
+    | '/docs/typography'
+    | '/e/demo-annotations'
+    | '/e/editable-invoice'
+    | '/e/employee-filters'
+    | '/docs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DocsRoute: typeof DocsRouteWithChildren
   EDemoAnnotationsRoute: typeof EDemoAnnotationsRoute
+  EEditableInvoiceRoute: typeof EEditableInvoiceRoute
   EEmployeeFiltersRoute: typeof EEmployeeFiltersRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/docs': {
+      id: '/docs'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -68,11 +193,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs/': {
+      id: '/docs/'
+      path: '/'
+      fullPath: '/docs/'
+      preLoaderRoute: typeof DocsIndexRouteImport
+      parentRoute: typeof DocsRoute
+    }
     '/e/employee-filters': {
       id: '/e/employee-filters'
       path: '/e/employee-filters'
       fullPath: '/e/employee-filters'
       preLoaderRoute: typeof EEmployeeFiltersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/e/editable-invoice': {
+      id: '/e/editable-invoice'
+      path: '/e/editable-invoice'
+      fullPath: '/e/editable-invoice'
+      preLoaderRoute: typeof EEditableInvoiceRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/e/demo-annotations': {
@@ -82,12 +221,78 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EDemoAnnotationsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs/typography': {
+      id: '/docs/typography'
+      path: '/typography'
+      fullPath: '/docs/typography'
+      preLoaderRoute: typeof DocsTypographyRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/spacing': {
+      id: '/docs/spacing'
+      path: '/spacing'
+      fullPath: '/docs/spacing'
+      preLoaderRoute: typeof DocsSpacingRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/layout': {
+      id: '/docs/layout'
+      path: '/layout'
+      fullPath: '/docs/layout'
+      preLoaderRoute: typeof DocsLayoutRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/elevation': {
+      id: '/docs/elevation'
+      path: '/elevation'
+      fullPath: '/docs/elevation'
+      preLoaderRoute: typeof DocsElevationRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components': {
+      id: '/docs/components'
+      path: '/components'
+      fullPath: '/docs/components'
+      preLoaderRoute: typeof DocsComponentsRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/colors': {
+      id: '/docs/colors'
+      path: '/colors'
+      fullPath: '/docs/colors'
+      preLoaderRoute: typeof DocsColorsRouteImport
+      parentRoute: typeof DocsRoute
+    }
   }
 }
 
+interface DocsRouteChildren {
+  DocsColorsRoute: typeof DocsColorsRoute
+  DocsComponentsRoute: typeof DocsComponentsRoute
+  DocsElevationRoute: typeof DocsElevationRoute
+  DocsLayoutRoute: typeof DocsLayoutRoute
+  DocsSpacingRoute: typeof DocsSpacingRoute
+  DocsTypographyRoute: typeof DocsTypographyRoute
+  DocsIndexRoute: typeof DocsIndexRoute
+}
+
+const DocsRouteChildren: DocsRouteChildren = {
+  DocsColorsRoute: DocsColorsRoute,
+  DocsComponentsRoute: DocsComponentsRoute,
+  DocsElevationRoute: DocsElevationRoute,
+  DocsLayoutRoute: DocsLayoutRoute,
+  DocsSpacingRoute: DocsSpacingRoute,
+  DocsTypographyRoute: DocsTypographyRoute,
+  DocsIndexRoute: DocsIndexRoute,
+}
+
+const DocsRouteWithChildren = DocsRoute._addFileChildren(DocsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DocsRoute: DocsRouteWithChildren,
   EDemoAnnotationsRoute: EDemoAnnotationsRoute,
+  EEditableInvoiceRoute: EEditableInvoiceRoute,
   EEmployeeFiltersRoute: EEmployeeFiltersRoute,
 }
 export const routeTree = rootRouteImport

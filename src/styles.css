@@ -329,7 +329,7 @@
 
   /* shadcn bridge — dark-specific surfaces */
   --card: var(--background-base);
-  --popover: var(--gray-800);
+  --popover: #212121;
   --destructive: var(--background-error-base);
 }
 
@@ -584,12 +584,12 @@
     0px 4px 8px rgba(0, 0, 0, 0.08), 0px 2px 4px rgba(0, 0, 0, 0.08),
     0px 0px 0px 1px rgba(185, 185, 185, 0.08);
   --shadow-flyout:
-    0px 8px 16px rgba(0, 0, 0, 0.08), 0px 4px 8px rgba(0, 0, 0, 0.08),
-    0px 0px 0px 1px rgba(185, 185, 185, 0.08);
+    0px 8px 16px rgba(0, 0, 0, 0.30), 0px 4px 8px rgba(0, 0, 0, 0.08),
+    0px 0px 0px 0.5px rgba(185, 185, 185, 0.20);
   --shadow-ai:
     0px -6px 18px -4px rgba(225, 81, 255, 0.47), 0px 2px 3px -1px rgba(113, 77, 255, 0.48),
     0px 0px 0px 4px rgba(113, 77, 255, 0.11);
-  --shadow-border-base: 0px 1px 2px rgba(0, 0, 0, 0.08), 0px 0px 0px 1px rgba(185, 185, 185, 0.2);
+  --shadow-border-base: 0px 1px 2px rgba(0, 0, 0, 0.08), 0px 0px 0px 0.5px rgba(185, 185, 185, 0.2);
   --shadow-border-focus:
     0px 0px 0px 4px rgba(113, 77, 255, 0.3), 0px 0px 0px 1px #714dff,
     0px 1px 2px rgba(113, 77, 255, 0.5);

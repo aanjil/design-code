@@ -53,6 +53,7 @@ npx @tanstack/cli@latest create my-tanstack-app --agent --package-manager pnpm -
 
 Note: the `--tailwind` flag is deprecated and ignored by the current CLI —
 Tailwind v4 is always enabled in TanStack Start scaffolds, flag or not.
+The project directory was later renamed `my-tanstack-app` → `design-code`.
 
 ### Follow-up TanStack Intent commands run
 
@@ -127,7 +128,7 @@ yet.
 
 ### Next steps
 
-- `cd my-tanstack-app && pnpm dev` — serves at http://localhost:3000.
+- `cd design-code && pnpm dev` — serves at http://localhost:3000.
 - Make the first commit when ready.
 - Build real experiments (e.g. table filters) on this structure — the
   playground demo (`/e/demo-annotations`) is the copyable reference.

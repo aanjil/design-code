@@ -31,11 +31,21 @@ export function FilterMenu({
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
-      <DropdownMenuTrigger render={<Button variant="secondary" />}>
+      <DropdownMenuTrigger
+        render={<Button variant="secondary" aria-label="Filter" title="Filter" />}
+      >
         <FunnelSimple />
-        <span className="px-1 hover:cursor-pointer">Filter</span>
+        {/* label drops when the toolbar container narrows (employees page toolbar) */}
+        <span className="px-1 hover:cursor-pointer @max-3xl/toolbar:hidden">
+          Filter
+        </span>
+        {conditions.length > 0 && (
+          <span className="rounded-full bg-brand-muted px-1.5 text-caption-md text-brand-text">
+            {conditions.length}
+          </span>
+        )}
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-[200px] bg-surface-2">
+      <DropdownMenuContent align="end" className="w-[200px] ">
         {fields.map((field) => {
           const current =
             conditions.find((c) => c.fieldId === field.id)?.values ?? []
@@ -52,7 +62,7 @@ export function FilterMenu({
               </DropdownMenuSubTrigger>
               <DropdownMenuSubContent
                 sideOffset={6}
-                className="w-[270px] rounded-2xl bg-background-base p-0"
+                className="w-[270px] rounded-2xl  "
               >
                 <FilterValuePanel
                   field={field}
