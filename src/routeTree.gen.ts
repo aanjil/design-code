@@ -12,15 +12,47 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as DocsRouteImport } from './routes/docs'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DocsIndexRouteImport } from './routes/docs/index'
-import { Route as EEmployeeFiltersRouteImport } from './routes/e/employee-filters'
-import { Route as EEditableInvoiceRouteImport } from './routes/e/editable-invoice'
-import { Route as EDemoAnnotationsRouteImport } from './routes/e/demo-annotations'
+import { Route as AppIndexRouteImport } from './routes/app/index'
 import { Route as DocsTypographyRouteImport } from './routes/docs/typography'
 import { Route as DocsSpacingRouteImport } from './routes/docs/spacing'
 import { Route as DocsLayoutRouteImport } from './routes/docs/layout'
+import { Route as DocsIaRouteImport } from './routes/docs/ia'
+import { Route as DocsGrainCompositionRouteImport } from './routes/docs/grain-composition'
+import { Route as DocsGrainComponentRouteImport } from './routes/docs/grain-component'
+import { Route as DocsGrainCatalogRouteImport } from './routes/docs/grain-catalog'
+import { Route as DocsGrainRouteImport } from './routes/docs/grain'
+import { Route as DocsFloaterRouteImport } from './routes/docs/floater'
 import { Route as DocsElevationRouteImport } from './routes/docs/elevation'
-import { Route as DocsComponentsRouteImport } from './routes/docs/components'
 import { Route as DocsColorsRouteImport } from './routes/docs/colors'
+import { Route as CraftsTokensBillingRouteImport } from './routes/crafts/tokens-billing'
+import { Route as CraftsSplitPayRouteImport } from './routes/crafts/split-pay'
+import { Route as CraftsScheduleReportRouteImport } from './routes/crafts/schedule-report'
+import { Route as CraftsMultiPayrollRouteImport } from './routes/crafts/multi-payroll'
+import { Route as CraftsEmployeeFiltersRouteImport } from './routes/crafts/employee-filters'
+import { Route as CraftsEmmaMobileRouteImport } from './routes/crafts/emma-mobile'
+import { Route as CraftsEmmaIntakeRouteImport } from './routes/crafts/emma-intake'
+import { Route as CraftsEditableInvoiceRouteImport } from './routes/crafts/editable-invoice'
+import { Route as CraftsDynamicTimelineRouteImport } from './routes/crafts/dynamic-timeline'
+import { Route as CraftsDemoAnnotationsRouteImport } from './routes/crafts/demo-annotations'
+import { Route as CraftsBezelRouteImport } from './routes/crafts/bezel'
+import { Route as CraftsAskEmmaRouteImport } from './routes/crafts/ask-emma'
+import { Route as AppSectionRouteImport } from './routes/app/$section'
+import { Route as DocsComponentsIndexRouteImport } from './routes/docs/components/index'
+import { Route as DocsComponentsStepperRouteImport } from './routes/docs/components/stepper'
+import { Route as DocsComponentsSidebarRouteImport } from './routes/docs/components/sidebar'
+import { Route as DocsComponentsPageShellRouteImport } from './routes/docs/components/page-shell'
+import { Route as DocsComponentsInputsRouteImport } from './routes/docs/components/inputs'
+import { Route as DocsComponentsFiltersRouteImport } from './routes/docs/components/filters'
+import { Route as DocsComponentsFeedbackRouteImport } from './routes/docs/components/feedback'
+import { Route as DocsComponentsEditableTableRouteImport } from './routes/docs/components/editable-table'
+import { Route as DocsComponentsButtonsRouteImport } from './routes/docs/components/buttons'
+import { Route as DocsComponentsAppBarRouteImport } from './routes/docs/components/app-bar'
+import { Route as DocsComponentsAiNavigationRouteImport } from './routes/docs/components/ai-navigation'
+import { Route as DocsComponentsAiKnowledgeRouteImport } from './routes/docs/components/ai-knowledge'
+import { Route as DocsComponentsAiDecisionsRouteImport } from './routes/docs/components/ai-decisions'
+import { Route as DocsComponentsAiConversationalRouteImport } from './routes/docs/components/ai-conversational'
+import { Route as DocsComponentsAiAgentStatusRouteImport } from './routes/docs/components/ai-agent-status'
+import { Route as DocsComponentsAiRouteImport } from './routes/docs/components/ai'
 
 const DocsRoute = DocsRouteImport.update({
   id: '/docs',
@@ -37,19 +69,9 @@ const DocsIndexRoute = DocsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => DocsRoute,
 } as any)
-const EEmployeeFiltersRoute = EEmployeeFiltersRouteImport.update({
-  id: '/e/employee-filters',
-  path: '/e/employee-filters',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EEditableInvoiceRoute = EEditableInvoiceRouteImport.update({
-  id: '/e/editable-invoice',
-  path: '/e/editable-invoice',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const EDemoAnnotationsRoute = EDemoAnnotationsRouteImport.update({
-  id: '/e/demo-annotations',
-  path: '/e/demo-annotations',
+const AppIndexRoute = AppIndexRouteImport.update({
+  id: '/app/',
+  path: '/app/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocsTypographyRoute = DocsTypographyRouteImport.update({
@@ -67,14 +89,39 @@ const DocsLayoutRoute = DocsLayoutRouteImport.update({
   path: '/layout',
   getParentRoute: () => DocsRoute,
 } as any)
+const DocsIaRoute = DocsIaRouteImport.update({
+  id: '/ia',
+  path: '/ia',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsGrainCompositionRoute = DocsGrainCompositionRouteImport.update({
+  id: '/grain-composition',
+  path: '/grain-composition',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsGrainComponentRoute = DocsGrainComponentRouteImport.update({
+  id: '/grain-component',
+  path: '/grain-component',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsGrainCatalogRoute = DocsGrainCatalogRouteImport.update({
+  id: '/grain-catalog',
+  path: '/grain-catalog',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsGrainRoute = DocsGrainRouteImport.update({
+  id: '/grain',
+  path: '/grain',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsFloaterRoute = DocsFloaterRouteImport.update({
+  id: '/floater',
+  path: '/floater',
+  getParentRoute: () => DocsRoute,
+} as any)
 const DocsElevationRoute = DocsElevationRouteImport.update({
   id: '/elevation',
   path: '/elevation',
-  getParentRoute: () => DocsRoute,
-} as any)
-const DocsComponentsRoute = DocsComponentsRouteImport.update({
-  id: '/components',
-  path: '/components',
   getParentRoute: () => DocsRoute,
 } as any)
 const DocsColorsRoute = DocsColorsRouteImport.update({
@@ -82,99 +129,453 @@ const DocsColorsRoute = DocsColorsRouteImport.update({
   path: '/colors',
   getParentRoute: () => DocsRoute,
 } as any)
+const CraftsTokensBillingRoute = CraftsTokensBillingRouteImport.update({
+  id: '/crafts/tokens-billing',
+  path: '/crafts/tokens-billing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsSplitPayRoute = CraftsSplitPayRouteImport.update({
+  id: '/crafts/split-pay',
+  path: '/crafts/split-pay',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsScheduleReportRoute = CraftsScheduleReportRouteImport.update({
+  id: '/crafts/schedule-report',
+  path: '/crafts/schedule-report',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsMultiPayrollRoute = CraftsMultiPayrollRouteImport.update({
+  id: '/crafts/multi-payroll',
+  path: '/crafts/multi-payroll',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsEmployeeFiltersRoute = CraftsEmployeeFiltersRouteImport.update({
+  id: '/crafts/employee-filters',
+  path: '/crafts/employee-filters',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsEmmaMobileRoute = CraftsEmmaMobileRouteImport.update({
+  id: '/crafts/emma-mobile',
+  path: '/crafts/emma-mobile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsEmmaIntakeRoute = CraftsEmmaIntakeRouteImport.update({
+  id: '/crafts/emma-intake',
+  path: '/crafts/emma-intake',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsEditableInvoiceRoute = CraftsEditableInvoiceRouteImport.update({
+  id: '/crafts/editable-invoice',
+  path: '/crafts/editable-invoice',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsDynamicTimelineRoute = CraftsDynamicTimelineRouteImport.update({
+  id: '/crafts/dynamic-timeline',
+  path: '/crafts/dynamic-timeline',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsDemoAnnotationsRoute = CraftsDemoAnnotationsRouteImport.update({
+  id: '/crafts/demo-annotations',
+  path: '/crafts/demo-annotations',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsBezelRoute = CraftsBezelRouteImport.update({
+  id: '/crafts/bezel',
+  path: '/crafts/bezel',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsAskEmmaRoute = CraftsAskEmmaRouteImport.update({
+  id: '/crafts/ask-emma',
+  path: '/crafts/ask-emma',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AppSectionRoute = AppSectionRouteImport.update({
+  id: '/app/$section',
+  path: '/app/$section',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsComponentsIndexRoute = DocsComponentsIndexRouteImport.update({
+  id: '/components/',
+  path: '/components/',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsComponentsStepperRoute = DocsComponentsStepperRouteImport.update({
+  id: '/components/stepper',
+  path: '/components/stepper',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsComponentsSidebarRoute = DocsComponentsSidebarRouteImport.update({
+  id: '/components/sidebar',
+  path: '/components/sidebar',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsComponentsPageShellRoute = DocsComponentsPageShellRouteImport.update({
+  id: '/components/page-shell',
+  path: '/components/page-shell',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsComponentsInputsRoute = DocsComponentsInputsRouteImport.update({
+  id: '/components/inputs',
+  path: '/components/inputs',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsComponentsFiltersRoute = DocsComponentsFiltersRouteImport.update({
+  id: '/components/filters',
+  path: '/components/filters',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsComponentsFeedbackRoute = DocsComponentsFeedbackRouteImport.update({
+  id: '/components/feedback',
+  path: '/components/feedback',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsComponentsEditableTableRoute =
+  DocsComponentsEditableTableRouteImport.update({
+    id: '/components/editable-table',
+    path: '/components/editable-table',
+    getParentRoute: () => DocsRoute,
+  } as any)
+const DocsComponentsButtonsRoute = DocsComponentsButtonsRouteImport.update({
+  id: '/components/buttons',
+  path: '/components/buttons',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsComponentsAppBarRoute = DocsComponentsAppBarRouteImport.update({
+  id: '/components/app-bar',
+  path: '/components/app-bar',
+  getParentRoute: () => DocsRoute,
+} as any)
+const DocsComponentsAiNavigationRoute =
+  DocsComponentsAiNavigationRouteImport.update({
+    id: '/components/ai-navigation',
+    path: '/components/ai-navigation',
+    getParentRoute: () => DocsRoute,
+  } as any)
+const DocsComponentsAiKnowledgeRoute =
+  DocsComponentsAiKnowledgeRouteImport.update({
+    id: '/components/ai-knowledge',
+    path: '/components/ai-knowledge',
+    getParentRoute: () => DocsRoute,
+  } as any)
+const DocsComponentsAiDecisionsRoute =
+  DocsComponentsAiDecisionsRouteImport.update({
+    id: '/components/ai-decisions',
+    path: '/components/ai-decisions',
+    getParentRoute: () => DocsRoute,
+  } as any)
+const DocsComponentsAiConversationalRoute =
+  DocsComponentsAiConversationalRouteImport.update({
+    id: '/components/ai-conversational',
+    path: '/components/ai-conversational',
+    getParentRoute: () => DocsRoute,
+  } as any)
+const DocsComponentsAiAgentStatusRoute =
+  DocsComponentsAiAgentStatusRouteImport.update({
+    id: '/components/ai-agent-status',
+    path: '/components/ai-agent-status',
+    getParentRoute: () => DocsRoute,
+  } as any)
+const DocsComponentsAiRoute = DocsComponentsAiRouteImport.update({
+  id: '/components/ai',
+  path: '/components/ai',
+  getParentRoute: () => DocsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/docs': typeof DocsRouteWithChildren
+  '/app/$section': typeof AppSectionRoute
+  '/crafts/ask-emma': typeof CraftsAskEmmaRoute
+  '/crafts/bezel': typeof CraftsBezelRoute
+  '/crafts/demo-annotations': typeof CraftsDemoAnnotationsRoute
+  '/crafts/dynamic-timeline': typeof CraftsDynamicTimelineRoute
+  '/crafts/editable-invoice': typeof CraftsEditableInvoiceRoute
+  '/crafts/emma-intake': typeof CraftsEmmaIntakeRoute
+  '/crafts/emma-mobile': typeof CraftsEmmaMobileRoute
+  '/crafts/employee-filters': typeof CraftsEmployeeFiltersRoute
+  '/crafts/multi-payroll': typeof CraftsMultiPayrollRoute
+  '/crafts/schedule-report': typeof CraftsScheduleReportRoute
+  '/crafts/split-pay': typeof CraftsSplitPayRoute
+  '/crafts/tokens-billing': typeof CraftsTokensBillingRoute
   '/docs/colors': typeof DocsColorsRoute
-  '/docs/components': typeof DocsComponentsRoute
   '/docs/elevation': typeof DocsElevationRoute
+  '/docs/floater': typeof DocsFloaterRoute
+  '/docs/grain': typeof DocsGrainRoute
+  '/docs/grain-catalog': typeof DocsGrainCatalogRoute
+  '/docs/grain-component': typeof DocsGrainComponentRoute
+  '/docs/grain-composition': typeof DocsGrainCompositionRoute
+  '/docs/ia': typeof DocsIaRoute
   '/docs/layout': typeof DocsLayoutRoute
   '/docs/spacing': typeof DocsSpacingRoute
   '/docs/typography': typeof DocsTypographyRoute
-  '/e/demo-annotations': typeof EDemoAnnotationsRoute
-  '/e/editable-invoice': typeof EEditableInvoiceRoute
-  '/e/employee-filters': typeof EEmployeeFiltersRoute
+  '/app/': typeof AppIndexRoute
   '/docs/': typeof DocsIndexRoute
+  '/docs/components/ai': typeof DocsComponentsAiRoute
+  '/docs/components/ai-agent-status': typeof DocsComponentsAiAgentStatusRoute
+  '/docs/components/ai-conversational': typeof DocsComponentsAiConversationalRoute
+  '/docs/components/ai-decisions': typeof DocsComponentsAiDecisionsRoute
+  '/docs/components/ai-knowledge': typeof DocsComponentsAiKnowledgeRoute
+  '/docs/components/ai-navigation': typeof DocsComponentsAiNavigationRoute
+  '/docs/components/app-bar': typeof DocsComponentsAppBarRoute
+  '/docs/components/buttons': typeof DocsComponentsButtonsRoute
+  '/docs/components/editable-table': typeof DocsComponentsEditableTableRoute
+  '/docs/components/feedback': typeof DocsComponentsFeedbackRoute
+  '/docs/components/filters': typeof DocsComponentsFiltersRoute
+  '/docs/components/inputs': typeof DocsComponentsInputsRoute
+  '/docs/components/page-shell': typeof DocsComponentsPageShellRoute
+  '/docs/components/sidebar': typeof DocsComponentsSidebarRoute
+  '/docs/components/stepper': typeof DocsComponentsStepperRoute
+  '/docs/components/': typeof DocsComponentsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/app/$section': typeof AppSectionRoute
+  '/crafts/ask-emma': typeof CraftsAskEmmaRoute
+  '/crafts/bezel': typeof CraftsBezelRoute
+  '/crafts/demo-annotations': typeof CraftsDemoAnnotationsRoute
+  '/crafts/dynamic-timeline': typeof CraftsDynamicTimelineRoute
+  '/crafts/editable-invoice': typeof CraftsEditableInvoiceRoute
+  '/crafts/emma-intake': typeof CraftsEmmaIntakeRoute
+  '/crafts/emma-mobile': typeof CraftsEmmaMobileRoute
+  '/crafts/employee-filters': typeof CraftsEmployeeFiltersRoute
+  '/crafts/multi-payroll': typeof CraftsMultiPayrollRoute
+  '/crafts/schedule-report': typeof CraftsScheduleReportRoute
+  '/crafts/split-pay': typeof CraftsSplitPayRoute
+  '/crafts/tokens-billing': typeof CraftsTokensBillingRoute
   '/docs/colors': typeof DocsColorsRoute
-  '/docs/components': typeof DocsComponentsRoute
   '/docs/elevation': typeof DocsElevationRoute
+  '/docs/floater': typeof DocsFloaterRoute
+  '/docs/grain': typeof DocsGrainRoute
+  '/docs/grain-catalog': typeof DocsGrainCatalogRoute
+  '/docs/grain-component': typeof DocsGrainComponentRoute
+  '/docs/grain-composition': typeof DocsGrainCompositionRoute
+  '/docs/ia': typeof DocsIaRoute
   '/docs/layout': typeof DocsLayoutRoute
   '/docs/spacing': typeof DocsSpacingRoute
   '/docs/typography': typeof DocsTypographyRoute
-  '/e/demo-annotations': typeof EDemoAnnotationsRoute
-  '/e/editable-invoice': typeof EEditableInvoiceRoute
-  '/e/employee-filters': typeof EEmployeeFiltersRoute
+  '/app': typeof AppIndexRoute
   '/docs': typeof DocsIndexRoute
+  '/docs/components/ai': typeof DocsComponentsAiRoute
+  '/docs/components/ai-agent-status': typeof DocsComponentsAiAgentStatusRoute
+  '/docs/components/ai-conversational': typeof DocsComponentsAiConversationalRoute
+  '/docs/components/ai-decisions': typeof DocsComponentsAiDecisionsRoute
+  '/docs/components/ai-knowledge': typeof DocsComponentsAiKnowledgeRoute
+  '/docs/components/ai-navigation': typeof DocsComponentsAiNavigationRoute
+  '/docs/components/app-bar': typeof DocsComponentsAppBarRoute
+  '/docs/components/buttons': typeof DocsComponentsButtonsRoute
+  '/docs/components/editable-table': typeof DocsComponentsEditableTableRoute
+  '/docs/components/feedback': typeof DocsComponentsFeedbackRoute
+  '/docs/components/filters': typeof DocsComponentsFiltersRoute
+  '/docs/components/inputs': typeof DocsComponentsInputsRoute
+  '/docs/components/page-shell': typeof DocsComponentsPageShellRoute
+  '/docs/components/sidebar': typeof DocsComponentsSidebarRoute
+  '/docs/components/stepper': typeof DocsComponentsStepperRoute
+  '/docs/components': typeof DocsComponentsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/docs': typeof DocsRouteWithChildren
+  '/app/$section': typeof AppSectionRoute
+  '/crafts/ask-emma': typeof CraftsAskEmmaRoute
+  '/crafts/bezel': typeof CraftsBezelRoute
+  '/crafts/demo-annotations': typeof CraftsDemoAnnotationsRoute
+  '/crafts/dynamic-timeline': typeof CraftsDynamicTimelineRoute
+  '/crafts/editable-invoice': typeof CraftsEditableInvoiceRoute
+  '/crafts/emma-intake': typeof CraftsEmmaIntakeRoute
+  '/crafts/emma-mobile': typeof CraftsEmmaMobileRoute
+  '/crafts/employee-filters': typeof CraftsEmployeeFiltersRoute
+  '/crafts/multi-payroll': typeof CraftsMultiPayrollRoute
+  '/crafts/schedule-report': typeof CraftsScheduleReportRoute
+  '/crafts/split-pay': typeof CraftsSplitPayRoute
+  '/crafts/tokens-billing': typeof CraftsTokensBillingRoute
   '/docs/colors': typeof DocsColorsRoute
-  '/docs/components': typeof DocsComponentsRoute
   '/docs/elevation': typeof DocsElevationRoute
+  '/docs/floater': typeof DocsFloaterRoute
+  '/docs/grain': typeof DocsGrainRoute
+  '/docs/grain-catalog': typeof DocsGrainCatalogRoute
+  '/docs/grain-component': typeof DocsGrainComponentRoute
+  '/docs/grain-composition': typeof DocsGrainCompositionRoute
+  '/docs/ia': typeof DocsIaRoute
   '/docs/layout': typeof DocsLayoutRoute
   '/docs/spacing': typeof DocsSpacingRoute
   '/docs/typography': typeof DocsTypographyRoute
-  '/e/demo-annotations': typeof EDemoAnnotationsRoute
-  '/e/editable-invoice': typeof EEditableInvoiceRoute
-  '/e/employee-filters': typeof EEmployeeFiltersRoute
+  '/app/': typeof AppIndexRoute
   '/docs/': typeof DocsIndexRoute
+  '/docs/components/ai': typeof DocsComponentsAiRoute
+  '/docs/components/ai-agent-status': typeof DocsComponentsAiAgentStatusRoute
+  '/docs/components/ai-conversational': typeof DocsComponentsAiConversationalRoute
+  '/docs/components/ai-decisions': typeof DocsComponentsAiDecisionsRoute
+  '/docs/components/ai-knowledge': typeof DocsComponentsAiKnowledgeRoute
+  '/docs/components/ai-navigation': typeof DocsComponentsAiNavigationRoute
+  '/docs/components/app-bar': typeof DocsComponentsAppBarRoute
+  '/docs/components/buttons': typeof DocsComponentsButtonsRoute
+  '/docs/components/editable-table': typeof DocsComponentsEditableTableRoute
+  '/docs/components/feedback': typeof DocsComponentsFeedbackRoute
+  '/docs/components/filters': typeof DocsComponentsFiltersRoute
+  '/docs/components/inputs': typeof DocsComponentsInputsRoute
+  '/docs/components/page-shell': typeof DocsComponentsPageShellRoute
+  '/docs/components/sidebar': typeof DocsComponentsSidebarRoute
+  '/docs/components/stepper': typeof DocsComponentsStepperRoute
+  '/docs/components/': typeof DocsComponentsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
     | '/docs'
+    | '/app/$section'
+    | '/crafts/ask-emma'
+    | '/crafts/bezel'
+    | '/crafts/demo-annotations'
+    | '/crafts/dynamic-timeline'
+    | '/crafts/editable-invoice'
+    | '/crafts/emma-intake'
+    | '/crafts/emma-mobile'
+    | '/crafts/employee-filters'
+    | '/crafts/multi-payroll'
+    | '/crafts/schedule-report'
+    | '/crafts/split-pay'
+    | '/crafts/tokens-billing'
     | '/docs/colors'
-    | '/docs/components'
     | '/docs/elevation'
+    | '/docs/floater'
+    | '/docs/grain'
+    | '/docs/grain-catalog'
+    | '/docs/grain-component'
+    | '/docs/grain-composition'
+    | '/docs/ia'
     | '/docs/layout'
     | '/docs/spacing'
     | '/docs/typography'
-    | '/e/demo-annotations'
-    | '/e/editable-invoice'
-    | '/e/employee-filters'
+    | '/app/'
     | '/docs/'
+    | '/docs/components/ai'
+    | '/docs/components/ai-agent-status'
+    | '/docs/components/ai-conversational'
+    | '/docs/components/ai-decisions'
+    | '/docs/components/ai-knowledge'
+    | '/docs/components/ai-navigation'
+    | '/docs/components/app-bar'
+    | '/docs/components/buttons'
+    | '/docs/components/editable-table'
+    | '/docs/components/feedback'
+    | '/docs/components/filters'
+    | '/docs/components/inputs'
+    | '/docs/components/page-shell'
+    | '/docs/components/sidebar'
+    | '/docs/components/stepper'
+    | '/docs/components/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/app/$section'
+    | '/crafts/ask-emma'
+    | '/crafts/bezel'
+    | '/crafts/demo-annotations'
+    | '/crafts/dynamic-timeline'
+    | '/crafts/editable-invoice'
+    | '/crafts/emma-intake'
+    | '/crafts/emma-mobile'
+    | '/crafts/employee-filters'
+    | '/crafts/multi-payroll'
+    | '/crafts/schedule-report'
+    | '/crafts/split-pay'
+    | '/crafts/tokens-billing'
     | '/docs/colors'
-    | '/docs/components'
     | '/docs/elevation'
+    | '/docs/floater'
+    | '/docs/grain'
+    | '/docs/grain-catalog'
+    | '/docs/grain-component'
+    | '/docs/grain-composition'
+    | '/docs/ia'
     | '/docs/layout'
     | '/docs/spacing'
     | '/docs/typography'
-    | '/e/demo-annotations'
-    | '/e/editable-invoice'
-    | '/e/employee-filters'
+    | '/app'
     | '/docs'
+    | '/docs/components/ai'
+    | '/docs/components/ai-agent-status'
+    | '/docs/components/ai-conversational'
+    | '/docs/components/ai-decisions'
+    | '/docs/components/ai-knowledge'
+    | '/docs/components/ai-navigation'
+    | '/docs/components/app-bar'
+    | '/docs/components/buttons'
+    | '/docs/components/editable-table'
+    | '/docs/components/feedback'
+    | '/docs/components/filters'
+    | '/docs/components/inputs'
+    | '/docs/components/page-shell'
+    | '/docs/components/sidebar'
+    | '/docs/components/stepper'
+    | '/docs/components'
   id:
     | '__root__'
     | '/'
     | '/docs'
+    | '/app/$section'
+    | '/crafts/ask-emma'
+    | '/crafts/bezel'
+    | '/crafts/demo-annotations'
+    | '/crafts/dynamic-timeline'
+    | '/crafts/editable-invoice'
+    | '/crafts/emma-intake'
+    | '/crafts/emma-mobile'
+    | '/crafts/employee-filters'
+    | '/crafts/multi-payroll'
+    | '/crafts/schedule-report'
+    | '/crafts/split-pay'
+    | '/crafts/tokens-billing'
     | '/docs/colors'
-    | '/docs/components'
     | '/docs/elevation'
+    | '/docs/floater'
+    | '/docs/grain'
+    | '/docs/grain-catalog'
+    | '/docs/grain-component'
+    | '/docs/grain-composition'
+    | '/docs/ia'
     | '/docs/layout'
     | '/docs/spacing'
     | '/docs/typography'
-    | '/e/demo-annotations'
-    | '/e/editable-invoice'
-    | '/e/employee-filters'
+    | '/app/'
     | '/docs/'
+    | '/docs/components/ai'
+    | '/docs/components/ai-agent-status'
+    | '/docs/components/ai-conversational'
+    | '/docs/components/ai-decisions'
+    | '/docs/components/ai-knowledge'
+    | '/docs/components/ai-navigation'
+    | '/docs/components/app-bar'
+    | '/docs/components/buttons'
+    | '/docs/components/editable-table'
+    | '/docs/components/feedback'
+    | '/docs/components/filters'
+    | '/docs/components/inputs'
+    | '/docs/components/page-shell'
+    | '/docs/components/sidebar'
+    | '/docs/components/stepper'
+    | '/docs/components/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DocsRoute: typeof DocsRouteWithChildren
-  EDemoAnnotationsRoute: typeof EDemoAnnotationsRoute
-  EEditableInvoiceRoute: typeof EEditableInvoiceRoute
-  EEmployeeFiltersRoute: typeof EEmployeeFiltersRoute
+  AppSectionRoute: typeof AppSectionRoute
+  CraftsAskEmmaRoute: typeof CraftsAskEmmaRoute
+  CraftsBezelRoute: typeof CraftsBezelRoute
+  CraftsDemoAnnotationsRoute: typeof CraftsDemoAnnotationsRoute
+  CraftsDynamicTimelineRoute: typeof CraftsDynamicTimelineRoute
+  CraftsEditableInvoiceRoute: typeof CraftsEditableInvoiceRoute
+  CraftsEmmaIntakeRoute: typeof CraftsEmmaIntakeRoute
+  CraftsEmmaMobileRoute: typeof CraftsEmmaMobileRoute
+  CraftsEmployeeFiltersRoute: typeof CraftsEmployeeFiltersRoute
+  CraftsMultiPayrollRoute: typeof CraftsMultiPayrollRoute
+  CraftsScheduleReportRoute: typeof CraftsScheduleReportRoute
+  CraftsSplitPayRoute: typeof CraftsSplitPayRoute
+  CraftsTokensBillingRoute: typeof CraftsTokensBillingRoute
+  AppIndexRoute: typeof AppIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -200,25 +601,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsIndexRouteImport
       parentRoute: typeof DocsRoute
     }
-    '/e/employee-filters': {
-      id: '/e/employee-filters'
-      path: '/e/employee-filters'
-      fullPath: '/e/employee-filters'
-      preLoaderRoute: typeof EEmployeeFiltersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/e/editable-invoice': {
-      id: '/e/editable-invoice'
-      path: '/e/editable-invoice'
-      fullPath: '/e/editable-invoice'
-      preLoaderRoute: typeof EEditableInvoiceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/e/demo-annotations': {
-      id: '/e/demo-annotations'
-      path: '/e/demo-annotations'
-      fullPath: '/e/demo-annotations'
-      preLoaderRoute: typeof EDemoAnnotationsRouteImport
+    '/app/': {
+      id: '/app/'
+      path: '/app'
+      fullPath: '/app/'
+      preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs/typography': {
@@ -242,18 +629,53 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsLayoutRouteImport
       parentRoute: typeof DocsRoute
     }
+    '/docs/ia': {
+      id: '/docs/ia'
+      path: '/ia'
+      fullPath: '/docs/ia'
+      preLoaderRoute: typeof DocsIaRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/grain-composition': {
+      id: '/docs/grain-composition'
+      path: '/grain-composition'
+      fullPath: '/docs/grain-composition'
+      preLoaderRoute: typeof DocsGrainCompositionRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/grain-component': {
+      id: '/docs/grain-component'
+      path: '/grain-component'
+      fullPath: '/docs/grain-component'
+      preLoaderRoute: typeof DocsGrainComponentRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/grain-catalog': {
+      id: '/docs/grain-catalog'
+      path: '/grain-catalog'
+      fullPath: '/docs/grain-catalog'
+      preLoaderRoute: typeof DocsGrainCatalogRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/grain': {
+      id: '/docs/grain'
+      path: '/grain'
+      fullPath: '/docs/grain'
+      preLoaderRoute: typeof DocsGrainRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/floater': {
+      id: '/docs/floater'
+      path: '/floater'
+      fullPath: '/docs/floater'
+      preLoaderRoute: typeof DocsFloaterRouteImport
+      parentRoute: typeof DocsRoute
+    }
     '/docs/elevation': {
       id: '/docs/elevation'
       path: '/elevation'
       fullPath: '/docs/elevation'
       preLoaderRoute: typeof DocsElevationRouteImport
-      parentRoute: typeof DocsRoute
-    }
-    '/docs/components': {
-      id: '/docs/components'
-      path: '/components'
-      fullPath: '/docs/components'
-      preLoaderRoute: typeof DocsComponentsRouteImport
       parentRoute: typeof DocsRoute
     }
     '/docs/colors': {
@@ -263,27 +685,272 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsColorsRouteImport
       parentRoute: typeof DocsRoute
     }
+    '/crafts/tokens-billing': {
+      id: '/crafts/tokens-billing'
+      path: '/crafts/tokens-billing'
+      fullPath: '/crafts/tokens-billing'
+      preLoaderRoute: typeof CraftsTokensBillingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/split-pay': {
+      id: '/crafts/split-pay'
+      path: '/crafts/split-pay'
+      fullPath: '/crafts/split-pay'
+      preLoaderRoute: typeof CraftsSplitPayRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/schedule-report': {
+      id: '/crafts/schedule-report'
+      path: '/crafts/schedule-report'
+      fullPath: '/crafts/schedule-report'
+      preLoaderRoute: typeof CraftsScheduleReportRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/multi-payroll': {
+      id: '/crafts/multi-payroll'
+      path: '/crafts/multi-payroll'
+      fullPath: '/crafts/multi-payroll'
+      preLoaderRoute: typeof CraftsMultiPayrollRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/employee-filters': {
+      id: '/crafts/employee-filters'
+      path: '/crafts/employee-filters'
+      fullPath: '/crafts/employee-filters'
+      preLoaderRoute: typeof CraftsEmployeeFiltersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/emma-mobile': {
+      id: '/crafts/emma-mobile'
+      path: '/crafts/emma-mobile'
+      fullPath: '/crafts/emma-mobile'
+      preLoaderRoute: typeof CraftsEmmaMobileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/emma-intake': {
+      id: '/crafts/emma-intake'
+      path: '/crafts/emma-intake'
+      fullPath: '/crafts/emma-intake'
+      preLoaderRoute: typeof CraftsEmmaIntakeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/editable-invoice': {
+      id: '/crafts/editable-invoice'
+      path: '/crafts/editable-invoice'
+      fullPath: '/crafts/editable-invoice'
+      preLoaderRoute: typeof CraftsEditableInvoiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/dynamic-timeline': {
+      id: '/crafts/dynamic-timeline'
+      path: '/crafts/dynamic-timeline'
+      fullPath: '/crafts/dynamic-timeline'
+      preLoaderRoute: typeof CraftsDynamicTimelineRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/demo-annotations': {
+      id: '/crafts/demo-annotations'
+      path: '/crafts/demo-annotations'
+      fullPath: '/crafts/demo-annotations'
+      preLoaderRoute: typeof CraftsDemoAnnotationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/bezel': {
+      id: '/crafts/bezel'
+      path: '/crafts/bezel'
+      fullPath: '/crafts/bezel'
+      preLoaderRoute: typeof CraftsBezelRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/ask-emma': {
+      id: '/crafts/ask-emma'
+      path: '/crafts/ask-emma'
+      fullPath: '/crafts/ask-emma'
+      preLoaderRoute: typeof CraftsAskEmmaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/app/$section': {
+      id: '/app/$section'
+      path: '/app/$section'
+      fullPath: '/app/$section'
+      preLoaderRoute: typeof AppSectionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/components/': {
+      id: '/docs/components/'
+      path: '/components'
+      fullPath: '/docs/components/'
+      preLoaderRoute: typeof DocsComponentsIndexRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/stepper': {
+      id: '/docs/components/stepper'
+      path: '/components/stepper'
+      fullPath: '/docs/components/stepper'
+      preLoaderRoute: typeof DocsComponentsStepperRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/sidebar': {
+      id: '/docs/components/sidebar'
+      path: '/components/sidebar'
+      fullPath: '/docs/components/sidebar'
+      preLoaderRoute: typeof DocsComponentsSidebarRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/page-shell': {
+      id: '/docs/components/page-shell'
+      path: '/components/page-shell'
+      fullPath: '/docs/components/page-shell'
+      preLoaderRoute: typeof DocsComponentsPageShellRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/inputs': {
+      id: '/docs/components/inputs'
+      path: '/components/inputs'
+      fullPath: '/docs/components/inputs'
+      preLoaderRoute: typeof DocsComponentsInputsRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/filters': {
+      id: '/docs/components/filters'
+      path: '/components/filters'
+      fullPath: '/docs/components/filters'
+      preLoaderRoute: typeof DocsComponentsFiltersRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/feedback': {
+      id: '/docs/components/feedback'
+      path: '/components/feedback'
+      fullPath: '/docs/components/feedback'
+      preLoaderRoute: typeof DocsComponentsFeedbackRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/editable-table': {
+      id: '/docs/components/editable-table'
+      path: '/components/editable-table'
+      fullPath: '/docs/components/editable-table'
+      preLoaderRoute: typeof DocsComponentsEditableTableRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/buttons': {
+      id: '/docs/components/buttons'
+      path: '/components/buttons'
+      fullPath: '/docs/components/buttons'
+      preLoaderRoute: typeof DocsComponentsButtonsRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/app-bar': {
+      id: '/docs/components/app-bar'
+      path: '/components/app-bar'
+      fullPath: '/docs/components/app-bar'
+      preLoaderRoute: typeof DocsComponentsAppBarRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/ai-navigation': {
+      id: '/docs/components/ai-navigation'
+      path: '/components/ai-navigation'
+      fullPath: '/docs/components/ai-navigation'
+      preLoaderRoute: typeof DocsComponentsAiNavigationRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/ai-knowledge': {
+      id: '/docs/components/ai-knowledge'
+      path: '/components/ai-knowledge'
+      fullPath: '/docs/components/ai-knowledge'
+      preLoaderRoute: typeof DocsComponentsAiKnowledgeRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/ai-decisions': {
+      id: '/docs/components/ai-decisions'
+      path: '/components/ai-decisions'
+      fullPath: '/docs/components/ai-decisions'
+      preLoaderRoute: typeof DocsComponentsAiDecisionsRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/ai-conversational': {
+      id: '/docs/components/ai-conversational'
+      path: '/components/ai-conversational'
+      fullPath: '/docs/components/ai-conversational'
+      preLoaderRoute: typeof DocsComponentsAiConversationalRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/ai-agent-status': {
+      id: '/docs/components/ai-agent-status'
+      path: '/components/ai-agent-status'
+      fullPath: '/docs/components/ai-agent-status'
+      preLoaderRoute: typeof DocsComponentsAiAgentStatusRouteImport
+      parentRoute: typeof DocsRoute
+    }
+    '/docs/components/ai': {
+      id: '/docs/components/ai'
+      path: '/components/ai'
+      fullPath: '/docs/components/ai'
+      preLoaderRoute: typeof DocsComponentsAiRouteImport
+      parentRoute: typeof DocsRoute
+    }
   }
 }
 
 interface DocsRouteChildren {
   DocsColorsRoute: typeof DocsColorsRoute
-  DocsComponentsRoute: typeof DocsComponentsRoute
   DocsElevationRoute: typeof DocsElevationRoute
+  DocsFloaterRoute: typeof DocsFloaterRoute
+  DocsGrainRoute: typeof DocsGrainRoute
+  DocsGrainCatalogRoute: typeof DocsGrainCatalogRoute
+  DocsGrainComponentRoute: typeof DocsGrainComponentRoute
+  DocsGrainCompositionRoute: typeof DocsGrainCompositionRoute
+  DocsIaRoute: typeof DocsIaRoute
   DocsLayoutRoute: typeof DocsLayoutRoute
   DocsSpacingRoute: typeof DocsSpacingRoute
   DocsTypographyRoute: typeof DocsTypographyRoute
   DocsIndexRoute: typeof DocsIndexRoute
+  DocsComponentsAiRoute: typeof DocsComponentsAiRoute
+  DocsComponentsAiAgentStatusRoute: typeof DocsComponentsAiAgentStatusRoute
+  DocsComponentsAiConversationalRoute: typeof DocsComponentsAiConversationalRoute
+  DocsComponentsAiDecisionsRoute: typeof DocsComponentsAiDecisionsRoute
+  DocsComponentsAiKnowledgeRoute: typeof DocsComponentsAiKnowledgeRoute
+  DocsComponentsAiNavigationRoute: typeof DocsComponentsAiNavigationRoute
+  DocsComponentsAppBarRoute: typeof DocsComponentsAppBarRoute
+  DocsComponentsButtonsRoute: typeof DocsComponentsButtonsRoute
+  DocsComponentsEditableTableRoute: typeof DocsComponentsEditableTableRoute
+  DocsComponentsFeedbackRoute: typeof DocsComponentsFeedbackRoute
+  DocsComponentsFiltersRoute: typeof DocsComponentsFiltersRoute
+  DocsComponentsInputsRoute: typeof DocsComponentsInputsRoute
+  DocsComponentsPageShellRoute: typeof DocsComponentsPageShellRoute
+  DocsComponentsSidebarRoute: typeof DocsComponentsSidebarRoute
+  DocsComponentsStepperRoute: typeof DocsComponentsStepperRoute
+  DocsComponentsIndexRoute: typeof DocsComponentsIndexRoute
 }
 
 const DocsRouteChildren: DocsRouteChildren = {
   DocsColorsRoute: DocsColorsRoute,
-  DocsComponentsRoute: DocsComponentsRoute,
   DocsElevationRoute: DocsElevationRoute,
+  DocsFloaterRoute: DocsFloaterRoute,
+  DocsGrainRoute: DocsGrainRoute,
+  DocsGrainCatalogRoute: DocsGrainCatalogRoute,
+  DocsGrainComponentRoute: DocsGrainComponentRoute,
+  DocsGrainCompositionRoute: DocsGrainCompositionRoute,
+  DocsIaRoute: DocsIaRoute,
   DocsLayoutRoute: DocsLayoutRoute,
   DocsSpacingRoute: DocsSpacingRoute,
   DocsTypographyRoute: DocsTypographyRoute,
   DocsIndexRoute: DocsIndexRoute,
+  DocsComponentsAiRoute: DocsComponentsAiRoute,
+  DocsComponentsAiAgentStatusRoute: DocsComponentsAiAgentStatusRoute,
+  DocsComponentsAiConversationalRoute: DocsComponentsAiConversationalRoute,
+  DocsComponentsAiDecisionsRoute: DocsComponentsAiDecisionsRoute,
+  DocsComponentsAiKnowledgeRoute: DocsComponentsAiKnowledgeRoute,
+  DocsComponentsAiNavigationRoute: DocsComponentsAiNavigationRoute,
+  DocsComponentsAppBarRoute: DocsComponentsAppBarRoute,
+  DocsComponentsButtonsRoute: DocsComponentsButtonsRoute,
+  DocsComponentsEditableTableRoute: DocsComponentsEditableTableRoute,
+  DocsComponentsFeedbackRoute: DocsComponentsFeedbackRoute,
+  DocsComponentsFiltersRoute: DocsComponentsFiltersRoute,
+  DocsComponentsInputsRoute: DocsComponentsInputsRoute,
+  DocsComponentsPageShellRoute: DocsComponentsPageShellRoute,
+  DocsComponentsSidebarRoute: DocsComponentsSidebarRoute,
+  DocsComponentsStepperRoute: DocsComponentsStepperRoute,
+  DocsComponentsIndexRoute: DocsComponentsIndexRoute,
 }
 
 const DocsRouteWithChildren = DocsRoute._addFileChildren(DocsRouteChildren)
@@ -291,9 +958,20 @@ const DocsRouteWithChildren = DocsRoute._addFileChildren(DocsRouteChildren)
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DocsRoute: DocsRouteWithChildren,
-  EDemoAnnotationsRoute: EDemoAnnotationsRoute,
-  EEditableInvoiceRoute: EEditableInvoiceRoute,
-  EEmployeeFiltersRoute: EEmployeeFiltersRoute,
+  AppSectionRoute: AppSectionRoute,
+  CraftsAskEmmaRoute: CraftsAskEmmaRoute,
+  CraftsBezelRoute: CraftsBezelRoute,
+  CraftsDemoAnnotationsRoute: CraftsDemoAnnotationsRoute,
+  CraftsDynamicTimelineRoute: CraftsDynamicTimelineRoute,
+  CraftsEditableInvoiceRoute: CraftsEditableInvoiceRoute,
+  CraftsEmmaIntakeRoute: CraftsEmmaIntakeRoute,
+  CraftsEmmaMobileRoute: CraftsEmmaMobileRoute,
+  CraftsEmployeeFiltersRoute: CraftsEmployeeFiltersRoute,
+  CraftsMultiPayrollRoute: CraftsMultiPayrollRoute,
+  CraftsScheduleReportRoute: CraftsScheduleReportRoute,
+  CraftsSplitPayRoute: CraftsSplitPayRoute,
+  CraftsTokensBillingRoute: CraftsTokensBillingRoute,
+  AppIndexRoute: AppIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

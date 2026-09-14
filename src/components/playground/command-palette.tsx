@@ -1,7 +1,7 @@
 import { useNavigate } from '@tanstack/react-router'
 import { SquaresFour } from '@phosphor-icons/react'
 import { statusDotClass } from './status-badge'
-import { experiments } from '@/experiments/registry'
+import { crafts } from '@/crafts/registry'
 import {
   Command,
   CommandDialog,
@@ -13,8 +13,8 @@ import {
 } from '@/components/ui/command'
 import { cn } from '@/lib/utils'
 
-/** ⌘K experiment search — shared by the top nav and the canvas dock. */
-export function ExperimentCommandPalette({
+/** ⌘K craft search - shared by the top nav and the canvas dock. */
+export function CraftCommandPalette({
   open,
   onOpenChange,
 }: {
@@ -26,11 +26,11 @@ export function ExperimentCommandPalette({
   return (
     <CommandDialog open={open} onOpenChange={onOpenChange}>
       <Command>
-        <CommandInput placeholder="Search experiments…" />
+        <CommandInput placeholder="Search crafts…" />
         <CommandList>
-          <CommandEmpty>No experiments found.</CommandEmpty>
-          <CommandGroup heading="Experiments">
-            {experiments.map((e) => (
+          <CommandEmpty>No crafts found.</CommandEmpty>
+          <CommandGroup heading="Crafts">
+            {crafts.map((e) => (
               <CommandItem
                 key={e.slug}
                 value={`${e.title} ${e.tags.join(' ')}`}
@@ -60,7 +60,7 @@ export function ExperimentCommandPalette({
               }}
             >
               <SquaresFour />
-              All experiments
+              All crafts
             </CommandItem>
           </CommandGroup>
         </CommandList>

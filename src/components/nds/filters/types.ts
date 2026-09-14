@@ -30,7 +30,7 @@ export function makeCondition(
 
 export function conditionSummary(condition: FilterCondition): string {
   const [first, ...rest] = condition.values
-  if (!first) return '—'
+  if (!first) return '-'
   if (rest.length === 0) return first
   if (rest.length === 1) return `${first}, ${rest[0]}`
   return `${first} +${rest.length}`
@@ -51,7 +51,7 @@ export function upsertCondition(
 }
 
 /**
- * Deterministic mock "AI" — maps prompt words onto field options and
+ * Deterministic mock "AI" - maps prompt words onto field options and
  * synonyms. No network; good enough to demo the interaction.
  */
 export function parsePromptToConditions(

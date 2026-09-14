@@ -32,12 +32,12 @@ import { cn } from '@/lib/utils'
  * Fields and chips here sit on the flyout surface, so the form-field tokens
  * (background-base fill + shadow-button-gray ring) read as floating cutouts.
  * They need their own hairline treatment instead.
- * TODO: Fix color — rgba values below are hardcoded until proper
+ * TODO: Fix color - rgba values below are hardcoded until proper
  * on-flyout surface/border tokens exist in foundations.
  */
 const flyoutControl =
   'border border-[rgba(20,20,22,0.1)] bg-transparent hover:bg-[rgba(20,20,22,0.03)] dark:border-[rgba(255,255,255,0.12)] dark:hover:bg-[rgba(255,255,255,0.05)]'
-// TODO: Fix color — chip fills on flyout surface, same story as above.
+// TODO: Fix color - chip fills on flyout surface, same story as above.
 const chipOn =
   'border-transparent bg-[rgba(20,20,22,0.07)] text-text-primary hover:bg-[rgba(20,20,22,0.11)] dark:bg-[rgba(255,255,255,0.1)] dark:hover:bg-[rgba(255,255,255,0.15)]'
 const chipOff =
@@ -117,7 +117,7 @@ export function DisplayMenu({
               />
               <button
                 type="button"
-                aria-label={`Sort ${draft.sortDir === 'asc' ? 'ascending' : 'descending'} — click to flip`}
+                aria-label={`Sort ${draft.sortDir === 'asc' ? 'ascending' : 'descending'} - click to flip`}
                 onClick={() =>
                   setDraft((d) => ({
                     ...d,
@@ -205,7 +205,7 @@ function OptionSelect({
   const current = options.find((o) => o.value === value)
   return (
     <DropdownMenu>
-      {/* TODO: Fix color — open-state fill is hardcoded like flyoutControl above */}
+      {/* TODO: Fix color - open-state fill is hardcoded like flyoutControl above */}
       <DropdownMenuTrigger
         className={cn(
           'flex h-9 items-center gap-2 rounded-[10px] pr-2.5 pl-3.5 text-paragraph-sm text-text-primary transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 data-[popup-open]:bg-[rgba(20,20,22,0.05)] dark:data-[popup-open]:bg-[rgba(255,255,255,0.07)]',

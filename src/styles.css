@@ -1,7 +1,7 @@
 /*
- * NDS — Niural Design System tokens.
+ * NDS - Niural Design System tokens.
  * Source of truth: docs/foundations/*.md (synced from /Users/anjil/Documents/nds/foundations).
- * Rules: docs/DESIGN.md. Semantic tokens only — primitives below are NOT exposed as utilities,
+ * Rules: docs/DESIGN.md. Semantic tokens only - primitives below are NOT exposed as utilities,
  * and Tailwind's default color palette is disabled. If a color class doesn't exist, that's the
  * system telling you to use a token.
  */
@@ -13,7 +13,7 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  /* ---------- Primitives (reference only — never use directly) ---------- */
+  /* ---------- Primitives (reference only - never use directly) ---------- */
   --gray-25: #f0f0f0;
   --gray-50: #fafafa;
   --gray-100: #f5f5f5;
@@ -92,7 +92,7 @@
 
   --alpha-white-72: #ffffffb7;
 
-  /* ---------- Semantic tokens — LIGHT ---------- */
+  /* ---------- Semantic tokens - LIGHT ---------- */
   /* Background */
   --background-base: var(--white);
   --background-muted: var(--gray-200);
@@ -126,6 +126,15 @@
   --text-muted: var(--gray-500);
   --text-disabled: var(--gray-300);
   --text-on-color: var(--white);
+
+  /* Grain (AI-native design language, docs/foundations/grain.md) - the
+     claim bar earns attention through contrast and weight, never hue.
+     Do NOT use --shadow-ai (purple glow) on grain/* components - that
+     token is the pre-Grain "stardust" treatment the language replaces. */
+  --grain-ink: var(--gray-950);
+  --grain-ink-foreground: var(--white);
+  --grain-ink-muted: var(--gray-600);
+
   --text-success-base: #4aa34d;
   --text-success-subtle: var(--green-200);
   --text-warning-base: #c88830;
@@ -178,7 +187,7 @@
   --overlay-background-base: var(--alpha-white-72);
   --overlay-border-base: #ffffff7f;
 
-  /* Accent (decorative — never for status) */
+  /* Accent (decorative - never for status) */
   --accent-orange-base: #d45525;
   --accent-orange-muted: var(--orange-200);
   --accent-orange-highlight: #fdf6ee;
@@ -193,10 +202,10 @@
   --accent-violet-highlight: var(--violet-100);
 
   /* Gradients (use via [background:var(--gradient-…)]) */
-  --gradient-overlay-surface: linear-gradient(180deg, #ac93ff 0%, #e0e0e0 90.38%);
+  --gradient-overlay-surface: linear-gradient(180deg, var(--color-brand-muted) 0%, #e0e0e0 90.38%);
   --gradient-border-tb: linear-gradient(180deg, rgba(39, 39, 42, 0) 0%, #27272a 58.58%);
 
-  /* Component surfaces (from Figma Web design system — not yet in foundations docs) */
+  /* Component surfaces (from Figma Web design system - not yet in foundations docs) */
   --surface-button-gray: var(--gray-300);
   --surface-button-primary: var(--brand-emphasis);
   --elevation-alpha-22: rgba(185, 185, 185, 0.22);
@@ -243,7 +252,7 @@
 }
 
 .dark {
-  /* ---------- Semantic tokens — DARK ---------- */
+  /* ---------- Semantic tokens - DARK ---------- */
   --background-base: var(--gray-900);
   --background-muted: var(--gray-750);
   --background-emphasis: var(--gray-500);
@@ -273,6 +282,12 @@
   --text-info-base: var(--blue-400);
   --text-info-subtle: var(--blue-600);
   --text-error-base: var(--red-500);
+
+  /* Grain - contrast inverts with the theme so the claim bar stays the
+     loudest neutral in the room, dark mode included. */
+  --grain-ink: var(--white);
+  --grain-ink-foreground: var(--gray-950);
+  --grain-ink-muted: var(--gray-400);
 
   --border-base: var(--gray-800);
   --border-muted: var(--gray-600);
@@ -313,7 +328,7 @@
   --accent-orange-muted: #5b2f00;
   --accent-orange-highlight: #3e1609;
   --accent-pink-base: var(--pink-400);
-  --accent-pink-muted: var(--pink-900); /* TODO: foundation says pale-pink-900 — primitive undefined */
+  --accent-pink-muted: var(--pink-900); /* TODO: foundation says pale-pink-900 - primitive undefined */
   --accent-pink-highlight: var(--pink-950); /* TODO: pale-pink-1000 undefined */
   --accent-teal-base: var(--teal-400);
   --accent-teal-muted: var(--teal-900); /* TODO: pale-teal-900 undefined */
@@ -322,19 +337,19 @@
   --accent-violet-muted: var(--violet-900); /* TODO: pale-violet-900 undefined */
   --accent-violet-highlight: var(--violet-950); /* TODO: pale-violet-1000 undefined */
 
-  /* Component surfaces — dark */
+  /* Component surfaces - dark */
   --surface-button-gray: var(--gray-700);
   --elevation-alpha-22: rgba(151, 151, 151, 0.22);
   --gradient-button-gray: linear-gradient(180deg, #2e2e2e 10.577%, var(--gray-800) 100%);
 
-  /* shadcn bridge — dark-specific surfaces */
+  /* shadcn bridge - dark-specific surfaces */
   --card: var(--background-base);
   --popover: #212121;
   --destructive: var(--background-error-base);
 }
 
 @theme inline {
-  /* Kill Tailwind's default palette — NDS tokens only */
+  /* Kill Tailwind's default palette - NDS tokens only */
   --color-*: initial;
   --color-white: var(--white);
   --color-black: var(--black);
@@ -394,6 +409,10 @@
   --color-border-error-base: var(--border-error-base);
   --color-border-error-muted: var(--border-error-muted);
 
+  --color-grain-ink: var(--grain-ink);
+  --color-grain-ink-foreground: var(--grain-ink-foreground);
+  --color-grain-ink-muted: var(--grain-ink-muted);
+
   --color-brand-primary: var(--brand-primary);
   --color-brand-emphasis: var(--brand-emphasis);
   --color-brand-muted: var(--brand-muted);
@@ -432,7 +451,7 @@
   --color-accent-violet-muted: var(--accent-violet-muted);
   --color-accent-violet-highlight: var(--accent-violet-highlight);
 
-  /* shadcn/ui semantic names (used inside src/components/ui — don't use in experiment code) */
+  /* shadcn/ui semantic names (used inside src/components/ui - don't use in experiment code) */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -477,7 +496,7 @@
   --font-mono: "Geist Mono", ui-monospace, "SF Mono", monospace;
   --font-heading: var(--font-sans);
 
-  /* Title — Inter 520, lh 100%. h1/h2 -4%, h3 -3%, h4/h5 -2% */
+  /* Title - Inter 520, lh 100%. h1/h2 -4%, h3 -3%, h4/h5 -2% */
   --text-title-h1: 56px;
   --text-title-h1--line-height: 1;
   --text-title-h1--letter-spacing: -0.04em;
@@ -499,7 +518,7 @@
   --text-title-h5--letter-spacing: -0.02em;
   --text-title-h5--font-weight: 520;
 
-  /* Paragraph — Inter 425, lh 150%, -2% */
+  /* Paragraph - Inter 425, lh 150%, -2% */
   --text-paragraph-xl: 20px;
   --text-paragraph-xl--line-height: 1.5;
   --text-paragraph-xl--letter-spacing: -0.02em;
@@ -521,7 +540,7 @@
   --text-paragraph-xs--letter-spacing: -0.02em;
   --text-paragraph-xs--font-weight: 425;
 
-  /* Label — Inter 550 (sm: 530), lh 150%, -2%. Label/Small is the platform default. */
+  /* Label - Inter 550 (sm: 530), lh 150%, -2%. Label/Small is the platform default. */
   --text-label-xl: 20px;
   --text-label-xl--line-height: 1.5;
   --text-label-xl--letter-spacing: -0.02em;
@@ -543,7 +562,7 @@
   --text-label-xs--letter-spacing: -0.02em;
   --text-label-xs--font-weight: 550;
 
-  /* Caption — Inter, 12px, lh 130% */
+  /* Caption - Inter, 12px, lh 130% */
   --text-caption: 12px;
   --text-caption--line-height: 1.3;
   --text-caption--letter-spacing: -0.02em;
@@ -553,7 +572,7 @@
   --text-caption-md--letter-spacing: -0.02em;
   --text-caption-md--font-weight: 500;
 
-  /* Mono — pair with `font-mono`. md/sm are SemiBold for data emphasis. lh 150%, -1% */
+  /* Mono - pair with `font-mono`. md/sm are SemiBold for data emphasis. lh 150%, -1% */
   --text-mono-xl: 20px;
   --text-mono-xl--line-height: 1.5;
   --text-mono-xl--letter-spacing: -0.01em;
@@ -589,6 +608,12 @@
   --shadow-ai:
     0px -6px 18px -4px rgba(225, 81, 255, 0.47), 0px 2px 3px -1px rgba(113, 77, 255, 0.48),
     0px 0px 0px 4px rgba(113, 77, 255, 0.11);
+  /* Floater chrome ring (Figma "Grain" file, pill + default floaters) - a
+     tighter, ambient-only violet ring. Distinct from --shadow-ai: no pink
+     glow, 2px ring not 4px. Safe on Shell/Floater chrome (not a grain
+     itself) per docs/foundations/grain.md "Shell - the Floater, aligned". */
+  --shadow-floater:
+    0px 0px 0px 2px rgba(113, 77, 255, 0.11), 0px 2px 3px -2px rgba(113, 77, 255, 0.48);
   --shadow-border-base: 0px 1px 2px rgba(0, 0, 0, 0.08), 0px 0px 0px 0.5px rgba(185, 185, 185, 0.2);
   --shadow-border-focus:
     0px 0px 0px 4px rgba(113, 77, 255, 0.3), 0px 0px 0px 1px #714dff,
@@ -622,7 +647,7 @@
     0px 0px 0px 1px var(--elevation-alpha-24), 0px 1px 4px 0px var(--elevation-alpha-shadow);
 }
 
-/* Button fills from the design system — gradients can't be @theme color tokens */
+/* Button fills from the design system - gradients can't be @theme color tokens */
 @utility btn-gradient-primary {
   background-image: var(--gradient-button-primary);
 }
@@ -660,4 +685,51 @@
   ::selection {
     background: var(--brand-muted);
   }
+}
+
+
+.sidebar-background {
+  background: mix-color(var(--background-base), var(--brand-muted));
+  background-opacity: 0.6;
+}
+
+.main-layout {
+  background: transparent
+}
+
+/* Emma copilot "thinking" glow - a breathing ring outside the constant
+   shadow-ai glow, so the avatar visibly pulses while suggestions compute. */
+@keyframes emma-glow-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(113, 77, 255, 0.35);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(113, 77, 255, 0);
+  }
+}
+.animate-emma-glow {
+  animation: emma-glow-pulse 1.8s ease-in-out infinite;
+}
+
+/* Bezel bar furniture (src/components/nds/grain/bar.tsx): a reading dot
+   bob and a heard-voice waveform - process-layer motion, no claim. */
+@keyframes bar-scan-bob {
+  0%, 100% { opacity: .28; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(-3px); }
+}
+.animate-bar-scan {
+  animation: bar-scan-bob 1.05s ease-in-out infinite;
+}
+@keyframes bar-waveform {
+  0%, 100% { height: 4px; }
+  50% { height: 18px; }
+}
+.animate-bar-waveform {
+  animation: bar-waveform 1.05s ease-in-out infinite;
+}
+
+
+.niural-surface {
+  background: radial-gradient(173.86% 156.95% at -18.92% -46.59%, rgba(188, 218, 244, 0.60) 28.38%, rgba(223, 212, 228, 0.60) 65.26%, rgba(242, 226, 214, 0.60) 100%), #FFF;
 }

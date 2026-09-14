@@ -19,7 +19,7 @@ import { cn } from '@/lib/utils'
 /**
  * Editable table pattern (Figma "Editable table cell component", 9738:11698).
  * A CSS grid with 1px gaps over a hairline background = the grid lines.
- * Cells are 44px (headers 32px); Paragraph/Small for values — the DS spec
+ * Cells are 44px (headers 32px); Paragraph/Small for values - the DS spec
  * deliberately uses Inter (not mono) inside editable cells.
  * States: hover = highlight bg · editing = shadow-border-brand ·
  * open select / keyboard focus = shadow-border-active.
@@ -49,7 +49,7 @@ export function EditableTable({
   )
 }
 
-/** One table row — spans all columns via subgrid so cells align. */
+/** One table row - spans all columns via subgrid so cells align. */
 export function EditableRow({
   className,
   children,
@@ -306,7 +306,7 @@ export function SelectCell({
   )
 }
 
-/** Date cell — text entry with calendar affordance (YYYY-MM-DD). */
+/** Date cell - text entry with calendar affordance (YYYY-MM-DD). */
 export function DateCell({
   value,
   onChange,
@@ -399,7 +399,7 @@ export function CaretCell({
   )
 }
 
-/** Expanded row detail panel — highlight surface, wraps form fields. */
+/** Expanded row detail panel - highlight surface, wraps form fields. */
 export function ExpandedRowPanel({
   children,
   className,

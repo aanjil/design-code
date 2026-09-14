@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/docs/typography')({
   component: TypographyDoc,
-  head: () => ({ meta: [{ title: 'Typography — NDS Docs' }] }),
+  head: () => ({ meta: [{ title: 'Typography - NDS Docs' }] }),
 })
 
 interface Specimen {
@@ -89,11 +89,11 @@ function TypographyDoc() {
   return (
     <DocPage
       title="Typography"
-      description="Two typefaces: Inter for all UI text, Geist Mono for numbers and data. One class sets size, weight, line-height and tracking — never compose type by hand."
+      description="Two typefaces: Inter for all UI text, Geist Mono for numbers and data. One class sets size, weight, line-height and tracking - never compose type by hand."
     >
       <DocSection
         title="Title"
-        note="Inter 520, line-height 100%. Headlines don't wrap — keep copy short, never truncate."
+        note="Inter 520, line-height 100%. Headlines don't wrap - keep copy short, never truncate."
       >
         <SpecimenList specimens={TITLES} sample="Global payroll, simplified" />
       </DocSection>
@@ -110,7 +110,7 @@ function TypographyDoc() {
 
       <DocSection
         title="Label"
-        note="UI text — buttons, form labels, table headers, tabs. Label/Small (14/530) is the platform default."
+        note="UI text - buttons, form labels, table headers, tabs. Label/Small (14/530) is the platform default."
       >
         <SpecimenList specimens={LABELS} sample="Approve payroll" />
       </DocSection>
@@ -130,12 +130,12 @@ function TypographyDoc() {
         <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-primary marker:text-text-disabled">
           <li>Max two type sizes per component.</li>
           <li>
-            No custom font sizes — if a size isn't in the scale, the design
+            No custom font sizes - if a size isn't in the scale, the design
             needs revisiting, not a new size.
           </li>
           <li>
             Stacked text (name over role, label over value) takes{' '}
-            <InlineCode>no gap</InlineCode> — 150% line-height provides the
+            <InlineCode>no gap</InlineCode> - 150% line-height provides the
             separation. Remove <InlineCode>gap-1</InlineCode> on sight.
           </li>
           <li>Label for interactive/UI text, Paragraph for reading text.</li>

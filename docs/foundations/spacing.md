@@ -1,16 +1,16 @@
 # Spacing
 
-Spacing is intentional whitespace. It groups information, signals hierarchy, and makes the UI feel composed — not just pretty. Use it to organize, not decorate.
+Spacing is intentional whitespace. It groups information, signals hierarchy, and makes the UI feel composed - not just pretty. Use it to organize, not decorate.
 
 ---
 
 ## Philosophy
 
 **Optical spacing > mathematical spacing.**
-The scale is a guide, not a law. If something needs 15px and you can explain why, keep it. If you can't explain it, use 16px. You are not allowed to introduce new token values — but what value you use within the system is your call.
+The scale is a guide, not a law. If something needs 15px and you can explain why, keep it. If you can't explain it, use 16px. You are not allowed to introduce new token values - but what value you use within the system is your call.
 
 **Group with space, not lines.**
-Tighter = related. Looser = separate. (This is the Law of Proximity — use it to signal hierarchy, not aesthetics.) Use proximity before reaching for dividers or borders.
+Tighter = related. Looser = separate. (This is the Law of Proximity - use it to signal hierarchy, not aesthetics.) Use proximity before reaching for dividers or borders.
 
 **Less code is always better.**
 Avoid custom spacing that forces new tokens or utility classes. If your layout requires a value outside the scale, reconsider the layout first.
@@ -28,7 +28,7 @@ These four values cover 99% of cases. Start here.
 | **16px** | Page body padding, grid horizontal gap, section horizontal gap |
 | **20px** | Item group vertical gap, grid vertical gap |
 
-The full scale below covers the remaining 1% — component-level, layout-level, and edge cases.
+The full scale below covers the remaining 1% - component-level, layout-level, and edge cases.
 
 ---
 
@@ -53,13 +53,13 @@ Base unit is `4px`.
 
 ## Sections
 
-Sections are the top-level divisions of a page — form sections, detail blocks, content groups.
+Sections are the top-level divisions of a page - form sections, detail blocks, content groups.
 
-- **48px** — large, distinct sections that need clear separation
-- **32px** — default between sections
-- **24px** — sub-sections nested inside a section
-- **16px** — horizontal gap between items in a section
-- **20px** — vertical gap between items in a section
+- **48px** - large, distinct sections that need clear separation
+- **32px** - default between sections
+- **24px** - sub-sections nested inside a section
+- **16px** - horizontal gap between items in a section
+- **20px** - vertical gap between items in a section
 
 > When unsure between 32 and 48: does this section stand alone or flow from the one above it? Standalone → 48. Flowing → 32.
 
@@ -71,7 +71,7 @@ The app structure is: `AppBar > Sidebar + PageLayout (PageHeader + PageBody + Pa
 
 ### PageBody (default)
 - `16px` all sides
-- No margins — padding only
+- No margins - padding only
 
 ### Settings page
 - `48px` vertical padding
@@ -80,7 +80,7 @@ The app structure is: `AppBar > Sidebar + PageLayout (PageHeader + PageBody + Pa
 ### Form page
 - `24px` horizontal
 - `32px` top
-- `196px` bottom — intentional scroll breathing room, prevents content from feeling stuck at the bottom
+- `196px` bottom - intentional scroll breathing room, prevents content from feeling stuck at the bottom
 
 ### List page
 - `16px` all sides
@@ -101,7 +101,7 @@ The app structure is: `AppBar > Sidebar + PageLayout (PageHeader + PageBody + Pa
 
 ### Button / tabs / atoms
 - `10px` horizontal padding
-- No vertical padding — height is fixed, content is centered
+- No vertical padding - height is fixed, content is centered
 
 ### Card grid / flex-wrap
 - Horizontal gap: `16px`
@@ -118,7 +118,7 @@ The app structure is: `AppBar > Sidebar + PageLayout (PageHeader + PageBody + Pa
 | Multiple groups (proximity signal) | 8px |
 | Form inputs in a group | 6px |
 
-Use 8px between groups to signal "related but distinct." Don't go below 8px for groups — that's component-level spacing.
+Use 8px between groups to signal "related but distinct." Don't go below 8px for groups - that's component-level spacing.
 
 ---
 
@@ -173,26 +173,26 @@ If the UI feels cluttered despite "correct" spacing, switch from top-down to bot
 
 ## Exceptions
 
-Gut feel is valid. Optical balance is valid. If 15px looks better than 16px, keep it — but ask yourself why. If you can answer it, ship it. If you can't, use 16px.
+Gut feel is valid. Optical balance is valid. If 15px looks better than 16px, keep it - but ask yourself why. If you can answer it, ship it. If you can't, use 16px.
 
 You cannot introduce new token values. You can choose which existing value to use.
 
-Desktop and tablet share the same spacing system. Mobile is a separate app — not covered here.
+Desktop and tablet share the same spacing system. Mobile is a separate app - not covered here.
 
 ---
 
 ## Do's
 
-- When unsure, use `8, 12, 16, 20` — these cover 99% of cases
+- When unsure, use `8, 12, 16, 20` - these cover 99% of cases
 - Choose spacing based on proximity intent: how related are these two things?
 - Use `4px` text-wrap padding on icon+text elements to correct for icon bounding box optical offset
-- Let line-height handle stacked text — remove `gap-1` when you see it
+- Let line-height handle stacked text - remove `gap-1` when you see it
 - Prefer bottom-up spacing for dense, nested layouts; top-down for page-level content
 
 ## Don'ts
 
-- Don't add multiple spacings for the same context — pick one and be consistent
+- Don't add multiple spacings for the same context - pick one and be consistent
 - Don't use dividers or borders to separate things that spacing alone can handle
-- Don't add `gap` between stacked text elements — use line-height
-- Don't introduce custom values on first pass — use the defined scale, tweak only with a clear optical reason
-- Don't use spacing to make things look pretty — use it to make things make sense
+- Don't add `gap` between stacked text elements - use line-height
+- Don't introduce custom values on first pass - use the defined scale, tweak only with a clear optical reason
+- Don't use spacing to make things look pretty - use it to make things make sense

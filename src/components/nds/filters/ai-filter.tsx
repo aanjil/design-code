@@ -3,7 +3,7 @@ import { Sparkle } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 
 /**
- * Prompt-to-filters entry. Mock "Emma" — parsing is deterministic keyword
+ * Prompt-to-filters entry. Mock "Emma" - parsing is deterministic keyword
  * matching (see parsePromptToConditions); no network. Returns how many
  * conditions the prompt produced so the UI can react.
  */
@@ -60,7 +60,7 @@ export function AiFilter({
         }}
         placeholder={
           noMatch
-            ? 'Nothing matched — try a job title, location, type…'
+            ? 'Nothing matched - try a job title, location, type…'
             : 'Try “EOR account executives in London hired in 2024”'
         }
         className="min-w-0 flex-1 bg-transparent px-1 text-paragraph-sm text-text-primary outline-none placeholder:text-text-muted"

@@ -8,7 +8,7 @@ Typography in Niural uses two typefaces and four style categories. All values ar
 
 | Role | Family | Use |
 |------|--------|-----|
-| Heading / Body | Inter | All UI text — titles, labels, paragraphs, captions |
+| Heading / Body | Inter | All UI text - titles, labels, paragraphs, captions |
 | Mono | Geist Mono | Code, numbers, data values, financial figures |
 
 ---
@@ -25,7 +25,7 @@ Display and page headings. Inter, weight 520, line-height 100% (tight). Used for
 | `Title/H4` | 32px | 520 | 100% | -2% | Detail heading |
 | `Title/H5` | 24px | 520 | 100% | -2% | Component heading, card title |
 
-> Titles use tight line-height (100%) — they are not meant to wrap into reading text. Keep title copy short.
+> Titles use tight line-height (100%) - they are not meant to wrap into reading text. Keep title copy short.
 
 ---
 
@@ -45,14 +45,14 @@ Reading and body text. Inter, weight 425, line-height 150%.
 
 ## Label
 
-UI text — buttons, form labels, table headers, nav items, badges, tabs. Inter, line-height 150%. Higher weight than Paragraph at the same size.
+UI text - buttons, form labels, table headers, nav items, badges, tabs. Inter, line-height 150%. Higher weight than Paragraph at the same size.
 
 | Style | Size | Weight | Line height | Letter spacing | Use |
 |-------|------|--------|-------------|----------------|-----|
 | `Label/XLarge` | 20px | 550 | 150% | -2% | Prominent UI labels |
 | `Label/Large` | 18px | 550 | 150% | -2% | Large button labels |
 | `Label/Medium` | 16px | 550 | 150% | -2% | Standard labels |
-| `Label/Small` | 14px | 530 | 150% | -2% | Default label — most UI contexts |
+| `Label/Small` | 14px | 530 | 150% | -2% | Default label - most UI contexts |
 | `Label/XSmall` | 13px | 550 | 150% | -2% | Small badges, tags, secondary labels |
 
 > `Label/Small` (14px / 530) is the most used style across the platform.
@@ -82,7 +82,7 @@ Numeric data, financial values, code. Geist Mono, weight 425, line-height 150%.
 | `Mono/Small` | 14px | SemiBold | 150% | -1% | Table cells, financial figures |
 | `Mono/XSmall` | 13px | 425 | 150% | -1% | Fine numeric detail |
 
-> Use Mono for any value that benefits from fixed-width alignment — amounts, IDs, dates in tables, account numbers.
+> Use Mono for any value that benefits from fixed-width alignment - amounts, IDs, dates in tables, account numbers.
 
 ---
 
@@ -104,7 +104,7 @@ Niural uses variable font weights. Not all map to standard CSS names.
 
 | Category | Line height | Reason |
 |----------|-------------|--------|
-| Title | 100% | Headlines don't wrap — tight looks intentional |
+| Title | 100% | Headlines don't wrap - tight looks intentional |
 | Paragraph / Label / Mono | 150% | Reading comfort, stacked text breathing room |
 | Caption | 130% | Compact but still legible at 12px |
 
@@ -114,7 +114,7 @@ Niural uses variable font weights. Not all map to standard CSS names.
 
 ## Letter spacing
 
-All styles use negative letter spacing — tighter tracking at larger sizes, slightly looser at small.
+All styles use negative letter spacing - tighter tracking at larger sizes, slightly looser at small.
 
 | Size range | Tracking |
 |------------|---------|
@@ -127,7 +127,7 @@ All styles use negative letter spacing — tighter tracking at larger sizes, sli
 
 ## Stacking (label + value pairs)
 
-Two-line text stacks use line-height alone — no gap class needed.
+Two-line text stacks use line-height alone - no gap class needed.
 
 ```
 Employee name       ← Label/Small (14px / 530)
@@ -142,7 +142,7 @@ No `gap` between them. Line-height at 150% provides the natural separation.
 
 - Single line: `overflow: hidden; text-overflow: ellipsis; white-space: nowrap`
 - Multi-line: max 2 lines in most contexts
-- Never truncate headings — wrap or shorten the copy
+- Never truncate headings - wrap or shorten the copy
 
 ---
 
@@ -151,12 +151,12 @@ No `gap` between them. Line-height at 150% provides the natural separation.
 - Use `Label/Small` as the default for most UI text
 - Use Mono styles for numeric values, financial figures, account IDs
 - Match Paragraph to reading content, Label to interactive/UI elements
-- Keep title copy short — they're 100% line-height, not reading text
+- Keep title copy short - they're 100% line-height, not reading text
 
 ## Don'ts
 
-- Don't use Title styles for UI labels — use Label styles
+- Don't use Title styles for UI labels - use Label styles
 - Don't set custom font sizes outside the defined scale
-- Don't add gap between stacked text — line-height handles it
+- Don't add gap between stacked text - line-height handles it
 - Don't use more than 2 type sizes in a single component
-- Don't use Inter weight below 425 or above 560 — outside the defined range
+- Don't use Inter weight below 425 or above 560 - outside the defined range

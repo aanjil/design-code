@@ -1,8 +1,8 @@
 /**
- * Deterministic employee dataset for the Employees page experiments.
+ * Deterministic employee dataset for the Employees page crafts.
  * Fields mirror the filterable attributes in the Figma design:
  * work location, employee type, job title, compensation type, hire date.
- * Seeded PRNG — identical rows every reload.
+ * Seeded PRNG - identical rows every reload.
  */
 
 export type EmployeeStatus = 'active' | 'invited' | 'onboarding' | 'offboarded'
@@ -51,9 +51,12 @@ export const JOB_TITLES = [
 export const EMPLOYEE_TYPES = ['Full-time', 'Part-time', 'Contractor', 'EOR'] as const
 
 export const WORK_LOCATIONS = [
-  'New York HQ',
-  'Remote — US',
-  'Remote — EU',
+  'California',
+  'New York',
+  'Texas',
+  'Washington',
+  'Remote - US',
+  'Remote - EU',
   'Kathmandu',
   'London',
   'Berlin',

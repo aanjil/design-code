@@ -17,7 +17,8 @@ declare module '@tanstack/react-router' {
     router: ReturnType<typeof getRouter>
   }
   interface StaticDataRouteOption {
-    /** 'canvas' hides the top nav — the route fills the viewport and brings its own FloatingDock. */
-    layout?: 'canvas'
+    /** 'canvas' hides the top nav - the route fills the viewport and brings its own FloatingDock.
+     *  'app' does the same for the Master App - the mounted craft brings its own AppBar/Sidebar. */
+    layout?: 'canvas' | 'app'
   }
 }

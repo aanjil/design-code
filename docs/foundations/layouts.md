@@ -24,7 +24,7 @@ AppBar
 
 - Height: see `sizes.md`
 - Changes based on user role (different nav items, actions)
-- Spacing: see Patterns — AppBar is finalized there
+- Spacing: see Patterns - AppBar is finalized there
 
 ---
 
@@ -35,7 +35,7 @@ AppBar
 - Expanded width: see `sizes.md`
 - Collapsed width: see `sizes.md`
 - Items change based on user role
-- Spacing: see Patterns — Sidebar is finalized there
+- Spacing: see Patterns - Sidebar is finalized there
 
 ---
 
@@ -43,7 +43,7 @@ AppBar
 
 > Wrapper for Sidebar + PageLayout. Handles the split.
 
-- No padding of its own — Sidebar and PageLayout manage their own
+- No padding of its own - Sidebar and PageLayout manage their own
 - Behavior on collapse/expand:
 
 ---
@@ -61,7 +61,7 @@ Variants:
 - With breadcrumb
 - With filters
 
-> Spacing: see `spacing.md` — PageHeader spacing is defined per variant.
+> Spacing: see `spacing.md` - PageHeader spacing is defined per variant.
 
 ### PageBody
 
@@ -123,16 +123,16 @@ PageBody
 
 ### AI page layout
 
-> TBD — define when AI layout patterns are finalized.
+> TBD - define when AI layout patterns are finalized.
 
 ---
 
 ## Rules
 
-- Always use the defined layout compositions — don't create ad-hoc page structures
-- PageBody handles scroll — don't add overflow on inner containers unless intentional
-- Never use margins on PageLayout children — padding only
-- Footer is optional — only include when there's a sticky action (form submit, bulk action)
+- Always use the defined layout compositions - don't create ad-hoc page structures
+- PageBody handles scroll - don't add overflow on inner containers unless intentional
+- Never use margins on PageLayout children - padding only
+- Footer is optional - only include when there's a sticky action (form submit, bulk action)
 
 ---
 

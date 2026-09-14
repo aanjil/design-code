@@ -8,11 +8,11 @@ Fixed values that govern layout behavior, breakpoints, and numeric rules across 
 
 | Name | Value | Description |
 |------|-------|-------------|
-| `xs` | — | — |
-| `sm` | — | — |
-| `md` | — | — |
-| `lg` | — | — |
-| `xl` | — | — |
+| `xs` | - | - |
+| `sm` | - | - |
+| `md` | - | - |
+| `lg` | - | - |
+| `xl` | - | - |
 
 > Desktop and tablet share the same layout system. Mobile is a separate app.
 
@@ -22,13 +22,13 @@ Fixed values that govern layout behavior, breakpoints, and numeric rules across 
 
 | Token | Value | Use |
 |-------|-------|-----|
-| `z-base` | — | Default stacking |
-| `z-dropdown` | — | Dropdowns, popovers |
-| `z-sticky` | — | Sticky headers, AppBar |
-| `z-drawer` | — | Side drawers |
-| `z-modal` | — | Modals, dialogs |
-| `z-toast` | — | Notifications, toasts |
-| `z-tooltip` | — | Tooltips |
+| `z-base` | - | Default stacking |
+| `z-dropdown` | - | Dropdowns, popovers |
+| `z-sticky` | - | Sticky headers, AppBar |
+| `z-drawer` | - | Side drawers |
+| `z-modal` | - | Modals, dialogs |
+| `z-toast` | - | Notifications, toasts |
+| `z-tooltip` | - | Tooltips |
 
 ---
 
@@ -36,10 +36,10 @@ Fixed values that govern layout behavior, breakpoints, and numeric rules across 
 
 | Token | Value | Use |
 |-------|-------|-----|
-| `radius-sm` | — | Inputs, small components |
-| `radius-md` | — | Cards, modals |
-| `radius-lg` | — | Large panels |
-| `radius-full` | — | Pills, badges, avatars |
+| `radius-sm` | - | Inputs, small components |
+| `radius-md` | - | Cards, modals |
+| `radius-lg` | - | Large panels |
+| `radius-full` | - | Pills, badges, avatars |
 
 ---
 
@@ -47,9 +47,9 @@ Fixed values that govern layout behavior, breakpoints, and numeric rules across 
 
 Two categories: **Elevation** (component and interaction states) and **Shadows** (generic depth scale).
 
-### Elevation — component states
+### Elevation - component states
 
-These are semantic. Use them by name — don't reconstruct them manually.
+These are semantic. Use them by name - don't reconstruct them manually.
 
 | Token | Box shadow | Use |
 |-------|-----------|-----|
@@ -59,7 +59,7 @@ These are semantic. Use them by name — don't reconstruct them manually.
 | `Elevation/Flyout` | `0px 8px 16px rgba(0,0,0,0.08), 0px 4px 8px rgba(0,0,0,0.08), 0px 0px 0px 1px rgba(185,185,185,0.08)` | Dropdowns, popovers, menus |
 | `Elevation/AI` | `0px -6px 18px -4px rgba(225,81,255,0.47), 0px 2px 3px -1px rgba(113,77,255,0.48), 0px 0px 0px 4px rgba(113,77,255,0.11)` | AI surfaces and panels |
 
-### Elevation — border states
+### Elevation - border states
 
 Used on interactive elements for focus, active, error, and default border rings.
 
@@ -71,7 +71,7 @@ Used on interactive elements for focus, active, error, and default border rings.
 | `Elevation/Borders/Error` | `0px 0px 0px 4px rgba(255,100,103,0.20), 0px 0px 0px 1px #fb2c36` | Error state input/element |
 | `Elevation/Borders/Shadow` | `0px 0px 0px 1px #5e3bd4, 0px 1px 2px rgba(94,59,212,0.60)` | Brand border with shadow |
 
-### Shadows — depth scale
+### Shadows - depth scale
 
 Generic depth. Use when component-specific elevation tokens don't apply.
 
@@ -101,9 +101,9 @@ Defined as plain styles in Figma, not shadow tokens.
 
 | Token | Duration | Easing | Use |
 |-------|----------|--------|-----|
-| `transition-fast` | — | — | Hover states, toggles |
-| `transition-default` | — | — | Most transitions |
-| `transition-slow` | — | — | Modals, drawers entering |
+| `transition-fast` | - | - | Hover states, toggles |
+| `transition-default` | - | - | Most transitions |
+| `transition-slow` | - | - | Modals, drawers entering |
 
 ---
 

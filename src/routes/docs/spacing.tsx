@@ -3,13 +3,13 @@ import { DocPage, DocSection, InlineCode, SpecTable } from '@/docs/doc-kit'
 
 export const Route = createFileRoute('/docs/spacing')({
   component: SpacingDoc,
-  head: () => ({ meta: [{ title: 'Spacing — NDS Docs' }] }),
+  head: () => ({ meta: [{ title: 'Spacing - NDS Docs' }] }),
 })
 
 const SCALE = [
   { px: 4, cls: 'gap-1', use: 'Icon-to-text gap' },
   { px: 6, cls: 'gap-1.5', use: 'Label → input, form component gaps' },
-  { px: 8, cls: 'gap-2', use: 'Between sub-groups — the proximity signal' },
+  { px: 8, cls: 'gap-2', use: 'Between sub-groups - the proximity signal' },
   { px: 10, cls: 'px-2.5', use: 'Horizontal padding on atoms (buttons, tabs)' },
   { px: 12, cls: 'gap-3 / p-3', use: 'List items, button rows, card padding' },
   { px: 16, cls: 'p-4 / gap-x-4', use: 'Page body padding, horizontal grid gap' },
@@ -23,7 +23,7 @@ function SpacingDoc() {
   return (
     <DocPage
       title="Spacing"
-      description="A 4px base scale. Optical beats mathematical — pick the value that groups information correctly, but never invent values outside the scale."
+      description="A 4px base scale. Optical beats mathematical - pick the value that groups information correctly, but never invent values outside the scale."
     >
       <DocSection
         title="Quick reference"
@@ -86,7 +86,7 @@ function SpacingDoc() {
 
       <DocSection title="Rules">
         <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-primary marker:text-text-disabled">
-          <li>Group with space, not dividers — proximity signals hierarchy.</li>
+          <li>Group with space, not dividers - proximity signals hierarchy.</li>
           <li>
             Stacked text takes no gap; line-height handles it (see Typography).
           </li>

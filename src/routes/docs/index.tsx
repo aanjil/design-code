@@ -18,7 +18,7 @@ const SECTIONS = [
     to: '/docs/colors',
     icon: PaintBucket,
     title: 'Colors',
-    desc: 'Semantic tokens — backgrounds, text, borders, brand, surfaces, accents. Live values per theme.',
+    desc: 'Semantic tokens - backgrounds, text, borders, brand, surfaces, accents. Live values per theme.',
   },
   {
     to: '/docs/typography',
@@ -42,7 +42,7 @@ const SECTIONS = [
     to: '/docs/layout',
     icon: CirclesFour,
     title: 'Layout & sizes',
-    desc: 'App shell metrics from the Figma system — AppBar, sidebar, tables, radii — plus compositions.',
+    desc: 'App shell metrics from the Figma system - AppBar, sidebar, tables, radii - plus compositions.',
   },
 ] as const
 
@@ -50,7 +50,7 @@ function DocsOverview() {
   return (
     <DocPage
       title="NDS documentation"
-      description="The Niural design system as it exists in this playground — rendered live from the same tokens the experiments use, so what you see here is exactly what ships on the canvas."
+      description="The Niural design system as it exists in this playground - rendered live from the same tokens the crafts use, so what you see here is exactly what ships on the canvas."
     >
       <div className="grid grid-cols-[repeat(auto-fill,minmax(280px,1fr))] gap-x-4 gap-y-5">
         {SECTIONS.map(({ to, icon: Icon, title, desc }) => (
@@ -80,7 +80,7 @@ function DocsOverview() {
           <div>
             <p className="text-label-md text-text-primary">Components</p>
             <p className="text-paragraph-xs text-text-muted">
-              The component inventory — full variant &amp; prop docs are the
+              The component inventory - full variant &amp; prop docs are the
               next milestone.
             </p>
           </div>
@@ -92,7 +92,7 @@ function DocsOverview() {
         <p className="mt-1 max-w-[640px] text-paragraph-xs text-text-muted">
           Source foundations live in <InlineCode>docs/foundations/*.md</InlineCode>,
           get encoded as tokens in <InlineCode>src/styles.css</InlineCode>, and these
-          pages render from those tokens directly — color values are measured from
+          pages render from those tokens directly - color values are measured from
           the DOM at runtime, so flipping the theme updates every swatch. When
           foundations change: re-copy, update tokens, and these docs follow.
         </p>

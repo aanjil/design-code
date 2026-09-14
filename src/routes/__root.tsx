@@ -37,8 +37,13 @@ export const Route = createRootRoute({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const isCanvas = useMatches({
-    select: (matches) => matches.some((m) => m.staticData.layout === 'canvas'),
+  // Canvas crafts and the Master App both fill the full viewport with their
+  // own chrome - the global rail would just collide with it.
+  const fullBleed = useMatches({
+    select: (matches) =>
+      matches.some(
+        (m) => m.staticData.layout === 'canvas' || m.staticData.layout === 'app',
+      ),
   })
 
   return (
@@ -48,11 +53,11 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {!isCanvas && <AppNav />}
-        <main className={isCanvas ? 'h-dvh overflow-hidden' : undefined}>
+        {!fullBleed && <AppNav />}
+        <main className={fullBleed ? 'h-dvh overflow-hidden' : 'ml-16'}>
           {children}
         </main>
-        <TanStackDevtools
+        {/* <TanStackDevtools
           config={{
             position: 'bottom-right',
           }}
@@ -62,7 +67,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
               render: <TanStackRouterDevtoolsPanel />,
             },
           ]}
-        />
+        /> */}
         <Scripts />
       </body>
     </html>

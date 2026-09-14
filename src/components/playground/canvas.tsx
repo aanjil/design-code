@@ -10,23 +10,30 @@ import {
   Broom,
   Camera,
   ChatTeardropText,
+  Check,
   CornersIn,
   CornersOut,
+  Cursor,
   FrameCorners,
+  Hand,
+  Image as ImageIcon,
   Lock,
   Minus,
+  Play,
   Plus,
+  Warning,
 } from '@phosphor-icons/react'
-import type { CanvasPin } from './canvas-pins'
+import { toBlob } from 'html-to-image'
 import { PinMarker } from './canvas-pins'
+import { useCanvasPins } from './canvas-pins-context'
 import { CanvasRulers } from './canvas-rulers'
 import { WindowsPanel } from './windows-panel'
 import { PortalContainerContext } from '@/components/ui/portal-context'
 import { cn } from '@/lib/utils'
 
 /**
- * Experiment canvas: a zoomable, pannable blueprint surface (Figma-style)
- * holding Safari-style browser windows — drag via titlebar, resize via
+ * Craft canvas: a zoomable, pannable blueprint surface (Figma-style)
+ * holding Safari-style browser windows - drag via titlebar, resize via
  * corner, double-click the titlebar (or green light / corners button) to
  * present one window at ~98vw/98vh. Rulers + per-window dimension readouts,
  * a top-right windows panel with DOM snapshots, and click-placed design-note
@@ -43,6 +50,76 @@ export interface CanvasWindowDef {
   width: number
   height: number
   content: React.ReactNode
+  /** 'browser' (default) - Safari-style chrome, `content` fills the window.
+   *  'phone' - the title bar/drag/utility buttons stay identical, but the
+   *  content area renders a device bezel + Dynamic Island around `content`
+   *  instead of filling it directly. `width`/`height` must already include
+   *  the bezel (see PHONE_BEZEL/phoneFrameSize) - canvas.tsx has no opinion
+   *  on device screen size, only on how the bezel itself looks. */
+  chrome?: 'browser' | 'phone'
+}
+
+/** Bezel thickness in px around a phone screen's real content area - the
+ *  gap between a phone-chrome window's outer frame and the visible screen. */
+export const PHONE_BEZEL = 14
+
+/** Given a device's own screen size in points, the CanvasWindowDef
+ *  width/height a phone-chrome window needs (screen + bezel + the header
+ *  bar every window already reserves) so the rendered screen ends up
+ *  pixel-accurate to the real device. */
+export function phoneFrameSize(screenWidth: number, screenHeight: number): { width: number; height: number } {
+  return {
+    width: screenWidth + PHONE_BEZEL * 2,
+    height: screenHeight + PHONE_BEZEL * 2 + 36, // 36 = the h-9 title bar every window reserves
+  }
+}
+
+/** html-to-image's own promise can hang indefinitely (e.g. a blocked remote
+ *  font fetch during its embed step) - race it against a hard timeout so a
+ *  screenshot attempt can never permanently disable the trigger button. */
+function captureWithTimeout(
+  node: HTMLElement,
+  options: Parameters<typeof toBlob>[1],
+  timeoutMs: number,
+): Promise<Blob | null> {
+  return Promise.race([
+    toBlob(node, options),
+    new Promise<never>((_, reject) => {
+      setTimeout(() => reject(new Error('screenshot capture timed out')), timeoutMs)
+    }),
+  ])
+}
+
+/**
+ * `backdrop-filter` (the Sidebar's frosted-glass background) can hang
+ * html-to-image's foreignObject-based rasterizer indefinitely - it has no
+ * well-defined way to composite "blur whatever's behind me" into a still
+ * SVG snapshot. Temporarily force it off on every matching descendant for
+ * the duration of the capture, then restore each element's own inline
+ * value exactly (most have none, so this cleanly removes the override).
+ */
+async function withoutBackdropFilter<T>(root: HTMLElement, run: () => Promise<T>): Promise<T> {
+  const affected: Array<{ el: HTMLElement; prev: string }> = []
+  for (const el of [root, ...root.querySelectorAll('*')] as Array<HTMLElement>) {
+    if (getComputedStyle(el).backdropFilter !== 'none') {
+      affected.push({ el, prev: el.style.backdropFilter })
+      el.style.backdropFilter = 'none'
+    }
+  }
+  try {
+    return await run()
+  } finally {
+    for (const { el, prev } of affected) el.style.backdropFilter = prev
+  }
+}
+
+/** Figma-style section: a labeled container drawn under its member windows. */
+export interface CanvasGroupDef {
+  id: string
+  label: string
+  windowIds: Array<string>
+  /** Renders a Play button inline with the group label (e.g. the "App" group). */
+  onPlay?: () => void
 }
 
 interface WindowGeometry {
@@ -70,7 +147,8 @@ const MAX_ZOOM = 2
 const ZOOM_STEP = 1.25
 const MINIMAP_W = 176
 
-const clampZoom = (z: number) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z))
+const clampZoomTo = (z: number, minZoom: number) =>
+  Math.min(MAX_ZOOM, Math.max(minZoom, z))
 
 /* Blueprint grid: fine 20px lines + stronger 100px majors, token-driven. */
 const BLUEPRINT_BG: React.CSSProperties = {
@@ -87,11 +165,50 @@ export function PlaygroundCanvas({
   windows,
   className,
   onFullscreenChange,
+  groups,
+  focusWindow,
+  requestFullscreen,
+  exitFullscreenRequest,
+  onFocusChange,
+  onZenModeChange,
+  showRulers = true,
+  surfaceW = SURFACE_W,
+  surfaceH = SURFACE_H,
+  minZoom = MIN_ZOOM,
+  reservedLeft = 0,
+  reservedRight = 0,
 }: {
   windows: Array<CanvasWindowDef>
   className?: string
   onFullscreenChange?: (active: boolean) => void
+  /** Figma-style labeled sections drawn under (and dragging) their windows. */
+  groups?: Array<CanvasGroupDef>
+  /** Imperative focus request: bump `nonce` to re-fit the same window. */
+  focusWindow?: { id: string; nonce: number } | null
+  /** Imperative "present this window fullscreen" request (e.g. Play). */
+  requestFullscreen?: { id: string; nonce: number } | null
+  /** Imperative "exit whatever is presenting fullscreen" request (e.g. Exit button). */
+  exitFullscreenRequest?: { nonce: number } | null
+  /** Fires whenever a window is focused directly on the canvas. */
+  onFocusChange?: (id: string) => void
+  /** Fires whenever zen mode (Space) toggles, for chrome outside the canvas. */
+  onZenModeChange?: (active: boolean) => void
+  /** Show/hide the edge rulers (Settings popover toggle). */
+  showRulers?: boolean
+  surfaceW?: number
+  surfaceH?: number
+  minZoom?: number
+  /**
+   * Fixed-chrome width (px) to keep clear when centering/fitting, so
+   * content never lands behind a floating side panel.
+   */
+  reservedLeft?: number
+  reservedRight?: number
 }) {
+  const clampZoom = useCallback(
+    (z: number) => clampZoomTo(z, minZoom),
+    [minZoom],
+  )
   const scrollerRef = useRef<HTMLDivElement>(null)
   const zCounter = useRef(windows.length)
   const [geometry, setGeometry] = useState<Record<string, WindowGeometry>>(() =>
@@ -120,11 +237,32 @@ export function PlaygroundCanvas({
 
   /* ---------- pins (design notes) ---------- */
 
-  const [pins, setPins] = useState<Array<CanvasPin>>([])
-  const pinCounter = useRef(0)
-  const [annotateMode, setAnnotateMode] = useState(false)
-  const [openPinId, setOpenPinId] = useState<string | null>(null)
-  const [zenMode, setZenMode] = useState(false)
+  const {
+    pins,
+    addPin,
+    removePin: removePinCtx,
+    removePinsForWindow,
+    updatePinText,
+    openPinId,
+    setOpenPinId,
+    jumpRequest,
+  } = useCanvasPins()
+  /** Figma-style exclusive tool: cursor (default) / hand (pan) / annotate. */
+  const [tool, setTool] = useState<'cursor' | 'hand' | 'annotate'>('cursor')
+  const annotateMode = tool === 'annotate'
+  const [zenModeState, setZenModeState] = useState(false)
+  const setZenMode = useCallback(
+    (updater: boolean | ((prev: boolean) => boolean)) => {
+      setZenModeState((prev) => {
+        const next = typeof updater === 'function' ? updater(prev) : updater
+        onZenModeChange?.(next)
+        return next
+      })
+    },
+    [onZenModeChange],
+  )
+  const zenMode = zenModeState
+  const [isPanning, setIsPanning] = useState(false)
   /** Live DOM elements behind 'element' pins (⌘-click); measured each render. */
   const pinEls = useRef<Map<string, Element>>(new Map())
   const [measureTick, setMeasureTick] = useState(0)
@@ -156,12 +294,22 @@ export function PlaygroundCanvas({
 
   /* ---------- window state ---------- */
 
-  const bringToFront = useCallback((id: string) => {
-    setFocusedId(id)
-    zCounter.current += 1
-    const z = zCounter.current
-    setGeometry((prev) => ({ ...prev, [id]: { ...prev[id], z } }))
-  }, [])
+  // Set while an external focusWindow request is driving bringToFront, so
+  // that call doesn't echo back into onFocusChange - the explorer already
+  // knows what it just asked for; echoing resets its stateId and creates
+  // an infinite explorer <-> canvas focus loop (see focusWindow effect below).
+  const suppressFocusEcho = useRef(false)
+
+  const bringToFront = useCallback(
+    (id: string) => {
+      setFocusedId(id)
+      zCounter.current += 1
+      const z = zCounter.current
+      setGeometry((prev) => ({ ...prev, [id]: { ...prev[id], z } }))
+      if (!suppressFocusEcho.current) onFocusChange?.(id)
+    },
+    [onFocusChange],
+  )
 
   const updateGeometry = useCallback(
     (id: string, patch: Partial<WindowGeometry>) => {
@@ -196,7 +344,7 @@ export function PlaygroundCanvas({
         ...prev,
         {
           id: snapId,
-          title: `Snap ${snapCounter.current} · ${src.title.split('—')[0]?.trim()}`,
+          title: `Snap ${snapCounter.current} · ${src.title.split('-')[0]?.trim()}`,
           url: src.url,
           html: el.innerHTML,
         },
@@ -224,11 +372,14 @@ export function PlaygroundCanvas({
       delete next[id]
       return next
     })
-    setPins((prev) => prev.filter((p) => p.windowId !== id))
+    pins.forEach((p) => {
+      if (p.windowId === id) pinEls.current.delete(p.id)
+    })
+    removePinsForWindow(id)
     setFocusedId((prev) => (prev === id ? null : prev))
     setFullscreenId((prev) => (prev === id ? null : prev))
     setOpenPinId(null)
-  }, [])
+  }, [pins, removePinsForWindow, setOpenPinId])
 
   /** Bring a window to front and smooth-scroll the viewport onto it. */
   const jumpTo = useCallback(
@@ -286,16 +437,20 @@ export function PlaygroundCanvas({
     const minY = Math.min(...rects.map((r) => r.y)) - pad
     const maxX = Math.max(...rects.map((r) => r.x + r.width)) + pad
     const maxY = Math.max(...rects.map((r) => r.y + r.height)) + pad
-    const target = clampZoom(
-      Math.min(
-        scroller.clientWidth / (maxX - minX),
-        scroller.clientHeight / (maxY - minY),
-      ),
-    )
-    pendingScroll.current = { left: minX * target, top: minY * target }
+    const contentW = maxX - minX
+    const contentH = maxY - minY
+    const availW = Math.max(1, scroller.clientWidth - reservedLeft - reservedRight)
+    const availH = scroller.clientHeight
+    const target = clampZoom(Math.min(availW / contentW, availH / contentH))
+    // center the fitted content in whichever axis has leftover space,
+    // instead of pinning it to the top-left of the viewport.
+    pendingScroll.current = {
+      left: minX * target - reservedLeft - (availW - contentW * target) / 2,
+      top: minY * target - (availH - contentH * target) / 2,
+    }
     if (target === zoomRef.current) syncScrollNow()
     else setZoom(target)
-  }, [])
+  }, [reservedLeft, reservedRight])
 
   // fit needs latest geometry without re-creating callbacks
   const geometryRef = useRef(geometry)
@@ -320,12 +475,12 @@ export function PlaygroundCanvas({
       entries.reduce((sum, [, g]) => sum + g.width, 0) +
       TIDY_GAP * (entries.length - 1)
     const rowH = Math.max(...entries.map(([, g]) => g.height))
-    let x = Math.max(TIDY_GAP, (SURFACE_W - totalW) / 2)
-    let y = Math.max(TIDY_GAP, (SURFACE_H - rowH) / 2)
+    let x = Math.max(TIDY_GAP, (surfaceW - totalW) / 2)
+    let y = Math.max(TIDY_GAP, (surfaceH - rowH) / 2)
     setGeometry((prev) => {
       const next = { ...prev }
       for (const [id, g] of entries) {
-        if (x > TIDY_GAP && x + g.width > SURFACE_W - TIDY_GAP) {
+        if (x > TIDY_GAP && x + g.width > surfaceW - TIDY_GAP) {
           x = TIDY_GAP
           y += rowH + TIDY_GAP
         }
@@ -382,10 +537,11 @@ export function PlaygroundCanvas({
     const maxX = Math.max(...rects.map((r) => r.x + r.width))
     const maxY = Math.max(...rects.map((r) => r.y + r.height))
     const z = zoomRef.current
-    scroller.scrollLeft = ((minX + maxX) / 2) * z - scroller.clientWidth / 2
+    const availW = Math.max(1, scroller.clientWidth - reservedLeft - reservedRight)
+    scroller.scrollLeft = ((minX + maxX) / 2) * z - reservedLeft - availW / 2
     scroller.scrollTop = ((minY + maxY) / 2) * z - scroller.clientHeight / 2
     syncViewport()
-  }, [syncViewport])
+  }, [syncViewport, reservedLeft, reservedRight])
 
   /* ---------- wheel + keyboard ---------- */
 
@@ -395,7 +551,7 @@ export function PlaygroundCanvas({
   useEffect(() => {
     const scroller = scrollerRef.current
     if (!scroller) return
-    // React's synthetic wheel handlers are passive — bind manually.
+    // React's synthetic wheel handlers are passive - bind manually.
     const onWheel = (e: WheelEvent) => {
       if (!(e.ctrlKey || e.metaKey) || fullscreenRef.current) return
       e.preventDefault()
@@ -428,21 +584,83 @@ export function PlaygroundCanvas({
   const fitToWindow = useCallback((id: string) => {
     const scroller = scrollerRef.current
     const g = geometryRef.current[id]
-    if (!scroller || !g) return
+    if (!scroller || !g || scroller.clientWidth === 0) return
     const pad = 40
+    const availW = Math.max(1, scroller.clientWidth - reservedLeft - reservedRight)
     const target = clampZoom(
       Math.min(
-        scroller.clientWidth / (g.width + pad * 2),
+        availW / (g.width + pad * 2),
         scroller.clientHeight / (g.height + pad * 2),
       ),
     )
     pendingScroll.current = {
-      left: (g.x + g.width / 2) * target - scroller.clientWidth / 2,
+      left: (g.x + g.width / 2) * target - reservedLeft - availW / 2,
       top: (g.y + g.height / 2) * target - scroller.clientHeight / 2,
     }
     if (target === zoomRef.current) syncScrollNow()
     else setZoom(target)
-  }, [])
+  }, [reservedLeft, reservedRight])
+
+  // explorer panels (or any overlay) request focus by bumping the nonce
+  useEffect(() => {
+    if (!focusWindow) return
+    const id = focusWindow.id
+    if (!geometryRef.current[id]) return
+    suppressFocusEcho.current = true
+    bringToFront(id)
+    suppressFocusEcho.current = false
+    // defer one frame: on first mount the scroller can measure 0 wide,
+    // which would clamp the fit zoom to the minimum
+    let raf2 = 0
+    const raf1 = requestAnimationFrame(() => {
+      const scroller = scrollerRef.current
+      if (scroller && scroller.clientWidth > 0) {
+        fitToWindow(id)
+      } else {
+        raf2 = requestAnimationFrame(() => fitToWindow(id))
+      }
+    })
+    return () => {
+      cancelAnimationFrame(raf1)
+      cancelAnimationFrame(raf2)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [focusWindow?.id, focusWindow?.nonce])
+
+  /** Drag a whole group: move every member window by the pointer delta. */
+  const dragGroup = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>, windowIds: Array<string>) => {
+      if (e.button !== 0 || fullscreenRef.current) return
+      e.preventDefault()
+      e.stopPropagation()
+      const el = e.currentTarget
+      el.setPointerCapture(e.pointerId)
+      const startX = e.clientX
+      const startY = e.clientY
+      const starts = windowIds.map((id) => ({
+        id,
+        g: geometryRef.current[id],
+      }))
+      const move = (ev: PointerEvent) => {
+        const dx = (ev.clientX - startX) / zoomRef.current
+        const dy = (ev.clientY - startY) / zoomRef.current
+        setGeometry((prev) => {
+          const next = { ...prev }
+          for (const { id, g } of starts) {
+            if (g) next[id] = { ...next[id], x: g.x + dx, y: g.y + dy }
+          }
+          return next
+        })
+      }
+      const up = () => {
+        el.removeEventListener('pointermove', move)
+        el.removeEventListener('pointerup', up)
+      }
+      el.addEventListener('pointermove', move)
+      el.addEventListener('pointerup', up)
+    },
+    [],
+  )
 
   /** `n` / `shift+n`: focus the next/previous window and fit it on screen. */
   const cycleWindow = useCallback(
@@ -470,6 +688,14 @@ export function PlaygroundCanvas({
         return
       }
 
+      // Shift+2: fit all windows (Figma-style; matches the zoom control's icon)
+      if (e.key === '2' && e.shiftKey && !e.metaKey && !e.ctrlKey) {
+        if (inEditable || fullscreenRef.current) return
+        e.preventDefault()
+        fitToContent()
+        return
+      }
+
       if (e.key.toLowerCase() === 'n' && !e.metaKey && !e.ctrlKey && !e.altKey) {
         if (inEditable || fullscreenRef.current) return
         e.preventDefault()
@@ -482,7 +708,7 @@ export function PlaygroundCanvas({
           return
         }
         if (annotateRef.current) {
-          setAnnotateMode(false)
+          setTool('cursor')
           return
         }
         if (fullscreenRef.current) toggleFullscreen(fullscreenRef.current)
@@ -502,7 +728,7 @@ export function PlaygroundCanvas({
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [cycleWindow, toggleFullscreen, zoomAt])
+  }, [cycleWindow, toggleFullscreen, zoomAt, fitToContent])
 
   /* ---------- pins ---------- */
 
@@ -548,23 +774,17 @@ export function PlaygroundCanvas({
   }, [pins, geometry, zoom, viewport, measureTick])
 
   /** ⌘/Ctrl-click a DOM element inside a window → region pin with highlight. */
-  const createElementPin = useCallback((windowId: string, el: Element) => {
-    const surf = surfaceRef.current
-    const g = geometryRef.current[windowId]
-    if (!surf || !g) return
-    const z = zoomRef.current
-    const rect = el.getBoundingClientRect()
-    const surfRect = surf.getBoundingClientRect()
-    const lx = (rect.left - surfRect.left) / z
-    const ly = (rect.top - surfRect.top) / z
-    pinCounter.current += 1
-    const id = `pin-${pinCounter.current}`
-    pinEls.current.set(id, el)
-    setPins((prev) => [
-      ...prev,
-      {
-        id,
-        n: pinCounter.current,
+  const createElementPin = useCallback(
+    (windowId: string, el: Element) => {
+      const surf = surfaceRef.current
+      const g = geometryRef.current[windowId]
+      if (!surf || !g) return
+      const z = zoomRef.current
+      const rect = el.getBoundingClientRect()
+      const surfRect = surf.getBoundingClientRect()
+      const lx = (rect.left - surfRect.left) / z
+      const ly = (rect.top - surfRect.top) / z
+      const id = addPin({
         kind: 'element',
         windowId,
         rx: lx - g.x,
@@ -572,16 +792,21 @@ export function PlaygroundCanvas({
         rw: rect.width / z,
         rh: rect.height / z,
         text: '',
-      },
-    ])
-    setOpenPinId(id)
-  }, [])
+      })
+      pinEls.current.set(id, el)
+      setOpenPinId(id)
+    },
+    [addPin, setOpenPinId],
+  )
 
-  const removePin = useCallback((id: string) => {
-    setPins((prev) => prev.filter((p) => p.id !== id))
-    pinEls.current.delete(id)
-    setOpenPinId((prev) => (prev === id ? null : prev))
-  }, [])
+  /** Wraps the shared removePin so we also drop the ⌘-click DOM ref. */
+  const handleRemovePin = useCallback(
+    (id: string) => {
+      pinEls.current.delete(id)
+      removePinCtx(id)
+    },
+    [removePinCtx],
+  )
 
   /** Center the viewport on a pin and open its card (panel row click). */
   const jumpToPin = useCallback(
@@ -597,8 +822,16 @@ export function PlaygroundCanvas({
       })
       setOpenPinId(id)
     },
-    [resolvedPins],
+    [resolvedPins, setOpenPinId],
   )
+
+  // an external panel (e.g. the explorer's Notes tab) requests a jump by
+  // bumping jumpRequest — mirrors the focusWindow pattern above.
+  useEffect(() => {
+    if (!jumpRequest) return
+    jumpToPin(jumpRequest.id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jumpRequest?.id, jumpRequest?.nonce])
 
   const onSurfaceCapture = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
@@ -644,32 +877,62 @@ export function PlaygroundCanvas({
           ly <= g.y + g.height,
       )
       .sort((a, b) => b.g.z - a.g.z)[0]
-    pinCounter.current += 1
-    const id = `pin-${pinCounter.current}`
-    setPins((prev) => [
-      ...prev,
+    const id = addPin(
       hit
-        ? {
-            id,
-            n: pinCounter.current,
-            kind: 'point' as const,
-            windowId: hit.id,
-            rx: lx - hit.g.x,
-            ry: ly - hit.g.y,
-            text: '',
-          }
-        : {
-            id,
-            n: pinCounter.current,
-            kind: 'point' as const,
-            windowId: null,
-            rx: lx,
-            ry: ly,
-            text: '',
-          },
-    ])
+        ? { kind: 'point', windowId: hit.id, rx: lx - hit.g.x, ry: ly - hit.g.y, text: '' }
+        : { kind: 'point', windowId: null, rx: lx, ry: ly, text: '' },
+    )
     setOpenPinId(id)
   }
+
+  /** Figma-style click-drag-to-pan on empty canvas background. */
+  const onBackgroundPointerDown = useCallback(
+    (e: React.PointerEvent<HTMLDivElement>) => {
+      if (tool !== 'hand' || fullscreenRef.current) return
+      if (e.button !== 0 || e.metaKey || e.ctrlKey) return
+      const targetEl = e.target as HTMLElement
+      if (targetEl.closest('[data-window-id], [data-pin-marker]')) return
+      const scroller = scrollerRef.current
+      if (!scroller) return
+      e.preventDefault()
+      const el = e.currentTarget
+      el.setPointerCapture(e.pointerId)
+      const startX = e.clientX
+      const startY = e.clientY
+      const startLeft = scroller.scrollLeft
+      const startTop = scroller.scrollTop
+      setIsPanning(true)
+      const move = (ev: PointerEvent) => {
+        scroller.scrollLeft = startLeft - (ev.clientX - startX)
+        scroller.scrollTop = startTop - (ev.clientY - startY)
+      }
+      const up = () => {
+        el.removeEventListener('pointermove', move)
+        el.removeEventListener('pointerup', up)
+        setIsPanning(false)
+      }
+      el.addEventListener('pointermove', move)
+      el.addEventListener('pointerup', up)
+    },
+    [tool],
+  )
+
+  // an external Exit button requests leaving whatever is presenting fullscreen
+  useEffect(() => {
+    if (!exitFullscreenRequest) return
+    setFullscreenId(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [exitFullscreenRequest?.nonce])
+
+  // an external Play button requests presenting a window fullscreen
+  useEffect(() => {
+    if (!requestFullscreen) return
+    const id = requestFullscreen.id
+    if (!geometryRef.current[id]) return
+    bringToFront(id)
+    setFullscreenId(id)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [requestFullscreen?.id, requestFullscreen?.nonce])
 
   /* ---------- fullscreen geometry (inside the scaled layer) ---------- */
 
@@ -683,7 +946,7 @@ export function PlaygroundCanvas({
         height: viewport.ch * 0.98,
         transform: `scale(${1 / zoom})`,
         transformOrigin: 'top left',
-        zIndex: 9999,
+        zIndex: zCounter.current + 3000,
       }
     : undefined
 
@@ -692,21 +955,27 @@ export function PlaygroundCanvas({
       <div
         ref={scrollerRef}
         className={cn(
-          'h-full min-h-0 bg-surface-1',
+          'h-full min-h-0 bg-surface-0',
           fullscreenId ? 'overflow-hidden' : 'overflow-auto',
         )}
       >
         {/* scroll extent at current zoom */}
-        <div style={{ width: SURFACE_W * zoom, height: SURFACE_H * zoom }}>
+        <div style={{ width: surfaceW * zoom, height: surfaceH * zoom }}>
           {/* scaled blueprint surface */}
           <div
             ref={surfaceRef}
             onPointerDownCapture={onSurfaceCapture}
-            className="relative"
+            onPointerDown={onBackgroundPointerDown}
+            className={cn(
+              'relative',
+              !fullscreenId &&
+                tool === 'hand' &&
+                (isPanning ? 'cursor-grabbing' : 'cursor-grab'),
+            )}
             style={{
               ...BLUEPRINT_BG,
-              width: SURFACE_W,
-              height: SURFACE_H,
+              width: surfaceW,
+              height: surfaceH,
               transform: `scale(${zoom})`,
               transformOrigin: '0 0',
             }}
@@ -719,11 +988,62 @@ export function PlaygroundCanvas({
                   top: viewport.top / zoom,
                   width: viewport.cw / zoom,
                   height: viewport.ch / zoom,
-                  zIndex: 9998,
+                  zIndex: zCounter.current + 2000,
                 }}
                 onPointerDown={() => toggleFullscreen(fullscreenId)}
               />
             )}
+
+            {/* Figma-style group containers, drawn under the windows.
+                The label floats above the box at constant screen size
+                (inverse zoom scale) and doubles as the group drag handle. */}
+            {groups?.map((group) => {
+              const rects = group.windowIds
+                .map((id) => geometry[id])
+                .filter(Boolean)
+              if (rects.length === 0) return null
+              const minX = Math.min(...rects.map((r) => r.x)) - 40
+              const minY = Math.min(...rects.map((r) => r.y)) - 40
+              const maxX = Math.max(...rects.map((r) => r.x + r.width)) + 40
+              const maxY = Math.max(...rects.map((r) => r.y + r.height)) + 40
+              return (
+                <div
+                  key={group.id}
+                  className="absolute rounded-[28px] bg-background-emphasis shadow-border-base"
+                  style={{
+                    left: minX,
+                    top: minY,
+                    width: maxX - minX,
+                    height: maxY - minY,
+                  }}
+                >
+                  <div
+                    onPointerDown={(e) => dragGroup(e, group.windowIds)}
+                    className="absolute left-0 flex origin-bottom-left -translate-y-full cursor-grab items-center gap-2 pb-1.5 select-none active:cursor-grabbing"
+                    style={{ transform: `translateY(-100%) scale(${1 / zoom})` }}
+                  >
+                    <span className="text-label-xs whitespace-nowrap text-text-muted">
+                      {group.label}
+                    </span>
+                    <span className="text-caption-md text-text-disabled">
+                      {group.windowIds.length}
+                    </span>
+                    {group.onPlay && (
+                      <button
+                        type="button"
+                        aria-label={`Play ${group.label}`}
+                        title="Present fullscreen"
+                        onPointerDown={(e) => e.stopPropagation()}
+                        onClick={group.onPlay}
+                        className="flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-primary text-text-on-color transition-transform hover:scale-110"
+                      >
+                        <Play weight="fill" className="size-2.5" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              )
+            })}
 
             {combined.map((window) => {
               const g = geometry[window.id]
@@ -766,12 +1086,8 @@ export function PlaygroundCanvas({
                 onToggle={() =>
                   setOpenPinId((prev) => (prev === pin.id ? null : pin.id))
                 }
-                onChange={(text) =>
-                  setPins((prev) =>
-                    prev.map((p) => (p.id === pin.id ? { ...p, text } : p)),
-                  )
-                }
-                onDelete={() => removePin(pin.id)}
+                onChange={(text) => updatePinText(pin.id, text)}
+                onDelete={() => handleRemovePin(pin.id)}
               />
             ))}
 
@@ -779,7 +1095,7 @@ export function PlaygroundCanvas({
             {annotateMode && !fullscreenId && (
               <div
                 className="absolute inset-0 cursor-crosshair"
-                style={{ zIndex: 7000 }}
+                style={{ zIndex: zCounter.current + 1000 }}
                 onPointerDown={placePin}
               />
             )}
@@ -788,7 +1104,7 @@ export function PlaygroundCanvas({
       </div>
 
       {/* rulers */}
-      {!fullscreenId && (
+      {!fullscreenId && showRulers && (
         <div
           className={cn(
             'pointer-events-none absolute inset-0 z-30 transition-opacity duration-200',
@@ -798,13 +1114,13 @@ export function PlaygroundCanvas({
           <CanvasRulers
             viewport={viewport}
             zoom={zoom}
-            surfaceW={SURFACE_W}
-            surfaceH={SURFACE_H}
+            surfaceW={surfaceW}
+            surfaceH={surfaceH}
           />
         </div>
       )}
 
-      {/* Windows stack — top-left */}
+      {/* Windows stack - top-left */}
       {!fullscreenId && (
         <CanvasWindowsStack
           windows={windows.map((w) => ({ id: w.id, title: w.title }))}
@@ -814,12 +1130,12 @@ export function PlaygroundCanvas({
           onJump={jumpTo}
           onRemoveSnapshot={removeSnapshot}
           onJumpToNote={jumpToPin}
-          onRemoveNote={removePin}
+          onRemoveNote={handleRemovePin}
           zenMode={zenMode}
         />
       )}
 
-      {/* Minimap — bottom-left */}
+      {/* Minimap - bottom-left */}
       {!fullscreenId && (
         <div
           className={cn(
@@ -834,11 +1150,13 @@ export function PlaygroundCanvas({
             viewport={viewport}
             zoom={zoom}
             scrollerRef={scrollerRef}
+            surfaceW={surfaceW}
+            surfaceH={surfaceH}
           />
         </div>
       )}
 
-      {/* Zoom controls — bottom-center */}
+      {/* Zoom controls - bottom-center */}
       {!fullscreenId && (
         <div
           className={cn(
@@ -875,7 +1193,7 @@ export function PlaygroundCanvas({
             <button
               type="button"
               aria-label="Fit all windows"
-              title="Fit all windows"
+              title="Fit all windows (Shift+2)"
               onClick={fitToContent}
               className="flex size-7 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-background-highlight"
             >
@@ -884,7 +1202,7 @@ export function PlaygroundCanvas({
             <button
               type="button"
               aria-label="Tidy up windows"
-              title="Tidy up — arrange left to right"
+              title="Tidy up - arrange left to right"
               onClick={tidyUp}
               className="flex size-7 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-background-highlight"
             >
@@ -893,13 +1211,43 @@ export function PlaygroundCanvas({
             <span className="mx-0.5 h-3 w-px bg-border-muted" />
             <button
               type="button"
-              aria-label="Annotate — click anywhere to pin a design note"
-              aria-pressed={annotateMode}
-              title="Annotate — click anywhere to pin a note (Esc exits)"
-              onClick={() => setAnnotateMode((m) => !m)}
+              aria-label="Cursor tool"
+              aria-pressed={tool === 'cursor'}
+              title="Cursor - click to select, drag windows"
+              onClick={() => setTool('cursor')}
               className={cn(
                 'flex size-7 items-center justify-center rounded-full transition-colors',
-                annotateMode
+                tool === 'cursor'
+                  ? 'bg-brand-primary text-text-on-color'
+                  : 'text-text-primary hover:bg-background-highlight',
+              )}
+            >
+              <Cursor weight="fill" className="size-3.5" />
+            </button>
+            <button
+              type="button"
+              aria-label="Hand tool"
+              aria-pressed={tool === 'hand'}
+              title="Hand - drag the empty canvas to pan"
+              onClick={() => setTool('hand')}
+              className={cn(
+                'flex size-7 items-center justify-center rounded-full transition-colors',
+                tool === 'hand'
+                  ? 'bg-brand-primary text-text-on-color'
+                  : 'text-text-primary hover:bg-background-highlight',
+              )}
+            >
+              <Hand className="size-3.5" />
+            </button>
+            <button
+              type="button"
+              aria-label="Annotate - click anywhere to pin a design note"
+              aria-pressed={tool === 'annotate'}
+              title="Annotate - click anywhere to pin a note (Esc exits)"
+              onClick={() => setTool((t) => (t === 'annotate' ? 'cursor' : 'annotate'))}
+              className={cn(
+                'flex size-7 items-center justify-center rounded-full transition-colors',
+                tool === 'annotate'
                   ? 'bg-brand-primary text-text-on-color'
                   : 'text-text-primary hover:bg-background-highlight',
               )}
@@ -922,6 +1270,8 @@ function Minimap({
   viewport,
   zoom,
   scrollerRef,
+  surfaceW,
+  surfaceH,
 }: {
   windows: Array<{ id: string }>
   geometry: Record<string, WindowGeometry>
@@ -929,9 +1279,11 @@ function Minimap({
   viewport: { left: number; top: number; cw: number; ch: number }
   zoom: number
   scrollerRef: React.RefObject<HTMLDivElement | null>
+  surfaceW: number
+  surfaceH: number
 }) {
-  const k = MINIMAP_W / SURFACE_W
-  const height = Math.round(SURFACE_H * k)
+  const k = MINIMAP_W / surfaceW
+  const height = Math.round(surfaceH * k)
 
   function navigate(e: React.PointerEvent<HTMLDivElement>) {
     const scroller = scrollerRef.current
@@ -1031,14 +1383,45 @@ function BrowserWindow({
 }) {
   const [interacting, setInteracting] = useState(false)
   const [portalEl, setPortalEl] = useState<HTMLElement | null>(null)
+  const screenshotTargetRef = useRef<HTMLElement | null>(null)
+  const [screenshotState, setScreenshotState] = useState<'idle' | 'busy' | 'done' | 'error'>('idle')
 
   const contentRef = useCallback(
     (el: HTMLElement | null) => {
       setPortalEl(el)
+      screenshotTargetRef.current = el
       onContentEl(def.id, el)
     },
     [def.id, onContentEl],
   )
+
+  async function copyScreenshot() {
+    const node = screenshotTargetRef.current
+    if (!node || screenshotState === 'busy') return
+    setScreenshotState('busy')
+    try {
+      // Fonts load from a remote Google Fonts @import - html-to-image's font-
+      // embedding step re-fetches that stylesheet, which can hang indefinitely
+      // in sandboxed/offline environments. Try full-fidelity capture first,
+      // bounded by a hard timeout, then fall back to a font-less capture
+      // (still correct, just system-font text) rather than ever getting
+      // stuck - a hung promise here would leave the button disabled forever.
+      const blob = await withoutBackdropFilter(node, async () => {
+        try {
+          return await captureWithTimeout(node, { pixelRatio: 2, cacheBust: true }, 5000)
+        } catch {
+          return await captureWithTimeout(node, { pixelRatio: 2, cacheBust: true, skipFonts: true }, 5000)
+        }
+      })
+      if (!blob) throw new Error('capture produced no image')
+      await navigator.clipboard.write([new ClipboardItem({ [blob.type]: blob })])
+      setScreenshotState('done')
+    } catch {
+      setScreenshotState('error')
+    } finally {
+      setTimeout(() => setScreenshotState('idle'), 1600)
+    }
+  }
 
   function startDrag(e: React.PointerEvent<HTMLDivElement>) {
     if (fullscreen) return
@@ -1121,7 +1504,7 @@ function BrowserWindow({
         data-window-id={def.id}
         onPointerDown={onFocus}
         className={cn(
-          'absolute flex flex-col overflow-hidden rounded-xl bg-background-base shadow-flyout',
+          'absolute flex flex-col overflow-hidden rounded-xl bg-background-base shadow-border-base',
           focused && !fullscreen && 'shadow-border-active',
           interacting && 'select-none',
         )}
@@ -1137,7 +1520,7 @@ function BrowserWindow({
               }
         }
       >
-        {/* Safari-style chrome — drag me, double-click for app view */}
+        {/* Safari-style chrome - drag me, double-click for app view */}
         <div
           onPointerDown={startDrag}
           onDoubleClick={onToggleFullscreen}
@@ -1149,7 +1532,7 @@ function BrowserWindow({
                 ? 'cursor-grabbing'
                 : 'cursor-grab',
           )}
-          title={`${def.title} — double-click to toggle app view`}
+          title={`${def.title} - double-click to toggle app view`}
         >
           <span className="flex shrink-0 items-center gap-1.5" data-no-drag>
             <span className="size-3 rounded-full bg-background-error-base" />
@@ -1176,13 +1559,13 @@ function BrowserWindow({
           </span>
           <span className="flex shrink-0 items-center gap-1" data-no-drag>
             <span className="max-w-[96px] truncate text-caption text-text-muted">
-              {def.title.split('—')[0]?.trim()}
+              {def.title.split('-')[0]?.trim()}
             </span>
             {onSnapshot && !fullscreen && (
               <button
                 type="button"
                 aria-label="Snapshot this window"
-                title="Snapshot — freeze this state as a new window"
+                title="Snapshot - freeze this state as a new window"
                 onClick={onSnapshot}
                 className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
               >
@@ -1191,13 +1574,49 @@ function BrowserWindow({
             )}
             <button
               type="button"
+              data-no-drag
+              aria-label={
+                screenshotState === 'error'
+                  ? 'Screenshot failed - try again'
+                  : screenshotState === 'done'
+                    ? 'Copied to clipboard'
+                    : 'Copy screenshot to clipboard'
+              }
+              title={
+                screenshotState === 'error'
+                  ? "Couldn't copy - try again"
+                  : screenshotState === 'done'
+                    ? 'Copied!'
+                    : 'Copy a high-quality screenshot to clipboard'
+              }
+              onClick={copyScreenshot}
+              disabled={screenshotState === 'busy'}
+              className={cn(
+                'flex size-6 items-center justify-center rounded-md transition-colors hover:bg-background-highlight hover:text-text-primary',
+                screenshotState === 'done'
+                  ? 'text-text-success-base'
+                  : screenshotState === 'error'
+                    ? 'text-text-error-base'
+                    : 'text-text-muted',
+              )}
+            >
+              {screenshotState === 'done' ? (
+                <Check weight="bold" className="size-3.5" />
+              ) : screenshotState === 'error' ? (
+                <Warning weight="fill" className="size-3.5" />
+              ) : (
+                <ImageIcon className={cn('size-3.5', screenshotState === 'busy' && 'animate-pulse')} />
+              )}
+            </button>
+            <button
+              type="button"
               aria-label={
                 fullscreen ? 'Exit app view' : 'Open as app (fills the screen)'
               }
               title={
                 fullscreen
                   ? 'Exit app view (Esc)'
-                  : 'Open as app — 98% of the screen'
+                  : 'Open as app - 98% of the screen'
               }
               onClick={onToggleFullscreen}
               className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
@@ -1211,14 +1630,30 @@ function BrowserWindow({
           </span>
         </div>
 
-        {/* Preview content — popovers portal in here so they scale with zoom */}
+        {/* Preview content - popovers portal in here so they scale with zoom */}
         <div
           ref={contentRef}
           data-window-content=""
-          className="relative min-h-0 flex-1 overflow-auto"
+          className={cn(
+            'relative min-h-0 flex-1 overflow-auto',
+            def.chrome === 'phone' && 'flex items-center justify-center bg-[#0b0b0d]',
+          )}
         >
           <PortalContainerContext.Provider value={portalEl}>
-            {def.content}
+            {def.chrome === 'phone' ? (
+              <div
+                className="relative size-full shrink-0 rounded-[54px] bg-black shadow-2xl"
+                style={{ padding: PHONE_BEZEL }}
+              >
+                <div className="relative size-full overflow-hidden rounded-[42px] bg-white">
+                  {def.content}
+                </div>
+                {/* Dynamic Island */}
+                <div className="pointer-events-none absolute left-1/2 top-[26px] h-[35px] w-[120px] -translate-x-1/2 rounded-full bg-black" />
+              </div>
+            ) : (
+              def.content
+            )}
           </PortalContainerContext.Provider>
         </div>
 
@@ -1312,7 +1747,7 @@ function CanvasWindowsStack({
         )}
       </button>
 
-      {/* Expanded panel — rendered below the trigger */}
+      {/* Expanded panel - rendered below the trigger */}
       {open && (
         <div className="absolute top-full left-0 mt-2">
           <WindowsPanel

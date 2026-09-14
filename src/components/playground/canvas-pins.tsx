@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 /**
  * Design-note pins on the canvas. Two kinds:
  * - 'point': click-placed in annotate mode
- * - 'element': ⌘/Ctrl-click a DOM element inside a window — the element's
+ * - 'element': ⌘/Ctrl-click a DOM element inside a window - the element's
  *   region gets a dotted highlight and the pin travels with it.
  * Pins live in the scaled layer (zoom with the canvas) and register into
  * the annotations context so the dock's Notes sheet lists them. The open
@@ -57,7 +57,7 @@ export function PinMarker({
       {
         n: pin.n,
         title: pin.text.trim().slice(0, 48) || `Pin ${pin.n}`,
-        note: pin.text.trim() || 'Empty note — click the pin to write one.',
+        note: pin.text.trim() || 'Empty note - click the pin to write one.',
       },
       ref.current,
     )
@@ -66,6 +66,7 @@ export function PinMarker({
 
   return (
     <div
+      data-pin-marker=""
       className="group/pin absolute"
       style={{ left: ax, top: ay, zIndex: open ? 8000 : 7500 }}
     >
@@ -95,7 +96,7 @@ export function PinMarker({
           className="pointer-events-none absolute hidden w-max max-w-[260px] rounded-lg bg-background-base p-2 text-paragraph-xs whitespace-pre-wrap text-text-primary shadow-flyout group-hover/pin:block"
           style={{ left: 10, top: isRegion ? (rh ?? 0) + 6 : 10 }}
         >
-          {pin.text.trim() || 'Empty note — click the pin to write.'}
+          {pin.text.trim() || 'Empty note - click the pin to write.'}
         </div>
       )}
       {open && (

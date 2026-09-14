@@ -1,6 +1,6 @@
 # Sizes
 
-> Fixed sizes for common UI elements. These are not spacing — they are dimensions.
+> Fixed sizes for common UI elements. These are not spacing - they are dimensions.
 
 ---
 
@@ -10,24 +10,24 @@
 
 | Element | Height | Notes |
 |---------|--------|-------|
-| Button (default) | — | — |
-| Button (small) | — | — |
-| Input (default) | — | — |
-| Input (small) | — | — |
-| Select | — | — |
-| Tab | — | — |
-| Badge | — | — |
-| Chip | — | — |
+| Button (default) | - | - |
+| Button (small) | - | - |
+| Input (default) | - | - |
+| Input (small) | - | - |
+| Select | - | - |
+| Tab | - | - |
+| Badge | - | - |
+| Chip | - | - |
 
 ### Layout elements
 
 | Element | Height | Notes |
 |---------|--------|-------|
-| AppBar | — | — |
-| PageHeader | — | — |
-| Table row (default) | — | — |
-| Table row (compact) | — | — |
-| Table header | — | — |
+| AppBar | - | - |
+| PageHeader | - | - |
+| Table row (default) | - | - |
+| Table row (compact) | - | - |
+| Table header | - | - |
 
 ---
 
@@ -35,13 +35,13 @@
 
 | Element | Width | Notes |
 |---------|-------|-------|
-| Sidebar (expanded) | — | — |
-| Sidebar (collapsed) | — | — |
-| Modal (small) | — | — |
-| Modal (default) | — | — |
-| Modal (large) | — | — |
-| Drawer | — | — |
-| Tooltip (max) | — | — |
+| Sidebar (expanded) | - | - |
+| Sidebar (collapsed) | - | - |
+| Modal (small) | - | - |
+| Modal (default) | - | - |
+| Modal (large) | - | - |
+| Drawer | - | - |
+| Tooltip (max) | - | - |
 
 ---
 
@@ -50,7 +50,7 @@
 | Size | Use |
 |------|-----|
 | 12px | Inline with small text |
-| 16px | Default — most UI contexts |
+| 16px | Default - most UI contexts |
 | 20px | Emphasis, standalone |
 | 24px | Large, decorative |
 
@@ -62,9 +62,9 @@
 
 | Size | Use |
 |------|-----|
-| — | Table, list rows |
-| — | Profile, cards |
-| — | Large display |
+| - | Table, list rows |
+| - | Profile, cards |
+| - | Large display |
 
 ---
 

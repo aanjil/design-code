@@ -91,7 +91,7 @@ function DropdownMenuItem({
       data-variant={variant}
       className={cn(
         // Base UI marks the active item with data-highlighted (hover + arrow
-        // keys), not :focus — and bg-accent equals the panel bg, so it was
+        // keys), not :focus - and bg-accent equals the panel bg, so it was
         // invisible. Highlight = background-muted (one step above the panel).
         "group/dropdown-menu-item relative flex min-h-[34px] cursor-default items-center gap-2 rounded-lg px-2 py-1.5 text-label-sm outline-hidden select-none focus:bg-background-muted focus:text-accent-foreground data-highlighted:bg-background-muted data-highlighted:text-accent-foreground not-data-[variant=destructive]:focus:**:text-accent-foreground not-data-[variant=destructive]:data-highlighted:**:text-accent-foreground data-inset:pl-7 data-[variant=destructive]:text-destructive data-[variant=destructive]:focus:bg-destructive/10 data-[variant=destructive]:data-highlighted:bg-destructive/10 data-[variant=destructive]:focus:text-destructive data-[variant=destructive]:data-highlighted:text-destructive dark:data-[variant=destructive]:focus:bg-destructive/20 dark:data-[variant=destructive]:data-highlighted:bg-destructive/20 data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 data-[variant=destructive]:*:[svg]:text-destructive",
         className

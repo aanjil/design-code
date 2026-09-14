@@ -1,5 +1,5 @@
 /**
- * Deterministic mock people data. Seeded PRNG — identical rows on every reload,
+ * Deterministic mock people data. Seeded PRNG - identical rows on every reload,
  * so screenshots, demos, and annotations stay stable. No APIs, ever.
  */
 

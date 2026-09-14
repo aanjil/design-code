@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/docs/elevation')({
   component: ElevationDoc,
-  head: () => ({ meta: [{ title: 'Elevation — NDS Docs' }] }),
+  head: () => ({ meta: [{ title: 'Elevation - NDS Docs' }] }),
 })
 
 function ShadowCard({ cls, name, use }: { cls: string; name: string; use: string }) {
@@ -56,11 +56,11 @@ function ElevationDoc() {
   return (
     <DocPage
       title="Elevation"
-      description="Depth comes from shadow tokens, not borders — most rings are baked into the shadow (0.5–1px spread). Never add a border on top of a ring shadow."
+      description="Depth comes from shadow tokens, not borders - most rings are baked into the shadow (0.5–1px spread). Never add a border on top of a ring shadow."
     >
       <DocSection
         title="Semantic elevation"
-        note="Use these by name — never reconstruct them manually."
+        note="Use these by name - never reconstruct them manually."
       >
         <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-x-4 gap-y-5">
           {SEMANTIC.map((s) => (
@@ -71,7 +71,7 @@ function ElevationDoc() {
 
       <DocSection
         title="Border rings"
-        note="Interactive-state rings for inputs and buttons — 0.5px hairlines with soft drops."
+        note="Interactive-state rings for inputs and buttons - 0.5px hairlines with soft drops."
       >
         <div className="grid grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-x-4 gap-y-5">
           {RINGS.map((s) => (

@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 
 /**
  * Searchable multi-select list with Reset/Apply footer (Figma 9074:31913).
- * Rendered inside a menu submenu or a chip popover — the popup wrapper
+ * Rendered inside a menu submenu or a chip popover - the popup wrapper
  * provides the flyout surface; this fills it.
  */
 export function FilterValuePanel({

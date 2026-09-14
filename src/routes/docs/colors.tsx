@@ -4,7 +4,7 @@ import { DocPage, DocSection, InlineCode, SwatchGrid } from '@/docs/doc-kit'
 
 export const Route = createFileRoute('/docs/colors')({
   component: ColorsDoc,
-  head: () => ({ meta: [{ title: 'Colors — NDS Docs' }] }),
+  head: () => ({ meta: [{ title: 'Colors - NDS Docs' }] }),
 })
 
 /* Literal classes so Tailwind compiles them; names match colors.md. */
@@ -134,17 +134,17 @@ function ColorsDoc() {
   return (
     <DocPage
       title="Colors"
-      description="Semantic tokens only — primitives are not exposed as utilities and Tailwind's default palette is disabled. Utility suffix equals the token name from colors.md. Values below are measured live, so they follow the theme."
+      description="Semantic tokens only - primitives are not exposed as utilities and Tailwind's default palette is disabled. Utility suffix equals the token name from colors.md. Values below are measured live, so they follow the theme."
     >
       <DocSection
-        title="Backgrounds — neutral"
+        title="Backgrounds - neutral"
         note="Page and control surfaces. background-base is the page; highlight is the hover/selected wash."
       >
         <SwatchGrid tokens={BG_NEUTRAL} />
       </DocSection>
 
       <DocSection
-        title="Backgrounds — status"
+        title="Backgrounds - status"
         note="base/emphasis for solid fills, muted for chips, highlight for banners. Never use accents for status."
       >
         <SwatchGrid tokens={BG_STATUS} />
@@ -173,14 +173,14 @@ function ColorsDoc() {
 
       <DocSection
         title="Surfaces"
-        note="surface-2 is the most elevated. The scale inverts in dark mode — deeper dark, lower number."
+        note="surface-2 is the most elevated. The scale inverts in dark mode - deeper dark, lower number."
       >
         <SwatchGrid tokens={SURFACE} />
       </DocSection>
 
       <DocSection
         title="Accents"
-        note="Decorative only — tags, categories, data viz. Never for status states."
+        note="Decorative only - tags, categories, data viz. Never for status states."
       >
         <SwatchGrid tokens={ACCENT} />
       </DocSection>

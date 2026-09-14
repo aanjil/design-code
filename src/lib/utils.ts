@@ -3,7 +3,7 @@ import { extendTailwindMerge } from 'tailwind-merge'
 
 /**
  * tailwind-merge must be taught the NDS type-scale utilities (text-label-sm,
- * text-title-h1, …) are font-size classes — otherwise it treats them as text
+ * text-title-h1, …) are font-size classes - otherwise it treats them as text
  * COLORS and silently drops them when combined with text-text-* tokens.
  */
 const twMerge = extendTailwindMerge({

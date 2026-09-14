@@ -184,3 +184,148 @@ export function InlineCode({ children }: { children: React.ReactNode }) {
     </code>
   )
 }
+
+/* ---------------- component docs (storybook-style) ---------------- */
+
+/** Live preview box. `wide` scrolls horizontally for full-width comps. */
+export function Specimen({
+  label,
+  wide,
+  className,
+  children,
+}: {
+  label?: string
+  /** Content wider than the docs column scrolls inside the box. */
+  wide?: boolean
+  className?: string
+  children: React.ReactNode
+}) {
+  return (
+    <figure className="min-w-0">
+      <div
+
+        className={cn(
+          'rounded-xl bg-surface-1 p-5 shadow-border-base',
+          wide && 'overflow-x-auto',
+          className,
+        )}
+      >
+        {children}
+      </div>
+      {label && (
+        <figcaption className="mt-1.5 text-caption-md text-text-muted">
+          {label}
+        </figcaption>
+      )}
+    </figure>
+  )
+}
+
+export interface PropDef {
+  name: string
+  type: string
+  default?: string
+  description: string
+}
+
+/**
+ * Numbered showcase section - one component per full-width bordered panel,
+ * index + title + inline description above it. Distinct from DocSection/Specimen
+ * (grid-of-cards docs) for pages that read as a sequential catalog instead.
+ */
+export function ShowcaseSection({
+  index,
+  title,
+  description,
+  wide,
+  variants,
+  props,
+  children,
+}: {
+  index: number
+  title: string
+  description: string
+  /** Demo content fills the panel width instead of centering (wide tables). */
+  wide?: boolean
+  /** Centered control row in its own strip under the demo (e.g. variant pills). */
+  variants?: React.ReactNode
+  /** Rendered below the panel - typically a PropsTable. */
+  props?: React.ReactNode
+  children: React.ReactNode
+}) {
+  return (
+    <section className="border-t border-dashed border-border-muted pt-8 first:border-t-0 first:pt-0">
+      <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
+        <span className="font-mono text-mono-xs text-text-disabled">
+          {String(index).padStart(2, '0')}
+        </span>
+        <h2 className="text-title-h5 text-text-primary">{title}</h2>
+        <span className="text-paragraph-xs text-text-muted">{description}</span>
+      </div>
+      <div className="mt-4 overflow-hidden rounded-2xl border border-border-base bg-surface-1">
+        <div
+          className={cn(
+            'min-h-[220px] p-8',
+            wide ? 'overflow-x-auto' : 'flex items-center justify-center',
+          )}
+        >
+          {children}
+        </div>
+        {variants && (
+          <div className="flex justify-center border-t border-border-muted p-3">
+            {variants}
+          </div>
+        )}
+      </div>
+      {props && <div className="mt-4">{props}</div>}
+    </section>
+  )
+}
+
+export function VariantPills<T extends string>({
+  options,
+  value,
+  onChange,
+}: {
+  options: ReadonlyArray<T>
+  value: T
+  onChange: (value: T) => void
+}) {
+  return (
+    <div className="inline-flex items-center gap-1 rounded-full bg-background-base p-1 shadow-button-gray">
+      {options.map((opt) => (
+        <button
+          key={opt}
+          type="button"
+          onClick={() => onChange(opt)}
+          className={cn(
+            'rounded-full px-3 py-1 text-label-xs capitalize transition-colors',
+            opt === value
+              ? 'bg-background-highlight text-text-primary shadow-button-gray'
+              : 'text-text-muted hover:text-text-primary',
+          )}
+        >
+          {opt}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+export function PropsTable({ props }: { props: Array<PropDef> }) {
+  return (
+    <SpecTable
+      head={['Prop', 'Type', 'Default', 'Description']}
+      rows={props.map((p) => [
+        <InlineCode key="n">{p.name}</InlineCode>,
+        <span key="t" className="font-mono text-mono-xs text-text-muted">
+          {p.type}
+        </span>,
+        p.default ? <InlineCode key="d">{p.default}</InlineCode> : '-',
+        <span key="x" className="text-paragraph-xs">
+          {p.description}
+        </span>,
+      ])}
+    />
+  )
+}

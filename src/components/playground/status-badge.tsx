@@ -1,7 +1,7 @@
 import { cn } from '@/lib/utils'
-import type { ExperimentStatus } from '@/experiments/registry'
+import type { CraftStatus } from '@/crafts/registry'
 
-export const statusLabel: Record<ExperimentStatus, string> = {
+export const statusLabel: Record<CraftStatus, string> = {
   idea: 'Idea',
   wip: 'In progress',
   review: 'In review',
@@ -9,14 +9,14 @@ export const statusLabel: Record<ExperimentStatus, string> = {
 }
 
 /* Status pairs bg + text + border from the same semantic family (colors.md). */
-const badgeClass: Record<ExperimentStatus, string> = {
+const badgeClass: Record<CraftStatus, string> = {
   idea: 'bg-background-highlight text-text-muted border-border-base',
   wip: 'bg-background-warning-highlight text-text-warning-base border-border-warning-muted',
   review: 'bg-background-info-highlight text-text-info-base border-border-info-muted',
   ready: 'bg-background-success-highlight text-text-success-base border-border-success-muted',
 }
 
-export const statusDotClass: Record<ExperimentStatus, string> = {
+export const statusDotClass: Record<CraftStatus, string> = {
   idea: 'bg-background-emphasis',
   wip: 'bg-background-warning-base',
   review: 'bg-background-info-base',
@@ -27,7 +27,7 @@ export function StatusBadge({
   status,
   className,
 }: {
-  status: ExperimentStatus
+  status: CraftStatus
   className?: string
 }) {
   return (

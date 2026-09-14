@@ -1,6 +1,6 @@
 # Colors
 
-Two layers: **primitives** (raw values, the palette) and **tokens** (semantic usage, reference primitives). Always use tokens in design and code — never raw primitives directly.
+Two layers: **primitives** (raw values, the palette) and **tokens** (semantic usage, reference primitives). Always use tokens in design and code - never raw primitives directly.
 
 ```
 Primitive  →  gray-900 = #171717
@@ -275,11 +275,11 @@ Semantic tokens. These are what you use in design and code.
 | `surface-1` | `#f6f6f6` | `#101010` |
 | `surface-2` | `#fbfbfb` | `#131313` |
 
-> `surface-0` is the deepest/darkest, `surface-2` is the lightest/most elevated. In dark mode this inverts — deeper dark = lower surface number.
+> `surface-0` is the deepest/darkest, `surface-2` is the lightest/most elevated. In dark mode this inverts - deeper dark = lower surface number.
 
 ### Elevation / Alpha
 
-Used for overlays, shadows, and scrim effects. Values are RGBA — they adapt to the base color automatically.
+Used for overlays, shadows, and scrim effects. Values are RGBA - they adapt to the base color automatically.
 
 | Token | Light | Dark |
 |-------|-------|------|
@@ -344,14 +344,14 @@ For subtle/muted states (banners, inline alerts), use `*-muted` and `*-subtle` v
 
 ## Do's
 
-- Use tokens everywhere — design and code
-- Use semantic tokens for status states — never hardcode a color
+- Use tokens everywhere - design and code
+- Use semantic tokens for status states - never hardcode a color
 - Use `text-on-color` for text on any brand or colored background
 - Pair background + text + border from the same semantic family
 
 ## Don'ts
 
-- Don't use primitives directly in components — always go through tokens
-- Don't use `background-*` tokens for text — use `text-*` tokens
-- Don't mix Light/Dark values manually — token modes handle it
-- Don't use accent colors for status states — those are for decoration only
+- Don't use primitives directly in components - always go through tokens
+- Don't use `background-*` tokens for text - use `text-*` tokens
+- Don't mix Light/Dark values manually - token modes handle it
+- Don't use accent colors for status states - those are for decoration only

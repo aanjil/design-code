@@ -1,4 +1,4 @@
-# Filter system — frontend handoff
+# Filter system - frontend handoff
 
 Table filtering for index pages (employees, payroll runs, invoices…): a filter
 menu with nested value panels, an applied-filters bar with editable chips, and
@@ -8,10 +8,10 @@ behavior, data model, visual spec (in NDS tokens), and edge cases.
 - **Live reference**: NDS Playground → `/e/employee-filters` (three interactive
   states; green traffic light or ⌘-double-click a window title for app view).
 - **Reference implementation**: `src/components/nds/filters/` in the
-  `design-code` repo — behavior-complete, tokens-only. Ported to Base UI;
+  `design-code` repo - behavior-complete, tokens-only. Ported to Base UI;
   behavior spec below is stack-agnostic.
 - **Figma**: [Web design system](https://www.figma.com/design/yY9Zail0ubfqfxDLxp9QlR/Web-design-system)
-  — filter dropdowns `9816-5983` (field menu `9071-25310`, value panel
+  - filter dropdowns `9816-5983` (field menu `9071-25310`, value panel
   `9074-31913`), applied bar + chip `9749-54617`, toolbar button `9071-22884`,
   page context `9080-2038`.
 
@@ -44,7 +44,7 @@ interface FilterFieldDef {
 interface FilterCondition {
   fieldId: string
   operator: 'is' | 'is-any-of'   // derived: 1 value → 'is', >1 → 'is-any-of'
-  values: string[]               // never empty — empty removes the condition
+  values: string[]               // never empty - empty removes the condition
 }
 ```
 
@@ -57,7 +57,7 @@ interface FilterCondition {
   `compensation-type`, `hire-date`. Hire date filters by **year** (options are
   year strings; match on `hireDate.slice(0,4)`), pending a date-range picker.
 - Any filter change resets pagination to page 1. Recommended: mirror conditions
-  into URL search params (`?filter[job-title]=a,b`) — playground keeps them in
+  into URL search params (`?filter[job-title]=a,b`) - playground keeps them in
   memory only.
 
 ## 3. Filter menu (entry point)
@@ -67,7 +67,7 @@ interface FilterCondition {
   Label/Small; label text wrapped with 4px optical padding. With ≥1 applied
   condition the trigger shows a count badge (`brand-muted` bg, `brand-text`,
   Caption/medium). On narrow containers (toolbar < 768px) the label collapses
-  to icon-only — keep the badge visible and give the button
+  to icon-only - keep the badge visible and give the button
   `aria-label`/`title`.
 - Menu: 200px wide, `surface-2` bg, radius 12px, padding 4px, `shadow-flyout`.
   Items 34px, radius 8px, gap 2px: field icon 16px + Label/Small; hover/focus
@@ -88,11 +88,11 @@ interface FilterCondition {
   `background-base` + `shadow-button-gray` ring; checked = `brand-primary`
   fill + white bold check + `shadow-button-primary`. Row label Label/Small.
   Empty search → "No options match “{query}”." (Paragraph/XSmall muted).
-- Selection is **draft state** — nothing applies until Apply.
+- Selection is **draft state** - nothing applies until Apply.
 - **Footer**: top hairline `border-highlight`, padding 12px, two equal-width
   buttons (34px): **Reset Filter** = ghost-destructive (error text, error
-  highlight hover) — removes the field's condition entirely; **Apply** =
-  primary (violet radial gradient + `shadow-button-primary`) — commits the
+  highlight hover) - removes the field's condition entirely; **Apply** =
+  primary (violet radial gradient + `shadow-button-primary`) - commits the
   draft. Both close the whole menu.
 
 ## 5. FilterBar (applied state)
@@ -101,25 +101,25 @@ Rendered **only when ≥1 condition** exists, between the toolbar and the table.
 
 - Container: full-width, radius 12px, padding 10px, `background-base`,
   `shadow-button-gray` ring. Chips wrap; right cluster stays pinned.
-- **FilterChip** — segmented, 36px tall, radius 6px, `shadow-button-gray`,
+- **FilterChip** - segmented, 36px tall, radius 6px, `shadow-button-gray`,
   segments separated by 1px `border-highlight` hairlines. Segment text never
-  wraps (`whitespace-nowrap` + `shrink-0` on the chip) — chips reflow in the
+  wraps (`whitespace-nowrap` + `shrink-0` on the chip) - chips reflow in the
   bar as whole units:
   1. Field: icon 16px + Label/Small, 8px padding.
-  2. Operator: Label/XSmall muted — `is` (1 value) / `is any of` (>1).
+  2. Operator: Label/XSmall muted - `is` (1 value) / `is any of` (>1).
      Display-only.
   3. Values: Label/Small, hover `background-highlight`, max-width ~280px,
      truncated. Summary: 1 → `A`; 2 → `A, B`; 3+ → `A +N`. **Click reopens the
-     value panel anchored to the chip** (same draft/Apply/Reset semantics) —
+     value panel anchored to the chip** (same draft/Apply/Reset semantics) -
      chips are editable in place, not just removable.
   4. Remove: 28px round icon button (× 16px) inside a 34px slot; hover =
      error highlight + error icon. Removes just that condition.
 - **AI filter** entry sits inline after the chips (see §6).
-- Right cluster: **Save view** (ghost, BookmarkSimple 16px — saves the current
+- Right cluster: **Save view** (ghost, BookmarkSimple 16px - saves the current
   condition set; saved views appear as a toolbar menu; session-only stub in the
   playground, persistence TBD) and **Clear** (28px, radius 9px,
   `background-error-highlight` bg, error-base Label/Small text, hover
-  `background-error-muted`) — removes all conditions.
+  `background-error-muted`) - removes all conditions.
 
 ## 6. AI filter (prompt → conditions)
 
@@ -131,15 +131,15 @@ Rendered **only when ≥1 condition** exists, between the toolbar and the table.
   Esc collapses.
 - Placeholder: `Try "EOR account executives in London hired in 2024"`.
 - **Parsing contract** (deterministic in the playground; swap for a real
-  endpoint later — keep the same output shape `FilterCondition[]`):
+  endpoint later - keep the same output shape `FilterCondition[]`):
   - Lowercase the prompt, pad with spaces (crude word boundaries).
   - For each field: substring-match every option label; also match `synonyms`
-    (e.g. `engineers → Software Engineer`, `' us ' → Remote — US`,
+    (e.g. `engineers → Software Engineer`, `' us ' → Remote - US`,
     `contractors → Contractor`, a bare year → hire-date option).
   - Matches merge into existing conditions via `upsertCondition` (multiple
     fields can come from one prompt).
   - Zero matches → do NOT clear the input; show inline hint placeholder
-    "Nothing matched — try a job title, location, type…".
+    "Nothing matched - try a job title, location, type…".
 
 ## 7. States & edge cases
 
@@ -175,13 +175,13 @@ Rendered **only when ≥1 condition** exists, between the toolbar and the table.
 | AI focus | `shadow-ai` |
 | Empty state | `h-table-empty` (400px) |
 
-All colors/type/shadows are NDS tokens — never hex. Dark mode is automatic
+All colors/type/shadows are NDS tokens - never hex. Dark mode is automatic
 through the tokens; no `dark:` overrides anywhere in the feature.
 
 ## 10. Open questions / later
 
 - Date-range picker for hire date (year filter is interim).
-- Operator editing (`is` → `is not`, ranges) — chip operator segment is
+- Operator editing (`is` → `is not`, ranges) - chip operator segment is
   reserved for this.
 - Saved views persistence + sharing (currently session-only).
 - Real AI endpoint behind the prompt parser (same `FilterCondition[]` contract).

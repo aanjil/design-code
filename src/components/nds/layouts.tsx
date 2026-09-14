@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-full min-h-0 flex-col bg-surface-2 text-text-primary">
+    <div className="flex h-full min-h-0 flex-col niural-surface  text-text-primary">
       {children}
     </div>
   )
@@ -17,8 +17,8 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex min-h-0 flex-1 px-2 pb-2">
-      <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden rounded-xl border border-border-highlight bg-background-base">
+    <div className="flex min-h-0  flex-1 px-2 pb-2 main-layout">
+      <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden rounded-xl border shadow-card  bg-transparent">
         {children}
       </div>
     </div>
@@ -26,21 +26,30 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 }
 
 export function PageLayout({ children }: { children: React.ReactNode }) {
-  return <div className="flex min-h-0 min-w-0 flex-1 flex-col">{children}</div>
+  return <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-surface-2">{children}</div>
 }
 
 export function PageHeader({
   title,
+  subtitle,
   actions,
   onBack,
 }: {
   title: string
+  /** Second line under the title (e.g. a coverage/summary line). Grows the
+   *  header from its fixed 56px to auto height when present. */
+  subtitle?: string
   actions?: React.ReactNode
   /** Renders a back chevron before the title (detail/form pages). */
   onBack?: () => void
 }) {
   return (
-    <div className="flex h-14 shrink-0 items-center justify-between gap-3 border-b border-border-highlight py-[11px] pr-4 pl-1">
+    <div
+      className={cn(
+        'flex shrink-0 items-center justify-between gap-3 border-b border-border-highlight pr-4 pl-1',
+        subtitle ? 'py-3' : 'h-14 py-[11px]',
+      )}
+    >
       <div className="flex min-w-0 items-center px-3 py-1">
         {onBack && (
           <button
@@ -52,7 +61,10 @@ export function PageHeader({
             <CaretLeft className="size-4" />
           </button>
         )}
-        <h1 className="truncate px-1 text-label-md">{title}</h1>
+        <div className="min-w-0 px-1">
+          <h1 className="truncate text-label-md">{title}</h1>
+          {subtitle && <p className="truncate text-paragraph-xs text-text-muted">{subtitle}</p>}
+        </div>
       </div>
       {actions && <div className="flex shrink-0 items-center gap-3">{actions}</div>}
     </div>

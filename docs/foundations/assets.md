@@ -12,13 +12,13 @@ Covers icons, illustrations, and custom graphics used across the product.
 
 ### Sizes
 
-See `sizes.md` — icon sizes are defined there.
+See `sizes.md` - icon sizes are defined there.
 
 ### Usage rules
 
 - Use filled vs. outline variants consistently within a context
 - Don't mix icon libraries in the same view
-- Always use the 16px bounding box — never place raw SVG without a wrapper
+- Always use the 16px bounding box - never place raw SVG without a wrapper
 
 ### Custom icons
 
@@ -30,7 +30,7 @@ See `sizes.md` — icon sizes are defined there.
 
 ### Style
 
-> Visual style — line weight, color palette, tone. What they should feel like.
+> Visual style - line weight, color palette, tone. What they should feel like.
 
 ### Usage contexts
 
@@ -43,10 +43,10 @@ See `sizes.md` — icon sizes are defined there.
 
 | Context | Size |
 |---------|------|
-| Table empty state | — |
-| Page empty state | — |
-| Onboarding | — |
-| Error page | — |
+| Table empty state | - |
+| Page empty state | - |
+| Onboarding | - |
+| Error page | - |
 
 ### Library
 

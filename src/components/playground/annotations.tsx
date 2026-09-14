@@ -15,9 +15,9 @@ import {
 import { cn } from '@/lib/utils'
 
 /**
- * Annotation kit — numbered design notes pinned to real UI.
- * Wrap any element in <Annotate n={…} title="…" note="…"> inside an
- * ExperimentFrame. Markers toggle with the frame switch or the `a` key;
+ * Annotation kit - numbered design notes pinned to real UI.
+ * Wrap any element in <Annotate n={…} title="…" note="…"> inside a
+ * CraftFrame. Markers toggle with the frame switch or the `a` key;
  * the notes panel lists everything and can scroll-locate each marker.
  */
 
@@ -42,7 +42,7 @@ export function useAnnotations(): AnnotationsCtx {
   const ctx = useContext(Ctx)
   if (!ctx) {
     throw new Error(
-      '<Annotate> and annotation controls must be rendered inside an <ExperimentFrame>.',
+      '<Annotate> and annotation controls must be rendered inside a <CraftFrame>.',
     )
   }
   return ctx
