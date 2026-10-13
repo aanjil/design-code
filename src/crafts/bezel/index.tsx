@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { Play, X } from '@phosphor-icons/react'
+import { Play } from '@phosphor-icons/react'
 import type { CanvasGroupDef, CanvasWindowDef } from '@/components/playground/canvas'
 import { CanvasCraft } from '@/components/playground/canvas-craft'
 import {
@@ -8,9 +8,12 @@ import {
   ExplorerProvider,
   useExplorer,
 } from '@/components/playground/explorer'
+import { Director } from '@/components/playground/director'
 import { Button } from '@/components/ui/button'
+import { MockEngineProvider } from '@/mocks/engine'
 import { BEZEL_STATES, CATALOG_SCREEN_IDS, EXPLORER_CATALOG } from './catalog'
 import { LiveApp, ScreenFrame } from './app'
+import { bezelWorldConfig } from './world'
 
 /**
  * Same shape as multi-payroll/schedule-report: one real, live-interactive
@@ -68,11 +71,8 @@ function BezelCanvas() {
   const explorer = useExplorer()
   const { screenId, stateId, focusNonce } = explorer
   const [presentApp, setPresentApp] = useState<{ id: string; nonce: number } | null>(null)
-  const [exitRequest, setExitRequest] = useState<{ nonce: number } | null>(null)
-  const [appPresenting, setAppPresenting] = useState(false)
 
   const playApp = () => setPresentApp((prev) => ({ id: APP_ID, nonce: (prev?.nonce ?? 0) + 1 }))
-  const exitApp = () => setExitRequest((prev) => ({ nonce: (prev?.nonce ?? 0) + 1 }))
   const canvas = useMemo(() => buildCanvas(playApp), [])
 
   const focusId = CATALOG_SCREEN_IDS.has(screenId) ? stateId : screenId
@@ -87,8 +87,6 @@ function BezelCanvas() {
       minZoom={0.04}
       focusWindow={{ id: focusId, nonce: focusNonce }}
       requestFullscreen={presentApp}
-      exitFullscreenRequest={exitRequest}
-      onFullscreenChange={setAppPresenting}
       onFocusChange={(id) => {
         if (id === APP_ID) return
         explorer.show(screenId, id)
@@ -97,20 +95,20 @@ function BezelCanvas() {
       overlays={
         <ExplorerPanel
           extraActions={
-            <div className="flex items-center gap-1">
-              {appPresenting && (
-                <Button variant="ghost" size="icon-sm" aria-label="Exit App preview" title="Exit fullscreen preview" onClick={exitApp}>
-                  <X className="size-3.5" />
-                </Button>
-              )}
-              <Button size="sm" onClick={playApp}>
-                <Play weight="fill" />
-                <span className="px-1">Play</span>
-              </Button>
-            </div>
+            <Button size="sm" onClick={playApp}>
+              <Play weight="fill" />
+              <span className="px-1">Play</span>
+            </Button>
           }
         />
       }
+      hud={({ presenting }) => (
+        // Beside the explorer on the canvas; owns the corner once Play hides it.
+        <Director
+          className="fixed bottom-4"
+          style={{ right: presenting ? 16 : EXPLORER_PANEL_RESERVED_RIGHT }}
+        />
+      )}
     />
   )
 }
@@ -118,7 +116,10 @@ function BezelCanvas() {
 export function Bezel() {
   return (
     <ExplorerProvider catalog={EXPLORER_CATALOG} storageKey="bezel">
-      <BezelCanvas />
+      {/* Above the canvas so the live window and the Director share one world */}
+      <MockEngineProvider config={bezelWorldConfig}>
+        <BezelCanvas />
+      </MockEngineProvider>
     </ExplorerProvider>
   )
 }

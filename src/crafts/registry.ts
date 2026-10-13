@@ -26,6 +26,16 @@ export interface CraftMeta {
  */
 export const crafts: Array<CraftMeta> = [
   {
+    slug: 'payment-flow',
+    title: 'Payment Flow - local currency wallets',
+    description:
+      'Invoices list → Pay → payment screen (invoice summary + payment method accordion) → confirmation → result, with CAD/GBP/EUR wallets from the Local Currency Wallet Funding PRD. Live App + Admin share one store (fund → approve → available). Convert-all FX math, largest-share default wallet, insufficient/pending states, local bank transfer, fund wallet flow, wallet page, and an employer config switcher.',
+    status: 'wip',
+    tags: ['payments', 'wallet', 'fx', 'explorer', 'states', 'prd'],
+    to: '/crafts/payment-flow',
+    added: '2026-10-13',
+  },
+  {
     slug: 'multi-payroll',
     title: 'Multi-payroll frequencies - flow & state explorer',
     description:

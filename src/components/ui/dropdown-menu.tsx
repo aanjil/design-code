@@ -25,17 +25,21 @@ function DropdownMenuContent({
   side = "bottom",
   sideOffset = 4,
   className,
+  positionerClassName,
   ...props
 }: MenuPrimitive.Popup.Props &
   Pick<
     MenuPrimitive.Positioner.Props,
     "align" | "alignOffset" | "side" | "sideOffset"
-  >) {
+  > & {
+    /** Override stacking when the trigger lives on high-z chrome (e.g. the explorer panel). */
+    positionerClassName?: string
+  }) {
   const portalContainer = usePortalContainer()
   return (
     <MenuPrimitive.Portal container={portalContainer ?? undefined}>
       <MenuPrimitive.Positioner
-        className="isolate z-50 outline-none"
+        className={cn("isolate z-50 outline-none", positionerClassName)}
         align={align}
         alignOffset={alignOffset}
         side={side}

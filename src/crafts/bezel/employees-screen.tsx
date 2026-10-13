@@ -27,6 +27,7 @@ import type { GrainProps } from '@/components/nds/grain/grain'
 import type { PinnedInitiative, ThreadTurn } from '@/components/nds/grain/thread'
 import { FloatingBezel, type BezelMode } from './floating-bezel'
 import { cn } from '@/lib/utils'
+import { useWorldEmployees } from './world'
 
 const statusDot: Record<EmployeeStatus, string> = {
   active: 'bg-background-success-base',
@@ -81,14 +82,17 @@ export function EmployeesBezelScreen({
   const [threadTitle, setThreadTitle] = useState('Ask Emma')
   const groundRef = useRef<HTMLDivElement>(null)
 
+  // Same rows as the static mock, with statuses matured by the mock engine
+  // when the live window sits inside one (see world.ts).
+  const world = useWorldEmployees()
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase()
-    if (!q) return employees
-    return employees.filter((e) => `${e.name} ${e.email} ${e.id}`.toLowerCase().includes(q))
-  }, [search])
+    if (!q) return world
+    return world.filter((e) => `${e.name} ${e.email} ${e.id}`.toLowerCase().includes(q))
+  }, [search, world])
 
   const pageRows = filtered.slice(0, 10)
-  const selection = useMemo(() => employees.filter((e) => selectedIds.has(e.id)), [selectedIds])
+  const selection = useMemo(() => world.filter((e) => selectedIds.has(e.id)), [selectedIds, world])
 
   function toggleRow(id: string) {
     // Compute the next set directly rather than inside setSelectedIds's

@@ -19,6 +19,7 @@ import {
   Wallet,
 } from '@phosphor-icons/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { ProfileMenu } from '@/components/nds/profile-menu'
 import {
   Tooltip,
   TooltipContent,
@@ -113,13 +114,16 @@ export function AppBarNavItem({
 export function WalletButton({
   amount = '$ 28,043.34',
   active = false,
+  onClick,
 }: {
   amount?: string
   active?: boolean
+  onClick?: () => void
 }) {
   return (
     <button
       type="button"
+      onClick={onClick}
       className={cn(
         'flex h-9 shrink-0 items-center gap-1 rounded-full px-3 transition-all',
         active
@@ -428,18 +432,6 @@ function AppBarLogo({ compact }: { compact?: boolean }) {
   )
 }
 
-function AppBarAvatar({ square }: { square?: boolean }) {
-  return (
-    <span
-      className={cn(
-        'flex size-9 shrink-0 items-center justify-center bg-brand-muted text-label-xs text-brand-text shadow-[0px_0px_0px_1px_var(--elevation-alpha-16)]',
-        square ? 'rounded-[8px]' : 'rounded-full',
-      )}
-    >
-      SB
-    </span>
-  )
-}
 
 const DEFAULT_ORG_NAME = 'Nexus Corp Corp America'
 
@@ -652,6 +644,8 @@ export function AppBar({
   notifications,
   onNotificationsExportClick,
   onNavItemClick,
+  walletAmount,
+  onWalletClick,
   mini = false,
 }: {
   role?: AppBarRole
@@ -673,6 +667,10 @@ export function AppBar({
   /** Fires in addition to the pill's own local highlight - lets a consuming
    *  screen wire a nav item to real navigation instead of just decoration. */
   onNavItemClick?: (label: string) => void
+  /** Wallet pill amount (defaults to WalletButton's own placeholder). */
+  walletAmount?: string
+  /** Wires the wallet pill to real navigation (e.g. a wallet page). */
+  onWalletClick?: () => void
   /** Renders a 64px vertical icon rail instead of the 58px horizontal bar -
    *  same role, nav items, and state, just collapsed. Give it `h-full` from
    *  its parent (it replaces AppBar in the layout, not the Sidebar). */
@@ -724,7 +722,7 @@ export function AppBar({
                 key={label}
                 label={label}
                 icon={icon}
-                active={active === label}
+                active={!walletActive && active === label}
                 muted={muted}
                 onClick={() => {
                   setActive(label)
@@ -775,7 +773,7 @@ export function AppBar({
           )}
 
           <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
-          <AppBarAvatar square={isEmployee} />
+          <ProfileMenu role={role} square={isEmployee} side="right" onAccountSettings={onSettingsClick} />
         </aside>
       </TooltipProvider>
     )
@@ -803,7 +801,7 @@ export function AppBar({
               key={label}
               label={label}
               icon={icon}
-              active={active === label}
+              active={!walletActive && active === label}
               muted={muted}
               onClick={() => {
                 setActive(label)
@@ -845,7 +843,7 @@ export function AppBar({
             </>
           ) : (
             <>
-              <WalletButton active={walletActive} />
+              <WalletButton active={walletActive} amount={walletAmount} onClick={onWalletClick} />
               {notifications && (
                 <NotificationButton notifications={notifications} onExportClick={onNotificationsExportClick} />
               )}
@@ -890,7 +888,7 @@ export function AppBar({
         )}
 
         <AppBarDivider />
-        <AppBarAvatar square={isEmployee} />
+        <ProfileMenu role={role} square={isEmployee} onAccountSettings={onSettingsClick} />
       </div>
     </header>
   )

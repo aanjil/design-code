@@ -733,3 +733,6 @@
 .niural-surface {
   background: radial-gradient(173.86% 156.95% at -18.92% -46.59%, rgba(188, 218, 244, 0.60) 28.38%, rgba(223, 212, 228, 0.60) 65.26%, rgba(242, 226, 214, 0.60) 100%), #FFF;
 }
+.dark .niural-surface {
+  background: var(--surface-0);
+}

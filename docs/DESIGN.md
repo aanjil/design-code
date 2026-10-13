@@ -152,10 +152,14 @@ Card recipe: `rounded-xl bg-background-base p-3 shadow-card hover:shadow-card-ho
   "Tidy up" (broom) arranges windows in a centered left→right row and refits; the
   bottom-left minimap shows window rects + a draggable brand-outlined viewport. The view
   auto-centers on the windows at mount. The **green traffic light**, the **corners
-  button**, or **double-clicking the titlebar** presents one window at ~98vw/98vh at
-  crisp 1:1 regardless of canvas zoom, preserving that window's interaction state
-  ("app view") - Escape, backdrop, corners button, or green light exits. All canvas
-  chrome hides while presenting. Surface is 4000×2400.
+  button**, **double-clicking the titlebar**, or a craft's **Play** button presents one
+  window full-bleed (no browser chrome) at crisp 1:1 regardless of canvas zoom,
+  preserving that window's interaction state ("app view") - **Esc** exits (an "Exit
+  preview · Esc" pill announces itself, then hides until you hover the top edge). All
+  canvas chrome AND `overlays` (explorer panel) hide while presenting; only `hud`
+  survives. Surface is 4000×2400.
+- Left chrome column (canvas mode), top to bottom: Mesurer toolbar (library-pinned at
+  16,16) → FloatingDock (Back + settings, `top-16`) → windows stack (`top-28`).
 - Blueprint tooling: 20/100px line grid, edge rulers with adaptive logical-px labels,
   and a per-window readout above each titlebar (`w × h` of the content viewport +
   `x · y`) for eyeballing responsive sizes. (Ruler/readout use 10–12px mono - a
@@ -207,6 +211,16 @@ window contents differ per craft).
   popover + entry in the notes panel. Toggle via frame switch or the `a` key.
 - Mock data ONLY - no fetch, no APIs, no network. Seeded deterministic generators in
   `src/mocks/` (same data every reload, safe for screenshots/demos).
+- Mock engine (`src/mocks/engine/`) - for data that should *mature* during a demo.
+  `defineFlow({ id, initial, states })` = a state machine per kind of record; a state
+  moves on time (`after: { in: '2d', to, jitter }`) or on events (`on: { EVENT: to }`).
+  `MockEngineProvider config` owns a world of flow instances on a **virtual, seeded
+  clock** (play / speed / +1h / +1d / jump-to-next / reset; identical every reload).
+  Screens project the snapshot onto their existing mock rows (`useEngine(select)`, or
+  `useOptionalMockEngine()` so frozen catalog frames fall back to static data). The
+  `<Director>` HUD (`playground/director.tsx`, toggle `D`) is the presenter's remote -
+  pass it via CanvasCraft's `hud` so it survives Play. Reference: `crafts/bezel/world.ts`
+  (onboarding flow: Invited → Onboarding → Active drives the Employees status column).
 - Flow & state explorer (`playground/explorer.tsx`) - review-harness mode for
   state-heavy features: wrap the craft in `<ExplorerProvider catalog storageKey>`,
   pass `<FlowsPanel/> + <StatesPanel/>` via CanvasCraft's `overlays` prop, and have
@@ -224,6 +238,19 @@ window contents differ per craft).
   bumps `focusNonce` on every `show()`, so panel clicks AND in-app buttons pan/fit the
   canvas to that screen's frame. Multi-payroll = one frame per screen (27), one group
   per flow; in-app buttons call `show()` so flows click through end to end.
+- Master App (`/app/$section`): crafts are small increments; the Master App is where
+  they add up. A section can host several live crafts - `?page=<sidebar leaf>` picks
+  the one whose `subNavLabel` matches (Payments: Payroll Schedule → multi-payroll,
+  Invoices → payment-flow), and each craft forwards sidebar leaves it doesn't own via
+  `onSidebarNavigate`. Wallet is its own section, reached from the AppBar wallet pill.
+  Real-time data: a craft's live store persists to localStorage + syncs across tabs
+  (storage event), so the craft canvas and Master App share one world
+  (`payment-flow/store.tsx` `persistKey` is the reference). The mock data dock
+  (`payment-flow/mock-dock.tsx`: dataset presets, time machine, controls) floats
+  bottom-center on every Master App section; its `leading` slot carries the Master
+  App's "Go to" menu (sections, this section's crafts, all crafts - replaces the old
+  top-right switcher). The dock minimizes to a small handle (remembered in
+  localStorage).
 - Form flows: `FormShell` (multi-payroll ui) = no AppBar/Sidebar - slim title bar +
   left `Stepper` rail (nds/stepper, Figma 89:5507: 24px brand check / brand spinner /
   muted check, Label/XSmall, 24px hairline connectors) + centered `FormCard` column.

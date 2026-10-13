@@ -27,6 +27,7 @@ import { toBlob } from 'html-to-image'
 import { PinMarker } from './canvas-pins'
 import { useCanvasPins } from './canvas-pins-context'
 import { CanvasRulers } from './canvas-rulers'
+import { Kbd } from './kbd'
 import { WindowsPanel } from './windows-panel'
 import { PortalContainerContext } from '@/components/ui/portal-context'
 import { cn } from '@/lib/utils'
@@ -35,7 +36,7 @@ import { cn } from '@/lib/utils'
  * Craft canvas: a zoomable, pannable blueprint surface (Figma-style)
  * holding Safari-style browser windows - drag via titlebar, resize via
  * corner, double-click the titlebar (or green light / corners button) to
- * present one window at ~98vw/98vh. Rulers + per-window dimension readouts,
+ * present one window full-bleed (Esc exits). Rulers + per-window dimension readouts,
  * a top-right windows panel with DOM snapshots, and click-placed design-note
  * pins that feed the dock's Notes sheet. Popovers portal INSIDE each window
  * (see ui/portal-context) so they scale with the canvas zoom.
@@ -937,13 +938,14 @@ export function PlaygroundCanvas({
   /* ---------- fullscreen geometry (inside the scaled layer) ---------- */
 
   // The window stays mounted in the scaled layer (preserves its state);
-  // an inverse transform makes it render crisp at screen scale.
+  // an inverse transform makes it render crisp at screen scale. Presenting
+  // is full-bleed - the app *is* the screen, no canvas peeking around it.
   const fullscreenStyle: React.CSSProperties | undefined = fullscreenId
     ? {
-        left: (viewport.left + viewport.cw * 0.01) / zoom,
-        top: (viewport.top + viewport.ch * 0.01) / zoom,
-        width: viewport.cw * 0.98,
-        height: viewport.ch * 0.98,
+        left: viewport.left / zoom,
+        top: viewport.top / zoom,
+        width: viewport.cw,
+        height: viewport.ch,
         transform: `scale(${1 / zoom})`,
         transformOrigin: 'top left',
         zIndex: zCounter.current + 3000,
@@ -1120,7 +1122,7 @@ export function PlaygroundCanvas({
         </div>
       )}
 
-      {/* Windows stack - top-left */}
+      {/* Windows stack - top-left, under Mesurer + the floating dock */}
       {!fullscreenId && (
         <CanvasWindowsStack
           windows={windows.map((w) => ({ id: w.id, title: w.title }))}
@@ -1257,6 +1259,44 @@ export function PlaygroundCanvas({
           </div>
         </div>
       )}
+
+      {fullscreenId && (
+        <PresentExitHint
+          key={fullscreenId}
+          onExit={() => toggleFullscreen(fullscreenId)}
+        />
+      )}
+    </div>
+  )
+}
+
+/* ---------- Present-mode exit affordance ---------- */
+
+/**
+ * The only chrome left while presenting: announces "Esc to exit" on entry,
+ * then recedes to a faint pill so it never sits in a stakeholder's
+ * screenshot - hovering the top edge brings it back for mouse users.
+ */
+function PresentExitHint({ onExit }: { onExit: () => void }) {
+  const [announcing, setAnnouncing] = useState(true)
+  useEffect(() => {
+    const t = setTimeout(() => setAnnouncing(false), 2200)
+    return () => clearTimeout(t)
+  }, [])
+
+  return (
+    <div className="group absolute inset-x-0 top-0 z-[100] flex h-14 justify-center pt-3">
+      <button
+        type="button"
+        onClick={onExit}
+        className={cn(
+          'flex h-8 items-center gap-2 rounded-full bg-background-base/90 pr-1.5 pl-3 text-label-xs text-text-primary shadow-flyout backdrop-blur transition-opacity duration-300 hover:bg-background-highlight',
+          announcing ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 focus-visible:opacity-100',
+        )}
+      >
+        Exit preview
+        <Kbd>Esc</Kbd>
+      </button>
     </div>
   )
 }
@@ -1504,7 +1544,8 @@ function BrowserWindow({
         data-window-id={def.id}
         onPointerDown={onFocus}
         className={cn(
-          'absolute flex flex-col overflow-hidden rounded-xl bg-background-base shadow-border-base',
+          'absolute flex flex-col overflow-hidden bg-background-base',
+          !fullscreen && 'rounded-xl shadow-border-base',
           focused && !fullscreen && 'shadow-border-active',
           interacting && 'select-none',
         )}
@@ -1520,8 +1561,9 @@ function BrowserWindow({
               }
         }
       >
-        {/* Safari-style chrome - drag me, double-click for app view */}
-        <div
+        {/* Safari-style chrome - drag me, double-click for app view.
+            Dropped while presenting: the app fills the screen, Esc exits. */}
+        {!fullscreen && <div
           onPointerDown={startDrag}
           onDoubleClick={onToggleFullscreen}
           className={cn(
@@ -1616,7 +1658,7 @@ function BrowserWindow({
               title={
                 fullscreen
                   ? 'Exit app view (Esc)'
-                  : 'Open as app - 98% of the screen'
+                  : 'Open as app - fills the screen'
               }
               onClick={onToggleFullscreen}
               className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
@@ -1628,7 +1670,7 @@ function BrowserWindow({
               )}
             </button>
           </span>
-        </div>
+        </div>}
 
         {/* Preview content - popovers portal in here so they scale with zoom */}
         <div
@@ -1705,7 +1747,7 @@ function CanvasWindowsStack({
   return (
     <div
       className={cn(
-        'absolute top-4 left-4 z-40 transition-opacity duration-200',
+        'absolute top-28 left-4 z-40 transition-opacity duration-200',
         zenMode ? 'pointer-events-none opacity-0' : 'opacity-100',
       )}
     >

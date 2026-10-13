@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { Desktop, Moon, Sun } from '@phosphor-icons/react'
 import { Button } from '@/components/ui/button'
 
-type ThemeMode = 'light' | 'dark' | 'auto'
+export type ThemeMode = 'light' | 'dark' | 'auto'
+
+const THEME_EVENT = 'nds-theme-change'
 
 function getInitialMode(): ThemeMode {
   if (typeof window === 'undefined') return 'auto'
@@ -26,19 +28,21 @@ function applyThemeMode(mode: ThemeMode) {
   document.documentElement.style.colorScheme = resolved
 }
 
-const icons: Record<ThemeMode, typeof Sun> = {
-  light: Sun,
-  dark: Moon,
-  auto: Desktop,
-}
-
-export function ThemeToggle() {
-  const [mode, setMode] = useState<ThemeMode>('auto')
+/**
+ * Shared theme state - every consumer (rail toggle, floating dock, the
+ * AppBar profile menu's Appearance switch) stays in sync via a window
+ * event, and the choice persists in localStorage ('theme').
+ */
+export function useThemeMode(): [ThemeMode, (mode: ThemeMode) => void] {
+  const [mode, setModeState] = useState<ThemeMode>('auto')
 
   useEffect(() => {
     const initial = getInitialMode()
-    setMode(initial)
+    setModeState(initial)
     applyThemeMode(initial)
+    const onChange = (e: Event) => setModeState((e as CustomEvent<ThemeMode>).detail)
+    window.addEventListener(THEME_EVENT, onChange)
+    return () => window.removeEventListener(THEME_EVENT, onChange)
   }, [])
 
   useEffect(() => {
@@ -49,12 +53,30 @@ export function ThemeToggle() {
     return () => media.removeEventListener('change', onChange)
   }, [mode])
 
-  function cycle() {
-    const next: ThemeMode =
-      mode === 'light' ? 'dark' : mode === 'dark' ? 'auto' : 'light'
-    setMode(next)
+  const setMode = (next: ThemeMode) => {
     applyThemeMode(next)
-    window.localStorage.setItem('theme', next)
+    try {
+      window.localStorage.setItem('theme', next)
+    } catch {
+      /* ignore */
+    }
+    window.dispatchEvent(new CustomEvent(THEME_EVENT, { detail: next }))
+  }
+
+  return [mode, setMode]
+}
+
+const icons: Record<ThemeMode, typeof Sun> = {
+  light: Sun,
+  dark: Moon,
+  auto: Desktop,
+}
+
+export function ThemeToggle() {
+  const [mode, setMode] = useThemeMode()
+
+  function cycle() {
+    setMode(mode === 'light' ? 'dark' : mode === 'dark' ? 'auto' : 'light')
   }
 
   const Icon = icons[mode]

@@ -26,6 +26,7 @@ export function CanvasCraft({
   slug,
   windows,
   overlays,
+  hud,
   groups,
   focusWindow,
   requestFullscreen,
@@ -41,10 +42,16 @@ export function CanvasCraft({
   slug: string
   windows: Array<CanvasWindowDef>
   /**
-   * Extra floating chrome (e.g. the explorer panel). Stays visible while
-   * presenting so states can drive a fullscreen preview.
+   * Extra floating chrome (e.g. the explorer panel). Hidden while a window
+   * is presenting - Play means the app owns the whole screen; Esc returns.
    */
   overlays?: React.ReactNode
+  /**
+   * Presenter controls that must survive Play mode (e.g. the mock-engine
+   * Director). Gets `presenting` so it can re-anchor once the canvas
+   * chrome it sat beside is gone.
+   */
+  hud?: (state: { presenting: boolean }) => React.ReactNode
   /** Figma-style labeled group containers (see PlaygroundCanvas). */
   groups?: Array<CanvasGroupDef>
   focusWindow?: { id: string; nonce: number } | null
@@ -92,7 +99,8 @@ export function CanvasCraft({
               reservedLeft={reservedLeft}
               reservedRight={reservedRight}
             />
-            {overlays}
+            {!presenting && overlays}
+            {hud?.({ presenting })}
             {!presenting && (
               <FloatingDock slug={slug} showRulers={showRulers} onToggleRulers={setShowRulers} />
             )}

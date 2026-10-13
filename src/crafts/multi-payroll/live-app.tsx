@@ -207,10 +207,13 @@ function deriveLiveView(
 
 export function LiveApp({
   onNavItemClick,
+  onSidebarNavigate: onExternalSidebarNavigate,
 }: {
   /** Master App only - wires the AppBar's top-level pills to real
    *  cross-section navigation instead of just the local highlight. */
   onNavItemClick?: (label: string) => void
+  /** Master App only - sidebar leaves owned by another craft (Invoices). */
+  onSidebarNavigate?: (label: string) => void
 } = {}) {
   const data = useSyncExternalStore(
     liveStore.subscribe,
@@ -417,7 +420,8 @@ export function LiveApp({
   function onSidebarNavigate(label: string) {
     if (label === 'Payroll') show('F1')
     else if (label === 'Payroll Schedule') show('C1')
-    // other sidebar items have no real destination in this craft yet
+    // other leaves belong to other crafts - the Master App routes them
+    else onExternalSidebarNavigate?.(label)
   }
 
   const liveValue: ExplorerContextValue = {

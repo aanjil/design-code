@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { MASTER_IA } from '@/crafts/master-ia'
-import { MasterAppDock } from '@/components/playground/master-app-dock'
+import { MasterGoToMenu } from '@/components/playground/master-app-dock'
 import { AppBar } from '@/components/nds/app-bar'
 import { Sidebar } from '@/components/nds/sidebar'
 import {
@@ -17,10 +17,19 @@ import { LiveApp as MultiPayrollLiveApp } from '@/crafts/multi-payroll/live-app'
 import { LiveApp as ScheduleReportLiveApp } from '@/crafts/schedule-report/live-app'
 import { LiveApp as EmmaMobileLiveApp } from '@/crafts/emma-mobile/live-app'
 import { LiveApp as TokensBillingLiveApp } from '@/crafts/tokens-billing/live-app'
+import {
+  LiveApp as PaymentFlowLiveApp,
+  LiveMockDock,
+} from '@/crafts/payment-flow/live-app'
 
 export const Route = createFileRoute('/app/$section')({
   component: MasterAppSection,
   staticData: { layout: 'app' },
+  /** `page` = sidebar leaf inside the section (e.g. Payments → Invoices),
+   *  picks which live craft mounts when a section has several. */
+  validateSearch: (search: Record<string, unknown>): { page?: string } => ({
+    page: typeof search.page === 'string' ? search.page : undefined,
+  }),
   head: ({ params }) => {
     const section = MASTER_IA.find((s) => s.key === params.section)
     return { meta: [{ title: `${section?.label ?? 'App'} - NDS Playground` }] }
@@ -39,6 +48,14 @@ export const Route = createFileRoute('/app/$section')({
  */
 interface LiveComponentProps {
   onNavItemClick?: (label: string) => void
+  onSidebarNavigate?: (label: string) => void
+  onWalletClick?: () => void
+  sectionKey: string
+}
+
+/** Payment flow serves two sections: Payments → Invoices and the Wallet. */
+function PaymentFlowSection({ sectionKey, ...rest }: LiveComponentProps) {
+  return <PaymentFlowLiveApp screen={sectionKey === 'wallet' ? 'wallet' : 'invoices'} {...rest} />
 }
 
 const LIVE_COMPONENTS: Record<string, ComponentType<LiveComponentProps>> = {
@@ -48,13 +65,16 @@ const LIVE_COMPONENTS: Record<string, ComponentType<LiveComponentProps>> = {
   'schedule-report': ScheduleReportLiveApp,
   'emma-mobile': EmmaMobileLiveApp,
   'tokens-billing': TokensBillingLiveApp,
+  'payment-flow': PaymentFlowSection,
 }
 
 function MasterAppSection() {
   const { section: sectionKey } = Route.useParams()
+  const { page } = Route.useSearch()
   const navigate = useNavigate()
   const section = MASTER_IA.find((s) => s.key === sectionKey) ?? MASTER_IA[0]
-  const liveRef = section.crafts.find((c) => c.status === 'live')
+  const live = section.crafts.filter((c) => c.status === 'live')
+  const liveRef = live.find((c) => page && c.subNavLabel === page) ?? live[0]
   const LiveComponent = liveRef ? LIVE_COMPONENTS[liveRef.slug] : undefined
 
   // AppBar pill labels ('People', 'Payments', ...) match Master IA section
@@ -64,16 +84,32 @@ function MasterAppSection() {
     if (target) navigate({ to: '/app/$section', params: { section: target.key } })
   }
 
+  // Sidebar leaves owned by a different live craft in the same section
+  // (Payments: Payroll Schedule ↔ Invoices) - route via ?page=.
+  function handleSidebarNavigate(label: string) {
+    const owner = section.crafts.find((c) => c.status === 'live' && c.subNavLabel === label)
+    if (owner) navigate({ to: '/app/$section', params: { section: section.key }, search: { page: label } })
+  }
+
+  const goWallet = () => navigate({ to: '/app/$section', params: { section: 'wallet' } })
+
   return (
     <>
       {LiveComponent ? (
-        <LiveComponent onNavItemClick={handleNavItemClick} />
+        <LiveComponent
+          key={`${section.key}:${liveRef?.slug}`}
+          sectionKey={section.key}
+          onNavItemClick={handleNavItemClick}
+          onSidebarNavigate={handleSidebarNavigate}
+          onWalletClick={goWallet}
+        />
       ) : (
         <AppShell>
           <AppBar
             activeItem={section.label}
             onNavItemClick={handleNavItemClick}
             onAiClick={() => navigate({ to: '/crafts/ask-emma' })}
+            onWalletClick={goWallet}
           />
           <MainLayout>
             {section.sidebarGroups && (
@@ -92,7 +128,7 @@ function MasterAppSection() {
           </MainLayout>
         </AppShell>
       )}
-      <MasterAppDock section={section} />
+      <LiveMockDock leading={<MasterGoToMenu section={section} />} />
     </>
   )
 }

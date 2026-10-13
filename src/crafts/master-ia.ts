@@ -53,9 +53,17 @@ export const MASTER_IA: Array<MasterIASection> = [
     sidebarGroups: PAYMENTS_SIDEBAR,
     crafts: [
       { slug: 'multi-payroll', status: 'live', subNavLabel: 'Payroll Schedule' },
+      { slug: 'payment-flow', status: 'live', subNavLabel: 'Invoices' },
       { slug: 'split-pay', status: 'canvas-only' },
       { slug: 'dynamic-timeline', status: 'canvas-only', subNavLabel: 'Payroll' },
     ],
+  },
+  {
+    key: 'wallet',
+    label: 'Niural Wallet',
+    /** Not a left-rail section - reached from the AppBar wallet pill.
+     *  Balances, Fund wallet (USD + local CAD/GBP/EUR), transactions. */
+    crafts: [{ slug: 'payment-flow', status: 'live' }],
   },
   {
     key: 'niural-pay',

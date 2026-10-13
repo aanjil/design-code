@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-full min-h-0 flex-col niural-surface  text-text-primary">
+    <div className="flex h-full min-h-0 flex-col niural-surface dark:bg-surface-0  text-text-primary">
       {children}
     </div>
   )
@@ -18,7 +18,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-0  flex-1 px-2 pb-2 main-layout">
-      <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden rounded-xl border shadow-card  bg-transparent">
+      <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden rounded-xl border border-border-base   bg-transparent">
         {children}
       </div>
     </div>

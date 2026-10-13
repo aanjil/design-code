@@ -16,6 +16,10 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
  * canvas layout). Deliberately minimal - no craft switcher, no
  * title/description block; just navigation back to the gallery plus the
  * handful of toggles every canvas craft shares.
+ *
+ * Left column, top to bottom: Mesurer's toolbar (pinned at 16,16 by the
+ * library), this dock, then the canvas windows stack - stacked so none
+ * of them hides another.
  */
 export function FloatingDock({
   slug: _slug,
@@ -58,7 +62,7 @@ export function FloatingDock({
 
   return (
     <>
-      <div className="fixed top-4 left-4 z-50 flex items-center gap-1 rounded-full bg-background-base/90 p-1.5 shadow-flyout backdrop-blur">
+      <div className="fixed top-16 left-4 z-50 flex items-center gap-1 rounded-full bg-background-base/90 p-1.5 shadow-flyout backdrop-blur">
         <Button variant="ghost" size="sm" onClick={() => navigate({ to: '/' })}>
           <CaretLeft />
           <span className="px-1">Back</span>
