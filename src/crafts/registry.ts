@@ -26,6 +26,16 @@ export interface CraftMeta {
  */
 export const crafts: Array<CraftMeta> = [
   {
+    slug: 'org-settings',
+    title: 'Settings - organization',
+    description:
+      'Settings > Organization rebuilt from production screenshots on NDS tokens + fe-pkg: Overview (company info, EIN reveal, taxation status edit, verification), Documents (tax filings, W-2s, 1099s, onboarding, I-9, legal, statements by year), Tax Setup (federal + per-state setup, edit, register a new state), Users (status tabs, search, roles, invite/deactivate/resend), Groups (sortable, create/edit/delete), Security (SSO providers), Payroll (custom earnings) and Timesheets (permissions, work schedules). One live app window plus one window per page, all on in-memory mock data.',
+    status: 'wip',
+    tags: ['settings', 'organization', 'users', 'tax', 'documents', 'security'],
+    to: '/crafts/org-settings',
+    added: '2026-10-14',
+  },
+  {
     slug: 'payment-flow',
     title: 'Payment Flow - local currency wallets',
     description:

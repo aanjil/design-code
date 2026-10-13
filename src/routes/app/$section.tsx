@@ -2,7 +2,7 @@ import type { ComponentType } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { MASTER_IA } from '@/crafts/master-ia'
 import { MasterGoToMenu } from '@/components/playground/master-app-dock'
-import { AppBar } from '@/components/nds/app-bar'
+import { AppBar, AppBarLinksContext } from '@/components/nds/app-bar'
 import { Sidebar } from '@/components/nds/sidebar'
 import {
   AppShell,
@@ -17,6 +17,7 @@ import { LiveApp as MultiPayrollLiveApp } from '@/crafts/multi-payroll/live-app'
 import { LiveApp as ScheduleReportLiveApp } from '@/crafts/schedule-report/live-app'
 import { LiveApp as EmmaMobileLiveApp } from '@/crafts/emma-mobile/live-app'
 import { LiveApp as TokensBillingLiveApp } from '@/crafts/tokens-billing/live-app'
+import { LiveApp as OrgSettingsLiveApp } from '@/crafts/org-settings/app'
 import {
   LiveApp as PaymentFlowLiveApp,
   LiveMockDock,
@@ -65,6 +66,7 @@ const LIVE_COMPONENTS: Record<string, ComponentType<LiveComponentProps>> = {
   'schedule-report': ScheduleReportLiveApp,
   'emma-mobile': EmmaMobileLiveApp,
   'tokens-billing': TokensBillingLiveApp,
+  'org-settings': OrgSettingsLiveApp,
   'payment-flow': PaymentFlowSection,
 }
 
@@ -92,9 +94,14 @@ function MasterAppSection() {
   }
 
   const goWallet = () => navigate({ to: '/app/$section', params: { section: 'wallet' } })
+  // The gear lives in every craft's own AppBar - wire them all at once.
+  const appBarLinks = {
+    onSettingsClick: () => navigate({ to: '/app/$section', params: { section: 'settings' } }),
+    settingsActive: section.key === 'settings',
+  }
 
   return (
-    <>
+    <AppBarLinksContext.Provider value={appBarLinks}>
       {LiveComponent ? (
         <LiveComponent
           key={`${section.key}:${liveRef?.slug}`}
@@ -129,6 +136,6 @@ function MasterAppSection() {
         </AppShell>
       )}
       <LiveMockDock leading={<MasterGoToMenu section={section} />} />
-    </>
+    </AppBarLinksContext.Provider>
   )
 }

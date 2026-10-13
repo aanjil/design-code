@@ -1,4 +1,4 @@
-import { useId, useState } from 'react'
+import { createContext, useContext, useId, useState } from 'react'
 import type { Icon } from '@phosphor-icons/react'
 import {
   Bell,
@@ -22,6 +22,16 @@ import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover
 import { ProfileMenu } from '@/components/nds/profile-menu'
 import { Tooltip } from '@niural/components'
 import { cn } from '@/lib/utils'
+
+/**
+ * Ambient AppBar wiring for hosts that mount many crafts, each rendering its
+ * own AppBar (the Master App). An explicit prop on AppBar still wins.
+ */
+export const AppBarLinksContext = createContext<{
+  onSettingsClick?: () => void
+  /** Highlights the gear while the Settings area is open. */
+  settingsActive?: boolean
+}>({})
 
 // ─── types ────────────────────────────────────────────────────────────────────
 
@@ -671,6 +681,8 @@ export function AppBar({
    *  its parent (it replaces AppBar in the layout, not the Sidebar). */
   mini?: boolean
 }) {
+  const links = useContext(AppBarLinksContext)
+  const settingsClick = onSettingsClick ?? links.onSettingsClick
   const navItems = NAV_ITEMS[role]
   const [active, setActive] = useState(activeItem ?? navItems[0]?.label ?? '')
   const [aiOn, setAiOn] = useState(aiSelected)
@@ -761,14 +773,14 @@ export function AppBar({
                 )}
                 <RailIconButton icon={MagnifyingGlass} label="Search" />
                 {(isEmployer || isMultiEntity) && (
-                  <RailIconButton icon={Gear} label="Settings" onClick={onSettingsClick} />
+                  <RailIconButton icon={Gear} label="Settings" onClick={settingsClick} />
                 )}
               </div>
             </>
           )}
 
           <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
-          <ProfileMenu role={role} square={isEmployee} side="right" onAccountSettings={onSettingsClick} />
+          <ProfileMenu role={role} square={isEmployee} side="right" onAccountSettings={settingsClick} />
         </aside>
       </>
     )
@@ -872,8 +884,12 @@ export function AppBar({
                 <button
                   type="button"
                   aria-label="Settings"
-                  onClick={onSettingsClick}
-                  className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background-base shadow-button-gray"
+                  aria-current={links.settingsActive ? 'page' : undefined}
+                  onClick={settingsClick}
+                  className={cn(
+                    'flex size-9 shrink-0 items-center justify-center rounded-full bg-background-base transition-colors hover:bg-background-highlight',
+                    links.settingsActive ? 'text-brand-text shadow-border-brand' : 'shadow-button-gray',
+                  )}
                 >
                   <Gear className="size-[18px]" />
                 </button>
@@ -883,7 +899,7 @@ export function AppBar({
         )}
 
         <AppBarDivider />
-        <ProfileMenu role={role} square={isEmployee} onAccountSettings={onSettingsClick} />
+        <ProfileMenu role={role} square={isEmployee} onAccountSettings={settingsClick} />
       </div>
     </header>
   )

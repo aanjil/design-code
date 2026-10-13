@@ -86,7 +86,10 @@ export const MASTER_IA: Array<MasterIASection> = [
   {
     key: 'settings',
     label: 'Settings',
-    crafts: [{ slug: 'tokens-billing', status: 'live' }],
+    crafts: [
+      { slug: 'org-settings', status: 'live', subNavLabel: 'Overview' },
+      { slug: 'tokens-billing', status: 'live', subNavLabel: 'Tokens' },
+    ],
   },
   {
     key: 'emma-mobile',

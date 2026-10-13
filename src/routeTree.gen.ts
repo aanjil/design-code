@@ -28,6 +28,7 @@ import { Route as CraftsTokensBillingRouteImport } from './routes/crafts/tokens-
 import { Route as CraftsSplitPayRouteImport } from './routes/crafts/split-pay'
 import { Route as CraftsScheduleReportRouteImport } from './routes/crafts/schedule-report'
 import { Route as CraftsPaymentFlowRouteImport } from './routes/crafts/payment-flow'
+import { Route as CraftsOrgSettingsRouteImport } from './routes/crafts/org-settings'
 import { Route as CraftsMultiPayrollRouteImport } from './routes/crafts/multi-payroll'
 import { Route as CraftsEmployeeFiltersRouteImport } from './routes/crafts/employee-filters'
 import { Route as CraftsEmmaMobileRouteImport } from './routes/crafts/emma-mobile'
@@ -148,6 +149,11 @@ const CraftsScheduleReportRoute = CraftsScheduleReportRouteImport.update({
 const CraftsPaymentFlowRoute = CraftsPaymentFlowRouteImport.update({
   id: '/crafts/payment-flow',
   path: '/crafts/payment-flow',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CraftsOrgSettingsRoute = CraftsOrgSettingsRouteImport.update({
+  id: '/crafts/org-settings',
+  path: '/crafts/org-settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CraftsMultiPayrollRoute = CraftsMultiPayrollRouteImport.update({
@@ -300,6 +306,7 @@ export interface FileRoutesByFullPath {
   '/crafts/emma-mobile': typeof CraftsEmmaMobileRoute
   '/crafts/employee-filters': typeof CraftsEmployeeFiltersRoute
   '/crafts/multi-payroll': typeof CraftsMultiPayrollRoute
+  '/crafts/org-settings': typeof CraftsOrgSettingsRoute
   '/crafts/payment-flow': typeof CraftsPaymentFlowRoute
   '/crafts/schedule-report': typeof CraftsScheduleReportRoute
   '/crafts/split-pay': typeof CraftsSplitPayRoute
@@ -346,6 +353,7 @@ export interface FileRoutesByTo {
   '/crafts/emma-mobile': typeof CraftsEmmaMobileRoute
   '/crafts/employee-filters': typeof CraftsEmployeeFiltersRoute
   '/crafts/multi-payroll': typeof CraftsMultiPayrollRoute
+  '/crafts/org-settings': typeof CraftsOrgSettingsRoute
   '/crafts/payment-flow': typeof CraftsPaymentFlowRoute
   '/crafts/schedule-report': typeof CraftsScheduleReportRoute
   '/crafts/split-pay': typeof CraftsSplitPayRoute
@@ -394,6 +402,7 @@ export interface FileRoutesById {
   '/crafts/emma-mobile': typeof CraftsEmmaMobileRoute
   '/crafts/employee-filters': typeof CraftsEmployeeFiltersRoute
   '/crafts/multi-payroll': typeof CraftsMultiPayrollRoute
+  '/crafts/org-settings': typeof CraftsOrgSettingsRoute
   '/crafts/payment-flow': typeof CraftsPaymentFlowRoute
   '/crafts/schedule-report': typeof CraftsScheduleReportRoute
   '/crafts/split-pay': typeof CraftsSplitPayRoute
@@ -443,6 +452,7 @@ export interface FileRouteTypes {
     | '/crafts/emma-mobile'
     | '/crafts/employee-filters'
     | '/crafts/multi-payroll'
+    | '/crafts/org-settings'
     | '/crafts/payment-flow'
     | '/crafts/schedule-report'
     | '/crafts/split-pay'
@@ -489,6 +499,7 @@ export interface FileRouteTypes {
     | '/crafts/emma-mobile'
     | '/crafts/employee-filters'
     | '/crafts/multi-payroll'
+    | '/crafts/org-settings'
     | '/crafts/payment-flow'
     | '/crafts/schedule-report'
     | '/crafts/split-pay'
@@ -536,6 +547,7 @@ export interface FileRouteTypes {
     | '/crafts/emma-mobile'
     | '/crafts/employee-filters'
     | '/crafts/multi-payroll'
+    | '/crafts/org-settings'
     | '/crafts/payment-flow'
     | '/crafts/schedule-report'
     | '/crafts/split-pay'
@@ -584,6 +596,7 @@ export interface RootRouteChildren {
   CraftsEmmaMobileRoute: typeof CraftsEmmaMobileRoute
   CraftsEmployeeFiltersRoute: typeof CraftsEmployeeFiltersRoute
   CraftsMultiPayrollRoute: typeof CraftsMultiPayrollRoute
+  CraftsOrgSettingsRoute: typeof CraftsOrgSettingsRoute
   CraftsPaymentFlowRoute: typeof CraftsPaymentFlowRoute
   CraftsScheduleReportRoute: typeof CraftsScheduleReportRoute
   CraftsSplitPayRoute: typeof CraftsSplitPayRoute
@@ -724,6 +737,13 @@ declare module '@tanstack/react-router' {
       path: '/crafts/payment-flow'
       fullPath: '/crafts/payment-flow'
       preLoaderRoute: typeof CraftsPaymentFlowRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/org-settings': {
+      id: '/crafts/org-settings'
+      path: '/crafts/org-settings'
+      fullPath: '/crafts/org-settings'
+      preLoaderRoute: typeof CraftsOrgSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/crafts/multi-payroll': {
@@ -988,6 +1008,7 @@ const rootRouteChildren: RootRouteChildren = {
   CraftsEmmaMobileRoute: CraftsEmmaMobileRoute,
   CraftsEmployeeFiltersRoute: CraftsEmployeeFiltersRoute,
   CraftsMultiPayrollRoute: CraftsMultiPayrollRoute,
+  CraftsOrgSettingsRoute: CraftsOrgSettingsRoute,
   CraftsPaymentFlowRoute: CraftsPaymentFlowRoute,
   CraftsScheduleReportRoute: CraftsScheduleReportRoute,
   CraftsSplitPayRoute: CraftsSplitPayRoute,
