@@ -7,7 +7,7 @@ import type { PaySchedule } from '@/mocks/payroll'
 import { HIRE_CANDIDATES, SCHEDULES } from '@/mocks/payroll'
 import { useExplorer } from '@/components/playground/explorer'
 import { Stepper } from '@/components/nds/stepper'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 
 /**
  * H1 (beyond v1): schedule assignment inside the hire flow. Round 2: the
@@ -150,13 +150,18 @@ export function HireScreen({ view }: { view: HireView }) {
               {firstAligned && ` Pick ${firstAligned.name} to pay ${candidate.name.split(' ')[0]} correctly from day one.`}
               <div className="mt-2 flex gap-2">
                 {firstAligned && (
-                  <Button size="sm" onClick={() => setOverride(firstAligned.id)}>
-                    <span className="px-1">Pick {firstAligned.name}</span>
+                  <Button type="button" size="sm" onClick={() => setOverride(firstAligned.id)}>
+                    Pick {firstAligned.name}
                   </Button>
                 )}
-                <Button variant="secondary" size="sm">
-                  <Sparkle className="text-brand-primary" weight="fill" />
-                  <span className="px-1">Ask Emma</span>
+                <Button
+                  type="button"
+                  variant="solid"
+                  shade="neutral"
+                  size="sm"
+                  leftIcon={<Sparkle className="size-4 text-brand-primary" weight="fill" />}
+                >
+                  Ask Emma
                 </Button>
               </div>
             </Banner>
@@ -217,12 +222,17 @@ function Footer({
   const { show } = useExplorer()
   return (
     <div className="mt-2 flex items-center justify-between">
-      <Button variant="secondary" onClick={() => show('C1')}>
-        <CaretLeft />
-        <span className="px-1">Back</span>
+      <Button
+        type="button"
+        variant="solid"
+        shade="neutral"
+        onClick={() => show('C1')}
+        leftIcon={<CaretLeft className="size-4" />}
+      >
+        Back
       </Button>
-      <Button onClick={onContinue} disabled={disabled}>
-        <span className="px-1">{disabled ? disabledLabel : 'Continue'}</span>
+      <Button type="button" onClick={onContinue} disabled={disabled}>
+        {disabled ? disabledLabel : 'Continue'}
       </Button>
     </div>
   )

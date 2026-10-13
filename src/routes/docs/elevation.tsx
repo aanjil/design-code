@@ -1,6 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { DocPage, DocSection, InlineCode } from '@/docs/doc-kit'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/docs/elevation')({
@@ -90,33 +90,29 @@ function ElevationDoc() {
 
       <DocSection
         title="Button recipes"
-        note="34px tall, 9px radius (rounded-btn), Label/Small, gradient fills + ring shadows. Text children get px-1 for the 4px optical label pad."
+        note="@niural/components Button: 34px tall (md), control radius, Label/Small. The label carries its own 4px optical pad."
       >
         <div className="flex flex-wrap items-center gap-3 rounded-xl bg-surface-1 p-4">
-          <Button>
-            <span className="px-1">Primary</span>
+          <Button variant="solid" shade="primary" type="button">
+            Primary
           </Button>
-          <Button variant="secondary">
-            <span className="px-1">Secondary</span>
+          <Button variant="solid" shade="neutral" type="button">
+            Secondary
           </Button>
-          <Button variant="outline">
-            <span className="px-1">Outline</span>
+          <Button variant="ghost" shade="neutral" type="button">
+            Ghost
           </Button>
-          <Button variant="ghost">
-            <span className="px-1">Ghost</span>
+          <Button variant="ghost" shade="error" type="button">
+            Reset
           </Button>
-          <Button variant="ghost-destructive">
-            <span className="px-1">Reset</span>
-          </Button>
-          <Button variant="destructive">
-            <span className="px-1">Destructive</span>
+          <Button variant="solid" shade="error" type="button">
+            Destructive
           </Button>
         </div>
         <p className="mt-3 text-paragraph-xs text-text-muted">
-          Primary = violet radial gradient (<InlineCode>btn-gradient-primary</InlineCode>) +{' '}
-          <InlineCode>shadow-button-primary</InlineCode>. Secondary = white→highlight
-          gradient (<InlineCode>btn-gradient-gray</InlineCode>) +{' '}
-          <InlineCode>shadow-button-gray</InlineCode>.
+          Primary (solid + primary) = <InlineCode>bg-button-primary</InlineCode> +{' '}
+          <InlineCode>buttons-primary</InlineCode>. Secondary (solid + neutral) ={' '}
+          <InlineCode>bg-base</InlineCode> + <InlineCode>borders-base</InlineCode>.
         </p>
       </DocSection>
     </DocPage>

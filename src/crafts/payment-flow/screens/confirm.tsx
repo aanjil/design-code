@@ -2,7 +2,7 @@ import { Bank, Check, ClockCountdown, CurrencyEth, ArrowsLeftRight, Table } from
 import { usePayment } from '../app'
 import type { PayResult } from '../store'
 import { CopyButton, CurrencyMark, Money, ModalShell, PrimaryTag } from '../ui'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { COLLECTION_ACCOUNT, LOCAL_RAIL, fmt } from '@/mocks/payment-flow'
 import type { LocalCcy } from '@/mocks/payment-flow'
 import { railInSentence } from '../engine'
@@ -70,14 +70,15 @@ export function ConfirmModal() {
       width="w-[520px]"
       footer={
         <>
-          <Button variant="secondary" onClick={close}><span className="px-1">Cancel</span></Button>
+          <Button type="button" variant="solid" shade="neutral" onClick={close}>Cancel</Button>
           <Button
+            type="button"
             onClick={() => {
               const result = store.pay(payInvoices.map((i) => i.id), option, q)
               set({ modal: { kind: 'success', result }, selected: [] })
             }}
           >
-            <span className="px-1">Submit</span>
+            Submit
           </Button>
         </>
       }
@@ -128,7 +129,7 @@ export function SuccessModal({ result }: { result: PayResult }) {
     const local = result.option.group === 'local-transfer' ? (result.ccy as LocalCcy) : null
     const rail = local ? LOCAL_RAIL[local].method : 'Wire transfer'
     return (
-      <ModalShell width="w-[520px]" footer={<Button className="w-full" onClick={done}><span className="px-1">Done</span></Button>}>
+      <ModalShell width="w-[520px]" footer={<Button type="button" width="full" onClick={done}>Done</Button>}>
         <div className="flex flex-col items-center gap-3 pt-2 text-center">
           <span className="flex size-14 items-center justify-center rounded-full bg-brand-muted text-brand-text"><ClockCountdown className="size-7" weight="duotone" /></span>
           <p className="text-title-h4 text-text-primary">Send your transfer</p>
@@ -168,7 +169,7 @@ export function SuccessModal({ result }: { result: PayResult }) {
         ? `ACH from ${result.option.label} ••${result.option.bankLast4}`
         : 'crypto wallet'
   return (
-    <ModalShell width="w-[480px]" footer={<Button className="w-full" onClick={done}><span className="px-1">Continue</span></Button>}>
+    <ModalShell width="w-[480px]" footer={<Button type="button" width="full" onClick={done}>Continue</Button>}>
       <div className="flex flex-col items-center gap-3 pt-2 text-center">
         <span className="flex size-14 items-center justify-center rounded-full bg-brand-primary text-text-on-color"><Check weight="bold" className="size-7" /></span>
         <p className="text-title-h4 text-text-primary">Payment submitted</p>

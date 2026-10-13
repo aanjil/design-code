@@ -11,7 +11,7 @@ import {
 import { Kbd } from './kbd'
 import type { Instance, Tone } from '@/mocks/engine'
 import { fmtDuration, useEngine, useMockEngine } from '@/mocks/engine'
-import { Button } from '@/components/ui/button'
+import { IconButton } from '@niural/components'
 import { cn } from '@/lib/utils'
 
 /**
@@ -84,15 +84,16 @@ export function Director({ className, style }: { className?: string; style?: Rea
     >
       {/* Clock row - always visible */}
       <div className="flex items-center gap-1 p-1.5">
-        <Button
+        <IconButton
           variant="ghost"
-          size="icon-sm"
+          shade="neutral"
+          size="small"
           aria-label={playing ? 'Pause clock' : 'Play clock'}
           title={playing ? 'Pause' : 'Play - let the data mature'}
           onClick={playing ? engine.pause : engine.play}
         >
-          {playing ? <Pause weight="fill" /> : <Play weight="fill" />}
-        </Button>
+          {playing ? <Pause weight="fill" className="size-4" /> : <Play weight="fill" className="size-4" />}
+        </IconButton>
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
@@ -109,16 +110,17 @@ export function Director({ className, style }: { className?: string; style?: Rea
           </span>
           <CaretDown className={cn('size-3 shrink-0 text-text-muted transition-transform', open && 'rotate-180')} />
         </button>
-        <Button
+        <IconButton
           variant="ghost"
-          size="icon-sm"
+          shade="neutral"
+          size="small"
           aria-label="Jump to next event"
           title="Jump to the next thing that happens"
           disabled={nextDue === null}
           onClick={engine.next}
         >
-          <SkipForward weight="fill" />
-        </Button>
+          <SkipForward weight="fill" className="size-4" />
+        </IconButton>
       </div>
 
       {open && (
@@ -155,9 +157,9 @@ export function Director({ className, style }: { className?: string; style?: Rea
                 <ClockClockwise className="size-3" />+{step}
               </button>
             ))}
-            <Button variant="ghost" size="icon-sm" aria-label="Reset world" title="Reset to world start" onClick={engine.reset}>
-              <ArrowCounterClockwise />
-            </Button>
+            <IconButton variant="ghost" shade="neutral" size="small" aria-label="Reset world" title="Reset to world start" onClick={engine.reset}>
+              <ArrowCounterClockwise className="size-4" />
+            </IconButton>
           </div>
 
           {/* Instances */}

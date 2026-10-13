@@ -1,4 +1,5 @@
 import {
+  ClientOnly,
   HeadContent,
   Scripts,
   createRootRoute,
@@ -53,10 +54,14 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body>
-        {!fullBleed && <AppNav />}
-        <main className={fullBleed ? 'h-dvh overflow-hidden' : 'ml-16'}>
-          {children}
-        </main>
+        {/* Client-only: @niural/components can't render on the server
+            (see vite-plugins/niural-ssr-stub.ts). */}
+        <ClientOnly>
+          {!fullBleed && <AppNav />}
+          <main className={fullBleed ? 'h-dvh overflow-hidden' : 'ml-16'}>
+            {children}
+          </main>
+        </ClientOnly>
         {/* <TanStackDevtools
           config={{
             position: 'bottom-right',

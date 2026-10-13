@@ -45,7 +45,7 @@ import {
   Tag,
 } from '../ui'
 import { PageHeader } from '@/components/nds/layouts'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import {
   CCY_NAME,
   COLLECTION_ACCOUNT,
@@ -519,7 +519,7 @@ function WireDetails() {
         <div className="flex items-center justify-between">
           <p className="text-label-md text-text-primary">Recipient details</p>
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="sm"><DownloadSimple /><span className="px-1">Download</span></Button>
+            <Button type="button" variant="ghost" shade="neutral" size="sm" leftIcon={<DownloadSimple className="size-4" />}>Download</Button>
             <CopyButton value={fields.map(([k, v]) => `${k}: ${v}`).join('\n')} label="Copy all" />
           </div>
         </div>
@@ -554,10 +554,10 @@ function WireDetails() {
                   className="h-9 rounded-btn bg-background-base px-3 font-mono text-mono-sm tracking-[0.3em] shadow-button-gray outline-none focus:shadow-border-focus"
                 />
               </label>
-              <Button disabled={code.length !== 6} onClick={() => set({ wireVerify: 'verified' })}><span className="px-1">Confirm code</span></Button>
+              <Button type="button" disabled={code.length !== 6} onClick={() => set({ wireVerify: 'verified' })}>Confirm code</Button>
             </div>
           ) : (
-            <Button className="self-start" disabled={!method} onClick={() => set({ wireVerify: 'code' })}><span className="px-1">Verify</span></Button>
+            <Button type="button" className="self-start" disabled={!method} onClick={() => set({ wireVerify: 'code' })}>Verify</Button>
           )}
         </div>
       )}
@@ -622,8 +622,8 @@ function TotalsFooter() {
             {option?.group === 'wire' && ui.wireVerify !== 'verified' && 'Verify to continue'}
             {ui.methodsOpen && 'Choose a payment method'}
           </span>
-          <Button size="lg" disabled={blocked} onClick={() => set({ modal: { kind: 'confirm' } })}>
-            <span className="px-1">Confirm payment</span>
+          <Button type="button" size="lg" className="h-9" disabled={blocked} onClick={() => set({ modal: { kind: 'confirm' } })}>
+            Confirm payment
           </Button>
         </div>
       </div>

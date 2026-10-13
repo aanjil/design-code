@@ -1,6 +1,6 @@
 import type { EmailKind, EmailView } from '../types'
 import { COOLING_OFF_ESTIMATE, SPLIT_EMPLOYEE } from '@/mocks/split-pay'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 
 /**
  * F group - transactional emails (§6). One template, six bodies.
@@ -95,8 +95,8 @@ export function EmailScreen({ view }: { view: EmailView }) {
             ))}
             {email.cta && (
               <div className="pt-2">
-                <Button>
-                  <span className="px-1">{email.cta}</span>
+                <Button variant="solid" shade="primary" type="button">
+                  {email.cta}
                 </Button>
               </div>
             )}

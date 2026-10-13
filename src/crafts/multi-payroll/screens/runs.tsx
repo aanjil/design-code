@@ -6,8 +6,8 @@ import { WORLD_TODAY, addDaysISO, fmtHuman, money, periodOf } from '../engine'
 import { SCHEDULES } from '@/mocks/payroll'
 import { PageBody, PageHeader } from '@/components/nds/layouts'
 import { useExplorer } from '@/components/playground/explorer'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { Button, IconButton } from '@niural/components'
 
 /**
  * F group: runs list per schedule + the run-type picker. `full` adds the
@@ -92,12 +92,8 @@ function RunPickerModal({
       width="w-[460px]"
       footer={
         <>
-          <Button variant="secondary" onClick={onClose}>
-            <span className="px-1">Cancel</span>
-          </Button>
-          <Button onClick={onClose}>
-            <span className="px-1">Continue</span>
-          </Button>
+          <Button type="button" variant="solid" shade="neutral" onClick={onClose}>Cancel</Button>
+          <Button type="button" onClick={onClose}>Continue</Button>
         </>
       }
     >
@@ -151,9 +147,12 @@ export function RunsScreen({ view }: { view: RunsView }) {
       <PageHeader
         title="Payroll"
         actions={
-          <Button onClick={() => show('F2', view.picker === 'full' ? 'full' : 'v1')}>
-            <Play />
-            <span className="px-1">Run payroll</span>
+          <Button
+            type="button"
+            onClick={() => show('F2', view.picker === 'full' ? 'full' : 'v1')}
+            leftIcon={<Play className="size-4" />}
+          >
+            Run payroll
           </Button>
         }
       />
@@ -198,13 +197,11 @@ export function RunsScreen({ view }: { view: RunsView }) {
                   {pill.label}
                 </span>
                 {run.status === 'needs-approval' ? (
-                  <Button size="sm">
-                    <span className="px-1">Review & approve</span>
-                  </Button>
+                  <Button type="button" size="sm">Review & approve</Button>
                 ) : (
-                  <Button variant="ghost" size="icon-sm" aria-label="Open run">
+                  <IconButton variant="ghost" shade="neutral" size="small" aria-label="Open run">
                     <CaretRight className="size-4 text-text-muted" />
-                  </Button>
+                  </IconButton>
                 )}
               </div>
             )

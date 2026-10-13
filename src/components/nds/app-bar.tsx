@@ -20,12 +20,7 @@ import {
 } from '@phosphor-icons/react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { ProfileMenu } from '@/components/nds/profile-menu'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
+import { Tooltip } from '@niural/components'
 import { cn } from '@/lib/utils'
 
 // ─── types ────────────────────────────────────────────────────────────────────
@@ -483,28 +478,28 @@ function RailNavButton({
   onClick?: () => void
 }) {
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <button
-            type="button"
-            aria-label={label}
-            onClick={onClick}
-            className={cn(
-              'flex size-9 shrink-0 items-center justify-center rounded-full transition-colors',
-              active
-                ? 'bg-background/70 text-[#183F68]'
-                : cn(
-                    'hover:cursor-pointer',
-                    muted ? 'text-text-muted hover:text-text-primary' : 'text-text-primary',
-                  ),
-            )}
-          />
-        }
+    <Tooltip
+      content={label}
+      side="right"
+      asChild
+      delayDuration={300}
+    >
+      <button
+        type="button"
+        aria-label={label}
+        onClick={onClick}
+        className={cn(
+          'flex size-9 shrink-0 items-center justify-center rounded-full transition-colors',
+          active
+            ? 'bg-background/70 text-[#183F68]'
+            : cn(
+                'hover:cursor-pointer',
+                muted ? 'text-text-muted hover:text-text-primary' : 'text-text-primary',
+              ),
+        )}
       >
         <Icon className="size-[18px] shrink-0" />
-      </TooltipTrigger>
-      <TooltipContent side="right">{label}</TooltipContent>
+      </button>
     </Tooltip>
   )
 }
@@ -521,20 +516,20 @@ function RailIconButton({
   onClick?: () => void
 }) {
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <button
-            type="button"
-            aria-label={label}
-            onClick={onClick}
-            className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background-base shadow-button-gray"
-          />
-        }
+    <Tooltip
+      content={label}
+      side="right"
+      asChild
+      delayDuration={300}
+    >
+      <button
+        type="button"
+        aria-label={label}
+        onClick={onClick}
+        className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background-base shadow-button-gray"
       >
         <Icon className="size-[18px]" weight={weight} />
-      </TooltipTrigger>
-      <TooltipContent side="right">{label}</TooltipContent>
+      </button>
     </Tooltip>
   )
 }
@@ -547,27 +542,27 @@ function RailWalletButton({
   active?: boolean
 }) {
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <button
-            type="button"
-            aria-label={`Wallet - ${amount}`}
-            className={cn(
-              'flex size-9 shrink-0 items-center justify-center rounded-full transition-all',
-              active
-                ? 'bg-brand-wallet-primary shadow-[0px_3px_4px_0px_rgba(11,193,90,0.11),inset_0px_1px_1px_rgba(255,255,255,0.25)]'
-                : 'bg-background-base shadow-button-gray',
-            )}
-          />
-        }
+    <Tooltip
+      content={amount}
+      side="right"
+      asChild
+      delayDuration={300}
+    >
+      <button
+        type="button"
+        aria-label={`Wallet - ${amount}`}
+        className={cn(
+          'flex size-9 shrink-0 items-center justify-center rounded-full transition-all',
+          active
+            ? 'bg-brand-wallet-primary shadow-[0px_3px_4px_0px_rgba(11,193,90,0.11),inset_0px_1px_1px_rgba(255,255,255,0.25)]'
+            : 'bg-background-base shadow-button-gray',
+        )}
       >
         <Wallet
           className={cn('size-5 shrink-0', active ? 'text-white' : 'text-brand-wallet-primary')}
           weight="duotone"
         />
-      </TooltipTrigger>
-      <TooltipContent side="right">{amount}</TooltipContent>
+      </button>
     </Tooltip>
   )
 }
@@ -583,25 +578,28 @@ function RailAiButton({
 }) {
   const hasTokens = tokens !== undefined
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <button
-            type="button"
-            aria-label="Ask Emma"
-            onClick={onClick}
-            className={cn(
-              'relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full transition-all',
-              selected
-                ? 'shadow-[0px_3px_4px_0px_rgba(113,77,255,0.2),inset_0px_3px_4px_rgba(255,255,255,0.25)]'
-                : 'bg-background-base shadow-button-gray',
-            )}
-            style={
-              selected
-                ? { backgroundImage: 'linear-gradient(119.6deg, #714dff 30.8%, #e151ff 122.6%)' }
-                : undefined
-            }
-          />
+    <Tooltip
+      content={
+        <>Ask Emma{hasTokens ? ` · ${formatCompactCount(tokens)} tokens` : ''}</>
+      }
+      side="right"
+      asChild
+      delayDuration={300}
+    >
+      <button
+        type="button"
+        aria-label="Ask Emma"
+        onClick={onClick}
+        className={cn(
+          'relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full transition-all',
+          selected
+            ? 'shadow-[0px_3px_4px_0px_rgba(113,77,255,0.2),inset_0px_3px_4px_rgba(255,255,255,0.25)]'
+            : 'bg-background-base shadow-button-gray',
+        )}
+        style={
+          selected
+            ? { backgroundImage: 'linear-gradient(119.6deg, #714dff 30.8%, #e151ff 122.6%)' }
+            : undefined
         }
       >
         <EmmaMark className="size-5 shrink-0" />
@@ -610,10 +608,7 @@ function RailAiButton({
             {formatCompactCount(tokens)}
           </span>
         )}
-      </TooltipTrigger>
-      <TooltipContent side="right">
-        Ask Emma{hasTokens ? ` · ${formatCompactCount(tokens)} tokens` : ''}
-      </TooltipContent>
+      </button>
     </Tooltip>
   )
 }
@@ -691,26 +686,26 @@ export function AppBar({
 
   if (mini) {
     return (
-      <TooltipProvider delay={300}>
+      <>
         <aside className="flex h-full w-16 shrink-0 flex-col items-center gap-1 border-r border-border-base bg-surface-2 py-3">
           <div className="flex h-9 shrink-0 items-center justify-center">
             <NiuralMark className="size-6 shrink-0" />
           </div>
 
           {isMultiEntity && (
-            <Tooltip>
-              <TooltipTrigger
-                render={
-                  <button
-                    type="button"
-                    aria-label={DEFAULT_ORG_NAME}
-                    className="mt-1 flex h-6 shrink-0 items-center justify-center rounded-full border border-border-success-muted bg-background-success-muted px-2 text-[10px] leading-[1.6] tracking-tight text-text-success-base"
-                  />
-                }
+            <Tooltip
+              content={DEFAULT_ORG_NAME}
+              side="right"
+              asChild
+              delayDuration={300}
+            >
+              <button
+                type="button"
+                aria-label={DEFAULT_ORG_NAME}
+                className="mt-1 flex h-6 shrink-0 items-center justify-center rounded-full border border-border-success-muted bg-background-success-muted px-2 text-[10px] leading-[1.6] tracking-tight text-text-success-base"
               >
                 HQ
-              </TooltipTrigger>
-              <TooltipContent side="right">{DEFAULT_ORG_NAME}</TooltipContent>
+              </button>
             </Tooltip>
           )}
 
@@ -775,7 +770,7 @@ export function AppBar({
           <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
           <ProfileMenu role={role} square={isEmployee} side="right" onAccountSettings={onSettingsClick} />
         </aside>
-      </TooltipProvider>
+      </>
     )
   }
 

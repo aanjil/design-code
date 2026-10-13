@@ -13,7 +13,7 @@ import type { LandingView } from '../types'
 import { REPORTS, type ReportCategory } from '@/mocks/insights-reports'
 import { EmptyState } from '../ui'
 import { PageHeader, PageBody } from '@/components/nds/layouts'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 import { cn } from '@/lib/utils'
 
@@ -58,13 +58,11 @@ export function LandingScreen({ view }: { view: LandingView }) {
         title="Niural insights"
         actions={
           <>
-            <Button variant="secondary" onClick={() => show('C1', 'default')}>
-              <CalendarBlank />
-              <span className="px-1">Scheduled reports</span>
+            <Button type="button" variant="solid" shade="neutral" leftIcon={<CalendarBlank className="size-4" />} onClick={() => show('C1', 'default')}>
+              Scheduled reports
             </Button>
-            <Button variant="secondary" onClick={() => show('C2', 'default')}>
-              <Files />
-              <span className="px-1">View generated reports</span>
+            <Button type="button" variant="solid" shade="neutral" leftIcon={<Files className="size-4" />} onClick={() => show('C2', 'default')}>
+              View generated reports
             </Button>
           </>
         }

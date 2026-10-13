@@ -54,8 +54,10 @@ import {
 } from '@/components/nds/filters/types'
 import type { DisplayConfig } from '@/components/nds/display-menu'
 import { DisplayMenu } from '@/components/nds/display-menu'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Button, Checkbox, IconButton } from '@niural/components'
+// Kept on design-code's Button: the Views menu trigger renders responsive
+// label/count spans that fe-pkg Button would wrap in its padded <p>.
+import { Button as UiButton } from '@/components/ui/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -309,13 +311,15 @@ export function EmployeesPage({
             title="Employees"
             actions={
               <>
-                <Button variant="secondary">
-                  <span className="px-1">Bulk upload history</span>
+                <Button type="button" variant="solid" shade="neutral">
+                  Bulk upload history
                 </Button>
-                <Button>
-                  <BoxArrowDown />
-                  <span className="px-1">Import from ATS</span>
-                  <CaretDown />
+                <Button
+                  type="button"
+                  leftIcon={<BoxArrowDown className="size-4" />}
+                  rightIcon={<CaretDown className="size-4" />}
+                >
+                  Import from ATS
                 </Button>
               </>
             }
@@ -342,10 +346,12 @@ export function EmployeesPage({
                     }}
                   />
                   <Button
+                    type="button"
                     variant="ghost"
+                    shade="neutral"
                     onClick={() => setSearchExpanded(false)}
                   >
-                    <span className="px-1">Cancel</span>
+                    Cancel
                   </Button>
                 </div>
               ) : (
@@ -377,7 +383,7 @@ export function EmployeesPage({
                       <DropdownMenu>
                         <DropdownMenuTrigger
                           render={
-                            <Button
+                            <UiButton
                               variant="ghost"
                               className="text-text-muted"
                               aria-label={`Views (${savedViews.length})`}
@@ -423,9 +429,15 @@ export function EmployeesPage({
                       onApply={setDisplay}
                     />
                     <ToolbarDivider />
-                    <Button variant="secondary" aria-label="Export" title="Export">
-                      <Export />
-                      <span className="px-1 @max-3xl/toolbar:hidden">Export</span>
+                    <Button
+                      type="button"
+                      variant="solid"
+                      shade="neutral"
+                      aria-label="Export"
+                      title="Export"
+                      leftIcon={<Export className="size-4" />}
+                    >
+                      <span className="@max-3xl/toolbar:hidden">Export</span>
                     </Button>
                   </div>
                 </div>
@@ -451,6 +463,7 @@ export function EmployeesPage({
                   <tr className="border-b border-border-base">
                     <th className="w-14 px-5 py-2.5">
                       <Checkbox
+                        size="md"
                         checked={allOnPageSelected}
                         onCheckedChange={toggleAll}
                         aria-label="Select all on page"
@@ -492,11 +505,13 @@ export function EmployeesPage({
                             Try removing a filter, or clear them all.
                           </p>
                           <Button
-                            variant="secondary"
+                            type="button"
+                            variant="solid"
+                            shade="neutral"
                             className="mt-5"
                             onClick={() => updateConditions([])}
                           >
-                            <span className="px-1">Clear filters</span>
+                            Clear filters
                           </Button>
                         </div>
                       </td>
@@ -679,6 +694,7 @@ function GroupRows({
         >
           <td className="w-14 px-5 py-4">
             <Checkbox
+              size="md"
               checked={selected.has(employee.id)}
               onCheckedChange={() => onToggleRow(employee.id)}
               aria-label={`Select ${employee.name}`}
@@ -768,7 +784,9 @@ function RowMenu({ employee }: { employee: Employee }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={<Button variant="ghost" size="icon-sm" className="text-text-muted" />}
+        render={
+          <IconButton variant="ghost" shade="neutral" size="small" className="text-text-muted" />
+        }
         aria-label={`Actions for ${employee.name}`}
       >
         <DotsThreeVertical className="size-4" weight="bold" />

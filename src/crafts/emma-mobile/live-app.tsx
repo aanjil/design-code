@@ -1,6 +1,7 @@
 import { useEffect, useSyncExternalStore } from 'react'
 import type { AppView } from './types'
 import { renderWithChrome } from './app'
+import { FIRST_ONBOARDING_STEP, PASSWORD_ENABLED } from './engine'
 import { liveStore } from './live-store'
 import type { LiveData } from './live-store'
 import { ExplorerContext } from '@/components/playground/explorer'
@@ -58,7 +59,7 @@ export function LiveApp() {
   }, [data.loggedIn, data.loginStep])
 
   function show(screenId: string, stateId?: string, payload?: Record<string, unknown>) {
-    if (screenId === 'A1') {
+    if (screenId === 'A1' || (screenId === 'A2' && !PASSWORD_ENABLED)) {
       liveStore.setOnboardingStep(null)
       liveStore.setLoginStep(stateId === 'prompting' ? 'biometric-prompting' : 'biometric-framing')
       return
@@ -69,7 +70,7 @@ export function LiveApp() {
       return
     }
     if (screenId === 'C1') {
-      liveStore.setOnboardingStep((stateId as 'password' | 'name' | 'biometric-offer' | undefined) ?? 'password')
+      liveStore.setOnboardingStep((stateId as 'password' | 'name' | 'biometric-offer' | undefined) ?? FIRST_ONBOARDING_STEP)
       return
     }
     if (screenId === 'B1') {

@@ -10,7 +10,7 @@ import {
 } from '@phosphor-icons/react'
 import { useState } from 'react'
 import { SelectField } from '@/components/nds/select-field'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { cn } from '@/lib/utils'
 import {
   approvalQuestion,
@@ -147,17 +147,22 @@ export function RecommendationCard({ className }: { className?: string }) {
       )}
 
       <div className="mt-3 flex items-center gap-2">
-        <Button size="sm" disabled={accepted} onClick={() => setAccepted(true)}>
-          <span className="px-1">{accepted ? 'Accepted' : 'Accept'}</span>
+        <Button
+          type="button"
+          size="sm"
+          disabled={accepted}
+          onClick={() => setAccepted(true)}
+        >
+          {accepted ? 'Accepted' : 'Accept'}
         </Button>
         <Button
-          variant="secondary"
+          type="button"
+          variant="solid"
+          shade="neutral"
           size="sm"
           onClick={() => setExpanded((value) => !value)}
         >
-          <span className="px-1">
-            {expanded ? 'Hide alternatives' : 'Alternatives'}
-          </span>
+          {expanded ? 'Hide alternatives' : 'Alternatives'}
         </Button>
       </div>
     </div>

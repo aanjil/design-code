@@ -1,7 +1,7 @@
 import { UserPlus } from '@phosphor-icons/react'
 import { Annotate } from '@/components/playground/annotations'
 import { CraftFrame } from '@/components/playground/craft-frame'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { fmtMoney, initials, people } from '@/mocks/people'
 import type { Person } from '@/mocks/people'
 import { cn } from '@/lib/utils'
@@ -61,8 +61,7 @@ function TeamCard({ density }: { density: 'comfortable' | 'compact' }) {
               title="Primary action"
               note="Buttons use Label type. Icons are 16px with a 4px gap to text (icon+text optical rule in spacing.md)."
             >
-              <Button size="sm">
-                <UserPlus />
+              <Button type="button" size="sm" leftIcon={<UserPlus className="size-4" />}>
                 Invite
               </Button>
             </Annotate>

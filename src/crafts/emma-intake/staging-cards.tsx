@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { CheckCircle, LinkSimple, PencilSimple, Warning } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import type { IntakeCard, IntakeField, IntakeScenario } from '@/mocks/emma-intake'
 
 /**
@@ -159,13 +159,15 @@ function FieldRow({
                 className="h-8 rounded-md bg-background-base px-2 text-paragraph-sm shadow-button-gray outline-none focus:shadow-border-focus"
               />
               <Button
+                type="button"
                 size="sm"
+                width="full"
                 onClick={() => {
                   onEdit(draft)
                   setEditing(false)
                 }}
               >
-                <span className="px-1">Save</span>
+                Save
               </Button>
             </div>
           </PopoverContent>

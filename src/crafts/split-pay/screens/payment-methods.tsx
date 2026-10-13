@@ -4,7 +4,7 @@ import { ACTIVE_SPLIT, BANK_ACCOUNTS, COOLING_OFF_ESTIMATE, WALLET } from '@/moc
 import type { PillTone } from '../ui'
 import { ConfirmDialog, GuaranteeNote, ModalShell, StatusPill, StepTracker } from '../ui'
 import { PageBody, PageHeader } from '@/components/nds/layouts'
-import { Button } from '@/components/ui/button'
+import { Button, IconButton } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 
 /**
@@ -103,14 +103,15 @@ function BankCard({ bank }: { bank: (typeof BANK_ACCOUNTS)[number] }) {
         </p>
         <p className="text-paragraph-xs text-text-muted">Account ending {bank.last4}</p>
       </div>
-      <Button
+      <IconButton
         variant="ghost"
-        size="icon-sm"
+        shade="neutral"
+        size="small"
         aria-label={`Actions for ${bank.bank}`}
         onClick={() => show('E1', bank.primary ? 'bank-in-split' : 'last-bank')}
       >
         <DotsThree weight="bold" className="size-4" />
-      </Button>
+      </IconButton>
     </div>
   )
 }
@@ -136,18 +137,25 @@ function WalletCard({ state }: { state: Exclude<WalletCardState, 'no-wallet'> })
           {detail && <p className="mt-0.5 text-caption-md text-text-muted">{detail}</p>}
         </div>
         {meta.cta && (
-          <Button size="sm" variant={state === 'ready' || state === 'active' ? 'default' : 'secondary'} onClick={() => show(...meta.cta!.to)}>
-            <span className="px-1">{meta.cta.label}</span>
+          <Button
+            size="sm"
+            variant="solid"
+            shade={state === 'ready' || state === 'active' ? 'primary' : 'neutral'}
+            type="button"
+            onClick={() => show(...meta.cta!.to)}
+          >
+            {meta.cta.label}
           </Button>
         )}
-        <Button
+        <IconButton
           variant="ghost"
-          size="icon-sm"
+          shade="neutral"
+          size="small"
           aria-label="Actions for wallet"
           onClick={() => show('E1', 'delete-wallet')}
         >
           <DotsThree weight="bold" className="size-4" />
-        </Button>
+        </IconButton>
       </div>
       {meta.trackerStep !== undefined && (
         <div className="border-t border-border-highlight pt-3">
@@ -167,9 +175,8 @@ export function PaymentMethodsScreen({ view }: { view: PaymentMethodsView }) {
       <PageHeader
         title="Payment methods"
         actions={
-          <Button variant="secondary" onClick={() => show('A2', 'default')}>
-            <Plus />
-            <span className="px-1">Add payment method</span>
+          <Button variant="solid" shade="neutral" type="button" onClick={() => show('A2', 'default')} leftIcon={<Plus className="size-4" />}>
+            Add payment method
           </Button>
         }
       />
@@ -190,8 +197,8 @@ export function PaymentMethodsScreen({ view }: { view: PaymentMethodsView }) {
                 Send part of your pay to a crypto wallet. Add a wallet to get started.
               </p>
             </div>
-            <Button variant="secondary" size="sm" onClick={() => show('A2', 'default')}>
-              <span className="px-1">Add a crypto wallet</span>
+            <Button variant="solid" shade="neutral" size="sm" type="button" onClick={() => show('A2', 'default')}>
+              Add a crypto wallet
             </Button>
           </div>
         )}
@@ -203,11 +210,11 @@ export function PaymentMethodsScreen({ view }: { view: PaymentMethodsView }) {
             onClose={() => show('A1', 'no-wallet')}
             footer={
               <>
-                <Button variant="secondary" onClick={() => show('A1', 'no-wallet')}>
-                  <span className="px-1">Not now</span>
+                <Button variant="solid" shade="neutral" type="button" onClick={() => show('A1', 'no-wallet')}>
+                  Not now
                 </Button>
-                <Button onClick={() => show('A3', 'default')}>
-                  <span className="px-1">Verify now</span>
+                <Button variant="solid" shade="primary" type="button" onClick={() => show('A3', 'default')}>
+                  Verify now
                 </Button>
               </>
             }
@@ -227,11 +234,11 @@ export function PaymentMethodsScreen({ view }: { view: PaymentMethodsView }) {
             width="w-[480px]"
             footer={
               <>
-                <Button variant="secondary" onClick={() => show('A1', 'no-wallet')}>
-                  <span className="px-1">Decline</span>
+                <Button variant="solid" shade="neutral" type="button" onClick={() => show('A1', 'no-wallet')}>
+                  Decline
                 </Button>
-                <Button onClick={() => show('B1', 'details')}>
-                  <span className="px-1">Agree and continue</span>
+                <Button variant="solid" shade="primary" type="button" onClick={() => show('B1', 'details')}>
+                  Agree and continue
                 </Button>
               </>
             }

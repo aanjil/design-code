@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { VariantPills } from '@/docs/doc-kit'
-import { Switch } from '@/components/ui/switch'
+import { Switch } from '@niural/components'
 import { Shell, type FloaterSize } from './shell'
 import type { GrainExit } from './types'
 import { GRAIN_SCENARIOS, getGrainScenario } from '@/mocks/grain'
@@ -59,7 +59,7 @@ export function FloaterController() {
         <Control label="Emma off">
           <div className="flex items-center justify-between">
             <span className="text-paragraph-xs text-text-muted">Degrades to a plain search input</span>
-            <Switch checked={off} onCheckedChange={setOff} />
+            <Switch isChecked={off} onChange={setOff} />
           </div>
         </Control>
 

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Sparkle } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 
 /**
  * Prompt-to-filters entry. Mock "Emma" - parsing is deterministic keyword
@@ -66,7 +66,7 @@ export function AiFilter({
         className="min-w-0 flex-1 bg-transparent px-1 text-paragraph-sm text-text-primary outline-none placeholder:text-text-muted"
       />
       <Button size="sm" type="submit">
-        <span className="px-1">Apply</span>
+        Apply
       </Button>
     </form>
   )

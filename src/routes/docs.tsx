@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Link, Outlet, createFileRoute, useLocation } from '@tanstack/react-router'
 import { Check, Code, Copy } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
+import { IconButton } from '@niural/components'
 import { cn } from '@/lib/utils'
 
 export const Route = createFileRoute('/docs')({
@@ -179,16 +179,17 @@ function DocsLayout() {
       <main className="min-w-0 flex-1">
         {source && (
           <div className="mb-4 flex items-center justify-end">
-            <Button
+            <IconButton
               variant="ghost"
-              size="icon-sm"
+              shade="neutral"
+              size="small"
               onClick={() => setShowCode((v) => !v)}
               aria-pressed={showCode}
               aria-label={showCode ? 'Hide code' : 'Show code'}
               title={showCode ? 'Hide code' : 'Show code'}
             >
-              <Code weight={showCode ? 'fill' : 'regular'} />
-            </Button>
+              <Code weight={showCode ? 'fill' : 'regular'} className="size-4" />
+            </IconButton>
           </div>
         )}
         <div className="flex items-start gap-6">
@@ -202,15 +203,16 @@ function DocsLayout() {
                   <span className="truncate font-mono text-mono-xs text-text-muted">
                     {file?.label}
                   </span>
-                  <Button
+                  <IconButton
                     variant="ghost"
-                    size="icon-sm"
+                    shade="neutral"
+                    size="small"
                     onClick={copySource}
                     aria-label="Copy source"
                     title="Copy source"
                   >
-                    {copied ? <Check /> : <Copy />}
-                  </Button>
+                    {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
+                  </IconButton>
                 </div>
                 <pre className="max-h-[calc(100vh-8rem)] overflow-auto p-4 font-mono text-mono-xs leading-relaxed text-text-primary">
                   <code>{source}</code>

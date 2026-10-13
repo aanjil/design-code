@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ComponentProps } from 'react'
 import {
   ArrowSquareOut,
   Check,
@@ -8,14 +8,6 @@ import {
 } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { StatusPill } from '@/components/nds/controls'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import type {
   ConnectionStrength,
   ContextChunk,
@@ -33,9 +25,64 @@ type CodeBlockData = typeof codeBlock
  * Knowledge & data: RAG context chunks, an AI-proposed diff table, a
  * CRM-style records grid, a status-filterable table, narrative insight
  * cards, and a streamed code block. Scouting-stage - see
- * docs/foundations/ai-components.md. Reuses `Table` (ui/table) and
- * `StatusPill` (nds/controls) rather than inventing new table chrome.
+ * docs/foundations/ai-components.md. Uses plain `<table>` markup (the
+ * small helpers below; fe-pkg's Table is a TanStack data grid, a poor fit for
+ * these static tables) and `StatusPill` (nds/controls).
  */
+
+/* ---------------- Table markup ---------------- */
+
+function Table({ className, ...props }: ComponentProps<'table'>) {
+  return (
+    <div className="relative w-full overflow-x-auto">
+      <table className={cn('w-full caption-bottom text-sm', className)} {...props} />
+    </div>
+  )
+}
+
+function TableHeader({ className, ...props }: ComponentProps<'thead'>) {
+  return <thead className={cn('[&_tr]:border-b', className)} {...props} />
+}
+
+function TableBody({ className, ...props }: ComponentProps<'tbody'>) {
+  return <tbody className={cn('[&_tr:last-child]:border-0', className)} {...props} />
+}
+
+function TableRow({ className, ...props }: ComponentProps<'tr'>) {
+  return (
+    <tr
+      className={cn(
+        'border-b transition-colors hover:bg-background-muted/50 has-aria-expanded:bg-background-muted/50 data-[state=selected]:bg-background-muted',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
+function TableHead({ className, ...props }: ComponentProps<'th'>) {
+  return (
+    <th
+      className={cn(
+        'h-10 px-2 text-left align-middle font-medium whitespace-nowrap text-foreground [&:has([role=checkbox])]:pr-0',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
+
+function TableCell({ className, ...props }: ComponentProps<'td'>) {
+  return (
+    <td
+      className={cn(
+        'p-2 align-middle whitespace-nowrap [&:has([role=checkbox])]:pr-0',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
 
 /* ---------------- Context cards ---------------- */
 

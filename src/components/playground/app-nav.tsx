@@ -15,7 +15,7 @@ import { CraftCommandPalette } from './command-palette'
 import { statusDotClass, statusLabel } from './status-badge'
 import { ThemeToggle } from './theme-toggle'
 import { crafts } from '@/crafts/registry'
-import { Button } from '@/components/ui/button'
+import { IconButton, Tooltip } from '@niural/components'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,17 +25,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from '@/components/ui/tooltip'
 import { cn } from '@/lib/utils'
 
 const railIconLink =
   'flex size-9 shrink-0 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary'
 const railIconLinkActive = 'bg-background-highlight text-text-primary'
+
+/** Rail tooltips wait a beat so sweeping the rail doesn't flash every label. */
+const RAIL_TOOLTIP_DELAY = 300
 
 const DOCS_AREAS = [
   { to: '/docs', label: 'Foundations', icon: PaintBucket },
@@ -77,19 +74,14 @@ function RailLink({
   active: boolean
 }) {
   return (
-    <Tooltip>
-      <TooltipTrigger
-        render={
-          <Link
-            to={to}
-            aria-label={label}
-            className={cn(railIconLink, active && railIconLinkActive)}
-          />
-        }
+    <Tooltip content={label} side="right" asChild delayDuration={RAIL_TOOLTIP_DELAY}>
+      <Link
+        to={to}
+        aria-label={label}
+        className={cn(railIconLink, active && railIconLinkActive)}
       >
         <Icon className="size-[18px]" />
-      </TooltipTrigger>
-      <TooltipContent side="right">{label}</TooltipContent>
+      </Link>
     </Tooltip>
   )
 }
@@ -120,100 +112,99 @@ export function AppNav() {
   return (
     <>
       <aside className="fixed inset-y-0 left-0 z-50 flex w-16 shrink-0 flex-col items-center gap-1 border-r border-border-base bg-background-base/85 py-3 backdrop-blur">
-        <TooltipProvider delay={300}>
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Link
-                  to="/"
-                  aria-label="NDS Playground"
-                  className="flex size-9 shrink-0 items-center justify-center rounded-md bg-brand-primary text-caption-md text-text-on-color"
-                />
-              }
-            >
-              N
-            </TooltipTrigger>
-            <TooltipContent side="right">NDS Playground</TooltipContent>
-          </Tooltip>
+        <Tooltip
+          content="NDS Playground"
+          side="right"
+          asChild
+          delayDuration={RAIL_TOOLTIP_DELAY}
+        >
+          <Link
+            to="/"
+            aria-label="NDS Playground"
+            className="flex size-9 shrink-0 items-center justify-center rounded-md bg-brand-primary text-caption-md text-text-on-color"
+          >
+            N
+          </Link>
+        </Tooltip>
 
-          <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
+        <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
 
-          <nav className="flex flex-col items-center gap-1">
-            <RailLink to="/" label="Crafts" icon={SquaresFour} active={railTarget === '/'} />
-            {DOCS_AREAS.map((area) => (
-              <RailLink
-                key={area.to}
-                to={area.to}
-                label={area.label}
-                icon={area.icon}
-                active={railTarget === area.to}
-              />
-            ))}
-            <RailLink to="/app" label="Run the app" icon={Rocket} active={railTarget === '/app'} />
-          </nav>
+        <nav className="flex flex-col items-center gap-1">
+          <RailLink to="/" label="Crafts" icon={SquaresFour} active={railTarget === '/'} />
+          {DOCS_AREAS.map((area) => (
+            <RailLink
+              key={area.to}
+              to={area.to}
+              label={area.label}
+              icon={area.icon}
+              active={railTarget === area.to}
+            />
+          ))}
+          <RailLink to="/app" label="Run the app" icon={Rocket} active={railTarget === '/app'} />
+        </nav>
 
-          <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
+        <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
 
-          <DropdownMenu>
-            <DropdownMenuTrigger
-              aria-label={
-                current ? `Switch craft - currently ${current.title}` : 'Switch craft'
-              }
-              title={
-                current ? `Switch craft - currently ${current.title}` : 'Switch craft'
-              }
-              className={cn(railIconLink, 'data-popup-open:bg-background-highlight data-popup-open:text-text-primary')}
-            >
-              <Flask className="size-[18px]" />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent side="right" align="start" className="w-72">
-              <DropdownMenuGroup>
-                <DropdownMenuLabel className="text-caption-md text-text-muted">
-                  Switch craft
-                </DropdownMenuLabel>
-                {crafts.map((e) => (
-                  <DropdownMenuItem key={e.slug} render={<Link to={e.to} />}>
-                    <span
-                      className={cn(
-                        'size-1.5 shrink-0 rounded-full',
-                        statusDotClass[e.status],
-                      )}
-                    />
-                    <span className="truncate">{e.title}</span>
-                    <span className="ml-auto text-caption text-text-muted">
-                      {statusLabel[e.status]}
-                    </span>
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem render={<Link to="/" />}>
-                <SquaresFour />
-                All crafts
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            aria-label={
+              current ? `Switch craft - currently ${current.title}` : 'Switch craft'
+            }
+            title={
+              current ? `Switch craft - currently ${current.title}` : 'Switch craft'
+            }
+            className={cn(railIconLink, 'data-popup-open:bg-background-highlight data-popup-open:text-text-primary')}
+          >
+            <Flask className="size-[18px]" />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent side="right" align="start" className="w-72">
+            <DropdownMenuGroup>
+              <DropdownMenuLabel className="text-caption-md text-text-muted">
+                Switch craft
+              </DropdownMenuLabel>
+              {crafts.map((e) => (
+                <DropdownMenuItem key={e.slug} render={<Link to={e.to} />}>
+                  <span
+                    className={cn(
+                      'size-1.5 shrink-0 rounded-full',
+                      statusDotClass[e.status],
+                    )}
+                  />
+                  <span className="truncate">{e.title}</span>
+                  <span className="ml-auto text-caption text-text-muted">
+                    {statusLabel[e.status]}
+                  </span>
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuGroup>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem render={<Link to="/" />}>
+              <SquaresFour />
+              All crafts
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
-          <div className="flex-1" />
+        <div className="flex-1" />
 
-          <Tooltip>
-            <TooltipTrigger
-              render={
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  aria-label="Search crafts (⌘K)"
-                  onClick={() => setPaletteOpen(true)}
-                />
-              }
-            >
-              <MagnifyingGlass />
-            </TooltipTrigger>
-            <TooltipContent side="right">Search crafts (⌘K)</TooltipContent>
-          </Tooltip>
+        <Tooltip
+          content="Search crafts (⌘K)"
+          side="right"
+          asChild
+          delayDuration={RAIL_TOOLTIP_DELAY}
+        >
+          <IconButton
+            variant="ghost"
+            shade="neutral"
+            size="small"
+            aria-label="Search crafts (⌘K)"
+            onClick={() => setPaletteOpen(true)}
+          >
+            <MagnifyingGlass className="size-4" />
+          </IconButton>
+        </Tooltip>
 
-          <ThemeToggle />
-        </TooltipProvider>
+        <ThemeToggle />
       </aside>
 
       <CraftCommandPalette

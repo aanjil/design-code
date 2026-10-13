@@ -5,7 +5,7 @@ import {
   PageFooter,
   PageHeader,
 } from '@/components/nds/layouts'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 
 export const Route = createFileRoute('/docs/components/page-shell')({
   component: PageShellDoc,
@@ -24,8 +24,8 @@ function PageShellDoc() {
             <PageHeader
               title="Payroll Schedule"
               actions={
-                <Button>
-                  <span className="px-1">New schedule</span>
+                <Button variant="solid" shade="primary" type="button">
+                  New schedule
                 </Button>
               }
             />
@@ -44,11 +44,11 @@ function PageShellDoc() {
               </div>
             </PageBody>
             <PageFooter className="justify-end gap-2">
-              <Button variant="secondary">
-                <span className="px-1">Cancel</span>
+              <Button variant="solid" shade="neutral" type="button">
+                Cancel
               </Button>
-              <Button>
-                <span className="px-1">Save</span>
+              <Button variant="solid" shade="primary" type="button">
+                Save
               </Button>
             </PageFooter>
           </div>

@@ -51,9 +51,8 @@ import { useExplorer } from '@/components/playground/explorer'
 import { Stepper } from '@/components/nds/stepper'
 import { FieldLabel, SearchField, TextInput } from '@/components/nds/controls'
 import { SelectField } from '@/components/nds/select-field'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
+import { Button, Checkbox } from '@niural/components'
 
 /** Starter rule for a fresh wizard run - one seeded condition (matches the
  *  old hardcoded first `RuleRow`), everything else built via "Add condition". */
@@ -289,8 +288,8 @@ function MembershipStep({ noEmployees }: { noEmployees?: boolean }) {
           <p className="max-w-64 text-center text-paragraph-xs text-text-muted">
             You can still create the schedule - people join it as you hire.
           </p>
-          <Button variant="secondary" size="sm" className="mt-1">
-            <span className="px-1">Invite employees</span>
+          <Button type="button" variant="solid" shade="neutral" size="sm" className="mt-1">
+            Invite employees
           </Button>
         </div>
       ) : (
@@ -491,9 +490,16 @@ function ManualMembersStep({
               Most schedules don't need a rule - check people in below. You can add one later.
             </p>
           </div>
-          <Button variant="ghost" size="sm" className="shrink-0 text-brand-text" onClick={onAddRule}>
-            <Plus />
-            <span className="px-1">Add a membership rule instead</span>
+          <Button
+            type="button"
+            variant="ghost"
+            shade="neutral"
+            size="sm"
+            className="shrink-0 text-brand-text"
+            onClick={onAddRule}
+            leftIcon={<Plus className="size-4" />}
+          >
+            Add a membership rule instead
           </Button>
         </div>
         <Banner tone="info" title={`No membership rule set`} className="mt-4">
@@ -509,7 +515,7 @@ function ManualMembersStep({
               key={e.id}
               className="group flex cursor-pointer items-center gap-2.5 border-b border-border-highlight px-3 py-2 last:border-0 hover:bg-background-highlight"
             >
-              <Checkbox checked={selectedSet.has(e.id)} onCheckedChange={() => onToggle(e.id)} />
+              <Checkbox size="md" checked={selectedSet.has(e.id)} onCheckedChange={() => onToggle(e.id)} />
               <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-muted text-caption-md text-brand-text">
                 {e.name
                   .split(' ')
@@ -606,9 +612,14 @@ function RulesStep({
           title={`${frequency} pay violates ${state} rules for ${count} hourly match${count > 1 ? 'es' : ''}`}
           actions={
             !view.emma && (
-              <Button variant="secondary" size="sm">
-                <Sparkle className="text-brand-primary" weight="fill" />
-                <span className="px-1">Ask Emma</span>
+              <Button
+                type="button"
+                variant="solid"
+                shade="neutral"
+                size="sm"
+                leftIcon={<Sparkle className="size-4 text-brand-primary" weight="fill" />}
+              >
+                Ask Emma
               </Button>
             )
           }
@@ -621,11 +632,11 @@ function RulesStep({
           title="Compliance"
           actions={
             <>
-              <Button size="sm">
-                <span className="px-1">Switch to {violationGroups[0].requiredFrequency}</span>
+              <Button type="button" size="sm">
+                Switch to {violationGroups[0].requiredFrequency}
               </Button>
-              <Button variant="secondary" size="sm">
-                <span className="px-1">Exclude {violationGroups[0].state} hourly</span>
+              <Button type="button" variant="solid" shade="neutral" size="sm">
+                Exclude {violationGroups[0].state} hourly
               </Button>
             </>
           }
@@ -647,9 +658,16 @@ function RulesStep({
               Employees matching every condition join this schedule.
             </p>
           </div>
-          <Button variant="ghost" size="sm" className="shrink-0 text-brand-text" onClick={onRemoveRule}>
-            <X />
-            <span className="px-1">Remove rule - assign manually instead</span>
+          <Button
+            type="button"
+            variant="ghost"
+            shade="neutral"
+            size="sm"
+            className="shrink-0 text-brand-text"
+            onClick={onRemoveRule}
+            leftIcon={<X className="size-4" />}
+          >
+            Remove rule - assign manually instead
           </Button>
         </div>
         <div className="mt-6 flex flex-col gap-2">
@@ -675,30 +693,41 @@ function RulesStep({
                 ))}
               </div>
               <Button
+                type="button"
                 variant="ghost"
+                shade="neutral"
                 size="sm"
                 className="mt-2 text-brand-text"
                 onClick={() => addCondition('orGroup')}
+                leftIcon={<Plus className="size-4" />}
               >
-                <Plus />
-                <span className="px-1">Add OR condition</span>
+                Add OR condition
               </Button>
             </div>
           )}
           <div className="flex items-center gap-1">
-            <Button variant="ghost" size="sm" className="text-brand-text" onClick={() => addCondition('and')}>
-              <Plus />
-              <span className="px-1">Add condition</span>
+            <Button
+              type="button"
+              variant="ghost"
+              shade="neutral"
+              size="sm"
+              className="text-brand-text"
+              onClick={() => addCondition('and')}
+              leftIcon={<Plus className="size-4" />}
+            >
+              Add condition
             </Button>
             {!rule.orGroup && (
               <Button
+                type="button"
                 variant="ghost"
+                shade="neutral"
                 size="sm"
                 className="text-brand-text"
                 onClick={() => onChangeRule({ ...rule, orGroup: [{ attribute: 'workLocation', operator: 'is', values: [] }] })}
+                leftIcon={<Plus className="size-4" />}
               >
-                <Plus />
-                <span className="px-1">Add OR group</span>
+                Add OR group
               </Button>
             )}
           </div>
@@ -872,12 +901,8 @@ function ConflictsStep({
           title="Conflict"
           actions={
             <>
-              <Button size="sm">
-                <span className="px-1">Apply suggestion</span>
-              </Button>
-              <Button variant="ghost" size="sm">
-                <span className="px-1">Dismiss</span>
-              </Button>
+              <Button type="button" size="sm">Apply suggestion</Button>
+              <Button type="button" variant="ghost" shade="neutral" size="sm">Dismiss</Button>
             </>
           }
         >
@@ -1175,12 +1200,17 @@ export function WizardScreen({ view }: { view: WizardView }) {
         )}
 
         <div className="mt-2 flex items-center justify-between">
-          <Button variant="secondary" onClick={goBack}>
-            <CaretLeft />
-            <span className="px-1">Back</span>
+          <Button
+            type="button"
+            variant="solid"
+            shade="neutral"
+            onClick={goBack}
+            leftIcon={<CaretLeft className="size-4" />}
+          >
+            Back
           </Button>
-          <Button onClick={goNext} disabled={detailsBlocked}>
-            <span className="px-1">{isReview ? (editing ? 'Save changes' : 'Create schedule') : 'Continue'}</span>
+          <Button type="button" onClick={goNext} disabled={detailsBlocked}>
+            {isReview ? (editing ? 'Save changes' : 'Create schedule') : 'Continue'}
           </Button>
         </div>
       </div>

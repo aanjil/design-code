@@ -2,7 +2,7 @@ import { IdentificationCard } from '@phosphor-icons/react'
 import type { KycView } from '../types'
 import { KYC_DYNAMIC_STEPS, SPLIT_EMPLOYEE } from '@/mocks/split-pay'
 import { FlowShell, FormCard, OptionRow, ReadonlyField } from '../ui'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 
 /**
@@ -36,8 +36,8 @@ export function KycScreen({ view }: { view: KycView }) {
             <ReadonlyField label="Country" value={SPLIT_EMPLOYEE.country} />
           </FormCard>
           <div className="flex justify-end">
-            <Button onClick={() => show('B1', 'dynamic-1')}>
-              <span className="px-1">Continue</span>
+            <Button variant="solid" shade="primary" type="button" onClick={() => show('B1', 'dynamic-1')}>
+              Continue
             </Button>
           </div>
         </div>
@@ -61,13 +61,16 @@ export function KycScreen({ view }: { view: KycView }) {
           </FormCard>
           <div className="flex justify-end">
             <Button
+              variant="solid"
+              shade="primary"
+              type="button"
               onClick={() =>
                 idx + 1 < KYC_DYNAMIC_STEPS.length
                   ? show('B1', 'dynamic-2')
                   : show('B2', 'entry')
               }
             >
-              <span className="px-1">Continue</span>
+              Continue
             </Button>
           </div>
         </div>
@@ -89,8 +92,8 @@ export function KycScreen({ view }: { view: KycView }) {
               Takes about 5 minutes.
             </p>
           </div>
-          <Button onClick={() => show('B2', 'return')}>
-            <span className="px-1">Start verification</span>
+          <Button variant="solid" shade="primary" type="button" onClick={() => show('B2', 'return')}>
+            Start verification
           </Button>
         </FormCard>
       </FlowShell>
@@ -111,8 +114,8 @@ export function KycScreen({ view }: { view: KycView }) {
               as it's done, usually within a few hours.
             </p>
           </div>
-          <Button variant="secondary" onClick={() => show('A4', 'in-review')}>
-            <span className="px-1">Back to payment methods</span>
+          <Button variant="solid" shade="neutral" type="button" onClick={() => show('A4', 'in-review')}>
+            Back to payment methods
           </Button>
         </FormCard>
       </FlowShell>
@@ -138,12 +141,12 @@ export function KycScreen({ view }: { view: KycView }) {
           </p>
         </div>
         {view.retryBlocked ? (
-          <Button variant="secondary">
-            <span className="px-1">Contact support</span>
+          <Button variant="solid" shade="neutral" type="button">
+            Contact support
           </Button>
         ) : (
-          <Button onClick={() => show('B1', 'details')}>
-            <span className="px-1">Restart verification</span>
+          <Button variant="solid" shade="primary" type="button" onClick={() => show('B1', 'details')}>
+            Restart verification
           </Button>
         )}
       </FormCard>

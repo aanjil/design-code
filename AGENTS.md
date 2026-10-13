@@ -18,11 +18,33 @@ Before editing files for a substantial task:
 2. Tokens only. Tailwind's default palette is disabled in `src/styles.css`;
    every color/type/shadow comes from an NDS token utility. Never hardcode
    hex/px, never add `dark:` color overrides (tokens handle dark mode).
-3. UI primitives come from `@/components/ui/*` (shadcn on Base UI - composition
-   via `render` prop, not `asChild`). Icons come from `@phosphor-icons/react`.
-4. When foundations change (synced from `/Users/anjil/Documents/nds/foundations`):
-   re-copy into `docs/foundations/`, update tokens in `src/styles.css`, update
-   `docs/DESIGN.md`. All three stay in sync.
+3. UI primitives come from `@niural/components` (niural-fe-pkg) first. Only
+   fall back to `@/components/ui/*` (shadcn on Base UI) when fe-pkg has no
+   equivalent - today that's DropdownMenu and Popover, because fe-pkg's
+   portals can't target the zoomed canvas. Icons come from `@phosphor-icons/react`,
+   passed as ReactNode (fe-pkg slots that take an icon *name* don't work - no
+   icon registry is mounted).
+4. Tokens come from niural-fe-pkg, not from this repo. `src/styles.css` loads
+   fe-pkg's stylesheet into an `nds` CSS layer; `src/styles/fe-pkg-tokens.css`
+   maps design-code utility names (`bg-background-base`, `text-label-sm`, ...)
+   onto fe-pkg variables. To change a token, change it in niural-fe-pkg.
+   Never use `text-base` (fe-pkg defines `--text-base` as a color) - use
+   `text-paragraph-md`.
+
+## niural-fe-pkg link (branch `design-system`)
+
+- `@niural/components` is `link:../../niural-fe-pkg/packages/components` - it
+  serves whatever branch is checked out in the local niural-fe-pkg clone.
+- `pnpm dev:pkg` - builds fe-pkg once, then runs its watch build + this app;
+  edits to fe-pkg components show up here live. `pnpm pkg:build` rebuilds all
+  fe-pkg packages (watch only covers components).
+- The app renders client-only (`defaultSsr: false` in `src/start.ts`,
+  `<ClientOnly>` in `__root.tsx`): fe-pkg's build bundles browser-only deps
+  and crashes on the server. `vite-plugins/niural-ssr-stub.ts` stubs the
+  package on the server. Remove all three once fe-pkg ships an SSR-safe build.
+- `vite.config.ts` dedupes react/react-dom - fe-pkg's own install has React 18.
+- The `link:` path only works on this machine; switch to the published
+  GitHub Packages version before deploying or sharing.
 
 ## What this repo is
 

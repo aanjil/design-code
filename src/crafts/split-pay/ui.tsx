@@ -1,5 +1,5 @@
 import { Check, ShieldCheck, X } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { cn } from '@/lib/utils'
 
 /**
@@ -225,12 +225,17 @@ export function ConfirmDialog({
         </div>
         <div className="flex items-center justify-end gap-2">
           {!singleAction && (
-            <Button variant="secondary" onClick={onCancel}>
-              <span className="px-1">Cancel</span>
+            <Button variant="solid" shade="neutral" type="button" onClick={onCancel}>
+              Cancel
             </Button>
           )}
-          <Button variant={danger ? 'destructive' : 'default'} onClick={onConfirm}>
-            <span className="px-1">{confirmLabel}</span>
+          <Button
+            variant="solid"
+            shade={danger ? 'error' : 'primary'}
+            type="button"
+            onClick={onConfirm}
+          >
+            {confirmLabel}
           </Button>
         </div>
       </div>

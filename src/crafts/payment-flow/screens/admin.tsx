@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { MagnifyingGlass, ShieldStar } from '@phosphor-icons/react'
 import { useFlowData, useFlowStore } from '../store'
 import { Money, StatusPill } from '../ui'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { fmt, fmtDateTime } from '@/mocks/payment-flow'
 import type { FundingRequest, FundingStatus } from '@/mocks/payment-flow'
 import { cn } from '@/lib/utils'
@@ -105,8 +105,8 @@ function AdminRow({ r, onApprove, onReject }: { r: FundingRequest; onApprove: ()
       <span className="flex justify-end gap-1.5 px-3 py-2">
         {r.status === 'pending' && (
           <>
-            <Button variant="ghost-destructive" size="sm" onClick={onReject}><span className="px-1">Reject</span></Button>
-            <Button size="sm" onClick={onApprove}><span className="px-1">Approve</span></Button>
+            <Button type="button" variant="ghost" shade="error" size="sm" onClick={onReject}>Reject</Button>
+            <Button type="button" size="sm" onClick={onApprove}>Approve</Button>
           </>
         )}
       </span>

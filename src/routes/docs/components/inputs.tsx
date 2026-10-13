@@ -8,7 +8,7 @@ import {
   TextInput,
 } from '@/components/nds/controls'
 import { SelectField } from '@/components/nds/select-field'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Checkbox } from '@niural/components'
 
 export const Route = createFileRoute('/docs/components/inputs')({
   component: InputsDoc,
@@ -108,15 +108,9 @@ function InputsDoc() {
       <DocSection title="Checkbox" note="14px, 4px radius; checked = brand fill + primary ring.">
         <Specimen>
           <div className="flex items-center gap-6">
-            <label className="flex items-center gap-2 text-label-sm text-text-primary">
-              <Checkbox aria-label="Unchecked" /> Unchecked
-            </label>
-            <label className="flex items-center gap-2 text-label-sm text-text-primary">
-              <Checkbox defaultChecked aria-label="Checked" /> Checked
-            </label>
-            <label className="flex items-center gap-2 text-label-sm text-text-muted">
-              <Checkbox disabled aria-label="Disabled" /> Disabled
-            </label>
+            <Checkbox size="md" label="Unchecked" />
+            <Checkbox size="md" defaultChecked label="Checked" />
+            <Checkbox size="md" disabled label="Disabled" />
           </div>
         </Specimen>
       </DocSection>

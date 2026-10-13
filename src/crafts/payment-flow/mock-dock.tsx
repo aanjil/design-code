@@ -12,7 +12,7 @@ import {
 } from '@phosphor-icons/react'
 import { useEmployerConfig, useFlowData, useFlowStore } from './store'
 import { CurrencyMark, Money } from './ui'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import {
   CCY_FLAG,
   DATASETS,
@@ -159,9 +159,8 @@ export function MockDock({
                       {offset === 0 ? 'Real mock date' : `${offset > 0 ? '+' : ''}${offset} days from ${fmtDate(WORLD_TODAY)}`}
                     </p>
                   </div>
-                  <Button variant="secondary" size="sm" disabled={offset === 0} onClick={() => travel(WORLD_TODAY)}>
-                    <ArrowCounterClockwise />
-                    <span className="px-1">Back to today</span>
+                  <Button type="button" variant="solid" shade="neutral" size="sm" leftIcon={<ArrowCounterClockwise className="size-4" />} disabled={offset === 0} onClick={() => travel(WORLD_TODAY)}>
+                    Back to today
                   </Button>
                 </div>
                 <div className="grid grid-cols-6 gap-1.5">
@@ -244,27 +243,31 @@ export function MockDock({
                 </Section>
                 <div className="flex items-center gap-2">
                   <Button
-                    variant="secondary"
+                    type="button"
+                    variant="solid"
+                    shade="neutral"
                     size="sm"
+                    leftIcon={<CheckCircle className="size-4" />}
                     onClick={() => {
                       const n = store.approveAllPending()
                       flash(n ? `Approved ${n} funding ${n === 1 ? 'request' : 'requests'}` : 'No pending funding to approve')
                     }}
                   >
-                    <CheckCircle />
-                    <span className="px-1">Approve pending funding</span>
+                    Approve pending funding
                   </Button>
                   <span className="flex-1" />
                   <Button
-                    variant="ghost-destructive"
+                    type="button"
+                    variant="ghost"
+                    shade="error"
                     size="sm"
+                    leftIcon={<ArrowCounterClockwise className="size-4" />}
                     onClick={() => {
                       store.reset(data.local, { dataset: 'realistic', today: WORLD_TODAY })
                       flash('Reset to the realistic dataset')
                     }}
                   >
-                    <ArrowCounterClockwise />
-                    <span className="px-1">Reset all</span>
+                    Reset all
                   </Button>
                 </div>
               </div>
@@ -380,9 +383,8 @@ function AddInvoice({ local, onAdd }: { local: EmployerLocal; onAdd: (ccy: Ccy, 
             {overdue ? 'Overdue' : 'Due soon'}
           </button>
           <span className="flex-1" />
-          <Button size="sm" onClick={() => onAdd(tab === 'fees' ? feeCcy : ccy, tab, overdue)}>
-            <Plus />
-            <span className="px-1">Add</span>
+          <Button type="button" size="sm" leftIcon={<Plus className="size-4" />} onClick={() => onAdd(tab === 'fees' ? feeCcy : ccy, tab, overdue)}>
+            Add
           </Button>
         </div>
         {tab === 'contracts' ? (

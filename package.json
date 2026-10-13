@@ -7,6 +7,9 @@
   },
   "scripts": {
     "dev": "vite dev --port 3010",
+    "dev:pkg": "pnpm pkg:build && concurrently -k -n pkg,app -c magenta,cyan \"pnpm pkg:watch\" \"pnpm dev\"",
+    "pkg:build": "bun run --cwd ../../niural-fe-pkg build",
+    "pkg:watch": "bun run --cwd ../../niural-fe-pkg/packages/components dev",
     "generate-routes": "tsr generate",
     "build": "vite build",
     "preview": "vite preview",
@@ -14,6 +17,7 @@
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",
+    "@niural/components": "link:../../niural-fe-pkg/packages/components",
     "@phosphor-icons/react": "^2.1.10",
     "@tailwindcss/vite": "^4.1.18",
     "@tanstack/react-devtools": "latest",
@@ -47,6 +51,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^6.0.1",
+    "concurrently": "^10.0.6",
     "jsdom": "^28.1.0",
     "typescript": "^6.0.2",
     "vite": "^8.0.0",

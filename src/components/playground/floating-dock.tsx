@@ -5,9 +5,7 @@ import { useAnnotations } from './annotations'
 import { CraftCommandPalette } from './command-palette'
 import { Kbd } from './kbd'
 import { ThemeToggle } from './theme-toggle'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
+import { Button, Label, Switch } from '@niural/components'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 
 /**
@@ -63,9 +61,15 @@ export function FloatingDock({
   return (
     <>
       <div className="fixed top-16 left-4 z-50 flex items-center gap-1 rounded-full bg-background-base/90 p-1.5 shadow-flyout backdrop-blur">
-        <Button variant="ghost" size="sm" onClick={() => navigate({ to: '/' })}>
-          <CaretLeft />
-          <span className="px-1">Back</span>
+        <Button
+          variant="ghost"
+          shade="neutral"
+          size="sm"
+          type="button"
+          onClick={() => navigate({ to: '/' })}
+          leftIcon={<CaretLeft className="size-4" />}
+        >
+          Back
         </Button>
         <span className="mx-0.5 h-4 w-px bg-border-muted" />
         <Popover open={settingsOpen} onOpenChange={setSettingsOpen}>
@@ -95,18 +99,28 @@ export function FloatingDock({
               <span className="flex size-4 items-center justify-center text-text-muted">
                 <Kbd>A</Kbd>
               </span>
-              <Label htmlFor="dock-annotations" className="flex-1 text-label-xs text-text-primary">
-                Design note markers
-              </Label>
-              <Switch id="dock-annotations" checked={enabled} onCheckedChange={setEnabled} />
+              <div className="flex-1">
+                <Label
+                  htmlFor="dock-annotations"
+                  labelType="label-xsmall"
+                  textClassName="text-text-primary"
+                  text="Design note markers"
+                />
+              </div>
+              <Switch id="dock-annotations" isChecked={enabled} onChange={setEnabled} />
             </div>
 
             <div className="flex items-center gap-2 px-2 py-1.5">
               <Ruler className="size-4 text-text-muted" />
-              <Label htmlFor="dock-rulers" className="flex-1 text-label-xs text-text-primary">
-                Show rulers
-              </Label>
-              <Switch id="dock-rulers" checked={showRulers} onCheckedChange={onToggleRulers} />
+              <div className="flex-1">
+                <Label
+                  htmlFor="dock-rulers"
+                  labelType="label-xsmall"
+                  textClassName="text-text-primary"
+                  text="Show rulers"
+                />
+              </div>
+              <Switch id="dock-rulers" isChecked={showRulers} onChange={onToggleRulers} />
             </div>
 
             <div className="flex items-center gap-2 px-2 py-1.5">

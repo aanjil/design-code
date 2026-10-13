@@ -1,8 +1,7 @@
 import { useState } from 'react'
 import { ArrowCounterClockwise, Play } from '@phosphor-icons/react'
 import { VariantPills } from '@/docs/doc-kit'
-import { Switch } from '@/components/ui/switch'
-import { Button } from '@/components/ui/button'
+import { Button, Switch } from '@niural/components'
 import { Grain } from './grain'
 import { Shell } from './shell'
 import { densityFromConfidence, type GrainDensity, type GrainExit } from './types'
@@ -111,15 +110,17 @@ export function GrainController() {
 
         <Control label="Streaming claim (mocked live answer)">
           <div className="flex items-center justify-between">
-            <Switch checked={streaming} onCheckedChange={setStreaming} />
+            <Switch isChecked={streaming} onChange={setStreaming} />
             <Button
               type="button"
-              variant="outline"
+              variant="solid"
+              shade="neutral"
               size="sm"
+              leftIcon={<Play className="size-4" />}
               onClick={() => setStreamKey((k) => k + 1)}
               disabled={!streaming}
             >
-              <Play /> <span className="px-1">Replay</span>
+              Replay
             </Button>
           </div>
           {streaming && (
@@ -130,7 +131,7 @@ export function GrainController() {
         </Control>
 
         <Control label="Live undo window on the first exit">
-          <Switch checked={undoDemo} onCheckedChange={setUndoDemo} />
+          <Switch isChecked={undoDemo} onChange={setUndoDemo} />
         </Control>
 
         <Control label="Preview width">
@@ -140,12 +141,12 @@ export function GrainController() {
         <Control label="Shell (Floater at line density)">
           <div className="flex items-center justify-between">
             <span className="text-paragraph-xs text-text-muted">Dock this grain above a prompt bar</span>
-            <Switch checked={showShell} onCheckedChange={setShowShell} />
+            <Switch isChecked={showShell} onChange={setShowShell} />
           </div>
           {showShell && (
             <div className="mt-2 flex items-center justify-between">
               <span className="text-paragraph-xs text-text-muted">Emma off (degrades to search)</span>
-              <Switch checked={shellOff} onCheckedChange={setShellOff} />
+              <Switch isChecked={shellOff} onChange={setShellOff} />
             </div>
           )}
         </Control>
@@ -153,11 +154,13 @@ export function GrainController() {
         <Button
           type="button"
           variant="ghost"
+          shade="neutral"
           size="sm"
+          leftIcon={<ArrowCounterClockwise className="size-4" />}
           onClick={() => loadScenario(kind)}
           className="self-start"
         >
-          <ArrowCounterClockwise /> <span className="px-1">Reset to scenario defaults</span>
+          Reset to scenario defaults
         </Button>
       </div>
 

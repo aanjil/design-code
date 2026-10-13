@@ -3,7 +3,7 @@ import { usePayment } from '../app'
 import { railInSentence, round2 } from '../engine'
 import type { FundDraft } from '../types'
 import { CopyButton, CurrencyMark, Money, ModalShell, RadioDot, RecipientDetails } from '../ui'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import {
   BANK_ACCOUNTS,
   CCY_NAME,
@@ -46,7 +46,7 @@ export function FundWalletModal({ draft }: { draft: FundDraft }) {
 
   if (draft.step === 'initiated' && req) {
     return (
-      <ModalShell width="w-[440px]" footer={<Button className="w-full" onClick={close}><span className="px-1">Done</span></Button>}>
+      <ModalShell width="w-[440px]" footer={<Button type="button" width="full" onClick={close}>Done</Button>}>
         <div className="flex flex-col items-center gap-3 pt-1 text-center">
           <span className="flex size-12 items-center justify-center rounded-full bg-background-success-base text-text-on-color"><Check weight="bold" className="size-6" /></span>
           <p className="text-title-h4 text-text-primary">Wallet fund initiated</p>
@@ -90,14 +90,15 @@ export function FundWalletModal({ draft }: { draft: FundDraft }) {
         width="w-[820px]"
         footer={
           <>
-            <Button variant="secondary" onClick={() => update({ step: 'amount' })}><CaretLeft /><span className="px-1">Details</span></Button>
+            <Button type="button" variant="solid" shade="neutral" leftIcon={<CaretLeft className="size-4" />} onClick={() => update({ step: 'amount' })}>Details</Button>
             <Button
+              type="button"
               onClick={() => {
                 const r = store.fund({ ccy: draft.ccy, amount, fee: m.fee, method: m.short, memo: draft.memo || undefined })
                 update({ step: 'initiated', requestId: r.id })
               }}
             >
-              <span className="px-1">Submit</span>
+              Submit
             </Button>
           </>
         }
@@ -165,8 +166,8 @@ export function FundWalletModal({ draft }: { draft: FundDraft }) {
         onClose={close}
         footer={
           <>
-            <Button variant="secondary" onClick={() => update({ step: 'method' })}><CaretLeft /><span className="px-1">Back</span></Button>
-            <Button disabled={amount <= 0} onClick={() => update({ step: 'review' })}><span className="px-1">Next</span></Button>
+            <Button type="button" variant="solid" shade="neutral" leftIcon={<CaretLeft className="size-4" />} onClick={() => update({ step: 'method' })}>Back</Button>
+            <Button type="button" disabled={amount <= 0} onClick={() => update({ step: 'review' })}>Next</Button>
           </>
         }
       >
@@ -215,8 +216,8 @@ export function FundWalletModal({ draft }: { draft: FundDraft }) {
       onClose={close}
       footer={
         <>
-          <Button variant="secondary" onClick={close}><span className="px-1">Cancel</span></Button>
-          <Button onClick={() => update({ step: 'amount' })}><span className="px-1">Next</span></Button>
+          <Button type="button" variant="solid" shade="neutral" onClick={close}>Cancel</Button>
+          <Button type="button" onClick={() => update({ step: 'amount' })}>Next</Button>
         </>
       }
     >

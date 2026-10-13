@@ -9,7 +9,7 @@ import {
   Camera as PhosphorCamera,
   WifiHigh,
 } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { cn } from '@/lib/utils'
 
 /**
@@ -18,7 +18,7 @@ import { cn } from '@/lib/utils'
  * `chrome: 'phone'` + `phoneFrameSize`) - the device bezel + Dynamic Island
  * are canvas chrome; everything below is real screen content, sized against
  * the iPhone 16 Pro Max's own 440x956pt viewport (62pt top / 34pt bottom
- * safe areas). Deliberately minimal - reuses `Button` (ui/button.tsx) and
+ * safe areas). Deliberately minimal - reuses `Button` (@niural/components) and
  * `Banner` (nds/feedback.tsx) rather than forking mobile-only variants of
  * either; only genuinely mobile-shaped pieces (status bar, home indicator,
  * tab bar, chat bubble, dynamic input, the Action/Details/CTA card) live here.
@@ -211,12 +211,14 @@ export function MobileCard({
           {ctas.map((cta) => (
             <Button
               key={cta.label}
+              type="button"
               size="lg"
-              variant={cta.variant === 'secondary' ? 'secondary' : 'default'}
+              variant="solid"
+              shade={cta.variant === 'secondary' ? 'neutral' : 'primary'}
               onClick={cta.onClick}
               className="flex-1"
             >
-              <span className="px-1">{cta.label}</span>
+              {cta.label}
             </Button>
           ))}
         </div>

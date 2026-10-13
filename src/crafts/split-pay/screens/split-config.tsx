@@ -2,7 +2,7 @@ import { CaretDown, CheckCircle } from '@phosphor-icons/react'
 import type { SplitConfigView } from '../types'
 import { ACTIVE_SPLIT, BANK_ACCOUNTS, SPLIT_EMPLOYEE, WALLET } from '@/mocks/split-pay'
 import { Banner, FieldLabel, FlowShell, FormCard, GuaranteeNote } from '../ui'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 import { cn } from '@/lib/utils'
 
@@ -54,8 +54,8 @@ export function SplitConfigScreen({ view }: { view: SplitConfigView }) {
               Applies from your {ACTIVE_SPLIT.appliesFrom} pay cycle.
             </p>
           </div>
-          <Button variant="secondary" onClick={() => show('A4', 'active')}>
-            <span className="px-1">Back to payment methods</span>
+          <Button variant="solid" shade="neutral" type="button" onClick={() => show('A4', 'active')}>
+            Back to payment methods
           </Button>
         </FormCard>
       </FlowShell>
@@ -80,11 +80,11 @@ export function SplitConfigScreen({ view }: { view: SplitConfigView }) {
             <GuaranteeNote />
           </FormCard>
           <div className="flex justify-between">
-            <Button variant="secondary" onClick={() => show('D1', 'percent')}>
-              <span className="px-1">Back</span>
+            <Button variant="solid" shade="neutral" type="button" onClick={() => show('D1', 'percent')}>
+              Back
             </Button>
-            <Button onClick={() => show('D1', 'confirmation')}>
-              <span className="px-1">Save split</span>
+            <Button variant="solid" shade="primary" type="button" onClick={() => show('D1', 'confirmation')}>
+              Save split
             </Button>
           </div>
         </div>
@@ -156,11 +156,11 @@ export function SplitConfigScreen({ view }: { view: SplitConfigView }) {
         </FormCard>
 
         <div className="flex justify-between">
-          <Button variant="secondary" onClick={() => show('A4', editing ? 'active' : 'ready')}>
-            <span className="px-1">Cancel</span>
+          <Button variant="solid" shade="neutral" type="button" onClick={() => show('A4', editing ? 'active' : 'ready')}>
+            Cancel
           </Button>
-          <Button onClick={() => (editing ? show('D2', 'confirmation') : show('D1', 'review'))}>
-            <span className="px-1">{editing ? 'Save changes' : 'Review split'}</span>
+          <Button variant="solid" shade="primary" type="button" onClick={() => (editing ? show('D2', 'confirmation') : show('D1', 'review'))}>
+            {editing ? 'Save changes' : 'Review split'}
           </Button>
         </div>
       </div>

@@ -27,7 +27,7 @@ import {
   usd,
 } from '../engine'
 import { ModalShell, Segmented, SettingsShell, settingsNavTarget } from '../ui'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 
 /**
@@ -141,9 +141,8 @@ export function BuyScreen({ view }: { view: BuyView }) {
       balances={{ tokens: b.tokens, credit: b.credit, wallet: b.wallet }}
       onNavigate={(key) => show(settingsNavTarget(key) ?? 'A1')}
       actions={
-        <Button variant="ghost" size="sm" onClick={() => show('A1')}>
-          <ArrowLeft className="size-4" />
-          <span className="px-1">Back to tokens</span>
+        <Button type="button" variant="ghost" shade="neutral" size="sm" leftIcon={<ArrowLeft className="size-4" />} onClick={() => show('A1')}>
+          Back to tokens
         </Button>
       }
     >
@@ -224,8 +223,8 @@ export function BuyScreen({ view }: { view: BuyView }) {
             <span>Total</span>
             <span>{usd(p.total)}</span>
           </div>
-          <Button className="mt-3.5 w-full" disabled={bad} onClick={openReview}>
-            <span className="px-1">Review purchase</span>
+          <Button type="button" width="full" className="mt-3.5" disabled={bad} onClick={openReview}>
+            Review purchase
           </Button>
         </aside>
       </div>
@@ -350,11 +349,11 @@ function ReviewModal({
           </dl>
         </div>
         <div className="flex justify-center gap-2">
-          <Button variant="outline" onClick={onExit}>
-            <span className="px-1">Close</span>
+          <Button type="button" variant="solid" shade="neutral" onClick={onExit}>
+            Close
           </Button>
-          <Button onClick={onConfirm}>
-            <span className="px-1">Try again</span>
+          <Button type="button" onClick={onConfirm}>
+            Try again
           </Button>
         </div>
       </ModalShell>
@@ -387,15 +386,15 @@ function ReviewModal({
               <p className="mt-1 text-paragraph-xs text-brand-text">
                 Steps 1 and 2 are still saved. Resuming picks up at step 3 rather than starting over.
               </p>
-              <Button size="sm" className="mt-2">
-                <span className="px-1">Resume payroll run</span>
+              <Button type="button" size="sm" className="mt-2">
+                Resume payroll run
               </Button>
             </div>
           )}
         </div>
         <div className="flex justify-center">
-          <Button variant="outline" onClick={onExit}>
-            <span className="px-1">Back to credits and tokens</span>
+          <Button type="button" variant="solid" shade="neutral" onClick={onExit}>
+            Back to credits and tokens
           </Button>
         </div>
       </ModalShell>
@@ -501,11 +500,11 @@ function ReviewModal({
         </div>
       </div>
       <div className="mt-4 flex justify-end gap-2">
-        <Button variant="outline" onClick={onClose}>
-          <span className="px-1">Back</span>
+        <Button type="button" variant="solid" shade="neutral" onClick={onClose}>
+          Back
         </Button>
-        <Button onClick={onConfirm}>
-          <span className="px-1">{breakdown.add === 0 ? 'Confirm purchase' : wire ? "I've sent the transfer" : 'Authorise debit'}</span>
+        <Button type="button" onClick={onConfirm}>
+          {breakdown.add === 0 ? 'Confirm purchase' : wire ? "I've sent the transfer" : 'Authorise debit'}
         </Button>
       </div>
     </ModalShell>

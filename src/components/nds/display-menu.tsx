@@ -8,7 +8,7 @@ import {
   SortAscending,
   SortDescending,
 } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -82,11 +82,19 @@ export function DisplayMenu({
       }}
     >
       <PopoverTrigger
-        render={<Button variant="secondary" aria-label="Display" title="Display" />}
+        render={
+          <Button
+            type="button"
+            variant="solid"
+            shade="neutral"
+            leftIcon={<SlidersHorizontal className="size-4" />}
+            aria-label="Display"
+            title="Display"
+          />
+        }
       >
-        <SlidersHorizontal />
         {/* label drops when the toolbar container narrows (employees page toolbar) */}
-        <span className="px-1 @max-3xl/toolbar:hidden">Display</span>
+        <span className="@max-3xl/toolbar:hidden">Display</span>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-[352px] gap-7 p-5">
         <p className="text-label-lg text-text-primary">Display options</p>
@@ -171,21 +179,25 @@ export function DisplayMenu({
 
         <div className="flex items-center gap-2 pt-1">
           <Button
-            variant="secondary"
+            type="button"
+            variant="solid"
+            shade="neutral"
             className="h-10 flex-1"
             onClick={() => {
               onApply(draft)
               setOpen(false)
             }}
           >
-            <span className="px-1">Apply</span>
+            Apply
           </Button>
           <Button
-            variant="ghost-destructive"
+            type="button"
+            variant="ghost"
+            shade="error"
             className="h-10 flex-1"
             onClick={() => setDraft(defaults)}
           >
-            <span className="px-1">Reset</span>
+            Reset
           </Button>
         </div>
       </PopoverContent>

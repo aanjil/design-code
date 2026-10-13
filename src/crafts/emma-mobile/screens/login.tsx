@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { ScanSmiley, Sparkle } from '@phosphor-icons/react'
 import type { LoginView } from '../types'
-import { DEMO_USER_NAME } from '../engine'
+import { DEMO_USER_NAME, PASSWORD_ENABLED } from '../engine'
 import { MobileScreen } from '@/components/nds-mobile'
 import { Banner } from '@/components/nds/feedback'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 
 /**
@@ -48,15 +48,17 @@ function BiometricLogin({ step }: { step: 'biometric-framing' | 'biometric-promp
           </>
         )}
       </div>
-      <div className="pb-10 text-center">
-        <button
-          type="button"
-          onClick={() => show('A2')}
-          className="text-label-sm text-white/60 underline-offset-4 hover:underline"
-        >
-          Use password instead
-        </button>
-      </div>
+      {PASSWORD_ENABLED && (
+        <div className="pb-10 text-center">
+          <button
+            type="button"
+            onClick={() => show('A2')}
+            className="text-label-sm text-white/60 underline-offset-4 hover:underline"
+          >
+            Use password instead
+          </button>
+        </div>
+      )}
     </MobileScreen>
   )
 }
@@ -97,8 +99,8 @@ function PasswordLogin({ error }: { error?: boolean }) {
             </Banner>
           )}
 
-          <Button size="lg" className="mt-2 h-12 rounded-xl" onClick={() => show('B1')}>
-            <span className="px-1">Log in</span>
+          <Button type="button" size="lg" width="full" className="mt-2 h-12 rounded-xl" onClick={() => show('B1')}>
+            Log in
           </Button>
           <button type="button" className="text-center text-label-xs text-brand-text">
             Forgot password?
@@ -130,6 +132,7 @@ function PasswordLogin({ error }: { error?: boolean }) {
 }
 
 export function LoginScreen({ view }: { view: LoginView }) {
-  if (view.step === 'password') return <PasswordLogin error={view.error} />
+  if (view.step === 'password' && PASSWORD_ENABLED) return <PasswordLogin error={view.error} />
+  if (view.step === 'password') return <BiometricLogin step="biometric-framing" />
   return <BiometricLogin step={view.step} />
 }

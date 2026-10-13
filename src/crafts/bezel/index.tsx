@@ -9,7 +9,7 @@ import {
   useExplorer,
 } from '@/components/playground/explorer'
 import { Director } from '@/components/playground/director'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { MockEngineProvider } from '@/mocks/engine'
 import { BEZEL_STATES, CATALOG_SCREEN_IDS, EXPLORER_CATALOG } from './catalog'
 import { LiveApp, ScreenFrame } from './app'
@@ -95,9 +95,13 @@ function BezelCanvas() {
       overlays={
         <ExplorerPanel
           extraActions={
-            <Button size="sm" onClick={playApp}>
-              <Play weight="fill" />
-              <span className="px-1">Play</span>
+            <Button
+              type="button"
+              size="sm"
+              leftIcon={<Play weight="fill" className="size-4" />}
+              onClick={playApp}
+            >
+              Play
             </Button>
           }
         />

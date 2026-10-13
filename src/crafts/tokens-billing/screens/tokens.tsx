@@ -22,8 +22,8 @@ import {
   usd,
 } from '../engine'
 import { Banner, Chip, EmptyRow, ModalShell, SettingsShell, StatCard, TableCard, Td, Th, settingsNavTarget } from '../ui'
-import { Button } from '@/components/ui/button'
-import { Switch } from '@/components/ui/switch'
+import { Button } from '@niural/components'
+import { Switch } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 
 /**
@@ -55,8 +55,8 @@ function TokenOverviewCard({ view }: { view: TokensView }) {
       <Banner tone="error" title="Couldn't load your balance">
         Your tokens are safe - we just couldn't reach the ledger. Nothing here is stale because nothing loaded.
         <div className="mt-2">
-          <Button size="sm" variant="outline">
-            <span className="px-1">Try again</span>
+          <Button type="button" size="sm" variant="solid" shade="neutral">
+            Try again
           </Button>
         </div>
       </Banner>
@@ -77,11 +77,11 @@ function TokenOverviewCard({ view }: { view: TokensView }) {
       sub={sub}
       actions={
         <>
-          <Button size="sm" variant="outline" onClick={() => show('A3')}>
-            <span className="px-1">See what used them</span>
+          <Button type="button" size="sm" variant="solid" shade="neutral" onClick={() => show('A3')}>
+            See what used them
           </Button>
-          <Button size="sm" onClick={() => show('D1')}>
-            <span className="px-1">Buy tokens</span>
+          <Button type="button" size="sm" onClick={() => show('D1')}>
+            Buy tokens
           </Button>
         </>
       }
@@ -148,8 +148,8 @@ function AutoReloadRow({ view }: { view: TokensView }) {
         <p className="text-label-sm text-text-primary">{cfg.head}</p>
         <p className="mt-0.5 text-paragraph-xs text-text-muted">{summary}</p>
       </div>
-      <Button size="sm" variant="outline" onClick={() => show('A2', 'ok')}>
-        <span className="px-1">Auto-reload settings</span>
+      <Button type="button" size="sm" variant="solid" shade="neutral" onClick={() => show('A2', 'ok')}>
+        Auto-reload settings
       </Button>
     </div>
   )
@@ -187,11 +187,11 @@ function BlockedCard({ view }: { view: TokensView }) {
           </p>
           <p className="mt-1.5 text-paragraph-xs text-text-error-base">{why}</p>
           <div className="mt-2.5 flex items-center gap-2">
-            <Button size="sm" onClick={() => show('D1')}>
-              <span className="px-1">Buy tokens</span>
+            <Button type="button" size="sm" onClick={() => show('D1')}>
+              Buy tokens
             </Button>
-            <Button size="sm" variant="outline">
-              <span className="px-1">Fund wallet</span>
+            <Button type="button" size="sm" variant="solid" shade="neutral">
+              Fund wallet
             </Button>
           </div>
           <p className="mt-2.5 text-paragraph-xs text-text-error-base">
@@ -209,8 +209,8 @@ function PurchasesLedger({ view }: { view: TokensView }) {
     <div className="mt-6">
       <div className="mb-2 flex items-baseline justify-between">
         <h3 className="text-label-md text-text-primary">Purchases and top-ups</h3>
-        <Button size="sm" variant="ghost">
-          <span className="px-1">Export</span>
+        <Button type="button" size="sm" variant="ghost" shade="neutral">
+          Export
         </Button>
       </div>
       <TableCard>
@@ -296,11 +296,11 @@ function NotificationPrefs() {
           </div>
           <div className="flex items-center justify-between gap-3">
             <p className="text-paragraph-xs text-text-primary">Token balance running low</p>
-            <Switch defaultChecked />
+            <Switch isChecked />
           </div>
           <div className="flex items-center justify-between gap-3">
             <p className="text-paragraph-xs text-text-primary">Niural added credit to your account</p>
-            <Switch defaultChecked />
+            <Switch isChecked />
           </div>
         </div>
         <div className="mt-3.5 rounded-lg bg-background-highlight p-3">
@@ -348,13 +348,13 @@ function AutoReloadModal({ view }: { view: TokensView }) {
       subtitle="Top up automatically so Emma never stops mid-task"
       onClose={() => show('A2', 'close')}
       footer={
-        <Button disabled={!!fieldError} onClick={() => show('A2', 'close')}>
-          <span className="px-1">Save changes</span>
+        <Button type="button" disabled={!!fieldError} onClick={() => show('A2', 'close')}>
+          Save changes
         </Button>
       }
     >
       <label className="mb-4 flex items-center gap-2">
-        <Switch defaultChecked={b.autoOn} />
+        <Switch isChecked={b.autoOn} />
         <span className="text-paragraph-sm text-text-primary">Auto-reload is {b.autoOn ? 'on' : 'off'}</span>
       </label>
       <p className="mb-1.5 text-label-xs text-text-primary">Funding sources, in order</p>
@@ -367,7 +367,7 @@ function AutoReloadModal({ view }: { view: TokensView }) {
               {on && <Chip tone="accent">{order === 0 ? '1st' : '2nd'}</Chip>}
               <span className="flex-1 text-paragraph-xs text-text-primary capitalize">{s} balance</span>
               <span className="text-caption-md text-text-muted">{s === 'credit' ? usd(b.credit) : usd(b.wallet)}</span>
-              <Switch defaultChecked={on} />
+              <Switch isChecked={on} />
             </div>
           )
         })}
@@ -444,8 +444,8 @@ export function TokensScreen({ view }: { view: TokensView }) {
         <Banner tone="info" title="You've used your free tokens" className="mb-4">
           Emma drafted 12 offer letters and reviewed 40 receipts on the house. Buy 250 tokens for $25.00 to keep going.
           <div className="mt-2 flex gap-2">
-            <Button size="sm" variant="outline" onClick={() => show('D1')}>
-              <span className="px-1">Buy tokens</span>
+            <Button type="button" size="sm" variant="solid" shade="neutral" onClick={() => show('D1')}>
+              Buy tokens
             </Button>
           </div>
         </Banner>

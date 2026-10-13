@@ -89,7 +89,7 @@ export const crafts: Array<CraftMeta> = [
     slug: 'emma-mobile',
     title: 'Emma Mobile - AI-native mobile flow explorer',
     description:
-      'First slice of the AI-native adaptive mobile experience (Emma): biometric-first login with password fallback, and the dynamic dashboard - predictive Action/Details/CTA cards, session summary, dashboard↔chat transition, the automatic fallback banner, and traditional mode. Same explorer/canvas pattern as the other crafts, rendered in real iPhone 16 Pro Max (440×956pt) device frames instead of desktop browser windows.',
+      'First slice of the AI-native adaptive mobile experience (Emma): biometric-first login, and the dynamic dashboard - predictive Action/Details/CTA cards, session summary, dashboard↔chat transition, the automatic fallback banner, and traditional mode. Same explorer/canvas pattern as the other crafts, rendered in real iPhone 16 Pro Max (440×956pt) device frames instead of desktop browser windows.',
     status: 'wip',
     tags: ['mobile', 'ai-native', 'emma', 'explorer', 'states'],
     to: '/crafts/emma-mobile',

@@ -32,7 +32,9 @@ import {
 } from '../ui'
 import { FieldLabel as ControlLabel, TextInput } from '@/components/nds/controls'
 import { SelectField } from '@/components/nds/select-field'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
+// Kept on design-code's Checkbox: it sits inside a <button> card and fe-pkg's
+// Radix Checkbox renders its own <button> (invalid nested buttons).
 import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
 
@@ -682,24 +684,25 @@ export function ScheduleConfigModal({
       footer={
         <div className="flex w-full items-center justify-between">
           {step > 1 ? (
-            <Button variant="secondary" onClick={() => setStep((s) => (s - 1) as ModalStep)}>
-              <span className="px-1">Back</span>
+            <Button type="button" variant="solid" shade="neutral" onClick={() => setStep((s) => (s - 1) as ModalStep)}>
+              Back
             </Button>
           ) : (
-            <Button variant="secondary" onClick={onClose}>
-              <span className="px-1">Cancel</span>
+            <Button type="button" variant="solid" shade="neutral" onClick={onClose}>
+              Cancel
             </Button>
           )}
           {step < 3 ? (
             <Button
+              type="button"
               disabled={(step === 1 && !canContinueFromStep1) || (step === 2 && !canContinueFromStep2)}
               onClick={() => setStep((s) => (s + 1) as ModalStep)}
             >
-              <span className="px-1">{step === 1 ? 'Continue to delivery setup' : 'Continue to review'}</span>
+              {step === 1 ? 'Continue to delivery setup' : 'Continue to review'}
             </Button>
           ) : (
-            <Button onClick={onSave}>
-              <span className="px-1">{editing ? 'Save changes' : 'Save schedule'}</span>
+            <Button type="button" onClick={onSave}>
+              {editing ? 'Save changes' : 'Save schedule'}
             </Button>
           )}
         </div>

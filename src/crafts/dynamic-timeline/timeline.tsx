@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { CheckCircle } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { TaskRows } from '@/components/nds/ai/agent-status'
 import type { TaskRowStatus } from '@/mocks/ai-components'
 import type { DraftState, ExpResolution, MayaResolution, SamResolution } from './types'
@@ -305,10 +305,10 @@ function ConfirmContent({
         <p className="mb-4 border-l-2 border-text-primary pl-3 text-paragraph-sm text-text-muted">{unresolvedNote(draft)}</p>
         <div className="flex flex-wrap items-center gap-3 border-t border-border-highlight pt-3.5">
           <Button type="button" disabled={impact.halted} onClick={onApprove}>
-            <span className="px-1">Approve this reading</span>
+            Approve this reading
           </Button>
-          <Button type="button" variant="outline" onClick={onChangeSomething}>
-            <span className="px-1">Change something</span>
+          <Button type="button" variant="solid" shade="neutral" onClick={onChangeSomething}>
+            Change something
           </Button>
           <span className="text-caption text-text-muted">Reversible for 2h before submission · final after that</span>
         </div>

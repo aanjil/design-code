@@ -22,7 +22,7 @@ import { AppBar } from '@/components/nds/app-bar'
 import { Sidebar } from '@/components/nds/sidebar'
 import { AppShell, MainLayout, PageBody, PageHeader, PageLayout } from '@/components/nds/layouts'
 import { SearchField, StatusPill } from '@/components/nds/controls'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Checkbox } from '@niural/components'
 import type { GrainProps } from '@/components/nds/grain/grain'
 import type { PinnedInitiative, ThreadTurn } from '@/components/nds/grain/thread'
 import { FloatingBezel, type BezelMode } from './floating-bezel'
@@ -305,6 +305,7 @@ export function EmployeesBezelScreen({
                     >
                       <td className="w-12 px-5 py-4">
                         <Checkbox
+                          size="md"
                           checked={selectedIds.has(employee.id)}
                           onCheckedChange={() => toggleRow(employee.id)}
                           aria-label={`Select ${employee.name}`}

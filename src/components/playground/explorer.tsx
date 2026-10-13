@@ -7,7 +7,7 @@ import {
 } from '@phosphor-icons/react'
 import { useCanvasPins } from './canvas-pins-context'
 import { useZenMode } from './canvas-craft'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Checkbox } from '@niural/components'
 import { cn } from '@/lib/utils'
 
 /**
@@ -315,6 +315,7 @@ function FlowsTab() {
                         className="flex shrink-0 items-center"
                       >
                         <Checkbox
+                          size="md"
                           checked={isDone}
                           onCheckedChange={() => toggleDone(screen.id)}
                           aria-label={`Mark ${screen.label} designed`}

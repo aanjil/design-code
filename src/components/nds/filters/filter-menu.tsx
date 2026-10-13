@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { FunnelSimple } from '@phosphor-icons/react'
 import type { FilterCondition, FilterFieldDef } from './types'
 import { FilterValuePanel } from './value-panel'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -32,18 +32,28 @@ export function FilterMenu({
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger
-        render={<Button variant="secondary" aria-label="Filter" title="Filter" />}
+        render={
+          <Button
+            type="button"
+            variant="solid"
+            shade="neutral"
+            leftIcon={<FunnelSimple className="size-4" />}
+            rightIcon={
+              conditions.length > 0 ? (
+                <span className="rounded-full bg-brand-muted px-1.5 text-caption-md text-brand-text">
+                  {conditions.length}
+                </span>
+              ) : undefined
+            }
+            aria-label="Filter"
+            title="Filter"
+          />
+        }
       >
-        <FunnelSimple />
         {/* label drops when the toolbar container narrows (employees page toolbar) */}
-        <span className="px-1 hover:cursor-pointer @max-3xl/toolbar:hidden">
+        <span className="hover:cursor-pointer @max-3xl/toolbar:hidden">
           Filter
         </span>
-        {conditions.length > 0 && (
-          <span className="rounded-full bg-brand-muted px-1.5 text-caption-md text-brand-text">
-            {conditions.length}
-          </span>
-        )}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[200px] ">
         {fields.map((field) => {

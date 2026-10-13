@@ -20,8 +20,7 @@ import { usePayment } from '../app'
 import { invoiceTotal } from '../engine'
 import { Money, StatusPill } from '../ui'
 import { SearchField } from '@/components/nds/controls'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Button, Checkbox } from '@niural/components'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -97,10 +96,9 @@ export function InvoicesScreen() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <Button variant="link">Bulk invoice history</Button>
-          <Button>
-            <Plus />
-            <span className="px-1">Upload bulk invoice</span>
+          <Button type="button" variant="ghost" shade="primary">Bulk invoice history</Button>
+          <Button type="button" leftIcon={<Plus className="size-4" />}>
+            Upload bulk invoice
           </Button>
         </div>
       </div>
@@ -150,6 +148,7 @@ export function InvoicesScreen() {
           <span className="flex justify-center text-text-muted"><CaretDoubleRight className="size-4" /></span>
           <span className="flex justify-center">
             <Checkbox
+              size="md"
               checked={allOn}
               onCheckedChange={(on) => set({ selected: on ? payable.map((r) => r.id) : [] })}
               aria-label="Select all payable invoices"
@@ -220,7 +219,7 @@ function Row({ inv, today, checked, onToggle, onPay }: { inv: Invoice; today: st
     >
       <span className="flex justify-center text-text-muted"><CaretRight className="size-4" /></span>
       <span className="flex justify-center">
-        <Checkbox checked={checked} disabled={!pending} onCheckedChange={onToggle} aria-label={`Select ${inv.name}`} />
+        <Checkbox size="md" checked={checked} disabled={!pending} onCheckedChange={onToggle} aria-label={`Select ${inv.name}`} />
       </span>
       <span className="px-3">
         <Money className="block text-mono-sm">{inv.dueDate}</Money>
@@ -273,13 +272,11 @@ function BulkBar({ count, onClear, onPay }: { count: number; onClear: () => void
         </button>
       </div>
       <div className="grid grid-cols-2 gap-3 p-3">
-        <Button variant="secondary" onClick={onPay} className="h-10">
-          <Receipt className="text-brand-text" />
-          <span className="px-1">Pay {count} {noun}</span>
+        <Button type="button" variant="solid" shade="neutral" width="full" leftIcon={<Receipt className="size-4 text-brand-text" />} onClick={onPay} className="h-10">
+          Pay {count} {noun}
         </Button>
-        <Button variant="ghost-destructive" disabled className="h-10 shadow-button-gray">
-          <Trash />
-          <span className="px-1">Delete {count} {noun}</span>
+        <Button type="button" variant="ghost" shade="error" width="full" leftIcon={<Trash className="size-4" />} disabled className="h-10 shadow-button-gray">
+          Delete {count} {noun}
         </Button>
       </div>
     </div>

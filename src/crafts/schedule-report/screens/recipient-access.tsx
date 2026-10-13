@@ -10,8 +10,7 @@ import {
   XCircle,
 } from '@phosphor-icons/react'
 import type { RecipientAccessView } from '../types'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
+import { Button, Input } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 
 /**
@@ -42,9 +41,9 @@ function EmailEntry({ reportName }: { reportName?: string }) {
       <p className="text-paragraph-xs text-text-muted">
         {reportName ?? 'A report'} is ready. Enter the email address this link was sent to.
       </p>
-      <Input type="email" placeholder="you@company.com" className="text-center" />
-      <Button className="w-full" onClick={() => show('D2', 'sent')}>
-        <span className="px-1">Continue</span>
+      <Input type="email" placeholder="you@company.com" inputClassName="text-center" />
+      <Button type="button" width="full" onClick={() => show('D2', 'sent')}>
+        Continue
       </Button>
     </Frame>
   )
@@ -92,8 +91,8 @@ function OtpStep({ view }: { view: RecipientAccessView }) {
           Incorrect code - {view.attemptsLeft} attempts remaining
         </p>
       )}
-      <Button className="w-full" onClick={() => show('D3', 'default')}>
-        <span className="px-1">Verify</span>
+      <Button type="button" width="full" onClick={() => show('D3', 'default')}>
+        Verify
       </Button>
       <button type="button" disabled className="flex items-center gap-1 text-caption-md text-text-muted">
         <ClockCountdown className="size-3.5" />
@@ -109,9 +108,8 @@ function DownloadReady({ reportName }: { reportName?: string }) {
       <CheckCircle weight="fill" className="size-6 text-text-success-base" />
       <p className="text-label-md">Your report is ready</p>
       <p className="text-paragraph-xs text-text-muted">{reportName ?? 'Report'} · generated Jul 15, 2026 · .xlsx</p>
-      <Button className="w-full">
-        <Download />
-        <span className="px-1">Download report</span>
+      <Button type="button" width="full" leftIcon={<Download className="size-4" />}>
+        Download report
       </Button>
       <p className="text-caption-md text-text-muted">This link stays active until it expires 7 days after generation.</p>
     </Frame>

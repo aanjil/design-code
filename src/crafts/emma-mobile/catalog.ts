@@ -8,6 +8,7 @@ import type {
   RegistrationFormView,
   SettingsView,
 } from './types'
+import { PASSWORD_ENABLED } from './engine'
 
 /**
  * Scenario catalog - same contract as multi-payroll's: every state is one
@@ -71,14 +72,18 @@ export const SCENARIOS: Array<GroupDef> = [
           },
         ],
       },
-      {
-        id: 'A2',
-        label: 'A2 Password login (fallback)',
-        states: [
-          { id: 'default', label: 'Default', make: () => login({ step: 'password' }) },
-          { id: 'error', label: 'Incorrect credentials', make: () => login({ step: 'password', error: true }) },
-        ],
-      },
+      ...(PASSWORD_ENABLED
+        ? [
+            {
+              id: 'A2',
+              label: 'A2 Password login (fallback)',
+              states: [
+                { id: 'default', label: 'Default', make: () => login({ step: 'password' }) },
+                { id: 'error', label: 'Incorrect credentials', make: () => login({ step: 'password', error: true }) },
+              ],
+            },
+          ]
+        : []),
     ],
   },
   {
@@ -120,7 +125,9 @@ export const SCENARIOS: Array<GroupDef> = [
         id: 'C1',
         label: 'C1 AI-native account creation',
         states: [
-          { id: 'password', label: 'Capturing password', make: () => onboardingChat({ step: 'password' }) },
+          ...(PASSWORD_ENABLED
+            ? [{ id: 'password', label: 'Capturing password', make: () => onboardingChat({ step: 'password' }) }]
+            : []),
           { id: 'name', label: 'Capturing name', make: () => onboardingChat({ step: 'name' }) },
           {
             id: 'biometric-offer',

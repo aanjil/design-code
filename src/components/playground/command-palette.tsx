@@ -4,13 +4,14 @@ import { statusDotClass } from './status-badge'
 import { crafts } from '@/crafts/registry'
 import {
   Command,
-  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command'
+} from '@niural/components'
+// fe-pkg has no CommandDialog; keep design-code's dialog shell around fe-pkg Command.
+import { CommandDialog } from '@/components/ui/command'
 import { cn } from '@/lib/utils'
 
 /** ⌘K craft search - shared by the top nav and the canvas dock. */
@@ -34,6 +35,7 @@ export function CraftCommandPalette({
               <CommandItem
                 key={e.slug}
                 value={`${e.title} ${e.tags.join(' ')}`}
+                className="justify-start gap-2"
                 onSelect={() => {
                   onOpenChange(false)
                   navigate({ to: e.to })
@@ -54,12 +56,13 @@ export function CraftCommandPalette({
           </CommandGroup>
           <CommandGroup heading="Pages">
             <CommandItem
+              className="justify-start gap-2"
               onSelect={() => {
                 onOpenChange(false)
                 navigate({ to: '/' })
               }}
             >
-              <SquaresFour />
+              <SquaresFour className="size-4" />
               All crafts
             </CommandItem>
           </CommandGroup>

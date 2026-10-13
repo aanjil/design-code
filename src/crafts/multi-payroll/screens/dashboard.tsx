@@ -29,8 +29,6 @@ import { ARCHIVED_SCHEDULE, SCHEDULES, scheduleFor } from '@/mocks/payroll'
 import { employees } from '@/mocks/employees'
 import { useExplorer } from '@/components/playground/explorer'
 import { PageBody, PageHeader } from '@/components/nds/layouts'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { cn } from '@/lib/utils'
 import {
   DropdownMenu,
@@ -39,6 +37,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
+import { Button, Checkbox, IconButton } from '@niural/components'
 
 /**
  * C group: schedules dashboard - cards, ⋯ menu, archive/delete modals,
@@ -123,7 +122,14 @@ function ScheduleCard({
           <FreqTag>{schedule.payDayRule}</FreqTag>
           <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger
-              render={<Button variant="ghost" size="icon-sm" className="text-text-muted" />}
+              render={
+                <IconButton
+                  variant="ghost"
+                  shade="neutral"
+                  size="small"
+                  className="text-text-muted"
+                />
+              }
               aria-label={`Actions for ${schedule.name}`}
             >
               <DotsThreeVertical weight="bold" className="size-4" />
@@ -226,9 +232,15 @@ function SuggestedScheduleCard({
       )}
       {onCustomize && (
         <div>
-          <Button variant="secondary" size="sm" onClick={onCustomize}>
-            <NotePencil />
-            <span className="px-1">Customize before creating</span>
+          <Button
+            type="button"
+            variant="solid"
+            shade="neutral"
+            size="sm"
+            onClick={onCustomize}
+            leftIcon={<NotePencil className="size-4" />}
+          >
+            Customize before creating
           </Button>
         </div>
       )}
@@ -254,15 +266,21 @@ function AiSuggestPanel() {
         title="Suggested pay schedules"
         actions={
           <>
-            <Button size="sm" onClick={() => show('C1', undefined, { acceptAiSuggestions: true })}>
-              <span className="px-1">Create all {suggestions.length}</span>
+            <Button
+              type="button"
+              size="sm"
+              onClick={() => show('C1', undefined, { acceptAiSuggestions: true })}
+            >
+              Create all {suggestions.length}
             </Button>
             <Button
+              type="button"
               variant="ghost"
+              shade="neutral"
               size="sm"
               onClick={() => show('A1', undefined, { empty: true, aiSuggest: false })}
             >
-              <span className="px-1">Start from scratch instead</span>
+              Start from scratch instead
             </Button>
           </>
         }
@@ -427,12 +445,16 @@ function CopilotPanel({
         </div>
         {stage === 'suggestions' && (
           <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border-highlight px-4 py-3">
-            <Button variant="ghost" size="sm" onClick={onClose}>
-              <span className="px-1">{canBulkCreate ? 'Not now' : 'Close'}</span>
+            <Button type="button" variant="ghost" shade="neutral" size="sm" onClick={onClose}>
+              {canBulkCreate ? 'Not now' : 'Close'}
             </Button>
             {canBulkCreate && (
-              <Button size="sm" onClick={() => show('C1', undefined, { acceptAiSuggestions: true })}>
-                <span className="px-1">Create all {suggestions.length}</span>
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => show('C1', undefined, { acceptAiSuggestions: true })}
+              >
+                Create all {suggestions.length}
               </Button>
             )}
           </div>
@@ -452,11 +474,9 @@ function ArchiveBlockedModal({ schedule, onClose }: { schedule?: PaySchedule; on
       onClose={onClose}
       footer={
         <>
-          <Button variant="secondary" onClick={onClose}>
-            <span className="px-1">Cancel</span>
-          </Button>
-          <Button onClick={() => show('C8', undefined, { scheduleId: schedule?.id })}>
-            <span className="px-1">Move employees</span>
+          <Button type="button" variant="solid" shade="neutral" onClick={onClose}>Cancel</Button>
+          <Button type="button" onClick={() => show('C8', undefined, { scheduleId: schedule?.id })}>
+            Move employees
           </Button>
         </>
       }
@@ -478,15 +498,15 @@ function ArchiveConfirmModal({ onClose }: { onClose: () => void }) {
       onClose={onClose}
       footer={
         <>
-          <Button variant="secondary" onClick={onClose}>
-            <span className="px-1">Cancel</span>
-          </Button>
+          <Button type="button" variant="solid" shade="neutral" onClick={onClose}>Cancel</Button>
           <Button
-            variant="destructive"
+            type="button"
+            variant="solid"
+            shade="error"
             disabled={!ack}
             onClick={() => show('C9', 'archived')}
           >
-            <span className="px-1">Archive schedule</span>
+            Archive schedule
           </Button>
         </>
       }
@@ -498,6 +518,7 @@ function ArchiveConfirmModal({ onClose }: { onClose: () => void }) {
         </Banner>
         <label className="flex cursor-pointer items-center gap-2.5 rounded-lg bg-background-highlight p-2.5">
           <Checkbox
+            size="md"
             checked={ack}
             onCheckedChange={(v) => setAck(v === true)}
             aria-label="Acknowledge archive"
@@ -519,12 +540,13 @@ function DeleteBlockedModal({ onClose }: { onClose: () => void }) {
       onClose={onClose}
       footer={
         <>
-          <Button variant="secondary" onClick={onClose}>
-            <span className="px-1">Cancel</span>
-          </Button>
-          <Button onClick={() => show('C6')}>
-            <Archive />
-            <span className="px-1">Archive instead</span>
+          <Button type="button" variant="solid" shade="neutral" onClick={onClose}>Cancel</Button>
+          <Button
+            type="button"
+            onClick={() => show('C6')}
+            leftIcon={<Archive className="size-4" />}
+          >
+            Archive instead
           </Button>
         </>
       }
@@ -545,12 +567,8 @@ function ReactivateModal({ onClose }: { onClose: () => void }) {
       onClose={onClose}
       footer={
         <>
-          <Button variant="secondary" onClick={onClose}>
-            <span className="px-1">Cancel</span>
-          </Button>
-          <Button onClick={() => show('C1', 'full')}>
-            <span className="px-1">Reactivate</span>
-          </Button>
+          <Button type="button" variant="solid" shade="neutral" onClick={onClose}>Cancel</Button>
+          <Button type="button" onClick={() => show('C1', 'full')}>Reactivate</Button>
         </>
       }
     >
@@ -597,9 +615,8 @@ export function DashboardScreen({ view }: { view: DashboardView }) {
         title="Payroll Schedule"
         subtitle={`${schedules.length} schedules · ${employees.length} employees · everyone is covered`}
         actions={
-          <Button onClick={() => show('B1')}>
-            <Plus />
-            <span className="px-1">New pay schedule</span>
+          <Button type="button" onClick={() => show('B1')} leftIcon={<Plus className="size-4" />}>
+            New pay schedule
           </Button>
         }
       />
@@ -616,16 +633,21 @@ export function DashboardScreen({ view }: { view: DashboardView }) {
                 for everyone - split later as you grow.
               </p>
               <div className="mt-3 flex items-center gap-2">
-                <Button onClick={() => show('A2')}>
-                  <Plus />
-                  <span className="px-1">Set up your first schedule</span>
+                <Button
+                  type="button"
+                  onClick={() => show('A2')}
+                  leftIcon={<Plus className="size-4" />}
+                >
+                  Set up your first schedule
                 </Button>
                 <Button
+                  type="button"
                   variant="ghost"
+                  shade="neutral"
                   onClick={() => show('A1', undefined, { empty: true, aiSuggest: true })}
+                  leftIcon={<Sparkle className="size-4 text-brand-primary" weight="fill" />}
                 >
-                  <Sparkle className="text-brand-primary" weight="fill" />
-                  <span className="px-1">See Emma's suggested setup</span>
+                  See Emma's suggested setup
                 </Button>
               </div>
             </div>
@@ -665,9 +687,15 @@ export function DashboardScreen({ view }: { view: DashboardView }) {
                   </FreqTag>
                 </div>
                 <div>
-                  <Button variant="secondary" size="sm" onClick={() => show('C9', 'reactivate')}>
-                    <ArrowCounterClockwise />
-                    <span className="px-1">Reactivate</span>
+                  <Button
+                    type="button"
+                    variant="solid"
+                    shade="neutral"
+                    size="sm"
+                    onClick={() => show('C9', 'reactivate')}
+                    leftIcon={<ArrowCounterClockwise className="size-4" />}
+                  >
+                    Reactivate
                   </Button>
                 </div>
               </div>

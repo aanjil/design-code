@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import { useAnnotations } from './annotations'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { cn } from '@/lib/utils'
 
 /**
@@ -114,11 +114,11 @@ export function PinMarker({
             className="min-h-16 w-full resize-none rounded-lg bg-background-highlight p-2 text-paragraph-xs text-text-primary outline-none placeholder:text-text-muted"
           />
           <div className="mt-1.5 flex items-center justify-between">
-            <Button variant="ghost-destructive" size="sm" onClick={onDelete}>
-              <span className="px-1">Delete</span>
+            <Button variant="ghost" shade="error" size="sm" type="button" onClick={onDelete}>
+              Delete
             </Button>
-            <Button size="sm" onClick={onToggle}>
-              <span className="px-1">Done</span>
+            <Button variant="solid" shade="primary" size="sm" type="button" onClick={onToggle}>
+              Done
             </Button>
           </div>
         </div>

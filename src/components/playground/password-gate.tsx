@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Button } from '@/components/ui/button'
 import {
+  Button,
   Card,
-  CardContent,
-  CardDescription,
+  CardBody,
+  CardCaption,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+  Input,
+  Label,
+} from '@niural/components'
 
 /**
  * Casual, client-side password gate for sharing a work-in-progress
@@ -102,37 +102,39 @@ export function PasswordGate({
     <div className="flex h-dvh w-dvw items-center justify-center bg-surface-0 p-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>{title}</CardTitle>
-          <CardDescription>
-            This preview is password-protected. Ask Anjil for access.
-          </CardDescription>
+          <CardTitle title={title} />
+          <CardCaption caption="This preview is password-protected. Ask Anjil for access." />
         </CardHeader>
-        <CardContent>
+        <CardBody>
           <form onSubmit={submit} className="flex flex-col gap-3">
             <div className="flex flex-col gap-1.5">
-              <Label htmlFor={`gate-password-${slug}`}>Password</Label>
+              <Label htmlFor={`gate-password-${slug}`} text="Password" />
               <Input
                 id={`gate-password-${slug}`}
                 type="password"
                 autoFocus
                 autoComplete="off"
                 value={value}
+                error={error ? "That password isn't right - try again." : undefined}
                 onChange={(e) => {
                   setValue(e.target.value)
                   setError(false)
                 }}
               />
-              {error && (
-                <p className="text-caption-md text-text-error-base">
-                  That password isn't right - try again.
-                </p>
-              )}
             </div>
-            <Button type="submit" disabled={!value || checking}>
-              {checking ? 'Checking...' : 'Unlock'}
+            <Button
+              type="submit"
+              variant="solid"
+              shade="primary"
+              width="full"
+              isLoading={checking}
+              loadingText="Checking..."
+              disabled={!value || checking}
+            >
+              Unlock
             </Button>
           </form>
-        </CardContent>
+        </CardBody>
       </Card>
     </div>
   )

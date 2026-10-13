@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Check, MagnifyingGlass } from '@phosphor-icons/react'
 import type { FilterFieldDef } from './types'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { cn } from '@/lib/utils'
 
 /**
@@ -86,14 +86,20 @@ export function FilterValuePanel({
 
       <div className="flex items-center gap-3 border-t border-border-highlight p-3">
         <Button
-          variant="ghost-destructive"
+          type="button"
+          variant="ghost"
+          shade="error"
           className="flex-1"
           onClick={onReset}
         >
-          <span className="px-1">Reset Filter</span>
+          Reset Filter
         </Button>
-        <Button className="flex-1" onClick={() => onApply([...selected])}>
-          <span className="px-1">Apply</span>
+        <Button
+          type="button"
+          className="flex-1"
+          onClick={() => onApply([...selected])}
+        >
+          Apply
         </Button>
       </div>
     </div>

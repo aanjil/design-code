@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Camera, CheckCircle, Paperclip, WarningCircle } from '@phosphor-icons/react'
 import type { DocumentCaptureView, OnboardingChatView, RegistrationFormView } from '../types'
-import { EXTRACTED_DOCUMENT_FIELDS, ONBOARDING_MESSAGES } from '../engine'
+import { EXTRACTED_DOCUMENT_FIELDS, ONBOARDING_MESSAGES, PASSWORD_ENABLED } from '../engine'
 import {
   MobileAppHeader,
   MobileChatBubble,
@@ -10,7 +10,7 @@ import {
   MobileStatusBar,
 } from '@/components/nds-mobile'
 import { Banner } from '@/components/nds/feedback'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 
 /**
@@ -48,11 +48,18 @@ function OnboardingChat({ view }: { view: OnboardingChatView }) {
       <div className="shrink-0 px-4 pt-1">
         {isOffer ? (
           <div className="flex gap-2 pb-4">
-            <Button variant="secondary" size="lg" className="h-12 flex-1 rounded-xl" onClick={() => show('B1')}>
-              <span className="px-1">Skip</span>
+            <Button
+              type="button"
+              variant="solid"
+              shade="neutral"
+              size="lg"
+              className="h-12 flex-1 rounded-xl"
+              onClick={() => show('B1')}
+            >
+              Skip
             </Button>
-            <Button size="lg" className="h-12 flex-1 rounded-xl" onClick={() => show('B1')}>
-              <span className="px-1">Turn on Face ID</span>
+            <Button type="button" size="lg" className="h-12 flex-1 rounded-xl" onClick={() => show('B1')}>
+              Turn on Face ID
             </Button>
           </div>
         ) : (
@@ -90,18 +97,27 @@ function DocumentCapture({ view }: { view: DocumentCaptureView }) {
             passport works.
           </MobileChatBubble>
           <div className="mt-auto flex flex-col gap-2 pb-6">
-            <Button size="lg" className="h-12 rounded-xl" onClick={() => show('C2', 'extracting')}>
-              <Camera weight="fill" className="size-[18px]" />
-              <span className="px-1">Take a photo</span>
-            </Button>
             <Button
-              variant="secondary"
+              type="button"
               size="lg"
+              width="full"
               className="h-12 rounded-xl"
+              leftIcon={<Camera weight="fill" className="size-[18px]" />}
               onClick={() => show('C2', 'extracting')}
             >
-              <Paperclip weight="bold" className="size-[18px]" />
-              <span className="px-1">Upload from library</span>
+              Take a photo
+            </Button>
+            <Button
+              type="button"
+              variant="solid"
+              shade="neutral"
+              size="lg"
+              width="full"
+              className="h-12 rounded-xl"
+              leftIcon={<Paperclip weight="bold" className="size-[18px]" />}
+              onClick={() => show('C2', 'extracting')}
+            >
+              Upload from library
             </Button>
           </div>
         </div>
@@ -138,8 +154,8 @@ function DocumentCapture({ view }: { view: DocumentCaptureView }) {
             </div>
           ))}
           <div className="mt-2 pb-6">
-            <Button size="lg" className="h-12 w-full rounded-xl" onClick={() => show('B1')}>
-              <span className="px-1">Looks good, continue</span>
+            <Button type="button" size="lg" width="full" className="h-12 rounded-xl" onClick={() => show('B1')}>
+              Looks good, continue
             </Button>
           </div>
         </div>
@@ -180,15 +196,17 @@ function RegistrationForm({ view }: { view: RegistrationFormView }) {
             className="h-11 rounded-xl bg-background-highlight px-3.5 text-paragraph-sm text-text-primary outline-none"
           />
         </div>
-        <div className="flex flex-col gap-1.5">
-          <label className="text-label-xs text-text-muted">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="h-11 rounded-xl bg-background-highlight px-3.5 text-paragraph-sm text-text-primary outline-none"
-          />
-        </div>
+        {PASSWORD_ENABLED && (
+          <div className="flex flex-col gap-1.5">
+            <label className="text-label-xs text-text-muted">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="h-11 rounded-xl bg-background-highlight px-3.5 text-paragraph-sm text-text-primary outline-none"
+            />
+          </div>
+        )}
 
         {view.error && (
           <Banner tone="error" title="That email is already registered">
@@ -196,10 +214,10 @@ function RegistrationForm({ view }: { view: RegistrationFormView }) {
           </Banner>
         )}
 
-        <Button size="lg" className="mt-2 h-12 rounded-xl" onClick={() => show('B1')}>
-          <span className="px-1">Create account</span>
+        <Button type="button" size="lg" width="full" className="mt-2 h-12 rounded-xl" onClick={() => show('B1')}>
+          Create account
         </Button>
-        <button type="button" onClick={() => show('A2')} className="text-center text-label-xs text-brand-text">
+        <button type="button" onClick={() => show(PASSWORD_ENABLED ? 'A2' : 'A1', PASSWORD_ENABLED ? undefined : 'framing')} className="text-center text-label-xs text-brand-text">
           Already have an account? Log in
         </button>
       </div>

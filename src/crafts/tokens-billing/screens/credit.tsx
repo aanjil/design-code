@@ -2,7 +2,7 @@ import { Gift, Info } from '@phosphor-icons/react'
 import type { CreditView } from '../types'
 import { LEDGERS, usd } from '../engine'
 import { Banner, EmptyRow, MiniStat, SettingsShell, StatCard, TableCard, Td, Th, settingsNavTarget } from '../ui'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 
 /**
@@ -47,8 +47,8 @@ export function CreditScreen({ view }: { view: CreditView }) {
         value={value}
         sub={sub}
         actions={
-          <Button size="sm" variant="outline">
-            <span className="px-1">How credit is used</span>
+          <Button type="button" size="sm" variant="solid" shade="neutral">
+            How credit is used
           </Button>
         }
       />
@@ -73,8 +73,8 @@ export function CreditScreen({ view }: { view: CreditView }) {
       <div className="mt-6">
         <div className="mb-2 flex items-baseline justify-between">
           <h3 className="text-label-md text-text-primary">Credit history</h3>
-          <Button size="sm" variant="ghost">
-            <span className="px-1">Export</span>
+          <Button type="button" size="sm" variant="ghost" shade="neutral">
+            Export
           </Button>
         </div>
         <TableCard>

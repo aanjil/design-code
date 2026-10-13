@@ -25,7 +25,7 @@ import {
   SelectCell,
   TextCell,
 } from '@/components/nds/editable-table'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 
 /**
  * "Create invoice" (Niural Pay) - FormLayout page hosting the editable
@@ -377,9 +377,13 @@ export function CreateInvoicePage({
                       </span>
                     </FieldLabel>
                     <div className="flex items-center gap-3 rounded-btn p-2 shadow-button-gray">
-                      <Button variant="secondary">
-                        <UploadSimple />
-                        <span className="px-1">Upload file</span>
+                      <Button
+                        type="button"
+                        variant="solid"
+                        shade="neutral"
+                        leftIcon={<UploadSimple className="size-4" />}
+                      >
+                        Upload file
                       </Button>
                       <span className="text-paragraph-xs text-text-muted">
                         or drop file to upload
@@ -437,15 +441,10 @@ export function CreateInvoicePage({
             </div>
           </PageBody>
           <PageFooter className="justify-between">
-            <Button
-              variant="outline"
-              className="text-text-error-base shadow-[0px_0px_0px_1px_var(--border-error-base)] hover:bg-background-error-highlight"
-            >
-              <span className="px-1">Cancel</span>
+            <Button type="button" variant="outline" shade="error">
+              Cancel
             </Button>
-            <Button>
-              <span className="px-1">Submit</span>
-            </Button>
+            <Button type="button">Submit</Button>
           </PageFooter>
         </PageLayout>
       </MainLayout>

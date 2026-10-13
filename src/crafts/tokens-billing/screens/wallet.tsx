@@ -1,7 +1,7 @@
 import { ArrowRight, Coin, CurrencyDollar } from '@phosphor-icons/react'
 import type { Balances } from '../types'
 import { usd } from '../engine'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { SettingsShell, settingsNavTarget } from '../ui'
 import { useExplorer } from '@/components/playground/explorer'
 
@@ -58,11 +58,11 @@ export function WalletScreen({ balances }: { balances: Balances }) {
       </div>
 
       <div className="mt-5 flex gap-2">
-        <Button size="sm" variant="outline" onClick={() => show('B1')}>
-          <span className="px-1">Credit</span>
+        <Button type="button" size="sm" variant="solid" shade="neutral" onClick={() => show('B1')}>
+          Credit
         </Button>
-        <Button size="sm" variant="outline" onClick={() => show('A1')}>
-          <span className="px-1">Tokens</span>
+        <Button type="button" size="sm" variant="solid" shade="neutral" onClick={() => show('A1')}>
+          Tokens
         </Button>
       </div>
     </SettingsShell>

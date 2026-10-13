@@ -8,8 +8,7 @@ import {
   WarningCircle,
 } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
-import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge, Tabs } from '@niural/components'
 import {
   loadingState,
   streamingAnswer,
@@ -98,6 +97,50 @@ function StatusIcon({ status }: { status: TaskRowStatus }) {
   )
 }
 
+// Mounted only while the trace is open, so the active tab resets to the first
+// one on every reopen (same as the old uncontrolled `defaultValue`).
+function ThinkingTabs({
+  tabs,
+  steps,
+}: {
+  tabs: ReadonlyArray<string>
+  steps: Array<ThinkingStep>
+}) {
+  const [tab, setTab] = useState(tabs[0] ?? '')
+
+  return (
+    <>
+      <Tabs
+        variant="segmented"
+        tabs={tabs.map((t) => ({ label: t, value: t }))}
+        value={tab}
+        onChange={setTab}
+      />
+      {tab === 'Steps' ? (
+        <ol className="mt-3 flex flex-col gap-2.5">
+          {steps.map((step) => (
+            <li key={step.label} className="flex items-center gap-2">
+              <span className="size-1.5 shrink-0 rounded-full bg-background-emphasis" />
+              <span className="flex-1 text-paragraph-xs text-text-primary">
+                {step.label}
+              </span>
+              {step.count && (
+                <Badge status="neutral" type="soft">
+                  {step.count}
+                </Badge>
+              )}
+            </li>
+          ))}
+        </ol>
+      ) : tab ? (
+        <p className="mt-3 text-paragraph-xs text-text-muted">
+          No {tab.toLowerCase()} trace recorded for this run.
+        </p>
+      ) : null}
+    </>
+  )
+}
+
 export function Thinking({
   durationSeconds = thinkingTrace.durationSeconds,
   steps = thinkingTrace.steps,
@@ -131,36 +174,7 @@ export function Thinking({
       </button>
       {open && (
         <div className="border-t border-border-highlight px-3 py-3">
-          <Tabs defaultValue={tabs[0]}>
-            <TabsList>
-              {tabs.map((tab) => (
-                <TabsTrigger key={tab} value={tab}>
-                  {tab}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-            {tabs.map((tab) => (
-              <TabsContent key={tab} value={tab}>
-                {tab === 'Steps' ? (
-                  <ol className="mt-3 flex flex-col gap-2.5">
-                    {steps.map((step) => (
-                      <li key={step.label} className="flex items-center gap-2">
-                        <span className="size-1.5 shrink-0 rounded-full bg-background-emphasis" />
-                        <span className="flex-1 text-paragraph-xs text-text-primary">
-                          {step.label}
-                        </span>
-                        {step.count && <Badge variant="secondary">{step.count}</Badge>}
-                      </li>
-                    ))}
-                  </ol>
-                ) : (
-                  <p className="mt-3 text-paragraph-xs text-text-muted">
-                    No {tab.toLowerCase()} trace recorded for this run.
-                  </p>
-                )}
-              </TabsContent>
-            ))}
-          </Tabs>
+          <ThinkingTabs tabs={tabs} steps={steps} />
         </div>
       )}
     </div>

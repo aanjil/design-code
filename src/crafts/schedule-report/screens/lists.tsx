@@ -19,7 +19,7 @@ import { FULL_WEEKDAYS, fmtHuman, frequencyLabel } from '../engine'
 import { ConfirmDialog, DeliveryChips, EmptyState, RecipientChip, RunStatusPill, ScheduleStatusBadge } from '../ui'
 import { ScheduleConfigModal } from './schedule-modal'
 import { PageBody, PageHeader } from '@/components/nds/layouts'
-import { Button } from '@/components/ui/button'
+import { Button, IconButton } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 import { cn } from '@/lib/utils'
 
@@ -142,19 +142,23 @@ function ScheduleDrawer({
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="secondary" size="sm" onClick={() => onAction('edit')}>
-            <NotePencil className="size-3.5" />
-            <span className="px-1">Edit</span>
+          <Button type="button" variant="solid" shade="neutral" size="sm" leftIcon={<NotePencil className="size-3.5" />} onClick={() => onAction('edit')}>
+            Edit
           </Button>
           {schedule.status !== 'completed' && (
-            <Button variant="secondary" size="sm" onClick={() => onAction(schedule.status === 'paused' ? 'resume' : 'pause')}>
-              {schedule.status === 'paused' ? <Play className="size-3.5" /> : <PauseCircle className="size-3.5" />}
-              <span className="px-1">{schedule.status === 'paused' ? 'Resume' : 'Pause'}</span>
+            <Button
+              type="button"
+              variant="solid"
+              shade="neutral"
+              size="sm"
+              leftIcon={schedule.status === 'paused' ? <Play className="size-3.5" /> : <PauseCircle className="size-3.5" />}
+              onClick={() => onAction(schedule.status === 'paused' ? 'resume' : 'pause')}
+            >
+              {schedule.status === 'paused' ? 'Resume' : 'Pause'}
             </Button>
           )}
-          <Button variant="ghost-destructive" size="sm" onClick={() => onAction('delete')}>
-            <Trash className="size-3.5" />
-            <span className="px-1">Delete</span>
+          <Button type="button" variant="ghost" shade="error" size="sm" leftIcon={<Trash className="size-3.5" />} onClick={() => onAction('delete')}>
+            Delete
           </Button>
         </div>
 
@@ -235,7 +239,7 @@ function ScheduledTable({
         icon={WarningCircle}
         title="Couldn't load schedules"
         body="Something went wrong loading your scheduled reports."
-        action={<Button variant="secondary" size="sm">Retry</Button>}
+        action={<Button type="button" variant="solid" shade="neutral" size="sm">Retry</Button>}
       />
     )
   }
@@ -246,7 +250,7 @@ function ScheduledTable({
         title="No scheduled reports yet"
         body="Open a report and choose Schedule to automate its next run."
         action={
-          <Button size="sm" onClick={() => show('A1', 'owner')}>
+          <Button type="button" size="sm" onClick={() => show('A1', 'owner')}>
             Browse reports
           </Button>
         }
@@ -358,13 +362,13 @@ function GeneratedTable({ rows }: { rows: Array<GeneratedRow> }) {
                       <DeliveryChips platform={r.delivery.platform} emailCount={r.delivery.emailCount} emailFailed={r.delivery.emailFailed} />
                       <RunStatusPill status={r.status} />
                       {r.status === 'failed' ? (
-                        <Button variant="ghost" size="icon-sm" aria-label="Retry">
+                        <IconButton variant="ghost" shade="neutral" size="small" aria-label="Retry">
                           <ArrowsClockwise className="size-4" />
-                        </Button>
+                        </IconButton>
                       ) : (
-                        <Button variant="ghost" size="icon-sm" aria-label="Download" disabled={r.status === 'in-progress'}>
+                        <IconButton variant="ghost" shade="neutral" size="small" aria-label="Download" disabled={r.status === 'in-progress'}>
                           <Download className="size-4" />
-                        </Button>
+                        </IconButton>
                       )}
                     </div>
                   )

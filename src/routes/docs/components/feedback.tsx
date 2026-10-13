@@ -2,7 +2,7 @@ import { createFileRoute } from '@tanstack/react-router'
 import { DocPage, DocSection, PropsTable, Specimen } from '@/docs/doc-kit'
 import { Banner, EmmaCard } from '@/components/nds/feedback'
 import { StatusPill } from '@/components/nds/controls'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { Kbd } from '@/components/playground/kbd'
 
 export const Route = createFileRoute('/docs/components/feedback')({
@@ -74,11 +74,11 @@ function FeedbackDoc() {
               title="Compliance"
               actions={
                 <>
-                  <Button size="sm">
-                    <span className="px-1">Switch to Semi-monthly</span>
+                  <Button variant="solid" shade="primary" size="sm" type="button">
+                    Switch to Semi-monthly
                   </Button>
-                  <Button variant="secondary" size="sm">
-                    <span className="px-1">Exclude CA hourly</span>
+                  <Button variant="solid" shade="neutral" size="sm" type="button">
+                    Exclude CA hourly
                   </Button>
                 </>
               }

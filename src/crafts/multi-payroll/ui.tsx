@@ -1,7 +1,7 @@
 import type { Icon } from '@phosphor-icons/react'
 import { CheckCircle, Warning, X } from '@phosphor-icons/react'
 import type { PaySchedule } from '@/mocks/payroll'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { cn } from '@/lib/utils'
 
 /**
@@ -123,8 +123,15 @@ export function GhostAction({
   onClick?: () => void
 }) {
   return (
-    <Button variant="ghost" size="sm" onClick={onClick} className="h-7 text-brand-text">
-      <span className="px-1">{label}</span>
+    <Button
+      type="button"
+      variant="ghost"
+      shade="neutral"
+      size="sm"
+      onClick={onClick}
+      className="text-brand-text"
+    >
+      {label}
     </Button>
   )
 }

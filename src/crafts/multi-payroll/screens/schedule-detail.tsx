@@ -51,8 +51,8 @@ import { PageBody, PageHeader } from '@/components/nds/layouts'
 import { FieldLabel } from '@/components/nds/controls'
 import { Stepper } from '@/components/nds/stepper'
 import { useExplorer } from '@/components/playground/explorer'
-import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
+import { Button } from '@niural/components'
 
 /**
  * C8 - one schedule's own page (metadata + real rule + real members),
@@ -401,17 +401,21 @@ function MoveFlowScreen({
                           />
                         )}
                         <Button
+                          type="button"
                           variant="ghost"
+                          shade="neutral"
                           size="sm"
-                          className="h-6 px-1.5 text-brand-text"
+                          className="h-6 px-0.5 text-brand-text"
                           onClick={() => setEditingRetro((v) => !v)}
                         >
                           {editingRetro ? 'Done' : 'Edit'}
                         </Button>
                         <Button
+                          type="button"
                           variant="ghost"
+                          shade="neutral"
                           size="sm"
-                          className="h-6 px-1.5 text-text-error-base"
+                          className="h-6 px-0.5 text-text-error-base"
                           onClick={() => setConfirmingSkip(true)}
                         >
                           Skip
@@ -427,9 +431,11 @@ function MoveFlowScreen({
                       <span className="flex items-center gap-2">
                         <span className="text-label-xs text-text-disabled">Skipped</span>
                         <Button
+                          type="button"
                           variant="ghost"
+                          shade="neutral"
                           size="sm"
-                          className="h-6 px-1.5 text-brand-text"
+                          className="h-6 px-0.5 text-brand-text"
                           onClick={() => setRetroSkipped(false)}
                         >
                           Undo
@@ -459,18 +465,25 @@ function MoveFlowScreen({
                     {fmtHuman(impact.gapEnd)} will not be paid.
                   </Banner>
                   <div className="mt-4 flex items-center justify-end gap-2">
-                    <Button variant="secondary" onClick={() => setConfirmingSkip(false)}>
-                      <span className="px-1">Cancel</span>
+                    <Button
+                      type="button"
+                      variant="solid"
+                      shade="neutral"
+                      onClick={() => setConfirmingSkip(false)}
+                    >
+                      Cancel
                     </Button>
                     <Button
-                      variant="destructive"
+                      type="button"
+                      variant="solid"
+                      shade="error"
                       onClick={() => {
                         setRetroSkipped(true)
                         setRetroOverride(null)
                         setConfirmingSkip(false)
                       }}
                     >
-                      <span className="px-1">Skip retro</span>
+                      Skip retro
                     </Button>
                   </div>
                 </div>
@@ -507,12 +520,18 @@ function MoveFlowScreen({
         )}
 
         <div className="mt-2 flex items-center justify-between">
-          <Button variant="secondary" onClick={goBack}>
-            <CaretLeft />
-            <span className="px-1">{current === 0 ? 'Cancel' : 'Back'}</span>
+          <Button
+            type="button"
+            variant="solid"
+            shade="neutral"
+            onClick={goBack}
+            leftIcon={<CaretLeft className="size-4" />}
+          >
+            {current === 0 ? 'Cancel' : 'Back'}
           </Button>
           {view.stage === 'date' && (
             <Button
+              type="button"
               disabled={validation.level === 'block'}
               onClick={() =>
                 show('D3', validation.level === 'ok' ? 'clean' : 'gap', {
@@ -523,23 +542,27 @@ function MoveFlowScreen({
                 })
               }
             >
-              <span className="px-1">Continue</span>
+              Continue
             </Button>
           )}
           {view.stage === 'review' && (
             <Button
+              type="button"
               onClick={() =>
                 show('D4', validation.level === 'pending' ? 'scheduled' : 'immediate', {
                   scheduleId: fromScheduleId,
                 })
               }
             >
-              <span className="px-1">Continue</span>
+              Continue
             </Button>
           )}
           {view.stage === 'confirm' && (
-            <Button onClick={() => show('C8', undefined, { scheduleId: fromScheduleId, completeMove: true })}>
-              <span className="px-1">{view.confirmMode === 'scheduled' ? 'Schedule move' : 'Confirm move'}</span>
+            <Button
+              type="button"
+              onClick={() => show('C8', undefined, { scheduleId: fromScheduleId, completeMove: true })}
+            >
+              {view.confirmMode === 'scheduled' ? 'Schedule move' : 'Confirm move'}
             </Button>
           )}
         </div>
@@ -587,13 +610,15 @@ function MemberRow({
       </td>
       <td className="px-4 py-3 text-right">
         <Button
+          type="button"
           variant="ghost"
+          shade="neutral"
           size="sm"
           className="text-brand-text"
           onClick={() => show('D2', 'valid', { employeeId: employee.id, from: schedule.frequency })}
+          leftIcon={<ArrowsLeftRight className="size-4" />}
         >
-          <ArrowsLeftRight />
-          <span className="px-1">Move</span>
+          Move
         </Button>
       </td>
     </tr>
@@ -625,18 +650,22 @@ export function ScheduleDetailScreen({ view }: { view: ScheduleDetailView }) {
           !schedule.isDefault ? (
             <>
               <Button
-                variant="secondary"
+                type="button"
+                variant="solid"
+                shade="neutral"
                 onClick={() => show('B2', undefined, { editScheduleId: schedule.id })}
+                leftIcon={<UsersThree className="size-4" />}
               >
-                <UsersThree />
-                <span className="px-1">Edit rule</span>
+                Edit rule
               </Button>
               <Button
-                variant="secondary"
+                type="button"
+                variant="solid"
+                shade="neutral"
                 onClick={() => show('B1', undefined, { editScheduleId: schedule.id })}
+                leftIcon={<NotePencil className="size-4" />}
               >
-                <NotePencil />
-                <span className="px-1">Edit details</span>
+                Edit details
               </Button>
             </>
           ) : undefined
@@ -649,11 +678,17 @@ export function ScheduleDetailScreen({ view }: { view: ScheduleDetailView }) {
             title="Rules changed - re-evaluate memberships?"
             actions={
               <>
-                <Button size="sm" onClick={() => show('H2', 'flagged')}>
-                  <span className="px-1">Re-evaluate {members.length} employees</span>
+                <Button type="button" size="sm" onClick={() => show('H2', 'flagged')}>
+                  Re-evaluate {members.length} employees
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => show('C8', undefined, { scheduleId: schedule.id })}>
-                  <span className="px-1">Later</span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  shade="neutral"
+                  size="sm"
+                  onClick={() => show('C8', undefined, { scheduleId: schedule.id })}
+                >
+                  Later
                 </Button>
               </>
             }
@@ -667,8 +702,12 @@ export function ScheduleDetailScreen({ view }: { view: ScheduleDetailView }) {
             tone="warning"
             title="Re-evaluation flagged 1 move"
             actions={
-              <Button size="sm" onClick={() => show('D3', 'gap', { scheduleId: schedule.id })}>
-                <span className="px-1">Review move</span>
+              <Button
+                type="button"
+                size="sm"
+                onClick={() => show('D3', 'gap', { scheduleId: schedule.id })}
+              >
+                Review move
               </Button>
             }
           >
@@ -681,11 +720,21 @@ export function ScheduleDetailScreen({ view }: { view: ScheduleDetailView }) {
             title="Work-location change"
             actions={
               <>
-                <Button size="sm" onClick={() => show('D2', 'valid', { scheduleId: schedule.id })}>
-                  <span className="px-1">Review move</span>
+                <Button
+                  type="button"
+                  size="sm"
+                  onClick={() => show('D2', 'valid', { scheduleId: schedule.id })}
+                >
+                  Review move
                 </Button>
-                <Button variant="ghost" size="sm" onClick={() => show('C8', undefined, { scheduleId: schedule.id })}>
-                  <span className="px-1">Dismiss</span>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  shade="neutral"
+                  size="sm"
+                  onClick={() => show('C8', undefined, { scheduleId: schedule.id })}
+                >
+                  Dismiss
                 </Button>
               </>
             }

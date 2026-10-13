@@ -14,8 +14,7 @@ import {
   X,
   XCircle,
 } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
+import { Button, Checkbox } from '@niural/components'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -291,11 +290,11 @@ export function ConfirmDialog({
           <p className="text-paragraph-xs text-text-muted">{body}</p>
         </div>
         <div className="flex items-center justify-center gap-2">
-          <Button variant="secondary" onClick={onCancel}>
-            <span className="px-1">Cancel</span>
+          <Button type="button" variant="solid" shade="neutral" onClick={onCancel}>
+            Cancel
           </Button>
-          <Button variant={tone === 'danger' ? 'destructive' : 'default'} onClick={onConfirm}>
-            <span className="px-1">{confirmLabel}</span>
+          <Button type="button" variant="solid" shade={tone === 'danger' ? 'error' : 'primary'} onClick={onConfirm}>
+            {confirmLabel}
           </Button>
         </div>
       </div>
@@ -376,8 +375,8 @@ export function SuccessDialog({
           <p className="mt-1 text-paragraph-xs text-text-muted">{body}</p>
         </div>
         <div className="flex w-full flex-col items-center gap-2">
-          <Button className="w-full" onClick={onPrimary}>
-            <span className="px-1">{primaryLabel}</span>
+          <Button type="button" width="full" onClick={onPrimary}>
+            {primaryLabel}
           </Button>
           <button
             type="button"
@@ -467,7 +466,7 @@ export function RecipientPicker({
               className="justify-between"
             >
               <span className="flex min-w-0 items-center gap-2">
-                <Checkbox checked={selectedEmails.includes(m.email)} onCheckedChange={() => {}} />
+                <Checkbox size="md" tabIndex={-1} className="pointer-events-none" checked={selectedEmails.includes(m.email)} onCheckedChange={() => {}} />
                 <span className="flex min-w-0 flex-col">
                   <span className="truncate text-label-xs text-text-primary">{m.name}</span>
                   <span className="truncate text-caption-md text-text-muted">{m.email}</span>

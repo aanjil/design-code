@@ -2,7 +2,7 @@ import { Bank, ClockCountdown, DownloadSimple, Wallet } from '@phosphor-icons/re
 import type { ReceiptView } from '../types'
 import { ACTIVE_SPLIT, BANK_ACCOUNTS, SPLIT_EMPLOYEE } from '@/mocks/split-pay'
 import { PageBody, PageHeader } from '@/components/nds/layouts'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 
 /**
  * E2 - paystub receipt (§5.2). Existing multi-account layout: two rows,
@@ -23,9 +23,8 @@ export function ReceiptScreen({ view }: { view: ReceiptView }) {
         title="Pay statement · Jul 2026"
         actions={
           view.pending ? undefined : (
-            <Button variant="secondary">
-              <DownloadSimple />
-              <span className="px-1">Download</span>
+            <Button variant="solid" shade="neutral" type="button" leftIcon={<DownloadSimple className="size-4" />}>
+              Download
             </Button>
           )
         }

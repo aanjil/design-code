@@ -1,5 +1,5 @@
 import { CheckCircle } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import type { IntakeFlowConfig, IntakeScenario } from '@/mocks/emma-intake'
 import type { CapturedFile } from './floating-copilot'
 import { PromptBarFloater } from './floating-copilot'
@@ -112,11 +112,11 @@ export function StagingPhase({
           className="flex-1"
         />
         <div className="ml-auto flex shrink-0 items-center gap-2 pr-1">
-          <Button variant="outline" size="sm" onClick={onCancel}>
-            <span className="px-1">Cancel</span>
+          <Button type="button" variant="solid" shade="neutral" size="sm" onClick={onCancel}>
+            Cancel
           </Button>
-          <Button size="sm" onClick={onConfirm}>
-            <span className="px-1">Confirm &amp; Create</span>
+          <Button type="button" size="sm" onClick={onConfirm}>
+            Confirm &amp; Create
           </Button>
         </div>
       </div>
@@ -137,8 +137,8 @@ export function ConfirmedPhase({
         <CheckCircle weight="fill" className="size-6 text-text-success-base" />
       </span>
       <p className="max-w-[420px] text-paragraph-sm text-text-primary">{summary}</p>
-      <Button variant="outline" size="sm" onClick={onStartOver}>
-        <span className="px-1">Start over</span>
+      <Button type="button" variant="solid" shade="neutral" size="sm" onClick={onStartOver}>
+        Start over
       </Button>
     </div>
   )

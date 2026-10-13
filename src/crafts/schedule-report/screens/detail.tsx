@@ -5,7 +5,7 @@ import { fmtHuman } from '../engine'
 import { ConfirmDialog, SuccessDialog } from '../ui'
 import { ScheduleConfigModal } from './schedule-modal'
 import { PageBody, PageHeader } from '@/components/nds/layouts'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 
 /**
@@ -43,27 +43,30 @@ export function DetailScreen({
         onBack={() => show('A1', 'owner')}
         actions={
           <>
-            <Button variant="secondary">
-              <span className="px-1">Adjust filter</span>
+            <Button type="button" variant="solid" shade="neutral">
+              Adjust filter
             </Button>
             <Button
-              variant="secondary"
+              type="button"
+              variant="solid"
+              shade="neutral"
               className="relative"
               disabled={!report.schedulable}
               title={!report.schedulable ? "Scheduling isn't available for this report type" : undefined}
               onClick={() => show('B1', 'default', { reportId: report.id })}
+              leftIcon={<CalendarBlank className="size-4" />}
+              rightIcon={
+                report.schedulable && (
+                  <span className="absolute -top-1.5 -right-1.5 rounded-full bg-brand-primary px-1.5 py-0.5 text-[9px] font-medium text-text-on-color">
+                    NEW
+                  </span>
+                )
+              }
             >
-              <CalendarBlank />
-              <span className="px-1">Schedule</span>
-              {report.schedulable && (
-                <span className="absolute -top-1.5 -right-1.5 rounded-full bg-brand-primary px-1.5 py-0.5 text-[9px] font-medium text-text-on-color">
-                  NEW
-                </span>
-              )}
+              Schedule
             </Button>
-            <Button>
-              <Play weight="fill" />
-              <span className="px-1">Generate report</span>
+            <Button type="button" leftIcon={<Play weight="fill" className="size-4" />}>
+              Generate report
             </Button>
           </>
         }

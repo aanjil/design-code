@@ -7,18 +7,18 @@ import {
 } from './annotations'
 import { Kbd } from './kbd'
 import { getCraft } from '@/crafts/registry'
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { ScrollArea } from '@/components/ui/scroll-area'
 import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from '@/components/ui/sheet'
-import { Switch } from '@/components/ui/switch'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
+  Button,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerRoot,
+  DrawerTitle,
+  Label,
+  ScrollArea,
+  Switch,
+  Tabs,
+} from '@niural/components'
 
 export interface CraftVariant {
   id: string
@@ -84,37 +84,46 @@ function FrameInner({
           <div className="flex items-center gap-1.5">
             <Switch
               id="annotations-switch"
-              checked={enabled}
-              onCheckedChange={setEnabled}
+              isChecked={enabled}
+              onChange={setEnabled}
             />
             <Label
               htmlFor="annotations-switch"
-              className="gap-1 text-label-xs text-text-muted"
-            >
-              Markers <Kbd>A</Kbd>
-            </Label>
+              labelType="label-xsmall"
+              textClassName="items-center text-text-muted"
+              text={
+                <>
+                  Markers <Kbd>A</Kbd>
+                </>
+              }
+            />
           </div>
-          <Button variant="outline" size="sm" onClick={() => setNotesOpen(true)}>
-            <NotePencil />
+          <Button
+            variant="solid"
+            shade="neutral"
+            size="sm"
+            type="button"
+            onClick={() => setNotesOpen(true)}
+            leftIcon={<NotePencil className="size-4" />}
+            rightIcon={
+              <span className="text-caption-md text-text-muted">
+                {entries.length}
+              </span>
+            }
+          >
             Notes
-            <span className="text-caption-md text-text-muted">
-              {entries.length}
-            </span>
           </Button>
         </div>
       </div>
 
       {variants && variants.length > 0 && (
         <div className="flex flex-wrap items-center gap-3">
-          <Tabs value={variantId} onValueChange={setVariantId}>
-            <TabsList>
-              {variants.map((v) => (
-                <TabsTrigger key={v.id} value={v.id}>
-                  {v.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
+          <Tabs
+            variant="segmented"
+            tabs={variants.map((v) => ({ label: v.label, value: v.id }))}
+            value={variantId}
+            onChange={setVariantId}
+          />
           {active?.note && (
             <p className="text-paragraph-xs text-text-muted">{active.note}</p>
           )}
@@ -140,15 +149,20 @@ export function NotesSheet({
   const { entries, focusNote } = useAnnotations()
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent side="right" className="w-[360px] sm:max-w-[360px]">
-        <SheetHeader>
-          <SheetTitle className="text-label-md">Design notes</SheetTitle>
-          <SheetDescription className="text-paragraph-xs">
+    <DrawerRoot open={open} onOpenChange={onOpenChange}>
+      <DrawerContent
+        side="right"
+        width="xss"
+        closeOnOverlayClick
+        className="w-[360px] md:w-[360px]"
+      >
+        <DrawerHeader className="pr-12">
+          <DrawerTitle className="text-label-md">Design notes</DrawerTitle>
+          <DrawerDescription className="text-paragraph-xs text-text-muted">
             Numbered markers on the canvas. Click a note to locate it. Press{' '}
             <Kbd>A</Kbd> to toggle markers.
-          </SheetDescription>
-        </SheetHeader>
+          </DrawerDescription>
+        </DrawerHeader>
         <ScrollArea className="min-h-0 flex-1 px-4 pb-4">
           {entries.length === 0 ? (
             <p className="text-paragraph-xs text-text-muted">
@@ -179,7 +193,7 @@ export function NotesSheet({
             </div>
           )}
         </ScrollArea>
-      </SheetContent>
-    </Sheet>
+      </DrawerContent>
+    </DrawerRoot>
   )
 }

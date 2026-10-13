@@ -3,7 +3,7 @@ import { Bank, Copy, Download, Info, Plus, Wallet as WalletIcon } from '@phospho
 import type { Balances, PaymentMethodsView } from '../types'
 import { WIRE_DETAILS, WIRE_REFERENCE } from '../engine'
 import { Chip, SettingsShell, settingsNavTarget } from '../ui'
-import { Button } from '@/components/ui/button'
+import { Button, IconButton } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 
 /**
@@ -30,9 +30,8 @@ export function PaymentMethodsScreen({ view, balances }: { view: PaymentMethodsV
       balances={{ tokens: balances.tokens, credit: balances.credit, wallet: balances.wallet }}
       onNavigate={(key) => show(settingsNavTarget(key) ?? 'B2')}
       actions={
-        <Button size="sm">
-          <Plus className="size-4" />
-          <span className="px-1">Add payment method</span>
+        <Button type="button" size="sm" leftIcon={<Plus className="size-4" />}>
+          Add payment method
         </Button>
       }
     >
@@ -65,9 +64,8 @@ export function PaymentMethodsScreen({ view, balances }: { view: PaymentMethodsV
           <p className="mt-5 mb-2.5 text-label-sm text-text-primary">Crypto</p>
           <div className="rounded-xl bg-background-base p-6 text-center shadow-card">
             <p className="text-paragraph-xs text-text-muted">Connect a crypto wallet to fund in USDC or USDT.</p>
-            <Button size="sm" variant="outline" className="mt-2.5">
-              <WalletIcon className="size-4" />
-              <span className="px-1">Connect wallet</span>
+            <Button type="button" size="sm" variant="solid" shade="neutral" className="mt-2.5" leftIcon={<WalletIcon className="size-4" />}>
+              Connect wallet
             </Button>
           </div>
         </div>
@@ -76,12 +74,12 @@ export function PaymentMethodsScreen({ view, balances }: { view: PaymentMethodsV
           <div className="mb-2.5 flex items-center justify-between">
             <p className="text-label-sm text-text-primary">Send a wire to Niural</p>
             <div className="flex gap-1">
-              <Button size="icon-sm" variant="ghost" aria-label="Copy details">
+              <IconButton size="small" variant="ghost" shade="neutral" aria-label="Copy details">
                 <Copy className="size-4" />
-              </Button>
-              <Button size="icon-sm" variant="ghost" aria-label="Download details">
+              </IconButton>
+              <IconButton size="small" variant="ghost" shade="neutral" aria-label="Download details">
                 <Download className="size-4" />
-              </Button>
+              </IconButton>
             </div>
           </div>
           <div className="rounded-xl bg-background-base p-4 shadow-card">

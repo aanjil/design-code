@@ -12,7 +12,7 @@ import {
   ExplorerProvider,
   useExplorer,
 } from '@/components/playground/explorer'
-import { Button } from '@/components/ui/button'
+import { Button, IconButton } from '@niural/components'
 
 /**
  * Scheduled Report Generation - flow & state explorer (PRD: Niural
@@ -111,23 +111,23 @@ function ScheduleReportCanvas() {
         <ExplorerPanel
           extraActions={
             <div className="flex items-center gap-1">
-              <Button
+              <IconButton
                 variant="ghost"
-                size="icon-sm"
+                shade="neutral"
+                size="small"
                 aria-label="Reset app data"
                 title="Reset app data - clears the live App back to empty"
                 onClick={() => liveStore.reset()}
               >
                 <ArrowCounterClockwise className="size-3.5" />
-              </Button>
+              </IconButton>
               {appPresenting && (
-                <Button variant="ghost" size="icon-sm" aria-label="Exit App preview" title="Exit fullscreen preview" onClick={exitApp}>
+                <IconButton variant="ghost" shade="neutral" size="small" aria-label="Exit App preview" title="Exit fullscreen preview" onClick={exitApp}>
                   <X className="size-3.5" />
-                </Button>
+                </IconButton>
               )}
-              <Button size="sm" onClick={playApp}>
-                <Play weight="fill" />
-                <span className="px-1">Play</span>
+              <Button type="button" size="sm" leftIcon={<Play weight="fill" className="size-4" />} onClick={playApp}>
+                Play
               </Button>
             </div>
           }

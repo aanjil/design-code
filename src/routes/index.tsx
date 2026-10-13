@@ -1,7 +1,7 @@
 import { Link, createFileRoute } from '@tanstack/react-router'
 import { ArrowUpRight, Rocket } from '@phosphor-icons/react'
 import { crafts } from '@/crafts/registry'
-import { Button } from '@/components/ui/button'
+import { Button, type ButtonProps } from '@niural/components'
 
 export const Route = createFileRoute('/')({
   component: Gallery,
@@ -37,9 +37,16 @@ function Gallery() {
             {crafts.length}{' '}
             {crafts.length === 1 ? 'craft' : 'crafts'}
           </p>
-          <Button render={<Link to="/app" />} nativeButton={false}>
-            <Rocket />
-            <span className="px-1">Run the app</span>
+          <Button
+            // fe-pkg's `as` is typed against its own React types and doesn't know
+            // the target's props, so cast Link and spread `to` past the excess-prop check.
+            as={Link as unknown as ButtonProps['as']}
+            {...{ to: '/app' }}
+            variant="solid"
+            shade="primary"
+            leftIcon={<Rocket className="size-4" />}
+          >
+            Run the app
           </Button>
         </div>
       </div>

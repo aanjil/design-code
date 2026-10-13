@@ -2,7 +2,7 @@ import { ClockCountdown, Signature } from '@phosphor-icons/react'
 import type { FcaView } from '../types'
 import { COOLING_OFF_ESTIMATE, FCA_CATEGORIZATION_QUESTIONS, FCA_RISK_QUESTIONS } from '@/mocks/split-pay'
 import { FlowShell, FormCard, OptionRow } from '../ui'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { useExplorer } from '@/components/playground/explorer'
 import { cn } from '@/lib/utils'
 
@@ -39,8 +39,8 @@ export function FcaScreen({ view }: { view: FcaView }) {
             </div>
           </FormCard>
           <div className="flex justify-end">
-            <Button onClick={() => show('C2', 'unscrolled')}>
-              <span className="px-1">Continue</span>
+            <Button variant="solid" shade="primary" type="button" onClick={() => show('C2', 'unscrolled')}>
+              Continue
             </Button>
           </div>
         </div>
@@ -84,8 +84,8 @@ export function FcaScreen({ view }: { view: FcaView }) {
             </div>
           </FormCard>
           <div className="flex justify-end">
-            <Button disabled={!scrolled} onClick={() => show('C3', 'questions')}>
-              <span className="px-1">Accept and sign</span>
+            <Button variant="solid" shade="primary" type="button" disabled={!scrolled} onClick={() => show('C3', 'questions')}>
+              Accept and sign
             </Button>
           </div>
         </div>
@@ -115,8 +115,8 @@ export function FcaScreen({ view }: { view: FcaView }) {
             </FormCard>
           ))}
           <div className="flex justify-end">
-            <Button onClick={() => (failed ? show('C3', 'questions') : show('C4', 'default'))}>
-              <span className="px-1">{failed ? 'Try again' : 'Submit answers'}</span>
+            <Button variant="solid" shade="primary" type="button" onClick={() => (failed ? show('C3', 'questions') : show('C4', 'default'))}>
+              {failed ? 'Try again' : 'Submit answers'}
             </Button>
           </div>
         </div>
@@ -139,8 +139,8 @@ export function FcaScreen({ view }: { view: FcaView }) {
             email you the moment it's done. Nothing needed from you.
           </p>
         </div>
-        <Button variant="secondary" onClick={() => show('A4', 'cooling-off')}>
-          <span className="px-1">Back to payment methods</span>
+        <Button variant="solid" shade="neutral" type="button" onClick={() => show('A4', 'cooling-off')}>
+          Back to payment methods
         </Button>
       </FormCard>
     </FlowShell>

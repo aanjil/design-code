@@ -7,8 +7,7 @@ import {
   Sparkle,
 } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Button } from '@/components/ui/button'
+import { IconButton, Tabs } from '@niural/components'
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -45,15 +44,14 @@ export function Chat({
 
   return (
     <div className={cn('flex flex-col rounded-xl bg-background-base shadow-card', className)}>
-      <Tabs value={tab} onValueChange={(v) => setTab(String(v))} className="px-3 pt-3">
-        <TabsList>
-          {tabs.map((t) => (
-            <TabsTrigger key={t} value={t}>
-              {t}
-            </TabsTrigger>
-          ))}
-        </TabsList>
-      </Tabs>
+      <div className="px-3 pt-3">
+        <Tabs
+          variant="segmented"
+          tabs={tabs.map((t) => ({ label: t, value: t }))}
+          value={tab}
+          onChange={setTab}
+        />
+      </div>
 
       <div className="flex flex-col gap-3 p-4">
         <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-background-muted px-3 py-2 text-paragraph-sm text-text-primary">
@@ -77,14 +75,15 @@ export function Chat({
           placeholder={placeholder}
           className="h-9 min-w-0 flex-1 rounded-btn bg-background-base px-3 text-paragraph-sm text-text-primary shadow-button-gray transition-shadow outline-none placeholder:text-text-muted focus:shadow-border-focus"
         />
-        <Button
+        <IconButton
           type="button"
-          size="icon"
+          size="default"
           aria-label="Send message"
+          iconClassName="text-inherit"
           disabled={!draft.trim()}
         >
           <PaperPlaneRight />
-        </Button>
+        </IconButton>
       </div>
     </div>
   )
@@ -167,14 +166,15 @@ export function PromptBar({
         >
           <Microphone className="size-4" />
         </button>
-        <Button
+        <IconButton
           type="button"
-          size="icon-sm"
+          size="small"
           aria-label="Send"
+          iconClassName="text-inherit"
           disabled={!value.trim()}
         >
           <PaperPlaneRight />
-        </Button>
+        </IconButton>
       </div>
     </div>
   )

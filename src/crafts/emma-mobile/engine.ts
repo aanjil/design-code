@@ -25,6 +25,11 @@ import type { ChatMessage, OnboardingStep } from './types'
 export const WORLD_TODAY = '2026-07-28'
 export const DEMO_USER_NAME = 'Jordan'
 
+/** Password logic is suppressed for now - hides A2 (password login), the
+ *  "Use password instead" escape, and the onboarding/registration password
+ *  capture. The screens stay in code; flip to true to bring them back. */
+export const PASSWORD_ENABLED = false
+
 export interface DashboardCardData {
   id: 'clock-in' | 'pay-stub' | 'pto-suggestion'
   icon: Icon
@@ -90,7 +95,24 @@ export const SEEDED_CHAT: Array<ChatMessage> = [
 /** Each step's transcript includes every prior message - PRD 3.1's "one
  *  field at a time" capture, replayed as a real growing conversation rather
  *  than 3 disconnected screenshots. */
-export const ONBOARDING_MESSAGES: Record<OnboardingStep, Array<ChatMessage>> = {
+const PASSWORDLESS_ONBOARDING_MESSAGES: Record<OnboardingStep, Array<ChatMessage>> = {
+  password: [],
+  name: [
+    { from: 'emma', text: "Let's create your Niural AI account." },
+    { from: 'emma', text: "Email: jordan@nexuscorp.com (from your employer). What's your full legal name?" },
+  ],
+  'biometric-offer': [
+    { from: 'emma', text: "Let's create your Niural AI account." },
+    { from: 'emma', text: "Email: jordan@nexuscorp.com (from your employer). What's your full legal name?" },
+    { from: 'user', text: 'Jordan Alexis Reyes' },
+    {
+      from: 'emma',
+      text: 'Your account is set up, Jordan. Want to turn on Face ID for faster logins next time?',
+    },
+  ],
+}
+
+const PASSWORD_ONBOARDING_MESSAGES: Record<OnboardingStep, Array<ChatMessage>> = {
   password: [
     { from: 'emma', text: "Let's create your Niural AI account - can you fill this in?" },
     { from: 'emma', text: 'Email: jordan@nexuscorp.com (from your employer). Set a password to continue.' },
@@ -113,6 +135,13 @@ export const ONBOARDING_MESSAGES: Record<OnboardingStep, Array<ChatMessage>> = {
     },
   ],
 }
+
+export const ONBOARDING_MESSAGES = PASSWORD_ENABLED
+  ? PASSWORD_ONBOARDING_MESSAGES
+  : PASSWORDLESS_ONBOARDING_MESSAGES
+
+/** Where onboarding chat starts - skips the password step when suppressed. */
+export const FIRST_ONBOARDING_STEP: OnboardingStep = PASSWORD_ENABLED ? 'password' : 'name'
 
 export interface ExtractedField {
   label: string

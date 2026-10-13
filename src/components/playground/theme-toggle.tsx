@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Desktop, Moon, Sun } from '@phosphor-icons/react'
-import { Button } from '@/components/ui/button'
+import { IconButton } from '@niural/components'
 
 export type ThemeMode = 'light' | 'dark' | 'auto'
 
@@ -83,14 +83,15 @@ export function ThemeToggle() {
   const label = `Theme: ${mode}. Click to cycle light → dark → auto.`
 
   return (
-    <Button
+    <IconButton
       variant="ghost"
-      size="icon-sm"
+      shade="neutral"
+      size="small"
       onClick={cycle}
       aria-label={label}
       title={label}
     >
-      <Icon />
-    </Button>
+      <Icon className="size-4" />
+    </IconButton>
   )
 }

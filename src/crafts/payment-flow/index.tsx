@@ -12,7 +12,7 @@ import {
   ExplorerProvider,
   useExplorer,
 } from '@/components/playground/explorer'
-import { Button } from '@/components/ui/button'
+import { Button, IconButton } from '@niural/components'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -188,17 +188,16 @@ function PaymentFlowCanvas() {
           extraActions={
             <div className="flex items-center gap-1">
               <ConfigSwitcher />
-              <Button variant="ghost" size="icon-sm" aria-label="Reset live data" title="Reset live App + Admin data" onClick={() => liveStore.reset(local)}>
+              <IconButton variant="ghost" shade="neutral" size="small" aria-label="Reset live data" title="Reset live App + Admin data" onClick={() => liveStore.reset(local)}>
                 <ArrowCounterClockwise className="size-3.5" />
-              </Button>
+              </IconButton>
               {presenting && (
-                <Button variant="ghost" size="icon-sm" aria-label="Exit App preview" onClick={() => setExitReq((p) => ({ nonce: (p?.nonce ?? 0) + 1 }))}>
+                <IconButton variant="ghost" shade="neutral" size="small" aria-label="Exit App preview" onClick={() => setExitReq((p) => ({ nonce: (p?.nonce ?? 0) + 1 }))}>
                   <X className="size-3.5" />
-                </Button>
+                </IconButton>
               )}
-              <Button size="sm" onClick={play}>
-                <Play weight="fill" />
-                <span className="px-1">Play</span>
+              <Button type="button" size="sm" leftIcon={<Play weight="fill" className="size-4" />} onClick={play}>
+                Play
               </Button>
             </div>
           }

@@ -1,22 +1,22 @@
 import { useState } from 'react'
 import { CaretUpDown, MagnifyingGlass, Plus, Sparkle } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
 import {
+  Button,
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
-} from '@/components/ui/command'
+} from '@niural/components'
 import { sidebarNav, searchPanel } from '@/mocks/ai-components'
 
 /**
  * Navigation & discovery: getting around the product itself, AI-flavored.
  * SidebarNav is a thin variant of nds/sidebar.tsx (same translucent panel,
  * hover/active language) with a workspace switcher + "New task" CTA on top
- * and badge counts per item instead of icons. Search reuses ui/command
+ * and badge counts per item instead of icons. Search reuses @niural/components Command
  * instead of a custom listbox - its empty state surfaces suggested agent
  * prompts rather than a blank box.
  */
@@ -103,9 +103,14 @@ export function SidebarNav({
           </span>
           <CaretUpDown className="size-4 shrink-0 text-text-muted" />
         </button>
-        <Button size="sm" className="w-full" onClick={onNewTask}>
-          <Plus className="size-4" />
-          <span className="px-1">New task</span>
+        <Button
+          type="button"
+          size="sm"
+          width="full"
+          leftIcon={<Plus className="size-4" />}
+          onClick={onNewTask}
+        >
+          New task
         </Button>
       </div>
       <nav className="flex flex-1 flex-col gap-8 overflow-y-auto p-4 pt-2">
@@ -152,6 +157,7 @@ export function Search({ className }: { className?: string }) {
               key={prompt}
               value={prompt}
               onSelect={() => setQuery(prompt)}
+              className="justify-start gap-2"
             >
               {trimmed ? (
                 <MagnifyingGlass className="size-4 text-text-muted" />

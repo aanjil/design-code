@@ -2,7 +2,7 @@ import { ArrowUp, ArrowsClockwise, ArrowsLeftRight, Bank, CurrencyCircleDollar, 
 import { usePayment } from '../app'
 import { CurrencyMark, Money, PrimaryTag, StatusPill, Tag } from '../ui'
 import { PageLayout } from '@/components/nds/layouts'
-import { Button } from '@/components/ui/button'
+import { Button } from '@niural/components'
 import { CCY_NAME, fmt, fmtDate } from '@/mocks/payment-flow'
 import type { LocalCcy } from '@/mocks/payment-flow'
 import { cn } from '@/lib/utils'
@@ -74,8 +74,8 @@ export function WalletScreen() {
                 <p className="text-paragraph-sm text-text-muted">Pending balance</p>
                 <Money className="text-mono-xl text-text-primary">{fmt(current.pending, current.ccy)}</Money>
               </div>
-              <Button className="ml-auto" onClick={() => openFund(current.ccy as 'USD' | LocalCcy)}>
-                <ArrowUp /><span className="px-1">Fund wallet</span>
+              <Button type="button" className="ml-auto" leftIcon={<ArrowUp className="size-4" />} onClick={() => openFund(current.ccy as 'USD' | LocalCcy)}>
+                Fund wallet
               </Button>
             </div>
           </div>
@@ -84,7 +84,7 @@ export function WalletScreen() {
             <div className="mt-3 flex flex-col gap-2">
               <div className="flex items-center justify-between gap-3 rounded-xl bg-background-base p-3 text-paragraph-sm shadow-card">
                 <span>Looking for your security deposits? They're stored separately and earn 1.5% cash rewards, paid monthly to this wallet.</span>
-                <Button variant="link" size="sm">View security deposits</Button>
+                <Button type="button" variant="ghost" shade="primary" size="sm">View security deposits</Button>
               </div>
               <p className="flex items-center gap-2 rounded-xl bg-background-base p-3 text-paragraph-sm text-text-primary shadow-card">
                 <Info className="size-4 text-text-muted" /> Heads up, funds in Niural wallet cannot be used for your local entity payrolls.
@@ -102,7 +102,7 @@ export function WalletScreen() {
               <p className="text-label-md text-text-primary">Recent transactions</p>
               <span className="flex items-center gap-1 text-label-xs text-text-info-base"><ArrowsClockwise className="size-3.5" />Refresh</span>
             </div>
-            <Button variant="link" size="sm">View all transactions</Button>
+            <Button type="button" variant="ghost" shade="primary" size="sm">View all transactions</Button>
           </div>
           <div className="overflow-hidden rounded-2xl bg-background-base shadow-card">
             <div className="grid grid-cols-[150px_1fr_150px_120px_150px_160px] items-center bg-background-highlight px-2 text-label-sm text-text-muted">
