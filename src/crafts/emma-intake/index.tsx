@@ -72,7 +72,7 @@ export function EmmaIntakeExperience({ config }: { config: IntakeFlowConfig }) {
 
   return (
     <div
-      className="relative h-full min-h-0 overflow-hidden bg-background-highlight/30"
+      className="relative h-full min-h-0 overflow-hidden bg-highlight/30"
       onDragEnter={(e) => {
         if (!canDrop) return
         e.preventDefault()

@@ -1,11 +1,13 @@
 /*
- * Design tokens come from niural-fe-pkg (@niural/components), linked locally.
- *  - fe-pkg's compiled stylesheet supplies every color/primitive variable
- *    (semantic vars live on .light / .dark - the theme script always sets one).
- *  - src/styles/fe-pkg-tokens.css maps design-code's utility names
- *    (bg-background-base, text-text-primary, text-label-sm, ...) onto fe-pkg values.
- * Tailwind's default color palette is disabled: if a color class doesn't exist,
- * use a token.
+ * niural-fe-pkg is the single design-token source.
+ *  - `@niural/components/styles.css` supplies every CSS variable (semantic vars
+ *    live on .light / .dark - the theme script always sets one).
+ *  - `@config` loads fe-pkg's Tailwind preset (tailwind.config.ts), so fe-pkg's
+ *    own class names work here: bg-base, text-muted, border-muted, bg-brand,
+ *    borders-focus, card, flyout, rounded-control, font-medium, ...
+ * Tailwind's default color palette is disabled - if a class doesn't exist,
+ * fe-pkg doesn't have that token. Reference a fe-pkg CSS variable directly
+ * (`bg-(--elevation-alpha-12)`) only when fe-pkg has the variable but no class.
  *
  * fe-pkg's CSS is Tailwind v3 output with no @layer. It's imported into its own
  * `nds` layer, between base and utilities: its element styles beat our base, and
@@ -17,116 +19,142 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "./styles/fe-pkg-tokens.css";
+@config "../tailwind.config.ts";
 
 @custom-variant dark (&:is(.dark *));
 
-@theme inline {
-  /* Kill Tailwind's default palette - NDS tokens only */
+@theme {
+  /* Kill Tailwind's default palette - fe-pkg's preset supplies every color. */
   --color-*: initial;
-  --color-white: var(--white);
-  --color-black: var(--black);
   --color-transparent: transparent;
+  --color-current: currentColor;
 
-  /* Foundation tokens → utilities (class suffix == token name from colors.md) */
-  --color-background-base: var(--background-base);
-  --color-background-muted: var(--background-muted);
-  --color-background-emphasis: var(--background-emphasis);
-  --color-background-disabled: var(--background-disabled);
-  --color-background-highlight: var(--background-highlight);
-  --color-background-item: var(--background-item);
-  --color-background-success-base: var(--background-success-base);
-  --color-background-success-emphasis: var(--background-success-emphasis);
-  --color-background-success-muted: var(--background-success-muted);
-  --color-background-success-muted-hover: var(--background-success-muted-hover);
-  --color-background-success-highlight: var(--background-success-highlight);
-  --color-background-warning-base: var(--background-warning-base);
-  --color-background-warning-emphasis: var(--background-warning-emphasis);
-  --color-background-warning-muted: var(--background-warning-muted);
-  --color-background-warning-muted-hover: var(--background-warning-muted-hover);
-  --color-background-warning-highlight: var(--background-warning-highlight);
-  --color-background-info-base: var(--background-info-base);
-  --color-background-info-emphasis: var(--background-info-emphasis);
-  --color-background-info-muted: var(--background-info-muted);
-  --color-background-info-muted-hover: var(--background-info-muted-hover);
-  --color-background-info-highlight: var(--background-info-highlight);
-  --color-background-error-base: var(--background-error-base);
-  --color-background-error-emphasis: var(--background-error-emphasis);
-  --color-background-error-muted: var(--background-error-muted);
-  --color-background-error-muted-hover: var(--background-error-muted-hover);
-  --color-background-error-highlight: var(--background-error-highlight);
+  /* fe-pkg defines --text-base as a COLOR; drop Tailwind's text-base font size
+     so the two never fight. */
+  --text-base: initial;
 
-  --color-text-primary: var(--text-primary);
-  --color-text-muted: var(--text-muted);
-  --color-text-disabled: var(--text-disabled);
-  --color-text-on-color: var(--text-on-color);
-  --color-text-success-base: var(--text-success-base);
-  --color-text-success-subtle: var(--text-success-subtle);
-  --color-text-warning-base: var(--text-warning-base);
-  --color-text-warning-subtle: var(--text-warning-subtle);
-  --color-text-info-base: var(--text-info-base);
-  --color-text-info-subtle: var(--text-info-subtle);
-  --color-text-error-base: var(--text-error-base);
-  --color-text-error-subtle: var(--text-error-subtle);
+  /* fe-pkg's preset `sans` is 'instrument-sans', which fe-pkg never loads -
+     its components render in Inter (fontFamily.body). Match what ships. */
+  --font-sans: "Inter", sans-serif;
+  /* No fe-pkg mono family - the one non-fe-pkg font. */
+  --font-mono: "Geist Mono", ui-monospace, "SF Mono", monospace;
 
-  --color-border-base: var(--border-base);
-  --color-border-muted: var(--border-muted);
-  --color-border-card: var(--border-card);
-  --color-border-highlight: var(--border-highlight);
-  --color-border-success-base: var(--border-success-base);
-  --color-border-success-muted: var(--border-success-muted);
-  --color-border-warning-base: var(--border-warning-base);
-  --color-border-warning-muted: var(--border-warning-muted);
-  --color-border-info-base: var(--border-info-base);
-  --color-border-info-muted: var(--border-info-muted);
-  --color-border-error-base: var(--border-error-base);
-  --color-border-error-muted: var(--border-error-muted);
+  /* Tailwind v3 radius steps, as fe-pkg compiles them (its preset keeps the
+     v3 defaults beside the named scale), so rounded-sm/md/lg/xl mean the same
+     on fe-pkg components and our markup. */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.375rem;
+  --radius-lg: 0.5rem;
+  --radius-xl: 0.75rem;
 
-  --color-grain-ink: var(--grain-ink);
-  --color-grain-ink-foreground: var(--grain-ink-foreground);
-  --color-grain-ink-muted: var(--grain-ink-muted);
+  /* Layout specials (playground spacing, not color/type tokens) */
+  --spacing-form-bottom: 196px; /* form page bottom scroll room */
+  --spacing-table-empty: 400px; /* fixed table empty-state height */
 
-  --color-brand-primary: var(--brand-primary);
-  --color-brand-emphasis: var(--brand-emphasis);
-  --color-brand-muted: var(--brand-muted);
-  --color-brand-base: var(--brand-base);
-  --color-brand-surface: var(--brand-surface);
-  --color-brand-text: var(--brand-text);
-  --color-brand-wallet-primary: var(--brand-wallet-primary);
-  --color-brand-wallet-secondary: var(--brand-wallet-secondary);
+  /* ---------- Type scale = fe-pkg <Text type="..."> (components/text/text.tsx textStyles) ----------
+     fe-pkg only ships these as a component; mirrored 1:1 as utilities so markup
+     can use them as classes: text-label-small == <Text type="label-small">.
+     Sizes/line-heights are the Tailwind v3 steps textStyles uses; weights and
+     tracking are the preset's fontWeight / letterSpacing.
+     TODO: upstream as preset utilities in niural-fe-pkg, then delete this block. */
+  --text-title-h1: 3.5rem; /* text-[3.5rem] */
+  --text-title-h1--letter-spacing: -0.04em; /* tracking-four */
+  --text-title-h1--font-weight: 520; /* font-heading */
+  --text-title-h2: 3rem; /* text-5xl */
+  --text-title-h2--line-height: 1;
+  --text-title-h2--letter-spacing: -0.04em;
+  --text-title-h2--font-weight: 520;
+  --text-title-h3: 2.25rem; /* text-4xl */
+  --text-title-h3--line-height: 2.5rem;
+  --text-title-h3--letter-spacing: -0.03em;
+  --text-title-h3--font-weight: 520;
+  --text-title-h4: 2rem; /* text-[2rem] */
+  --text-title-h4--letter-spacing: -0.02em;
+  --text-title-h4--font-weight: 520;
+  --text-title-h5: 1.5rem; /* text-2xl */
+  --text-title-h5--line-height: 2rem;
+  --text-title-h5--letter-spacing: -0.02em;
+  --text-title-h5--font-weight: 520;
 
-  --color-surface-0: var(--surface-0);
-  --color-surface-1: var(--surface-1);
-  --color-surface-2: var(--surface-2);
+  --text-label-xlarge: 1.25rem; /* text-xl */
+  --text-label-xlarge--line-height: 1.75rem;
+  --text-label-xlarge--letter-spacing: -0.03em; /* tracking-three */
+  --text-label-xlarge--font-weight: 560; /* font-medium */
+  --text-label-large: 1.125rem; /* text-lg */
+  --text-label-large--line-height: 1.75rem;
+  --text-label-large--letter-spacing: -0.03em;
+  --text-label-large--font-weight: 560;
+  --text-label-medium: 1rem; /* text-base (size) */
+  --text-label-medium--line-height: 1.5rem;
+  --text-label-medium--letter-spacing: -0.03em;
+  --text-label-medium--font-weight: 560;
+  --text-label-small: 0.875rem; /* text-sm */
+  --text-label-small--line-height: 1.25rem;
+  --text-label-small--letter-spacing: -0.03em;
+  --text-label-small--font-weight: 560;
+  --text-label-xsmall: 0.8125rem; /* text-[0.8125rem] */
+  --text-label-xsmall--letter-spacing: -0.03em;
+  --text-label-xsmall--font-weight: 560;
 
-  --color-elevation-alpha-0: var(--elevation-alpha-0);
-  --color-elevation-alpha-4: var(--elevation-alpha-4);
-  --color-elevation-alpha-8: var(--elevation-alpha-8);
-  --color-elevation-alpha-12: var(--elevation-alpha-12);
-  --color-elevation-alpha-16: var(--elevation-alpha-16);
-  --color-elevation-alpha-24: var(--elevation-alpha-24);
-  --color-elevation-alpha-60: var(--elevation-alpha-60);
-  --color-elevation-alpha-shadow: var(--elevation-alpha-shadow);
+  --text-paragraph-large: 1.125rem; /* text-lg */
+  --text-paragraph-large--line-height: 1.75rem;
+  --text-paragraph-large--letter-spacing: -0.02em; /* tracking-two */
+  --text-paragraph-large--font-weight: 450; /* font-normal */
+  --text-paragraph-medium: 1rem; /* text-base (size) */
+  --text-paragraph-medium--line-height: 1.5rem;
+  --text-paragraph-medium--letter-spacing: -0.02em;
+  --text-paragraph-medium--font-weight: 450;
+  --text-paragraph-small: 0.875rem; /* text-sm */
+  --text-paragraph-small--line-height: 1.25rem;
+  --text-paragraph-small--letter-spacing: -0.02em;
+  --text-paragraph-small--font-weight: 450;
+  --text-paragraph-xsmall: 0.8125rem; /* text-[0.8125rem] */
+  --text-paragraph-xsmall--letter-spacing: -0.02em;
+  --text-paragraph-xsmall--font-weight: 450;
 
-  --color-overlay-background-base: var(--overlay-background-base);
-  --color-overlay-border-base: var(--overlay-border-base);
+  --text-caption-sm: 0.75rem; /* text-xs */
+  --text-caption-sm--line-height: 1rem;
+  --text-caption-sm--letter-spacing: -0.02em;
+  --text-caption-xs: 0.625rem; /* text-[0.625rem] */
+  --text-caption-xs--letter-spacing: -0.02em;
 
-  --color-accent-orange-base: var(--accent-orange-base);
-  --color-accent-orange-muted: var(--accent-orange-muted);
-  --color-accent-orange-highlight: var(--accent-orange-highlight);
-  --color-accent-pink-base: var(--accent-pink-base);
-  --color-accent-pink-muted: var(--accent-pink-muted);
-  --color-accent-pink-highlight: var(--accent-pink-highlight);
-  --color-accent-teal-base: var(--accent-teal-base);
-  --color-accent-teal-muted: var(--accent-teal-muted);
-  --color-accent-teal-highlight: var(--accent-teal-highlight);
-  --color-accent-violet-base: var(--accent-violet-base);
-  --color-accent-violet-muted: var(--accent-violet-muted);
-  --color-accent-violet-highlight: var(--accent-violet-highlight);
+  /* Depth scale (generic Tailwind steps, no semantic meaning) */
+  --shadow-sm: 0px 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0px 2px 4px -2px rgba(0, 0, 0, 0.1), 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0px 4px 6px -4px rgba(0, 0, 0, 0.1), 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1);
+  --shadow-2xl: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-inner: 0px 2px 4px rgba(0, 0, 0, 0.05) inset;
+}
 
-  /* shadcn/ui semantic names (used inside src/components/ui - don't use in experiment code).
-     No --color-primary / --color-muted: fe-pkg ships text-primary, text-muted, bg-muted and
-     border-muted with its own meaning, and ours would override them. */
+/* ---------- shadcn/ui bridge (src/components/ui only) ----------
+   shadcn's semantic names point at fe-pkg variables. Craft code never uses
+   these - it uses fe-pkg classes. No --color-primary / --color-muted: fe-pkg
+   ships text-primary, text-muted, bg-muted with its own meaning. */
+:root,
+.light,
+.dark {
+  --background: var(--background-base);
+  --foreground: var(--text-base);
+  --card-foreground: var(--text-base);
+  --popover: var(--background-popover);
+  --popover-foreground: var(--text-base);
+  --primary: var(--brand-primary);
+  --primary-foreground: var(--text-on-color);
+  --secondary: var(--background-highlight);
+  --secondary-foreground: var(--text-base);
+  --muted-foreground: var(--text-muted);
+  --accent: var(--background-highlight);
+  --accent-foreground: var(--text-base);
+  --destructive: var(--background-error-emphasis);
+  --border: var(--border-default);
+  --input: var(--border-default);
+  --ring: var(--brand-primary);
+  --radius: 0.5625rem; /* fe-pkg radius `control` */
+}
+
+@theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   /* fe-pkg uses --card for a box-shadow, so point at the surface directly */
@@ -144,49 +172,6 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-
-}
-
-@theme {
-  /* fe-pkg defines --text-base as a COLOR; drop Tailwind's text-base font size
-     so the two never fight. Use text-paragraph-md instead. */
-  --text-base: initial;
-
-  /* Fonts, type scale, radii and named shadows live in styles/fe-pkg-tokens.css. */
-
-  /* Depth scale */
-  --shadow-sm: 0px 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow: 0px 1px 2px -1px rgba(0, 0, 0, 0.1), 0px 1px 3px rgba(0, 0, 0, 0.1);
-  --shadow-md: 0px 2px 4px -2px rgba(0, 0, 0, 0.1), 0px 4px 6px -1px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0px 4px 6px -4px rgba(0, 0, 0, 0.1), 0px 10px 15px -3px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0px 8px 10px -6px rgba(0, 0, 0, 0.1), 0px 20px 25px -5px rgba(0, 0, 0, 0.1);
-  --shadow-2xl: 0px 25px 50px -12px rgba(0, 0, 0, 0.25);
-  --shadow-inner: 0px 2px 4px rgba(0, 0, 0, 0.05) inset;
-
-  /* ---------- Spacing extras (spacing.md) ---------- */
-  --spacing-form-bottom: 196px; /* form page bottom scroll room */
-  --spacing-table-empty: 400px; /* fixed table empty-state height */
-}
-
-/* Button fills from the design system - gradients can't be @theme color tokens */
-@utility btn-gradient-primary {
-  background-image: var(--gradient-button-primary);
-}
-@utility btn-gradient-gray {
-  background-image: var(--gradient-button-gray);
 }
 
 @layer base {
@@ -200,7 +185,7 @@
   }
   body {
     /* Default = Paragraph/Small (14px), fe-pkg body weight */
-    @apply bg-background-base text-text-primary font-sans;
+    @apply bg-base text-primary font-sans;
     margin: 0;
     font-size: 14px;
     font-weight: 450;
@@ -232,7 +217,7 @@
 }
 
 /* Emma copilot "thinking" glow - a breathing ring outside the constant
-   shadow-ai glow, so the avatar visibly pulses while suggestions compute. */
+   elevation-ai glow, so the avatar visibly pulses while suggestions compute. */
 @keyframes emma-glow-pulse {
   0%,
   100% {
@@ -268,5 +253,124 @@
   background: radial-gradient(173.86% 156.95% at -18.92% -46.59%, rgba(188, 218, 244, 0.60) 28.38%, rgba(223, 212, 228, 0.60) 65.26%, rgba(242, 226, 214, 0.60) 100%), #FFF;
 }
 .dark .niural-surface {
-  background: var(--surface-0);
+  background: var(--surface-app);
 }
+/* Emma travelling between bar and column (crafts/bezel/master-bezel.tsx):
+   the named groups morph with the bezel's own easing; the rest of the page
+   holds still instead of cross-fading. */
+::view-transition-group(emma-bezel),
+::view-transition-group(emma-app) {
+  animation-duration: 460ms;
+  animation-timing-function: cubic-bezier(0.22, 1, 0.36, 1);
+}
+::view-transition-old(emma-bezel),
+::view-transition-new(emma-bezel) {
+  animation-duration: 280ms;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+}
+
+/* ---------- Bezel ambience (grain/shell.tsx variant="bezel") ----------
+   The Bezel claims territory with light, not chrome: a soft AI-gradient aura
+   breathes behind the bar and a gradient ring traces its edge. How present
+   both are follows what Emma is doing (data-aura). All colour is fe-pkg's
+   gradient / status vars; reduced motion keeps the light, drops the motion. */
+@property --bezel-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+.bezel-aura {
+  --aura: 0.07;
+  --aura-speed: 6s;
+  position: absolute;
+  /* bottom stays inside the bar's 14px gap - an aura must never make the page scroll */
+  inset: -6px -14px -6px;
+  z-index: -1;
+  border-radius: 999px;
+  background: var(--niural-ai-colors-gradient);
+  filter: blur(16px);
+  opacity: var(--aura);
+  pointer-events: none;
+  animation: bezel-breathe var(--aura-speed) ease-in-out infinite;
+  transition: opacity 0.5s ease, background 0.5s ease;
+}
+.bezel-aura[data-aura="attention"] { --aura: 0.16; --aura-speed: 3.6s; }
+.bezel-aura[data-aura="focus"] { --aura: 0.11; --aura-speed: 5s; }
+.bezel-aura[data-aura="scanning"] { --aura: 0.14; --aura-speed: 1.8s; }
+.bezel-aura[data-aura="working"] { --aura: 0.24; --aura-speed: 2.2s; }
+/* Tension is low confidence, not success: a warm glow, no brand hue. */
+.bezel-aura[data-aura="tension"] {
+  --aura: 0.2;
+  --aura-speed: 3s;
+  background: radial-gradient(closest-side, var(--background-warning-emphasis), transparent);
+}
+
+@keyframes bezel-breathe {
+  0%, 100% { transform: scale(0.97); opacity: var(--aura); }
+  50% { transform: scale(1.02); opacity: calc(var(--aura) * 1.25); }
+}
+
+/* The gradient ring: a 1px border cut out of a gradient fill. */
+.bezel-ring {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--niural-ai-colors-gradient);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  opacity: 0.45;
+  pointer-events: none;
+  transition: opacity 0.4s ease;
+}
+.bezel-ring[data-aura="attention"],
+.bezel-ring[data-aura="focus"] { opacity: 0.9; }
+.bezel-ring[data-aura="tension"] {
+  background: var(--border-warning-base);
+  opacity: 0.8;
+}
+/* Scanning: light travels round the edge - process, not a claim. */
+.bezel-ring[data-aura="scanning"] {
+  opacity: 1;
+  background: conic-gradient(from var(--bezel-angle), transparent 0deg, var(--brand-primary) 70deg, var(--accent-pink-base) 130deg, transparent 200deg);
+  animation: bezel-sweep 1.6s linear infinite;
+}
+@keyframes bezel-sweep { to { --bezel-angle: 360deg; } }
+
+/* Run in flight: the full fill, with a slow sheen passing over it. */
+.bezel-fill {
+  background-image: linear-gradient(110deg, transparent 30%, color-mix(in srgb, var(--white) 22%, transparent) 45%, transparent 60%), var(--niural-ai-colors-gradient);
+  background-size: 250% 100%, 100% 100%;
+  animation: bezel-sheen 3.2s ease-in-out infinite;
+}
+@keyframes bezel-sheen {
+  0% { background-position: 120% 0, 0 0; }
+  60%, 100% { background-position: -120% 0, 0 0; }
+}
+
+/* Arrival: the bar rises into place instead of popping. */
+.bezel-enter { animation: bezel-rise 0.55s cubic-bezier(0.22, 1, 0.36, 1) both; }
+@keyframes bezel-rise {
+  from { opacity: 0; transform: translateY(14px) scale(0.97); filter: blur(4px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+/* Pill <-> bar: the row's content trades places as the surface reshapes -
+   it waits a beat for the width to start moving, then resolves from a blur. */
+.bezel-swap { animation: bezel-swap 0.42s cubic-bezier(0.22, 1, 0.36, 1) 0.08s both; }
+@keyframes bezel-swap {
+  from { opacity: 0; transform: translateX(-6px); filter: blur(3px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bezel-aura, .bezel-ring, .bezel-fill, .bezel-enter, .bezel-swap { animation: none; }
+}
+/* The chat head's orb: a round aura hugging the 56px head. */
+.bezel-aura.bezel-aura-orb { inset: -6px; filter: blur(10px); }

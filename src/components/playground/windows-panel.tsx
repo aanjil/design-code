@@ -26,8 +26,8 @@ export function WindowsPanel({
   onRemoveNote: (id: string) => void
 }) {
   return (
-    <div className="max-h-[min(480px,calc(100vh-160px))] w-60 overflow-y-auto rounded-2xl bg-background-base/90 p-1.5 shadow-border-base backdrop-blur">
-      <p className="px-1.5 pt-1 pb-1.5 text-caption-md text-text-muted">
+    <div className="max-h-[min(480px,calc(100vh-160px))] w-60 overflow-y-auto rounded-2xl bg-base/90 p-1.5 borders-base backdrop-blur">
+      <p className="px-1.5 pt-1 pb-1.5 text-caption-sm font-medium text-muted">
         Windows
       </p>
       <div className="flex flex-col gap-0.5">
@@ -37,11 +37,11 @@ export function WindowsPanel({
             type="button"
             onClick={() => onJump(w.id)}
             className={cn(
-              'flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-label-xs text-text-primary transition-colors hover:bg-background-highlight',
-              focusedId === w.id && 'bg-background-highlight',
+              'flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-label-xsmall text-primary transition-colors hover:bg-highlight',
+              focusedId === w.id && 'bg-highlight',
             )}
           >
-            <AppWindow className="size-4 shrink-0 text-text-muted" />
+            <AppWindow className="size-4 shrink-0 text-muted" />
             <span className="min-w-0 flex-1 truncate">{w.title}</span>
           </button>
         ))}
@@ -49,27 +49,27 @@ export function WindowsPanel({
 
       {notes.length > 0 && (
         <>
-          <p className="px-1.5 pt-2.5 pb-1.5 text-caption-md text-text-muted">
+          <p className="px-1.5 pt-2.5 pb-1.5 text-caption-sm font-medium text-muted">
             Notes
           </p>
           <div className="flex flex-col gap-0.5">
             {notes.map((note) => (
               <div
                 key={note.id}
-                className="group flex w-full items-start gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-background-highlight"
+                className="group flex w-full items-start gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-highlight"
               >
                 <button
                   type="button"
                   onClick={() => onJumpToNote(note.id)}
                   className="flex min-w-0 flex-1 items-start gap-2 text-left"
                 >
-                  <span className="mt-px flex size-4 shrink-0 items-center justify-center rounded-full bg-brand-primary text-caption-md text-text-on-color">
+                  <span className="mt-px flex size-4 shrink-0 items-center justify-center rounded-full bg-brand text-caption-sm font-medium text-on-color">
                     {note.n}
                   </span>
                   <span
                     className={cn(
-                      'min-w-0 flex-1 truncate text-paragraph-xs',
-                      note.text.trim() ? 'text-text-primary' : 'text-text-muted',
+                      'min-w-0 flex-1 truncate text-paragraph-xsmall',
+                      note.text.trim() ? 'text-primary' : 'text-muted',
                     )}
                   >
                     {note.text.trim() || 'Empty note'}
@@ -79,7 +79,7 @@ export function WindowsPanel({
                   type="button"
                   aria-label={`Delete note ${note.n}`}
                   onClick={() => onRemoveNote(note.id)}
-                  className="flex size-5 shrink-0 items-center justify-center rounded-md text-text-muted opacity-0 transition-opacity group-hover:opacity-100 hover:bg-background-error-highlight hover:text-text-error-base"
+                  className="flex size-5 shrink-0 items-center justify-center rounded-md text-muted opacity-0 transition-opacity group-hover:opacity-100 hover:bg-error-highlight hover:text-error"
                 >
                   <X className="size-3.5" />
                 </button>
@@ -91,7 +91,7 @@ export function WindowsPanel({
 
       {snapshots.length > 0 && (
         <>
-          <p className="px-1.5 pt-2.5 pb-1.5 text-caption-md text-text-muted">
+          <p className="px-1.5 pt-2.5 pb-1.5 text-caption-sm font-medium text-muted">
             Snapshots
           </p>
           <div className="flex flex-col gap-0.5">
@@ -99,23 +99,23 @@ export function WindowsPanel({
               <div
                 key={s.id}
                 className={cn(
-                  'group flex w-full items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-background-highlight',
-                  focusedId === s.id && 'bg-background-highlight',
+                  'group flex w-full items-center gap-2 rounded-lg px-2 py-1 transition-colors hover:bg-highlight',
+                  focusedId === s.id && 'bg-highlight',
                 )}
               >
                 <button
                   type="button"
                   onClick={() => onJump(s.id)}
-                  className="flex min-w-0 flex-1 items-center gap-2 text-left text-label-xs text-text-primary"
+                  className="flex min-w-0 flex-1 items-center gap-2 text-left text-label-xsmall text-primary"
                 >
-                  <Camera className="size-4 shrink-0 text-brand-text" />
+                  <Camera className="size-4 shrink-0 text-brand" />
                   <span className="min-w-0 flex-1 truncate">{s.title}</span>
                 </button>
                 <button
                   type="button"
                   aria-label={`Remove ${s.title}`}
                   onClick={() => onRemoveSnapshot(s.id)}
-                  className="flex size-5 shrink-0 items-center justify-center rounded-md text-text-muted opacity-0 transition-opacity group-hover:opacity-100 hover:bg-background-error-highlight hover:text-text-error-base"
+                  className="flex size-5 shrink-0 items-center justify-center rounded-md text-muted opacity-0 transition-opacity group-hover:opacity-100 hover:bg-error-highlight hover:text-error"
                 >
                   <X className="size-3.5" />
                 </button>

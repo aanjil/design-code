@@ -1,6 +1,6 @@
 import { createContext, useContext, useSyncExternalStore } from 'react'
-import { makeReference, round2 } from './engine'
-import type { MethodOption, Quote } from './engine'
+import { fmtRate, makeReference, round2 } from './engine'
+import type { CreditSettings, MethodOption, Quote } from './engine'
 import {
   EMPLOYER,
   OTHER_FUNDING_REQUESTS,
@@ -30,6 +30,53 @@ import type {
  * for its scenario, so states never leak between frames.
  */
 
+/**
+ * Prototype switches (dock → Experiments). Credits and the right-side
+ * payment summary are experiments: either can be turned off to compare
+ * against today's flow. The rest answer open questions live.
+ */
+export interface Flags {
+  /** Experiment: credits on the payment screen (P4-P6). */
+  credits: boolean
+  /** Open: USD credit pays local fees (converted) - off = USD invoices only. */
+  creditCrossCcy: boolean
+  /** Open: credit starts applied. Off by default until PM confirms. */
+  creditDefaultOn: boolean
+  /** Experiment: payment summary breakdown card in the right column. */
+  summaryPanel: boolean
+  /** P2 on hold: Pay by bank transfer (v1.1) for local invoices. */
+  localTransfer: boolean
+  /** P6: the next Confirm fails atomically (one shot). */
+  failNextPayment: boolean
+}
+
+export const DEFAULT_FLAGS: Flags = {
+  credits: true,
+  creditCrossCcy: true,
+  creditDefaultOn: false,
+  summaryPanel: true,
+  localTransfer: false,
+  failNextPayment: false,
+}
+
+export const DEFAULT_CREDIT: CreditSettings = { balance: 2_000, expiresOn: null }
+export const CREDIT_EXPIRY = '2026-12-31'
+
+/** Append-only credit ledger (Credits PRD P0-1, P0-5, P0-8). */
+export interface CreditEntry {
+  id: string
+  type: 'grant' | 'system-usage' | 'admin-deduct' | 'restore'
+  /** Signed USD. */
+  amount: number
+  /** Resulting balance. */
+  balance: number
+  note: string
+  invoiceRef?: string
+  target?: 'Niural fee'
+  rate?: string
+  at: string
+}
+
 export interface FlowData {
   local: EmployerLocal
   /** Time machine date - drives overdue days, timestamps, settlement. */
@@ -40,28 +87,39 @@ export interface FlowData {
   txs: Array<WalletTx>
   requests: Array<FundingRequest>
   seq: number
+  flags: Flags
+  credit: CreditSettings
+  creditLedger: Array<CreditEntry>
 }
 
 export type PayResult = {
   ids: Array<string>
-  option: MethodOption
+  /** Single-method payments; null = credit only or split by currency. */
+  option: MethodOption | null
+  /** What was debited, one entry per wallet / method. */
+  legs: Array<{ option: MethodOption; amount: number; ccy: Ccy }>
   total: number
   ccy: Ccy
+  /** USD credit drawn. */
+  creditUsd: number
   reference?: string
 }
+
+export type PayOutcome = { ok: true; result: PayResult } | { ok: false }
 
 export interface FlowStore {
   get: () => FlowData
   subscribe: (fn: () => void) => () => void
   /** Re-seed; keeps the current dataset + date unless overridden. */
-  reset: (local: EmployerLocal, opts?: { dataset?: Dataset; today?: string }) => void
+  reset: (local: EmployerLocal, opts?: { dataset?: Dataset; today?: string; full?: boolean }) => void
   /** Time machine: moves today, settles processing invoices whose date passed. */
   travel: (today: string) => number
   setBalance: (walletId: string, available: number) => void
   addInvoice: (opts: { ccy?: Ccy; tab: 'contracts' | 'fees'; overdue?: boolean }) => Invoice
   approveAllPending: () => number
   mutate: (fn: (d: FlowData) => void) => void
-  pay: (ids: Array<string>, option: MethodOption, q: Quote) => PayResult
+  /** Atomic (P6): credit drawdown + wallet debit commit together or not at all. */
+  pay: (ids: Array<string>, option: MethodOption | null, q: Quote) => PayOutcome
   fund: (input: { ccy: 'USD' | LocalCcy; amount: number; fee: number; method: string; memo?: string }) => FundingRequest
   approve: (id: string) => void
   reject: (id: string) => void
@@ -77,10 +135,25 @@ export function seedData(local: EmployerLocal, dataset: Dataset = 'realistic', t
     txs: seedTransactions(local),
     requests: OTHER_FUNDING_REQUESTS.map((r) => ({ ...r })),
     seq: 1,
+    flags: { ...DEFAULT_FLAGS },
+    credit: { ...DEFAULT_CREDIT },
+    creditLedger: [
+      {
+        id: 'cl-1',
+        type: 'grant',
+        amount: DEFAULT_CREDIT.balance,
+        balance: DEFAULT_CREDIT.balance,
+        note: 'Goodwill credit',
+        at: '2026-10-01T09:00:00Z',
+      },
+    ],
   }
 }
 
 const nowOf = (d: FlowData) => `${d.today}T15:15:00Z`
+
+/** Display invoice number - "INV-F03" from "inv-f03". */
+export const invoiceRef = (id: string) => id.toUpperCase()
 
 function settle(d: FlowData): number {
   let n = 0
@@ -101,7 +174,7 @@ function settle(d: FlowData): number {
  * persisted store, so a change in any of them shows up in the others.
  * Loaded lazily on first subscribe so SSR + hydration see the seed.
  */
-const PERSIST_VERSION = 1
+const PERSIST_VERSION = 3
 
 export function createFlowStore(
   local: EmployerLocal,
@@ -158,8 +231,10 @@ export function createFlowStore(
       subs.add(fn)
       return () => subs.delete(fn)
     },
+    // Keeps the prototype switches + credit balance - only Reset all clears them.
     reset: (nextLocal, opts = {}) => {
-      data = seedData(nextLocal, opts.dataset ?? data.dataset, opts.today ?? data.today)
+      const keep = { flags: data.flags, credit: data.credit, creditLedger: data.creditLedger }
+      data = { ...seedData(nextLocal, opts.dataset ?? data.dataset, opts.today ?? data.today), ...(opts.full ? {} : keep) }
       emit()
     },
     travel: (today) => {
@@ -205,31 +280,62 @@ export function createFlowStore(
     },
     mutate,
     pay: (ids, option, q) => {
-      const awaiting = option.group === 'wire' || option.group === 'local-transfer'
+      if (data.flags.failNextPayment) {
+        // All or nothing: one shot failure, no credit drawn, no wallet debited.
+        mutate((d) => {
+          d.flags.failNextPayment = false
+        })
+        return { ok: false }
+      }
+      // Server-side re-validation stand-in: never commit an invalid plan.
+      if (q.plan?.invalid) return { ok: false }
+      const awaiting = option?.group === 'wire' || option?.group === 'local-transfer'
       const reference = awaiting ? makeReference(data.seq + ids.length * 7) : undefined
+      const creditUsd = q.plan?.used ?? 0
       mutate((d) => {
         d.seq += 1
-        const settleDays = option.group === 'bank' ? 3 : 1
+        const settleDays = option?.group === 'bank' ? 3 : 1
         for (const inv of d.invoices) {
           if (!ids.includes(inv.id)) continue
           inv.status = awaiting ? 'awaiting-transfer' : 'processing'
           if (!awaiting) inv.settleOn = addDays(d.today, settleDays)
         }
-        const w = option.wallet && d.wallets.find((x) => x.id === option.wallet?.id)
-        if (w) {
-          w.available = round2(w.available - q.total)
+        for (const share of q.plan?.shares ?? []) {
+          if (share.applied <= 0) continue
+          const inv = d.invoices.find((i) => i.id === share.invoiceId)
+          d.credit.balance = round2(Math.max(0, d.credit.balance - share.usd))
+          d.creditLedger.unshift({
+            id: `cl-${d.seq}-${share.invoiceId}`,
+            type: 'system-usage',
+            amount: -share.usd,
+            balance: d.credit.balance,
+            note: `Applied to Niural fee · ${invoiceRef(share.invoiceId)}`,
+            invoiceRef: inv ? `${invoiceRef(inv.id)} · ${inv.name}` : invoiceRef(share.invoiceId),
+            target: 'Niural fee',
+            rate: share.ccy === 'USD' ? undefined : `1 USD = ${fmtRate(share.rate)} ${share.ccy}`,
+            at: nowOf(d),
+          })
+        }
+        for (const leg of q.legs) {
+          const w = leg.option.wallet && d.wallets.find((x) => x.id === leg.option.wallet?.id)
+          if (!w) continue
+          w.available = round2(w.available - leg.amount)
           d.txs.unshift({
-            id: `tx-${d.seq}`,
+            id: `tx-${d.seq}-${w.ccy}`,
             type: 'Invoice payment',
             description: ids.length === 1 ? `Invoice payment · ${d.invoices.find((i) => i.id === ids[0])?.name}` : `Invoice payment · ${ids.length} invoices`,
             status: 'completed',
             ccy: w.ccy,
-            amount: -q.total,
+            amount: -leg.amount,
             at: nowOf(d),
           })
         }
       })
-      return { ids, option, total: q.total, ccy: q.ccy, reference }
+      const legs = q.legs.map((l) => ({ option: l.option, amount: l.amount, ccy: l.ccy }))
+      return {
+        ok: true,
+        result: { ids, option: q.split || q.legs.length === 0 ? null : option, legs, total: q.total, ccy: q.ccy, creditUsd, reference },
+      }
     },
     fund: ({ ccy, amount, fee, method, memo }) => {
       const req: FundingRequest = {

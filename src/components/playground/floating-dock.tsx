@@ -60,7 +60,7 @@ export function FloatingDock({
 
   return (
     <>
-      <div className="fixed top-16 left-4 z-50 flex items-center gap-1 rounded-full bg-background-base/90 p-1.5 shadow-flyout backdrop-blur">
+      <div className="fixed top-16 left-4 z-50 flex items-center gap-1 rounded-full bg-base/90 p-1.5 flyout backdrop-blur">
         <Button
           variant="ghost"
           shade="neutral"
@@ -71,11 +71,11 @@ export function FloatingDock({
         >
           Back
         </Button>
-        <span className="mx-0.5 h-4 w-px bg-border-muted" />
+        <span className="mx-0.5 h-4 w-px bg-(--border-muted)" />
         <Popover open={settingsOpen} onOpenChange={setSettingsOpen}>
           <PopoverTrigger
             aria-label="Canvas settings"
-            className="flex size-7 items-center justify-center rounded-lg text-text-primary transition-colors hover:bg-background-highlight"
+            className="flex size-7 items-center justify-center rounded-lg text-primary transition-colors hover:bg-highlight"
           >
             <GearSix />
           </PopoverTrigger>
@@ -86,24 +86,24 @@ export function FloatingDock({
                 setSettingsOpen(false)
                 setPaletteOpen(true)
               }}
-              className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-label-xs text-text-primary hover:bg-background-highlight"
+              className="flex w-full items-center gap-2 rounded-lg px-2 py-2 text-left text-label-xsmall text-primary hover:bg-highlight"
             >
-              <MagnifyingGlass className="size-4 text-text-muted" />
+              <MagnifyingGlass className="size-4 text-muted" />
               <span className="flex-1">Search crafts</span>
               <Kbd>⌘K</Kbd>
             </button>
 
-            <span className="my-1 block h-px bg-border-muted" />
+            <span className="my-1 block h-px bg-(--border-muted)" />
 
             <div className="flex items-center gap-2 px-2 py-1.5">
-              <span className="flex size-4 items-center justify-center text-text-muted">
+              <span className="flex size-4 items-center justify-center text-muted">
                 <Kbd>A</Kbd>
               </span>
               <div className="flex-1">
                 <Label
                   htmlFor="dock-annotations"
                   labelType="label-xsmall"
-                  textClassName="text-text-primary"
+                  textClassName="text-primary"
                   text="Design note markers"
                 />
               </div>
@@ -111,12 +111,12 @@ export function FloatingDock({
             </div>
 
             <div className="flex items-center gap-2 px-2 py-1.5">
-              <Ruler className="size-4 text-text-muted" />
+              <Ruler className="size-4 text-muted" />
               <div className="flex-1">
                 <Label
                   htmlFor="dock-rulers"
                   labelType="label-xsmall"
-                  textClassName="text-text-primary"
+                  textClassName="text-primary"
                   text="Show rulers"
                 />
               </div>
@@ -124,7 +124,7 @@ export function FloatingDock({
             </div>
 
             <div className="flex items-center gap-2 px-2 py-1.5">
-              <span className="flex-1 text-label-xs text-text-primary">Theme</span>
+              <span className="flex-1 text-label-xsmall text-primary">Theme</span>
               <ThemeToggle />
             </div>
           </PopoverContent>

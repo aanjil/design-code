@@ -46,23 +46,23 @@ export function LoadingState({
       {variant === 'drive' && (
         <>
           <style>{DRIVE_KEYFRAMES}</style>
-          <div className="h-1.5 w-16 shrink-0 overflow-hidden rounded-full bg-background-muted">
-            <div className="h-full w-1/3 rounded-full bg-brand-primary [animation:nds-loading-drive_1.4s_ease-in-out_infinite]" />
+          <div className="h-1.5 w-16 shrink-0 overflow-hidden rounded-full bg-muted">
+            <div className="h-full w-1/3 rounded-full bg-brand [animation:nds-loading-drive_1.4s_ease-in-out_infinite]" />
           </div>
         </>
       )}
       {variant === 'dots' && (
         <div className="flex shrink-0 items-center gap-1">
-          <span className="size-1.5 animate-pulse rounded-full bg-brand-primary" />
-          <span className="size-1.5 animate-pulse rounded-full bg-brand-primary [animation-delay:150ms]" />
-          <span className="size-1.5 animate-pulse rounded-full bg-brand-primary [animation-delay:300ms]" />
+          <span className="size-1.5 animate-pulse rounded-full bg-brand" />
+          <span className="size-1.5 animate-pulse rounded-full bg-brand [animation-delay:150ms]" />
+          <span className="size-1.5 animate-pulse rounded-full bg-brand [animation-delay:300ms]" />
         </div>
       )}
       {variant === 'orbit' && (
-        <span className="size-4 shrink-0 animate-spin rounded-full border-2 border-border-base border-t-brand-primary" />
+        <span className="size-4 shrink-0 animate-spin rounded-full border-2 border-base border-t-brand" />
       )}
-      <p className="text-label-xs text-text-muted">
-        <span className="text-text-primary">{label}</span> · {elapsedSeconds}s
+      <p className="text-label-xsmall text-muted">
+        <span className="text-primary">{label}</span> · {elapsedSeconds}s
       </p>
     </div>
   )
@@ -71,28 +71,28 @@ export function LoadingState({
 function StatusIcon({ status }: { status: TaskRowStatus }) {
   if (status === 'completed') {
     return (
-      <CheckCircle weight="fill" className="size-4 shrink-0 text-text-success-base" />
+      <CheckCircle weight="fill" className="size-4 shrink-0 text-success" />
     )
   }
   if (status === 'running') {
     return (
       <Spinner
         weight="bold"
-        className="size-4 shrink-0 animate-[spin_1.5s_linear_infinite] text-text-info-base"
+        className="size-4 shrink-0 animate-[spin_1.5s_linear_infinite] text-info"
       />
     )
   }
   if (status === 'failed') {
     return (
-      <WarningCircle weight="fill" className="size-4 shrink-0 text-text-error-base" />
+      <WarningCircle weight="fill" className="size-4 shrink-0 text-error" />
     )
   }
   if (status === 'deferred') {
-    return <Clock weight="bold" className="size-4 shrink-0 text-text-warning-base" />
+    return <Clock weight="bold" className="size-4 shrink-0 text-warning" />
   }
   return (
     <span className="flex size-4 shrink-0 items-center justify-center">
-      <span className="size-1.5 rounded-full bg-background-emphasis" />
+      <span className="size-1.5 rounded-full bg-emphasis" />
     </span>
   )
 }
@@ -120,8 +120,8 @@ function ThinkingTabs({
         <ol className="mt-3 flex flex-col gap-2.5">
           {steps.map((step) => (
             <li key={step.label} className="flex items-center gap-2">
-              <span className="size-1.5 shrink-0 rounded-full bg-background-emphasis" />
-              <span className="flex-1 text-paragraph-xs text-text-primary">
+              <span className="size-1.5 shrink-0 rounded-full bg-emphasis" />
+              <span className="flex-1 text-paragraph-xsmall text-primary">
                 {step.label}
               </span>
               {step.count && (
@@ -133,7 +133,7 @@ function ThinkingTabs({
           ))}
         </ol>
       ) : tab ? (
-        <p className="mt-3 text-paragraph-xs text-text-muted">
+        <p className="mt-3 text-paragraph-xsmall text-muted">
           No {tab.toLowerCase()} trace recorded for this run.
         </p>
       ) : null}
@@ -157,23 +157,23 @@ export function Thinking({
   const [open, setOpen] = useState(defaultOpen)
 
   return (
-    <div className={cn('rounded-xl bg-surface-1 shadow-border-base', className)}>
+    <div className={cn('rounded-xl bg-surface-frame borders-base', className)}>
       <button
         type="button"
         onClick={() => setOpen((v) => !v)}
         className="flex w-full items-center gap-1.5 px-3 py-2.5 text-left"
       >
         {open ? (
-          <CaretDown className="size-4 shrink-0 text-text-muted" />
+          <CaretDown className="size-4 shrink-0 text-muted" />
         ) : (
-          <CaretRight className="size-4 shrink-0 text-text-muted" />
+          <CaretRight className="size-4 shrink-0 text-muted" />
         )}
-        <span className="text-label-xs text-text-primary">
+        <span className="text-label-xsmall text-primary">
           Thought for {durationSeconds} seconds
         </span>
       </button>
       {open && (
-        <div className="border-t border-border-highlight px-3 py-3">
+        <div className="border-t border-base px-3 py-3">
           <ThinkingTabs tabs={tabs} steps={steps} />
         </div>
       )}
@@ -198,12 +198,12 @@ export function StreamingText({
 
   return (
     <div className={cn('flex flex-col gap-3', className)}>
-      <p className="text-paragraph-sm text-text-primary">{text}</p>
+      <p className="text-paragraph-small text-primary">{text}</p>
       <div>
         <button
           type="button"
           onClick={() => setSourcesOpen((v) => !v)}
-          className="inline-flex items-center gap-1 text-label-xs text-text-muted hover:text-text-primary"
+          className="inline-flex items-center gap-1 text-label-xsmall text-muted hover:text-primary"
         >
           {sourcesOpen ? (
             <CaretDown className="size-3.5" />
@@ -217,9 +217,9 @@ export function StreamingText({
             {sources.map((source) => (
               <li
                 key={source.domain}
-                className="flex items-center gap-1.5 text-paragraph-xs text-text-muted"
+                className="flex items-center gap-1.5 text-paragraph-xsmall text-muted"
               >
-                <span className="text-text-primary">{source.label}</span>
+                <span className="text-primary">{source.label}</span>
                 <span>· {source.domain}</span>
               </li>
             ))}
@@ -231,7 +231,7 @@ export function StreamingText({
           <button
             key={followUp}
             type="button"
-            className="rounded-full border border-border-base px-2.5 py-1 text-label-xs text-text-primary hover:bg-background-highlight"
+            className="rounded-full border border-base px-2.5 py-1 text-label-xsmall text-primary hover:bg-highlight"
           >
             {followUp}
           </button>
@@ -278,20 +278,20 @@ export function TaskRows({
 
         return (
           <li key={row.label}>
-            <div className="flex items-center gap-2 rounded-lg px-2.5 py-2 hover:bg-background-highlight">
+            <div className="flex items-center gap-2 rounded-lg px-2.5 py-2 hover:bg-highlight">
               <StatusIcon status={row.status} />
-              <span className="flex-1 truncate text-label-xs text-text-primary">
+              <span className="flex-1 truncate text-label-xsmall text-primary">
                 {row.label}
               </span>
               {row.meta && (
-                <span className="shrink-0 text-caption text-text-muted">{row.meta}</span>
+                <span className="shrink-0 text-caption-sm text-muted">{row.meta}</span>
               )}
               {expandable && (
                 <button
                   type="button"
                   onClick={toggle}
                   aria-label={isOpen ? 'Collapse' : 'Expand'}
-                  className="flex size-5 shrink-0 items-center justify-center text-text-muted"
+                  className="flex size-5 shrink-0 items-center justify-center text-muted"
                 >
                   {isOpen ? (
                     <CaretDown className="size-3.5" />
@@ -303,15 +303,15 @@ export function TaskRows({
             </div>
             {hasContent && isOpen && <div className="ml-6 mt-1 mr-1">{row.content}</div>}
             {!hasContent && hasSubRows && isOpen && (
-              <ul className="ml-6 flex flex-col gap-1 border-l border-border-highlight pl-3">
+              <ul className="ml-6 flex flex-col gap-1 border-l border-base pl-3">
                 {row.subRows!.map((sub) => (
                   <li key={sub.label} className="flex items-center gap-2 py-1">
                     <StatusIcon status={sub.status} />
-                    <span className="flex-1 truncate text-paragraph-xs text-text-primary">
+                    <span className="flex-1 truncate text-paragraph-xsmall text-primary">
                       {sub.label}
                     </span>
                     {sub.meta && (
-                      <span className="shrink-0 text-caption text-text-muted">{sub.meta}</span>
+                      <span className="shrink-0 text-caption-sm text-muted">{sub.meta}</span>
                     )}
                   </li>
                 ))}

@@ -12,18 +12,19 @@ import { useCountdown } from './hooks'
 export type BarDotTone = 'idle' | 'live' | 'warn'
 
 const dotToneClass: Record<BarDotTone, string> = {
-  idle: 'bg-text-disabled',
-  live: 'bg-grain-ink',
-  warn: 'bg-background-warning-base',
+  idle: 'bg-(--text-disabled)',
+  live: 'bg-(--text-base)',
+  warn: 'bg-warning',
 }
 
 export function StatusDot({ tone = 'idle', pulse = false }: { tone?: BarDotTone; pulse?: boolean }) {
   return (
-    <span className="relative flex size-1.5 shrink-0 items-center justify-center">
+    <span className="relative flex size-2 shrink-0 items-center justify-center">
       {pulse && (
-        <span className={cn('absolute inline-flex size-full animate-ping rounded-full opacity-60', dotToneClass[tone])} />
+        <span className={cn('absolute inline-flex size-full animate-ping rounded-full opacity-50', dotToneClass[tone])} />
       )}
-      <span className={cn('relative inline-flex size-1.5 rounded-full', dotToneClass[tone])} />
+      {/* soft halo keeps a 6px dot legible on glass */}
+      <span className={cn('relative inline-flex size-1.5 rounded-full ring-[3px] ring-(--elevation-alpha-8)', dotToneClass[tone])} />
     </span>
   )
 }
@@ -35,7 +36,7 @@ export function ScanDots() {
       {[0, 1, 2].map((i) => (
         <span
           key={i}
-          className="block size-1 rounded-full bg-text-muted animate-bar-scan"
+          className="block size-1 rounded-full bg-(--text-muted) animate-bar-scan"
           style={{ animationDelay: `${i * 0.14}s` }}
         />
       ))}
@@ -51,7 +52,7 @@ export function Waveform({ bars = 7 }: { bars?: number }) {
       {Array.from({ length: bars }, (_, i) => (
         <span
           key={i}
-          className="block w-[2.5px] rounded-full bg-grain-ink animate-bar-waveform"
+          className="block w-[2.5px] rounded-full bg-(--text-base) animate-bar-waveform"
           style={{ animationDelay: `${(i % 4) * 0.09}s` }}
         />
       ))}
@@ -78,19 +79,19 @@ export function UndoRing({
   return (
     <span className="relative inline-flex shrink-0 items-center justify-center" style={{ width: size, height: size }}>
       <svg width={size} height={size} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={r} className="fill-none stroke-border-base" strokeWidth={2.2} />
+        <circle cx={size / 2} cy={size / 2} r={r} className="fill-none stroke-(--border-default)" strokeWidth={2.2} />
         <circle
           cx={size / 2}
           cy={size / 2}
           r={r}
-          className="fill-none stroke-grain-ink transition-[stroke-dashoffset] duration-1000 ease-linear"
+          className="fill-none stroke-(--text-base) transition-[stroke-dashoffset] duration-1000 ease-linear"
           strokeWidth={2.2}
           strokeLinecap="round"
           strokeDasharray={c}
           strokeDashoffset={c * (1 - pct)}
         />
       </svg>
-      <span className="absolute font-mono text-[9px] font-semibold text-text-muted">{remaining}</span>
+      <span className="absolute tabular-nums text-[9px] font-semibold text-muted">{remaining}</span>
     </span>
   )
 }

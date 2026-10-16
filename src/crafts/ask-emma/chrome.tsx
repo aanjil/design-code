@@ -47,7 +47,7 @@ export function EmmaChrome({
 
 function DirChip({ children }: { children: React.ReactNode }) {
   return (
-    <span className="whitespace-nowrap rounded-sm border border-border-base px-1.5 py-1 font-mono text-[9.5px] tracking-wide text-text-muted">
+    <span className="whitespace-nowrap rounded-sm border border-base px-1.5 py-1 font-mono text-[9.5px] tracking-wide text-muted">
       {children}
     </span>
   )

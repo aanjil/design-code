@@ -30,21 +30,21 @@ function ModeOption({
       type="button"
       onClick={onSelect}
       className={cn(
-        'flex items-start gap-3 rounded-xl p-3.5 text-left shadow-card',
-        selected ? 'bg-brand-muted' : 'bg-background-base',
+        'flex items-start gap-3 rounded-xl p-3.5 text-left card',
+        selected ? 'bg-brand-muted' : 'bg-base',
       )}
     >
       <span
         className={cn(
           'flex size-9 shrink-0 items-center justify-center rounded-full',
-          selected ? 'bg-brand-primary' : 'bg-background-highlight',
+          selected ? 'bg-brand' : 'bg-highlight',
         )}
       >
-        <OptionIcon weight="fill" className={cn('size-[18px]', selected ? 'text-text-on-color' : 'text-text-muted')} />
+        <OptionIcon weight="fill" className={cn('size-[18px]', selected ? 'text-on-color' : 'text-muted')} />
       </span>
       <div className="min-w-0 flex-1">
-        <p className={cn('text-label-sm', selected ? 'text-brand-text' : 'text-text-primary')}>{title}</p>
-        <p className={cn('mt-0.5 text-paragraph-xs', selected ? 'text-brand-text/80' : 'text-text-muted')}>
+        <p className={cn('text-label-small', selected ? 'text-brand' : 'text-primary')}>{title}</p>
+        <p className={cn('mt-0.5 text-paragraph-xsmall', selected ? 'text-brand/80' : 'text-muted')}>
           {description}
         </p>
       </div>
@@ -57,11 +57,11 @@ export function SettingsScreen({ view }: { view: SettingsView }) {
   const { show } = useExplorer()
 
   return (
-    <div className="relative flex h-full flex-col bg-surface-1">
+    <div className="relative flex h-full flex-col bg-surface-frame">
       <MobileStatusBar />
       <MobileAppHeader title="Settings" onBack={() => show(view.mode === 'traditional' ? 'B3' : 'B1')} />
       <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-4 py-3">
-        <p className="px-1 text-label-xs text-text-muted">EXPERIENCE MODE</p>
+        <p className="px-1 text-label-xsmall text-muted">EXPERIENCE MODE</p>
         <ModeOption
           icon={Sparkle}
           title="AI-native"

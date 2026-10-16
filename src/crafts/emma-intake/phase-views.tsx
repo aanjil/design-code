@@ -34,8 +34,8 @@ export function EntryPhase({
   return (
     <div className="flex h-full min-h-[420px] flex-col items-center justify-end gap-8 p-8">
       <div className="flex flex-1 flex-col items-center justify-center gap-2 text-center">
-        <p className="text-label-sm text-text-muted">{flow.label} entry point</p>
-        <p className="max-w-[360px] text-paragraph-xs text-text-disabled">
+        <p className="text-label-small text-muted">{flow.label} entry point</p>
+        <p className="max-w-[360px] text-paragraph-xsmall text-disabled">
           A real page (Add Bill, Vendors…) would already be here - drag a file
           anywhere in this area, or use the composer below.
         </p>
@@ -96,8 +96,8 @@ export function StagingPhase({
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-3 rounded-full bg-background-base p-2 shadow-button-gray">
-        <span className="hidden shrink-0 truncate pl-3 text-label-xs text-text-muted sm:block sm:max-w-[140px]">
+      <div className="flex flex-wrap items-center gap-3 rounded-full bg-base p-2 borders-base">
+        <span className="hidden shrink-0 truncate pl-3 text-label-xsmall text-muted sm:block sm:max-w-[140px]">
           {fileLabel}
         </span>
         <PromptBarFloater
@@ -133,10 +133,10 @@ export function ConfirmedPhase({
 }) {
   return (
     <div className="flex h-full min-h-[420px] flex-col items-center justify-center gap-4 p-8 text-center">
-      <span className="flex size-12 items-center justify-center rounded-full bg-background-success-highlight">
-        <CheckCircle weight="fill" className="size-6 text-text-success-base" />
+      <span className="flex size-12 items-center justify-center rounded-full bg-success-highlight">
+        <CheckCircle weight="fill" className="size-6 text-success" />
       </span>
-      <p className="max-w-[420px] text-paragraph-sm text-text-primary">{summary}</p>
+      <p className="max-w-[420px] text-paragraph-small text-primary">{summary}</p>
       <Button type="button" variant="solid" shade="neutral" size="sm" onClick={onStartOver}>
         Start over
       </Button>

@@ -1,16 +1,20 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import {
   ArrowCounterClockwise,
   CaretDown,
   CaretUp,
   CheckCircle,
   ClockClockwise,
+  Coins,
+  Flask,
   ArrowsInSimple,
   Database,
+  DotsSixVertical,
   Plus,
   SlidersHorizontal,
 } from '@phosphor-icons/react'
 import { useEmployerConfig, useFlowData, useFlowStore } from './store'
+import { ExperimentsPanel } from './experiments-panel'
 import { CurrencyMark, Money } from './ui'
 import { Button } from '@niural/components'
 import {
@@ -33,27 +37,134 @@ import { cn } from '@/lib/utils'
  * after 1 day, ACH after 3), Controls (employer currencies, wallet
  * balances, approve pending funding, reset). Visually a dark pill so it
  * never reads as part of the product.
+ *
+ * Draggable anywhere via the grip (double-click it to snap home). Home is
+ * bottom-left, raised above the Bezel bar's lane in the Master App. The
+ * panel opens toward whichever half of the screen has room.
  */
 
-type Tab = 'data' | 'time' | 'controls'
+type Tab = string
+
+/** Host-supplied panels beside Data / Time machine / Controls (Master App: Bezel). */
+export interface MockDockTab {
+  id: string
+  label: string
+  icon: typeof Database
+  render: () => React.ReactNode
+}
 
 const TABS: Array<{ id: Tab; label: string; icon: typeof Database }> = [
   { id: 'data', label: 'Data', icon: Database },
   { id: 'time', label: 'Time machine', icon: ClockClockwise },
   { id: 'controls', label: 'Controls', icon: SlidersHorizontal },
+  { id: 'experiments', label: 'Experiments', icon: Flask },
 ]
 
 const ADD_CCYS: Array<Ccy> = ['USD', 'CAD', 'GBP', 'EUR', 'INR', 'PHP', 'NPR', 'USDC']
 
 const MIN_KEY = 'nds-mock-dock:minimized'
+const POS_KEY = 'nds-mock-dock:pos'
+const EDGE = 12
+
+type Pos = { x: number; y: number }
+
+/**
+ * Free placement inside the dock's container (the viewport when `fixed`,
+ * the window when on a canvas). `pos` = top-left of the dock box in the
+ * container's own (unzoomed) pixels; null = home. Pointer deltas are
+ * divided by the container's render scale so dragging tracks the cursor
+ * even inside a zoomed canvas window.
+ */
+function useDraggable(homeBottom: number) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const boxRef = useRef<HTMLDivElement>(null)
+  const [pos, setPos] = useState<Pos | null>(null)
+  const [size, setSize] = useState({ w: 0, h: 0 })
+  const drag = useRef<{ px: number; py: number; start: Pos; scale: number } | null>(null)
+
+  useEffect(() => {
+    try {
+      const raw = window.localStorage.getItem(POS_KEY)
+      if (raw) setPos(JSON.parse(raw) as Pos)
+    } catch {
+      /* ignore */
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const ro = new ResizeObserver(() => setSize({ w: el.offsetWidth, h: el.offsetHeight }))
+    ro.observe(el)
+    setSize({ w: el.offsetWidth, h: el.offsetHeight })
+    return () => ro.disconnect()
+  }, [])
+
+  const clamp = (p: Pos): Pos => {
+    const box = boxRef.current
+    const bw = box?.offsetWidth ?? 0
+    const bh = box?.offsetHeight ?? 0
+    return {
+      x: Math.min(Math.max(EDGE, p.x), Math.max(EDGE, size.w - bw - EDGE)),
+      y: Math.min(Math.max(EDGE, p.y), Math.max(EDGE, size.h - bh - EDGE)),
+    }
+  }
+
+  const save = (p: Pos | null) => {
+    try {
+      if (p) window.localStorage.setItem(POS_KEY, JSON.stringify(p))
+      else window.localStorage.removeItem(POS_KEY)
+    } catch {
+      /* ignore */
+    }
+  }
+
+  const gripProps = {
+    onPointerDown: (e: React.PointerEvent<HTMLElement>) => {
+      const container = containerRef.current
+      const box = boxRef.current
+      if (!container || !box) return
+      e.preventDefault()
+      e.currentTarget.setPointerCapture(e.pointerId)
+      const scale = container.getBoundingClientRect().width / (container.offsetWidth || 1) || 1
+      drag.current = { px: e.clientX, py: e.clientY, start: { x: box.offsetLeft, y: box.offsetTop }, scale }
+    },
+    onPointerMove: (e: React.PointerEvent<HTMLElement>) => {
+      const d = drag.current
+      if (!d) return
+      setPos(clamp({ x: d.start.x + (e.clientX - d.px) / d.scale, y: d.start.y + (e.clientY - d.py) / d.scale }))
+    },
+    onPointerUp: () => {
+      if (!drag.current) return
+      drag.current = null
+      setPos((p) => {
+        save(p)
+        return p
+      })
+    },
+    onDoubleClick: () => {
+      setPos(null)
+      save(null)
+    },
+  }
+
+  const placed = pos ? clamp(pos) : null
+  const style: React.CSSProperties = placed ? { left: placed.x, top: placed.y } : { left: EDGE + 4, bottom: homeBottom }
+  // Which half the dock sits in decides where the panel opens.
+  const upper = placed ? placed.y + (boxRef.current?.offsetHeight ?? 0) / 2 < size.h / 2 : false
+  const right = placed ? placed.x + (boxRef.current?.offsetWidth ?? 0) / 2 > size.w / 2 : false
+  return { containerRef, boxRef, style, upper, right, gripProps }
+}
 
 export function MockDock({
   fixed,
   leading,
+  extraTabs = [],
 }: {
   fixed?: boolean
   /** Host-specific controls at the start of the pill (Master App: Go to). */
   leading?: React.ReactNode
+  extraTabs?: Array<MockDockTab>
 } = {}) {
   const data = useFlowData()
   const store = useFlowStore()
@@ -92,20 +203,31 @@ export function MockDock({
   const pending = open_.filter((i) => i.status === 'pending')
   const overdue = pending.filter((i) => i.dueDate < data.today)
   const offset = daysBetween(WORLD_TODAY, data.today)
+  // Master App (fixed): home sits above the Bezel bar's bottom-centre lane.
+  const dragger = useDraggable(fixed ? 80 : EDGE)
 
   return (
-    <div className={cn('pointer-events-none inset-x-0 bottom-3 z-30 flex flex-col items-center gap-2', fixed ? 'fixed' : 'absolute')}>
+    <div ref={dragger.containerRef} className={cn('pointer-events-none inset-0 z-40', fixed ? 'fixed' : 'absolute')}>
+    <div
+      ref={dragger.boxRef}
+      style={dragger.style}
+      className={cn(
+        'absolute flex gap-2',
+        dragger.upper ? 'flex-col-reverse' : 'flex-col',
+        dragger.right ? 'items-end' : 'items-start',
+      )}
+    >
       {open && !minimized && (
-        <div className="pointer-events-auto w-[600px] overflow-hidden rounded-2xl bg-surface-2 shadow-flyout">
-          <div className="flex items-center gap-1 border-b border-border-highlight p-1.5">
-            {TABS.map((t) => (
+        <div className="pointer-events-auto w-[600px] overflow-hidden rounded-2xl bg-surface-page flyout">
+          <div className="flex items-center gap-1 border-b border-base p-1.5">
+            {[...TABS, ...extraTabs].map((t) => (
               <button
                 key={t.id}
                 type="button"
                 onClick={() => setTab(t.id)}
                 className={cn(
-                  'flex h-8 flex-1 items-center justify-center gap-1.5 rounded-lg text-label-xs transition-colors',
-                  tab === t.id ? 'bg-background-base text-text-primary shadow-button-gray' : 'text-text-muted hover:text-text-primary',
+                  'flex h-8 flex-1 items-center justify-center gap-1.5 rounded-lg text-label-xsmall transition-colors',
+                  tab === t.id ? 'bg-base text-primary borders-base' : 'text-muted hover:text-primary',
                 )}
               >
                 <t.icon className="size-3.5" />
@@ -115,6 +237,7 @@ export function MockDock({
           </div>
 
           <div className="p-4">
+            {extraTabs.find((t) => t.id === tab)?.render()}
             {tab === 'data' && (
               <div className="flex flex-col gap-4">
                 <Section title="Dataset" hint={`${open_.length} open · ${pending.length} payable · ${overdue.length} overdue`}>
@@ -130,11 +253,11 @@ export function MockDock({
                         }}
                         className={cn(
                           'flex h-14 flex-col items-start justify-center rounded-xl px-2.5 text-left transition-shadow',
-                          data.dataset === d.id ? 'bg-background-base shadow-border-brand' : 'bg-background-base shadow-button-gray hover:shadow-card-hover',
+                          data.dataset === d.id ? 'bg-base borders-shadow' : 'bg-base borders-base hover:card-hover',
                         )}
                       >
-                        <span className="text-label-xs text-text-primary">{d.label}</span>
-                        <span className="line-clamp-1 text-caption text-text-muted">{d.hint}</span>
+                        <span className="text-label-xsmall text-primary">{d.label}</span>
+                        <span className="line-clamp-1 text-caption-sm text-muted">{d.hint}</span>
                       </button>
                     ))}
                   </div>
@@ -153,9 +276,9 @@ export function MockDock({
               <div className="flex flex-col gap-4">
                 <div className="flex items-end justify-between">
                   <div>
-                    <p className="text-caption text-text-muted">Today in the prototype</p>
-                    <p className="text-title-h4 text-text-primary">{fmtDate(data.today)}</p>
-                    <p className="text-caption text-text-muted">
+                    <p className="text-caption-sm text-muted">Today in the prototype</p>
+                    <p className="text-title-h4 text-primary">{fmtDate(data.today)}</p>
+                    <p className="text-caption-sm text-muted">
                       {offset === 0 ? 'Real mock date' : `${offset > 0 ? '+' : ''}${offset} days from ${fmtDate(WORLD_TODAY)}`}
                     </p>
                   </div>
@@ -178,17 +301,19 @@ export function MockDock({
                       key={label}
                       type="button"
                       onClick={() => travel(to())}
-                      className="h-9 rounded-lg bg-background-base text-label-xs text-text-primary shadow-button-gray hover:bg-background-highlight"
+                      className="h-9 rounded-lg bg-base text-label-xsmall text-primary borders-base hover:bg-highlight"
                     >
                       {label}
                     </button>
                   ))}
                 </div>
-                <p className="text-paragraph-xs text-text-muted">
+                <p className="text-paragraph-xsmall text-muted">
                   Overdue days recalculate everywhere. Moving forward settles payments: wallet and crypto after 1 day, ACH after 3. Wire and local transfers wait for admin.
                 </p>
               </div>
             )}
+
+            {tab === 'experiments' && <ExperimentsPanel flash={flash} />}
 
             {tab === 'controls' && (
               <div className="flex flex-col gap-4">
@@ -200,8 +325,8 @@ export function MockDock({
                         type="button"
                         onClick={() => setLocal(l)}
                         className={cn(
-                          'flex h-9 items-center justify-center gap-1.5 rounded-lg bg-background-base text-label-xs text-text-primary',
-                          local === l ? 'shadow-border-brand' : 'shadow-button-gray hover:bg-background-highlight',
+                          'flex h-9 items-center justify-center gap-1.5 rounded-lg bg-base text-label-xsmall text-primary',
+                          local === l ? 'borders-shadow' : 'borders-base hover:bg-highlight',
                         )}
                       >
                         <span aria-hidden>{l ? CCY_FLAG[l] : CCY_FLAG.USD}</span>
@@ -215,11 +340,11 @@ export function MockDock({
                     {data.wallets
                       .filter((w) => !w.network || w.available > 0)
                       .map((w) => (
-                        <div key={w.id} className="flex items-center gap-2 rounded-lg bg-background-base px-2.5 py-1.5 shadow-button-gray">
+                        <div key={w.id} className="flex items-center gap-2 rounded-lg bg-base px-2.5 py-1.5 borders-base">
                           <CurrencyMark ccy={w.ccy} size="sm" />
-                          <span className="w-24 truncate text-label-xs text-text-primary">{w.network ? `${w.ccy} · ${w.network}` : w.ccy}</span>
-                          <Money className="flex-1 text-mono-xs text-text-primary">{fmt(w.available, w.ccy)}</Money>
-                          {w.pending > 0 && <Money className="text-mono-xs text-text-muted">+{fmt(w.pending, w.ccy)} pending</Money>}
+                          <span className="w-24 truncate text-label-xsmall text-primary">{w.network ? `${w.ccy} · ${w.network}` : w.ccy}</span>
+                          <Money className="flex-1 text-paragraph-xsmall text-primary">{fmt(w.available, w.ccy)}</Money>
+                          {w.pending > 0 && <Money className="text-paragraph-xsmall text-muted">+{fmt(w.pending, w.ccy)} pending</Money>}
                           {(
                             [
                               ['0', 0],
@@ -232,7 +357,7 @@ export function MockDock({
                               key={label}
                               type="button"
                               onClick={() => store.setBalance(w.id, v)}
-                              className="h-6 rounded-md px-1.5 text-label-xs text-text-muted hover:bg-background-highlight hover:text-text-primary"
+                              className="h-6 rounded-md px-1.5 text-label-xsmall text-muted hover:bg-highlight hover:text-primary"
                             >
                               {label}
                             </button>
@@ -263,7 +388,7 @@ export function MockDock({
                     size="sm"
                     leftIcon={<ArrowCounterClockwise className="size-4" />}
                     onClick={() => {
-                      store.reset(data.local, { dataset: 'realistic', today: WORLD_TODAY })
+                      store.reset(data.local, { dataset: 'realistic', today: WORLD_TODAY, full: true })
                       flash('Reset to the realistic dataset')
                     }}
                   >
@@ -277,53 +402,62 @@ export function MockDock({
       )}
 
       {note && (
-        <div className="pointer-events-none rounded-full bg-grain-ink px-3 py-1.5 text-label-xs text-grain-ink-foreground shadow-flyout">{note}</div>
+        <div className="pointer-events-none rounded-full bg-(--text-base) px-3 py-1.5 text-label-xsmall text-(--background-base) flyout">{note}</div>
       )}
 
       {minimized ? (
         /* minimized: a small handle - click to bring the dock back */
+        <div className="pointer-events-auto flex items-center gap-0.5 rounded-full bg-(--text-base) pl-1 text-(--background-base) flyout">
+        <DragGrip gripProps={dragger.gripProps} />
         <button
           type="button"
           aria-label="Expand mock data dock"
           title="Mock data dock"
           onClick={() => setMinimized(false)}
-          className="pointer-events-auto flex h-6 items-center gap-1 rounded-full bg-grain-ink px-2.5 text-grain-ink-foreground shadow-flyout transition-[height] hover:h-7"
+          className="flex h-6 items-center gap-1 rounded-full pr-2.5 pl-1 transition-[height] hover:h-7"
         >
-          <span className="h-1 w-8 rounded-full bg-grain-ink-muted" />
+          <span className="h-1 w-8 rounded-full bg-(--text-muted)" />
           <CaretUp className="size-3" />
         </button>
+        </div>
       ) : (
         /* pill - inverted surface so it never reads as product UI */
-        <div className="pointer-events-auto flex h-10 items-center gap-1 rounded-full bg-grain-ink p-1 text-label-xs text-grain-ink-foreground shadow-flyout">
+        <div className="pointer-events-auto flex h-10 items-center gap-1 rounded-full bg-(--text-base) p-1 text-label-xsmall text-(--background-base) flyout">
+          <DragGrip gripProps={dragger.gripProps} />
           {leading && (
             <>
               {leading}
-              <span className="h-4 w-px bg-elevation-alpha-24" />
+              <span className="h-4 w-px bg-(--elevation-alpha-24)" />
             </>
           )}
           <button
             type="button"
             onClick={() => setOpen((o) => !o)}
             aria-expanded={open}
-            title="Mock data, time machine and controls"
-            className="flex h-8 items-center gap-3 rounded-full pr-1.5 pl-2.5 hover:bg-elevation-alpha-12"
+            title="Mock data, time machine, controls and experiments"
+            className="flex h-8 items-center gap-3 rounded-full pr-1.5 pl-2.5 hover:bg-(--elevation-alpha-12)"
           >
             <span className="flex items-center gap-1.5">
               <Database className="size-4" />
               {DATASETS.find((d) => d.id === data.dataset)?.label} · {open_.length}
             </span>
-            <span className="h-4 w-px bg-elevation-alpha-24" />
+            <span className="h-4 w-px bg-(--elevation-alpha-24)" />
             <span className="flex items-center gap-1.5">
               <ClockClockwise className="size-4" />
               {fmtDate(data.today)}
-              {offset !== 0 && <span className="text-grain-ink-muted">({offset > 0 ? '+' : ''}{offset}d)</span>}
+              {offset !== 0 && <span className="text-muted">({offset > 0 ? '+' : ''}{offset}d)</span>}
             </span>
-            <span className="h-4 w-px bg-elevation-alpha-24" />
+            <span className="h-4 w-px bg-(--elevation-alpha-24)" />
             <span className="flex items-center gap-1.5">
               <span aria-hidden>{data.local ? CCY_FLAG[data.local] : CCY_FLAG.USD}</span>
               {data.local ? `USD + ${data.local}` : 'USD only'}
             </span>
-            <span className="flex size-6 items-center justify-center rounded-full bg-elevation-alpha-16">
+            <span className="h-4 w-px bg-(--elevation-alpha-24)" />
+            <span className={cn('flex items-center gap-1.5', !data.flags.credits && 'text-muted')}>
+              <Coins className="size-4" />
+              {data.flags.credits ? fmt(data.credit.balance, 'USD') : 'Credits off'}
+            </span>
+            <span className="flex size-6 items-center justify-center rounded-full bg-(--elevation-alpha-16)">
               {open ? <CaretDown className="size-3.5" /> : <CaretUp className="size-3.5" />}
             </span>
           </button>
@@ -332,13 +466,29 @@ export function MockDock({
             aria-label="Minimize dock"
             title="Minimize dock"
             onClick={() => setMinimized(true)}
-            className="flex size-8 items-center justify-center rounded-full text-grain-ink-muted hover:bg-elevation-alpha-12 hover:text-grain-ink-foreground"
+            className="flex size-8 items-center justify-center rounded-full text-muted hover:bg-(--elevation-alpha-12) hover:text-(--background-base)"
           >
             <ArrowsInSimple className="size-4" />
           </button>
         </div>
       )}
     </div>
+    </div>
+  )
+}
+
+function DragGrip({ gripProps }: { gripProps: ReturnType<typeof useDraggable>['gripProps'] }) {
+  return (
+    <span
+      {...gripProps}
+      role="button"
+      tabIndex={-1}
+      aria-label="Drag to move the dock"
+      title="Drag to move · double-click to reset"
+      className="flex h-8 w-5 shrink-0 cursor-grab touch-none items-center justify-center rounded-full text-muted hover:text-(--background-base) active:cursor-grabbing"
+    >
+      <DotsSixVertical weight="bold" className="size-4" />
+    </span>
   )
 }
 
@@ -346,8 +496,8 @@ function Section({ title, hint, children }: { title: string; hint?: string; chil
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline justify-between gap-3">
-        <p className="text-label-sm text-text-primary">{title}</p>
-        {hint && <p className="text-caption text-text-muted">{hint}</p>}
+        <p className="text-label-small text-primary">{title}</p>
+        {hint && <p className="text-caption-sm text-muted">{hint}</p>}
       </div>
       {children}
     </div>
@@ -362,23 +512,23 @@ function AddInvoice({ local, onAdd }: { local: EmployerLocal; onAdd: (ccy: Ccy, 
   const feeCcy: Ccy = local ?? 'USD'
   return (
     <Section title="Add invoice" hint="Generated, seeded - same output every time">
-      <div className="flex flex-col gap-2 rounded-xl bg-background-base p-2.5 shadow-button-gray">
+      <div className="flex flex-col gap-2 rounded-xl bg-base p-2.5 borders-base">
         <div className="flex items-center gap-1.5">
           {(['contracts', 'fees'] as const).map((t) => (
             <button
               key={t}
               type="button"
               onClick={() => setTab(t)}
-              className={cn('h-7 rounded-md px-2 text-label-xs', tab === t ? 'bg-brand-muted text-brand-text' : 'text-text-muted hover:bg-background-highlight')}
+              className={cn('h-7 rounded-md px-2 text-label-xsmall', tab === t ? 'bg-brand-muted text-brand' : 'text-muted hover:bg-highlight')}
             >
               {t === 'contracts' ? 'Contractor' : 'Niural fee'}
             </button>
           ))}
-          <span className="h-4 w-px bg-border-muted" />
+          <span className="h-4 w-px bg-(--border-muted)" />
           <button
             type="button"
             onClick={() => setOverdue((o) => !o)}
-            className={cn('h-7 rounded-md px-2 text-label-xs', overdue ? 'bg-background-error-highlight text-text-error-base' : 'text-text-muted hover:bg-background-highlight')}
+            className={cn('h-7 rounded-md px-2 text-label-xsmall', overdue ? 'bg-error-highlight text-error' : 'text-muted hover:bg-highlight')}
           >
             {overdue ? 'Overdue' : 'Due soon'}
           </button>
@@ -395,8 +545,8 @@ function AddInvoice({ local, onAdd }: { local: EmployerLocal; onAdd: (ccy: Ccy, 
                 type="button"
                 onClick={() => setCcy(c)}
                 className={cn(
-                  'flex h-7 items-center gap-1 rounded-md px-2 text-label-xs',
-                  ccy === c ? 'bg-background-highlight text-text-primary shadow-border-brand' : 'text-text-muted hover:bg-background-highlight',
+                  'flex h-7 items-center gap-1 rounded-md px-2 text-label-xsmall',
+                  ccy === c ? 'bg-highlight text-primary borders-shadow' : 'text-muted hover:bg-highlight',
                 )}
               >
                 <CurrencyMark ccy={c} size="sm" />
@@ -405,7 +555,7 @@ function AddInvoice({ local, onAdd }: { local: EmployerLocal; onAdd: (ccy: Ccy, 
             ))}
           </div>
         ) : (
-          <p className="text-caption text-text-muted">Billed in {feeCcy} - Niural fees follow the employer's currency config.</p>
+          <p className="text-caption-sm text-muted">Billed in {feeCcy} - Niural fees follow the employer's currency config.</p>
         )}
       </div>
     </Section>

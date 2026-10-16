@@ -35,7 +35,7 @@ export function MobileStatusBar({ dark }: { dark?: boolean }) {
     <div
       className={cn(
         'flex h-[54px] shrink-0 items-end justify-between px-6 pb-1.5',
-        dark ? 'text-white' : 'text-text-primary',
+        dark ? 'text-white' : 'text-primary',
       )}
     >
       <span className="text-[15px] font-semibold tracking-tight">9:41</span>
@@ -51,7 +51,7 @@ export function MobileStatusBar({ dark }: { dark?: boolean }) {
 export function MobileHomeIndicator({ dark }: { dark?: boolean }) {
   return (
     <div className="flex h-[34px] shrink-0 items-center justify-center">
-      <div className={cn('h-[5px] w-[134px] rounded-full', dark ? 'bg-white/90' : 'bg-text-primary/90')} />
+      <div className={cn('h-[5px] w-[134px] rounded-full', dark ? 'bg-white/90' : 'bg-(--text-base)/90')} />
     </div>
   )
 }
@@ -74,7 +74,7 @@ export function MobileScreen({
   chrome?: boolean
 }) {
   return (
-    <div className={cn('relative flex h-full flex-col', dark ? 'bg-[#0b0b0d]' : 'bg-surface-1')}>
+    <div className={cn('relative flex h-full flex-col', dark ? 'bg-[#0b0b0d]' : 'bg-surface-frame')}>
       {chrome && <MobileStatusBar dark={dark} />}
       <div className={cn('min-h-0 flex-1 overflow-y-auto', className)}>{children}</div>
       {chrome && <MobileHomeIndicator dark={dark} />}
@@ -100,12 +100,12 @@ export function MobileAppHeader({
           type="button"
           onClick={onBack}
           aria-label="Back"
-          className="flex size-8 shrink-0 items-center justify-center rounded-full text-text-primary transition-colors active:bg-background-highlight"
+          className="flex size-8 shrink-0 items-center justify-center rounded-full text-primary transition-colors active:bg-highlight"
         >
           <CaretLeft weight="bold" className="size-5" />
         </button>
       )}
-      <h1 className={cn('min-w-0 flex-1 truncate text-label-md text-text-primary', !onBack && 'px-1')}>
+      <h1 className={cn('min-w-0 flex-1 truncate text-label-medium text-primary', !onBack && 'px-1')}>
         {title}
       </h1>
       {action}
@@ -129,7 +129,7 @@ export function MobileTabBar({
   onSelect?: (id: string) => void
 }) {
   return (
-    <div className="flex shrink-0 items-stretch border-t border-border-highlight bg-background-base">
+    <div className="flex shrink-0 items-stretch border-t border-base bg-base">
       {items.map((item) => {
         const ItemIcon = item.icon
         const isActive = item.id === active
@@ -142,9 +142,9 @@ export function MobileTabBar({
           >
             <ItemIcon
               weight={isActive ? 'fill' : 'regular'}
-              className={cn('size-6', isActive ? 'text-brand-primary' : 'text-text-muted')}
+              className={cn('size-6', isActive ? 'text-brand-primary' : 'text-muted')}
             />
-            <span className={cn('text-[10px] leading-none', isActive ? 'text-brand-primary' : 'text-text-muted')}>
+            <span className={cn('text-[10px] leading-none', isActive ? 'text-brand-primary' : 'text-muted')}>
               {item.label}
             </span>
           </button>
@@ -190,8 +190,8 @@ export function MobileCard({
   return (
     <div
       className={cn(
-        'rounded-2xl p-4 shadow-card',
-        tone === 'brand' ? 'bg-brand-muted' : 'bg-background-base',
+        'rounded-2xl p-4 card',
+        tone === 'brand' ? 'bg-brand-muted' : 'bg-base',
       )}
     >
       <div className="flex items-start gap-3">
@@ -201,11 +201,11 @@ export function MobileCard({
           </span>
         )}
         <div className="min-w-0 flex-1">
-          <p className="text-label-sm text-text-primary">{title}</p>
-          {subtitle && <p className="mt-0.5 text-paragraph-xs text-text-muted">{subtitle}</p>}
+          <p className="text-label-small text-primary">{title}</p>
+          {subtitle && <p className="mt-0.5 text-paragraph-xsmall text-muted">{subtitle}</p>}
         </div>
       </div>
-      {details && !compact && <div className="mt-3 text-paragraph-xs text-text-muted">{details}</div>}
+      {details && !compact && <div className="mt-3 text-paragraph-xsmall text-muted">{details}</div>}
       {ctas.length > 0 && (
         <div className={cn('mt-3 flex gap-2', compact && 'flex-row')}>
           {ctas.map((cta) => (
@@ -248,8 +248,8 @@ function InputIconButton({
       className={cn(
         'flex size-9 shrink-0 items-center justify-center rounded-full transition-colors',
         tone === 'brand'
-          ? 'bg-brand-primary text-text-on-color'
-          : 'text-text-muted active:bg-background-highlight',
+          ? 'bg-brand text-on-color'
+          : 'text-muted active:bg-highlight',
       )}
     >
       <ItemIcon weight={tone === 'brand' ? 'bold' : 'regular'} className="size-[18px]" />
@@ -287,15 +287,15 @@ export function MobileInputBar({
 }) {
   const hasText = value.trim().length > 0
   return (
-    <div className="flex shrink-0 items-center gap-1.5 border-t border-border-highlight bg-background-base px-2 py-2">
+    <div className="flex shrink-0 items-center gap-1.5 border-t border-base bg-base px-2 py-2">
       {showCamera && <InputIconButton icon={PhosphorCamera} label="Camera" onClick={onCamera} />}
       {showAttachment && <InputIconButton icon={Paperclip} label="Attach a file" onClick={onAttachment} />}
-      <div className="flex h-10 min-w-0 flex-1 items-center rounded-full bg-background-highlight px-4">
+      <div className="flex h-10 min-w-0 flex-1 items-center rounded-full bg-highlight px-4">
         <input
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
-          className="min-w-0 flex-1 bg-transparent text-paragraph-sm text-text-primary outline-none placeholder:text-text-muted"
+          className="min-w-0 flex-1 bg-transparent text-paragraph-small text-primary outline-none placeholder:text-muted"
         />
       </div>
       {hasText ? (
@@ -321,8 +321,8 @@ export function MobileChatBubble({
     <div className={cn('flex', isEmma ? 'justify-start' : 'justify-end')}>
       <div
         className={cn(
-          'max-w-[80%] rounded-2xl px-3.5 py-2.5 text-paragraph-sm',
-          isEmma ? 'bg-background-highlight text-text-primary' : 'bg-brand-primary text-text-on-color',
+          'max-w-[80%] rounded-2xl px-3.5 py-2.5 text-paragraph-small',
+          isEmma ? 'bg-highlight text-primary' : 'bg-brand text-on-color',
         )}
       >
         {children}
@@ -341,7 +341,7 @@ export function MobileChatBubble({
  */
 export function MobileToast({ children }: { children: React.ReactNode }) {
   return (
-    <div className="absolute inset-x-4 bottom-24 z-10 rounded-xl bg-[#1a1a1a] px-4 py-3 text-center text-label-xs text-white shadow-2xl">
+    <div className="absolute inset-x-4 bottom-24 z-10 rounded-xl bg-[#1a1a1a] px-4 py-3 text-center text-label-xsmall text-white shadow-2xl">
       {children}
     </div>
   )

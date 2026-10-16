@@ -75,7 +75,7 @@ function FrameInner({
     <div className="flex flex-col gap-4">
       <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-3">
         <div className="min-w-0 max-w-[640px]">
-          <h1 className="truncate text-label-md text-text-primary">
+          <h1 className="truncate text-label-medium text-primary">
             {meta.title}
           </h1>
         </div>
@@ -90,7 +90,7 @@ function FrameInner({
             <Label
               htmlFor="annotations-switch"
               labelType="label-xsmall"
-              textClassName="items-center text-text-muted"
+              textClassName="items-center text-muted"
               text={
                 <>
                   Markers <Kbd>A</Kbd>
@@ -106,7 +106,7 @@ function FrameInner({
             onClick={() => setNotesOpen(true)}
             leftIcon={<NotePencil className="size-4" />}
             rightIcon={
-              <span className="text-caption-md text-text-muted">
+              <span className="text-caption-sm font-medium text-muted">
                 {entries.length}
               </span>
             }
@@ -125,12 +125,12 @@ function FrameInner({
             onChange={setVariantId}
           />
           {active?.note && (
-            <p className="text-paragraph-xs text-text-muted">{active.note}</p>
+            <p className="text-paragraph-xsmall text-muted">{active.note}</p>
           )}
         </div>
       )}
 
-      <div className="min-h-[420px] rounded-xl bg-background-base p-4 shadow-card">
+      <div className="min-h-[420px] rounded-xl bg-base p-4 card">
         {active ? active.node : children}
       </div>
 
@@ -157,15 +157,15 @@ export function NotesSheet({
         className="w-[360px] md:w-[360px]"
       >
         <DrawerHeader className="pr-12">
-          <DrawerTitle className="text-label-md">Design notes</DrawerTitle>
-          <DrawerDescription className="text-paragraph-xs text-text-muted">
+          <DrawerTitle className="text-label-medium">Design notes</DrawerTitle>
+          <DrawerDescription className="text-paragraph-xsmall text-muted">
             Numbered markers on the canvas. Click a note to locate it. Press{' '}
             <Kbd>A</Kbd> to toggle markers.
           </DrawerDescription>
         </DrawerHeader>
         <ScrollArea className="min-h-0 flex-1 px-4 pb-4">
           {entries.length === 0 ? (
-            <p className="text-paragraph-xs text-text-muted">
+            <p className="text-paragraph-xsmall text-muted">
               No annotations in this craft yet. Wrap any element in{' '}
               <code>&lt;Annotate&gt;</code> to add one.
             </p>
@@ -179,12 +179,12 @@ export function NotesSheet({
                     onOpenChange(false)
                     setTimeout(() => focusNote(entry.n), 250)
                   }}
-                  className="flex w-full items-start gap-2 rounded-lg p-2 text-left transition-colors hover:bg-background-highlight"
+                  className="flex w-full items-start gap-2 rounded-lg p-2 text-left transition-colors hover:bg-highlight"
                 >
                   <span className={markerChipClass}>{entry.n}</span>
                   <span className="min-w-0">
-                    <span className="block text-label-sm">{entry.title}</span>
-                    <span className="block text-paragraph-xs text-text-muted">
+                    <span className="block text-label-small">{entry.title}</span>
+                    <span className="block text-paragraph-xsmall text-muted">
                       {entry.note}
                     </span>
                   </span>

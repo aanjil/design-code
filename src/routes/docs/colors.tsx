@@ -10,82 +10,82 @@ export const Route = createFileRoute('/docs/colors')({
 /* Literal classes so Tailwind compiles them; names match colors.md. */
 
 const BG_NEUTRAL: Array<SwatchDef> = [
-  { name: 'background-base', cls: 'bg-background-base' },
-  { name: 'background-muted', cls: 'bg-background-muted' },
-  { name: 'background-emphasis', cls: 'bg-background-emphasis' },
-  { name: 'background-disabled', cls: 'bg-background-disabled' },
-  { name: 'background-highlight', cls: 'bg-background-highlight' },
-  { name: 'background-item', cls: 'bg-background-item' },
+  { name: 'background-base', cls: 'bg-base' },
+  { name: 'background-muted', cls: 'bg-muted' },
+  { name: 'background-emphasis', cls: 'bg-emphasis' },
+  { name: 'background-disabled', cls: 'bg-disabled' },
+  { name: 'background-highlight', cls: 'bg-highlight' },
+  { name: 'background-item', cls: 'bg-item' },
 ]
 
 const BG_STATUS: Array<SwatchDef> = [
-  { name: 'success-base', cls: 'bg-background-success-base' },
-  { name: 'success-emphasis', cls: 'bg-background-success-emphasis' },
-  { name: 'success-muted', cls: 'bg-background-success-muted' },
-  { name: 'success-muted-hover', cls: 'bg-background-success-muted-hover' },
-  { name: 'success-highlight', cls: 'bg-background-success-highlight' },
-  { name: 'warning-base', cls: 'bg-background-warning-base' },
-  { name: 'warning-emphasis', cls: 'bg-background-warning-emphasis' },
-  { name: 'warning-muted', cls: 'bg-background-warning-muted' },
-  { name: 'warning-muted-hover', cls: 'bg-background-warning-muted-hover' },
-  { name: 'warning-highlight', cls: 'bg-background-warning-highlight' },
-  { name: 'info-base', cls: 'bg-background-info-base' },
-  { name: 'info-emphasis', cls: 'bg-background-info-emphasis' },
-  { name: 'info-muted', cls: 'bg-background-info-muted' },
-  { name: 'info-muted-hover', cls: 'bg-background-info-muted-hover' },
-  { name: 'info-highlight', cls: 'bg-background-info-highlight' },
-  { name: 'error-base', cls: 'bg-background-error-base' },
-  { name: 'error-emphasis', cls: 'bg-background-error-emphasis' },
-  { name: 'error-muted', cls: 'bg-background-error-muted' },
-  { name: 'error-muted-hover', cls: 'bg-background-error-muted-hover' },
-  { name: 'error-highlight', cls: 'bg-background-error-highlight' },
+  { name: 'success-base', cls: 'bg-success' },
+  { name: 'success-emphasis', cls: 'bg-success-emphasis' },
+  { name: 'success-muted', cls: 'bg-success-muted' },
+  { name: 'success-muted-hover', cls: 'bg-success-muted-hover' },
+  { name: 'success-highlight', cls: 'bg-success-highlight' },
+  { name: 'warning-base', cls: 'bg-warning' },
+  { name: 'warning-emphasis', cls: 'bg-warning-emphasis' },
+  { name: 'warning-muted', cls: 'bg-warning-muted' },
+  { name: 'warning-muted-hover', cls: 'bg-warning-muted-hover' },
+  { name: 'warning-highlight', cls: 'bg-warning-highlight' },
+  { name: 'info-base', cls: 'bg-info' },
+  { name: 'info-emphasis', cls: 'bg-info-emphasis' },
+  { name: 'info-muted', cls: 'bg-info-muted' },
+  { name: 'info-muted-hover', cls: 'bg-info-muted-hover' },
+  { name: 'info-highlight', cls: 'bg-info-highlight' },
+  { name: 'error-base', cls: 'bg-error' },
+  { name: 'error-emphasis', cls: 'bg-error-emphasis' },
+  { name: 'error-muted', cls: 'bg-error-muted' },
+  { name: 'error-muted-hover', cls: 'bg-error-muted-hover' },
+  { name: 'error-highlight', cls: 'bg-error-highlight' },
 ]
 
 const TEXT: Array<SwatchDef> = [
-  { name: 'text-primary', cls: 'bg-text-primary' },
-  { name: 'text-muted', cls: 'bg-text-muted' },
-  { name: 'text-disabled', cls: 'bg-text-disabled' },
-  { name: 'text-on-color', cls: 'bg-text-on-color' },
-  { name: 'text-success-base', cls: 'bg-text-success-base' },
-  { name: 'text-success-subtle', cls: 'bg-text-success-subtle' },
-  { name: 'text-warning-base', cls: 'bg-text-warning-base' },
-  { name: 'text-warning-subtle', cls: 'bg-text-warning-subtle' },
-  { name: 'text-info-base', cls: 'bg-text-info-base' },
-  { name: 'text-info-subtle', cls: 'bg-text-info-subtle' },
-  { name: 'text-error-base', cls: 'bg-text-error-base' },
-  { name: 'text-error-subtle', cls: 'bg-text-error-subtle' },
+  { name: 'text-primary', cls: 'bg-(--text-base)' },
+  { name: 'text-muted', cls: 'bg-(--text-muted)' },
+  { name: 'text-disabled', cls: 'bg-(--text-disabled)' },
+  { name: 'text-on-color', cls: 'bg-(--text-on-color)' },
+  { name: 'text-success-base', cls: 'bg-(--text-success-base)' },
+  { name: 'text-success-subtle', cls: 'bg-(--text-success-subtle)' },
+  { name: 'text-warning-base', cls: 'bg-(--text-warning-base)' },
+  { name: 'text-warning-subtle', cls: 'bg-(--text-warning-subtle)' },
+  { name: 'text-info-base', cls: 'bg-(--text-info-base)' },
+  { name: 'text-info-subtle', cls: 'bg-(--text-info-subtle)' },
+  { name: 'text-error-base', cls: 'bg-(--text-error-base)' },
+  { name: 'text-error-subtle', cls: 'bg-(--text-error-subtle)' },
 ]
 
 const BORDER: Array<SwatchDef> = [
-  { name: 'border-base', cls: 'bg-border-base' },
-  { name: 'border-muted', cls: 'bg-border-muted' },
-  { name: 'border-card', cls: 'bg-border-card' },
-  { name: 'border-highlight', cls: 'bg-border-highlight' },
-  { name: 'border-success-base', cls: 'bg-border-success-base' },
-  { name: 'border-success-muted', cls: 'bg-border-success-muted' },
-  { name: 'border-warning-base', cls: 'bg-border-warning-base' },
-  { name: 'border-warning-muted', cls: 'bg-border-warning-muted' },
-  { name: 'border-info-base', cls: 'bg-border-info-base' },
-  { name: 'border-info-muted', cls: 'bg-border-info-muted' },
-  { name: 'border-error-base', cls: 'bg-border-error-base' },
-  { name: 'border-error-muted', cls: 'bg-border-error-muted' },
+  { name: 'border-base', cls: 'bg-(--border-default)' },
+  { name: 'border-muted', cls: 'bg-(--border-muted)' },
+  { name: 'border-card', cls: 'bg-(--border-card)' },
+  { name: 'border-highlight', cls: 'bg-(--border-highlight)' },
+  { name: 'border-success-base', cls: 'bg-(--border-success-base)' },
+  { name: 'border-success-muted', cls: 'bg-(--border-success-muted)' },
+  { name: 'border-warning-base', cls: 'bg-(--border-warning-base)' },
+  { name: 'border-warning-muted', cls: 'bg-(--border-warning-muted)' },
+  { name: 'border-info-base', cls: 'bg-(--border-info-base)' },
+  { name: 'border-info-muted', cls: 'bg-(--border-info-muted)' },
+  { name: 'border-error-base', cls: 'bg-(--border-error-base)' },
+  { name: 'border-error-muted', cls: 'bg-(--border-error-muted)' },
 ]
 
 const BRAND: Array<SwatchDef> = [
-  { name: 'brand-primary', cls: 'bg-brand-primary' },
+  { name: 'brand-primary', cls: 'bg-brand' },
   { name: 'brand-emphasis', cls: 'bg-brand-emphasis' },
   { name: 'brand-muted', cls: 'bg-brand-muted' },
   { name: 'brand-base', cls: 'bg-brand-base' },
   { name: 'brand-surface', cls: 'bg-brand-surface' },
-  { name: 'brand-text', cls: 'bg-brand-text' },
-  { name: 'wallet-primary', cls: 'bg-brand-wallet-primary' },
-  { name: 'wallet-secondary', cls: 'bg-brand-wallet-secondary' },
+  { name: 'brand-text', cls: 'bg-(--brand-text)' },
+  { name: 'wallet-primary', cls: 'bg-wallet' },
+  { name: 'wallet-secondary', cls: 'bg-wallet-secondary' },
 ]
 
 const SURFACE: Array<SwatchDef> = [
-  { name: 'surface-0', cls: 'bg-surface-0' },
-  { name: 'surface-1', cls: 'bg-surface-1' },
-  { name: 'surface-2', cls: 'bg-surface-2' },
+  { name: 'surface-0', cls: 'bg-surface-app' },
+  { name: 'surface-1', cls: 'bg-surface-frame' },
+  { name: 'surface-2', cls: 'bg-surface-page' },
 ]
 
 const ACCENT: Array<SwatchDef> = [
@@ -107,26 +107,26 @@ const PAIRINGS = [
   {
     label: 'Success',
     banner:
-      'border-border-success-muted bg-background-success-highlight text-text-success-base',
-    solid: 'bg-background-success-base',
+      'border-success-muted bg-success-highlight text-success',
+    solid: 'bg-success',
   },
   {
     label: 'Warning',
     banner:
-      'border-border-warning-muted bg-background-warning-highlight text-text-warning-base',
-    solid: 'bg-background-warning-base',
+      'border-warning-muted bg-warning-highlight text-warning',
+    solid: 'bg-warning',
   },
   {
     label: 'Info',
     banner:
-      'border-border-info-muted bg-background-info-highlight text-text-info-base',
-    solid: 'bg-background-info-base',
+      'border-info-muted bg-info-highlight text-info',
+    solid: 'bg-info',
   },
   {
     label: 'Error',
     banner:
-      'border-border-error-muted bg-background-error-highlight text-text-error-base',
-    solid: 'bg-background-error-base',
+      'border-error-muted bg-error-highlight text-error',
+    solid: 'bg-error',
   },
 ]
 
@@ -134,7 +134,7 @@ function ColorsDoc() {
   return (
     <DocPage
       title="Colors"
-      description="Semantic tokens only - primitives are not exposed as utilities and Tailwind's default palette is disabled. Utility suffix equals the token name from colors.md. Values below are measured live, so they follow the theme."
+      description="Semantic tokens only - primitives are not exposed as utilities and Tailwind's default palette is disabled. Classes come from niural-fe-pkg's Tailwind preset. Values below are measured live, so they follow the theme."
     >
       <DocSection
         title="Backgrounds - neutral"
@@ -196,19 +196,19 @@ function ColorsDoc() {
               className={`flex items-center gap-2 rounded-xl border p-3 ${p.banner}`}
             >
               <span className={`size-2 rounded-full ${p.solid}`} />
-              <span className="text-label-sm">{p.label} banner</span>
-              <span className="ml-auto text-paragraph-xs opacity-80">
+              <span className="text-label-small">{p.label} banner</span>
+              <span className="ml-auto text-paragraph-xsmall opacity-80">
                 bg-highlight · text-base · border-muted
               </span>
             </div>
           ))}
         </div>
-        <p className="mt-3 text-paragraph-xs text-text-muted">
+        <p className="mt-3 text-paragraph-xsmall text-muted">
           Rule of thumb: <InlineCode>bg-background-{'{s}'}-highlight</InlineCode> +{' '}
           <InlineCode>text-text-{'{s}'}-base</InlineCode> +{' '}
           <InlineCode>border-border-{'{s}'}-muted</InlineCode>. Solid fills use{' '}
           <InlineCode>bg-background-{'{s}'}-base</InlineCode> with{' '}
-          <InlineCode>text-text-on-color</InlineCode>.
+          <InlineCode>text-on-color</InlineCode>.
         </p>
       </DocSection>
     </DocPage>

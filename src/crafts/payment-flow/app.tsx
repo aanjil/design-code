@@ -1,6 +1,19 @@
 import { createContext, useContext, useMemo, useState } from 'react'
-import { defaultOptionId, findOption, methodOptions, quote } from './engine'
-import type { MethodGroup, MethodOption, Quote } from './engine'
+import {
+  autoSplit,
+  creditEligible,
+  creditMax,
+  defaultOptionId,
+  findOption,
+  isLocalMode,
+  methodOptions,
+  parseAmount,
+  planFromAlloc,
+  quote,
+  quoteSplit,
+  splitWallets,
+} from './engine'
+import type { CreditPlan, MethodGroup, MethodOption, Quote } from './engine'
 import { useFlowData, useFlowStore } from './store'
 import type { FlowData, FlowStore } from './store'
 import { DEFAULT_UI } from './types'
@@ -9,6 +22,7 @@ import { InvoicesScreen } from './screens/invoices'
 import { PaymentScreen } from './screens/payment'
 import { WalletScreen } from './screens/wallet'
 import { ConfirmModal, SuccessModal } from './screens/confirm'
+import { MethodsModal } from './screens/methods-modal'
 import { FundWalletModal } from './screens/fund-wallet'
 import { MockDock } from './mock-dock'
 import { AppBar } from '@/components/nds/app-bar'
@@ -32,6 +46,27 @@ export interface PaymentCtx {
   groups: Record<MethodGroup, Array<MethodOption>>
   option: MethodOption | null
   q: Quote | null
+  /**
+   * Credit on this payment. null = panel hidden (experiment off, balance 0,
+   * or no fee line credit may touch). `plan` is the live allocation when
+   * on (also in `q.plan`); `usdOnlyBlocked` = USD-only rule hid it.
+   */
+  credit: {
+    on: boolean
+    plan: CreditPlan
+    /** Most this batch can take, USD (balance or every eligible fee). */
+    max: number
+    /** Amount field as shown, USD. */
+    raw: string
+    /** Amount field error - blocks Confirm. */
+    error?: string
+  } | null
+  /** Shown instead of the credit line under the USD-only rule. */
+  usdOnlyBlocked: boolean
+  /** Apply / remove credit. Applying starts at the max. */
+  setCredit: (on: boolean) => void
+  /** Edit the USD amount to apply (as typed). */
+  setCreditAmount: (raw: string) => void
   startPayment: (ids: Array<string>) => void
   openFund: (ccy: 'USD' | LocalCcy, shortfall?: number) => void
 }
@@ -70,10 +105,40 @@ export function PaymentFlowApp({
     const payInvoices = ui.payIds
       .map((id) => data.invoices.find((i) => i.id === id))
       .filter((i): i is Invoice => !!i)
-    const groups = methodOptions(payInvoices, data.local, data.wallets)
-    const methodId = ui.methodId ?? (payInvoices.length ? defaultOptionId(payInvoices, data.wallets) : null)
+    const groups = methodOptions(payInvoices, data.local, data.wallets, { localTransfer: data.flags.localTransfer })
+    // Local invoices preselect the matching wallet (PRD F4.1); everything
+    // else starts on the method list - pick one, it becomes a switcher.
+    const localMode = isLocalMode(payInvoices, data.local)
+    const methodId = ui.methodId ?? (localMode ? defaultOptionId(payInvoices, data.wallets) : null)
     const option = findOption(groups, methodId)
-    const q = option && payInvoices.length ? quote(payInvoices, option) : null
+    const rules = { crossCcy: data.flags.creditCrossCcy }
+    const eligible = data.flags.credits && data.credit.balance > 0 ? creditEligible(payInvoices, rules) : []
+    const usdOnlyBlocked =
+      data.flags.credits &&
+      data.credit.balance > 0 &&
+      eligible.length === 0 &&
+      !rules.crossCcy &&
+      payInvoices.some((i) => i.ccy !== 'USD' && i.kind !== 'contractor')
+    const on = eligible.length > 0 && (ui.creditOn ?? data.flags.creditDefaultOn)
+    const max = creditMax(payInvoices, data.credit.balance, rules)
+    const typed = ui.creditAmount === null ? max : parseAmount(ui.creditAmount)
+    const error =
+      Number.isNaN(typed) || typed < 0
+        ? 'Enter an amount'
+        : typed > max + 1e-9
+          ? `You can apply up to ${fmt(max, 'USD')}`
+          : undefined
+    const alloc = on && !error ? autoSplit(payInvoices, typed, rules) : {}
+    const built = planFromAlloc(payInvoices, data.credit, rules, alloc)
+    const plan = on && error ? { ...built, invalid: true } : built
+    const raw = ui.creditAmount ?? max.toFixed(2)
+    const credit = eligible.length > 0 ? { on, plan, max, raw, error: on ? error : undefined } : null
+    const split = splitWallets(payInvoices, data.wallets)
+    const q = !payInvoices.length
+      ? null
+      : split
+        ? quoteSplit(payInvoices, split, on ? plan : null)
+        : quote(payInvoices, option, on ? plan : null)
     return {
       ui,
       set,
@@ -83,13 +148,19 @@ export function PaymentFlowApp({
       groups,
       option,
       q,
+      credit,
+      usdOnlyBlocked,
+      setCredit: (next) => set({ creditOn: next, creditAmount: null }),
+      setCreditAmount: (next) => set({ creditAmount: next }),
       startPayment: (ids) =>
         set({
           screen: 'payment',
           payIds: ids,
           methodId: null,
-          methodsOpen: false,
           openGroup: null,
+          creditOn: null,
+          creditAmount: null,
+          payFailed: false,
           collapsed: [],
           wireVerify: 'idle',
           modal: null,
@@ -148,6 +219,7 @@ export function PaymentFlowApp({
           </MainLayout>
         </AppShell>
         {mockDock && !ui.modal && <MockDock />}
+        {ui.modal?.kind === 'methods' && <MethodsModal />}
         {ui.modal?.kind === 'confirm' && <ConfirmModal />}
         {ui.modal?.kind === 'success' && <SuccessModal result={ui.modal.result} />}
         {ui.modal?.kind === 'fund' && <FundWalletModal draft={ui.modal.draft} />}

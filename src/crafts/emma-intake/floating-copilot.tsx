@@ -46,34 +46,34 @@ export function PromptBarFloater({
   return (
     <div
       className={cn(
-        'mx-auto flex w-full flex-col rounded-[26px] bg-background-base shadow-button-gray transition-[max-width,box-shadow] duration-300',
+        'mx-auto flex w-full flex-col rounded-[26px] bg-base borders-base transition-[max-width,box-shadow] duration-300',
         compact ? 'max-w-[440px]' : expanded ? 'max-w-[640px]' : 'max-w-[560px]',
-        isDragActive && 'shadow-ai ring-2 ring-brand-primary/40',
+        isDragActive && 'elevation-ai ring-2 ring-brand/40',
         className,
       )}
     >
       {isDragActive && (
-        <div className="m-1.5 flex flex-col items-center gap-1.5 rounded-[20px] border-2 border-dashed border-brand-primary/50 bg-brand-muted/30 px-4 py-5 text-center">
-          <UploadSimple className="size-5 text-brand-text" />
-          <p className="text-label-xs text-brand-text">Drop it here</p>
-          {dropHint && <p className="text-caption text-text-muted">{dropHint}</p>}
+        <div className="m-1.5 flex flex-col items-center gap-1.5 rounded-[20px] border-2 border-dashed border-brand/50 bg-brand-muted/30 px-4 py-5 text-center">
+          <UploadSimple className="size-5 text-brand" />
+          <p className="text-label-xsmall text-brand">Drop it here</p>
+          {dropHint && <p className="text-caption-sm text-muted">{dropHint}</p>}
         </div>
       )}
 
       {!isDragActive && file && (
-        <div className="m-1.5 mb-0 flex items-center gap-2 rounded-2xl bg-background-highlight px-2.5 py-2">
-          <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand-muted text-brand-text">
+        <div className="m-1.5 mb-0 flex items-center gap-2 rounded-2xl bg-highlight px-2.5 py-2">
+          <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand-muted text-brand">
             <FileIcon className="size-3.5" />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-label-xs text-text-primary">{file.name}</p>
-            <p className="text-caption text-text-muted">{file.sizeLabel}</p>
+            <p className="truncate text-label-xsmall text-primary">{file.name}</p>
+            <p className="text-caption-sm text-muted">{file.sizeLabel}</p>
           </div>
           <button
             type="button"
             onClick={onClearFile}
             aria-label="Remove file"
-            className="text-text-muted transition-colors hover:text-text-primary"
+            className="text-muted transition-colors hover:text-primary"
           >
             <X className="size-3.5" />
           </button>
@@ -85,7 +85,7 @@ export function PromptBarFloater({
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="flex size-8 shrink-0 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+            className="flex size-8 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-highlight hover:text-primary"
             aria-label="Attach a file"
           >
             <Paperclip className="size-4" />
@@ -108,7 +108,7 @@ export function PromptBarFloater({
               if (e.key === 'Enter' && file) onSubmit()
             }}
             placeholder={placeholder}
-            className="min-w-0 flex-1 bg-transparent px-1.5 text-paragraph-sm text-text-primary outline-none placeholder:text-text-muted"
+            className="min-w-0 flex-1 bg-transparent px-1.5 text-paragraph-small text-primary outline-none placeholder:text-muted"
           />
 
           <button
@@ -118,8 +118,8 @@ export function PromptBarFloater({
             className={cn(
               'flex size-8 shrink-0 items-center justify-center rounded-full transition-colors',
               file
-                ? 'bg-brand-primary text-text-on-color hover:opacity-90'
-                : 'bg-background-highlight text-text-disabled',
+                ? 'bg-brand text-on-color hover:opacity-90'
+                : 'bg-highlight text-disabled',
             )}
             aria-label="Send to Emma"
           >

@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 
 /**
  * Inline feedback: status banners (5 tones on the *-highlight surfaces)
- * and the Emma AI suggestion card (shadow-ai glow). Promoted from the
+ * and the Emma AI suggestion card (elevation-ai glow). Promoted from the
  * multi-payroll craft once they proved reusable.
  */
 
@@ -20,28 +20,28 @@ export type BannerTone = 'info' | 'warning' | 'error' | 'success' | 'pending'
 const TONES: Record<BannerTone, { icon: Icon; wrap: string; iconCls: string }> = {
   info: {
     icon: Info,
-    wrap: 'bg-background-info-highlight',
-    iconCls: 'text-text-info-base',
+    wrap: 'bg-info-highlight',
+    iconCls: 'text-info',
   },
   warning: {
     icon: Warning,
-    wrap: 'bg-background-warning-highlight',
-    iconCls: 'text-text-warning-base',
+    wrap: 'bg-warning-highlight',
+    iconCls: 'text-warning',
   },
   error: {
     icon: WarningOctagon,
-    wrap: 'bg-background-error-highlight',
-    iconCls: 'text-text-error-base',
+    wrap: 'bg-error-highlight',
+    iconCls: 'text-error',
   },
   success: {
     icon: CheckCircle,
-    wrap: 'bg-background-success-highlight',
-    iconCls: 'text-text-success-base',
+    wrap: 'bg-success-highlight',
+    iconCls: 'text-success',
   },
   pending: {
     icon: ClockCountdown,
     wrap: 'bg-brand-base',
-    iconCls: 'text-brand-text',
+    iconCls: 'text-brand',
   },
 }
 
@@ -53,7 +53,7 @@ export function Banner({
   className,
 }: {
   tone: BannerTone
-  title: string
+  title: React.ReactNode
   children?: React.ReactNode
   actions?: React.ReactNode
   className?: string
@@ -64,9 +64,9 @@ export function Banner({
     <div className={cn('flex items-start gap-2.5 rounded-lg p-3', t.wrap, className)}>
       <ToneIcon weight="fill" className={cn('mt-px size-4 shrink-0', t.iconCls)} />
       <div className="min-w-0 flex-1">
-        <p className="text-label-xs text-text-primary">{title}</p>
+        <div className="text-label-xsmall text-primary">{title}</div>
         {children && (
-          <div className="mt-0.5 text-paragraph-xs text-text-muted">{children}</div>
+          <div className="mt-0.5 text-paragraph-xsmall text-muted">{children}</div>
         )}
         {actions && <div className="mt-2 flex items-center gap-2">{actions}</div>}
       </div>
@@ -86,12 +86,12 @@ export function EmmaCard({
   className?: string
 }) {
   return (
-    <div className={cn('rounded-xl bg-background-base p-4 shadow-ai', className)}>
+    <div className={cn('rounded-xl bg-base p-4 elevation-ai', className)}>
       <div className="flex items-center gap-1.5">
         <Sparkle weight="fill" className="size-4 text-brand-primary" />
-        <p className="text-label-xs text-brand-text">Emma · {title}</p>
+        <p className="text-label-xsmall text-brand">Emma · {title}</p>
       </div>
-      <div className="mt-1.5 text-paragraph-xs text-text-primary">{children}</div>
+      <div className="mt-1.5 text-paragraph-xsmall text-primary">{children}</div>
       {actions && <div className="mt-3 flex items-center gap-2">{actions}</div>}
     </div>
   )

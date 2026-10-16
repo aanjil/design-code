@@ -4,7 +4,7 @@ import type { AppView } from './types'
 import { DashboardScreen } from './screens/dashboard'
 import { WizardScreen } from './screens/wizard'
 import { ScheduleDetailScreen } from './screens/schedule-detail'
-import { RunsScreen } from './screens/runs'
+import { RunDetailScreen, RunsScreen } from './screens/runs'
 import { HireScreen } from './screens/hire'
 import { useExplorer } from '@/components/playground/explorer'
 import { AppBar } from '@/components/nds/app-bar'
@@ -28,6 +28,8 @@ export function Screen({ view }: { view: AppView }) {
       return <ScheduleDetailScreen view={view.scheduleDetail} />
     case 'runs':
       return <RunsScreen view={view.runs} />
+    case 'run':
+      return <RunDetailScreen view={view.run} />
     case 'hire':
       return <HireScreen view={view.hire} />
   }
@@ -79,7 +81,7 @@ export function renderWithChrome(
           <Sidebar
             title="Payments"
             groups={PAYMENTS_SIDEBAR}
-            activeItem={view.kind === 'runs' ? 'Payroll' : 'Payroll Schedule'}
+            activeItem={view.kind === 'runs' || view.kind === 'run' ? 'Payroll' : 'Payroll Schedule'}
             onNavigate={onSidebarNavigate}
           />
           <PageLayout>

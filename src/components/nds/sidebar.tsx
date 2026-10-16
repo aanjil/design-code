@@ -99,9 +99,9 @@ export function Sidebar({
   onNavigate?: (label: string) => void
 }) {
   return (
-    <aside className="flex w-50 shrink-0 flex-col border-r border-border-base bg-background-base/72 ">
+    <aside className="flex w-60 shrink-0 flex-col border-r border-base bg-base/72 ">
       <div className="flex h-16 shrink-0 items-center px-4 py-2">
-        <p className="px-2 text-[18px] leading-[1.6] font-[550] tracking-[-0.02em] text-text-primary">
+        <p className="px-2 text-[18px] leading-[1.6] font-[550] tracking-[-0.02em] text-primary">
           {title}
         </p>
       </div>
@@ -109,7 +109,7 @@ export function Sidebar({
         {groups.map((group, gi) => (
           <div key={group.title ?? gi}>
             {group.title && (
-              <p className="px-2 pb-3 text-caption-md text-text-muted">
+              <p className="px-2 pb-3 text-caption-sm font-medium text-muted">
                 {group.title}
               </p>
             )}
@@ -121,11 +121,12 @@ export function Sidebar({
                     key={label}
                     type="button"
                     onClick={() => onNavigate?.(label)}
+                    data-sidebar-item={label}
                     className={cn(
-                      'flex w-full items-center gap-3 rounded-lg p-2 text-left text-label-sm transition-colors',
+                      'flex w-full items-center gap-3 rounded-lg p-2 text-left text-label-small transition-colors',
                       active
-                        ? 'bg-background-base text-brand-text shadow-button-gray'
-                        : 'text-text-primary hover:bg-background-highlight',
+                        ? 'bg-base text-brand borders-base'
+                        : 'text-primary hover:bg-highlight',
                     )}
                   >
                     <ItemIcon className="size-[18px] shrink-0" />

@@ -13,16 +13,16 @@ export { Banner } from '@/components/nds/feedback'
 export type PillTone = 'gray' | 'amber' | 'green' | 'red' | 'blue'
 
 const PILL_TONE: Record<PillTone, string> = {
-  gray: 'bg-background-highlight text-text-muted',
-  amber: 'bg-background-warning-muted text-text-primary',
-  green: 'bg-background-success-muted text-text-success-base',
-  red: 'bg-background-error-highlight text-text-error-base',
-  blue: 'bg-background-info-muted text-text-primary',
+  gray: 'bg-highlight text-muted',
+  amber: 'bg-warning-muted text-primary',
+  green: 'bg-success-muted text-success',
+  red: 'bg-error-highlight text-error',
+  blue: 'bg-info-muted text-primary',
 }
 
 export function StatusPill({ tone, children }: { tone: PillTone; children: React.ReactNode }) {
   return (
-    <span className={cn('inline-flex h-6 shrink-0 items-center rounded-full px-2 text-caption-md', PILL_TONE[tone])}>
+    <span className={cn('inline-flex h-6 shrink-0 items-center rounded-full px-2 text-caption-sm font-medium', PILL_TONE[tone])}>
       {children}
     </span>
   )
@@ -42,23 +42,23 @@ export function StepTracker({ current, nothingNeeded }: { current: number; nothi
             <div key={label} className="flex items-center gap-1.5">
               <span
                 className={cn(
-                  'flex size-5 items-center justify-center rounded-full text-caption-md',
-                  done && 'bg-brand-primary text-text-on-color',
-                  active && 'bg-background-warning-muted text-text-primary',
-                  !done && !active && 'bg-background-highlight text-text-muted',
+                  'flex size-5 items-center justify-center rounded-full text-caption-sm font-medium',
+                  done && 'bg-brand text-on-color',
+                  active && 'bg-warning-muted text-primary',
+                  !done && !active && 'bg-highlight text-muted',
                 )}
               >
                 {done ? <Check weight="bold" className="size-3" /> : i + 1}
               </span>
-              <span className={cn('text-caption-md', active ? 'text-text-primary' : 'text-text-muted')}>
+              <span className={cn('text-caption-sm font-medium', active ? 'text-primary' : 'text-muted')}>
                 {label}
               </span>
-              {i < TRACKER_STEPS.length - 1 && <span className="h-px w-4 bg-border-highlight" />}
+              {i < TRACKER_STEPS.length - 1 && <span className="h-px w-4 bg-(--border-highlight)" />}
             </div>
           )
         })}
       </div>
-      <p className="text-caption-md text-text-muted">
+      <p className="text-caption-sm font-medium text-muted">
         Step {Math.min(current + 1, 4)} of 4{nothingNeeded && ' · nothing needed from you'}
       </p>
     </div>
@@ -68,8 +68,8 @@ export function StepTracker({ current, nothingNeeded }: { current: number; nothi
 /** The full-pay guarantee - §0: consent, config review, wallet-delete modal. */
 export function GuaranteeNote({ className }: { className?: string }) {
   return (
-    <p className={cn('flex items-start gap-1.5 text-paragraph-xs text-text-muted', className)}>
-      <ShieldCheck weight="fill" className="mt-0.5 size-4 shrink-0 text-text-success-base" />
+    <p className={cn('flex items-start gap-1.5 text-paragraph-xsmall text-muted', className)}>
+      <ShieldCheck weight="fill" className="mt-0.5 size-4 shrink-0 text-success" />
       Your total pay is never affected. Anything that can't reach your wallet goes to your bank.
     </p>
   )
@@ -90,16 +90,16 @@ export function ModalShell({
   width?: string
 }) {
   return (
-    <div className="absolute inset-0 z-40 grid place-items-center bg-overlay-background-base p-6 backdrop-blur-[2px]">
-      <div className={cn('flex max-h-full min-w-0 flex-col rounded-2xl bg-background-base shadow-flyout', width)}>
+    <div className="absolute inset-0 z-40 grid place-items-center bg-overlay p-6 backdrop-blur-[2px]">
+      <div className={cn('flex max-h-full min-w-0 flex-col rounded-2xl bg-base flyout', width)}>
         <div className="flex shrink-0 items-center justify-between gap-3 px-5 pt-4 pb-1">
-          <p className="text-label-md text-text-primary">{title}</p>
+          <p className="text-label-medium text-primary">{title}</p>
           {onClose && (
             <button
               type="button"
               aria-label="Close"
               onClick={onClose}
-              className="flex size-7 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+              className="flex size-7 items-center justify-center rounded-lg text-muted transition-colors hover:bg-highlight hover:text-primary"
             >
               <X className="size-4" />
             </button>
@@ -126,10 +126,10 @@ export function FlowShell({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex h-full min-h-0 flex-col bg-surface-2 text-text-primary">
-      <div className="flex h-14 shrink-0 items-center justify-between border-b border-border-highlight bg-background-base px-6">
-        <h1 className="truncate text-label-md">{title}</h1>
-        {progress && <span className="text-caption-md text-text-muted">{progress}</span>}
+    <div className="flex h-full min-h-0 flex-col bg-surface-page text-primary">
+      <div className="flex h-14 shrink-0 items-center justify-between border-b border-base bg-base px-6">
+        <h1 className="truncate text-label-medium">{title}</h1>
+        {progress && <span className="text-caption-sm font-medium text-muted">{progress}</span>}
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto px-8 py-10">
         <div className="mx-auto w-full max-w-[560px]">{children}</div>
@@ -139,14 +139,14 @@ export function FlowShell({
 }
 
 export function FormCard({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={cn('rounded-2xl bg-background-base p-6 shadow-card', className)}>{children}</div>
+  return <div className={cn('rounded-2xl bg-base p-6 card', className)}>{children}</div>
 }
 
 export function FieldLabel({ children, required }: { children: React.ReactNode; required?: boolean }) {
   return (
-    <label className="mb-1 block text-label-xs text-text-primary">
+    <label className="mb-1 block text-label-xsmall text-primary">
       {children}
-      {required && <span className="text-text-error-base"> *</span>}
+      {required && <span className="text-error"> *</span>}
     </label>
   )
 }
@@ -155,7 +155,7 @@ export function ReadonlyField({ label, value }: { label: string; value: string }
   return (
     <div>
       <FieldLabel>{label}</FieldLabel>
-      <div className="flex h-8 items-center rounded-lg border border-input px-2.5 text-paragraph-xs text-text-primary">
+      <div className="flex h-8 items-center rounded-lg border border-input px-2.5 text-paragraph-xsmall text-primary">
         {value}
       </div>
     </div>
@@ -177,19 +177,19 @@ export function OptionRow({
       type="button"
       onClick={onSelect}
       className={cn(
-        'flex w-full items-center gap-3 rounded-xl p-3 text-left text-paragraph-xs transition-shadow',
-        selected ? 'shadow-border-brand' : 'shadow-button-gray hover:bg-background-highlight',
+        'flex w-full items-center gap-3 rounded-xl p-3 text-left text-paragraph-xsmall transition-shadow',
+        selected ? 'borders-shadow' : 'borders-base hover:bg-highlight',
       )}
     >
       <span
         className={cn(
           'flex size-4 shrink-0 items-center justify-center rounded-full border',
-          selected ? 'border-brand-primary' : 'border-border-base',
+          selected ? 'border-brand' : 'border-base',
         )}
       >
-        {selected && <span className="size-2 rounded-full bg-brand-primary" />}
+        {selected && <span className="size-2 rounded-full bg-brand" />}
       </span>
-      <span className="text-text-primary">{label}</span>
+      <span className="text-primary">{label}</span>
     </button>
   )
 }
@@ -216,11 +216,11 @@ export function ConfirmDialog({
   singleAction?: boolean
 }) {
   return (
-    <div className="absolute inset-0 z-40 grid place-items-center bg-overlay-background-base p-6 backdrop-blur-[2px]">
-      <div className="flex w-[420px] flex-col gap-4 rounded-2xl bg-background-base p-6 shadow-flyout">
+    <div className="absolute inset-0 z-40 grid place-items-center bg-overlay p-6 backdrop-blur-[2px]">
+      <div className="flex w-[420px] flex-col gap-4 rounded-2xl bg-base p-6 flyout">
         <div className="flex flex-col gap-2">
-          <p className="text-label-md text-text-primary">{title}</p>
-          <p className="text-paragraph-xs text-text-muted">{body}</p>
+          <p className="text-label-medium text-primary">{title}</p>
+          <p className="text-paragraph-xsmall text-muted">{body}</p>
           {guarantee && <GuaranteeNote />}
         </div>
         <div className="flex items-center justify-end gap-2">

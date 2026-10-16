@@ -27,7 +27,7 @@ export function ChatThreadScreen({ state }: { state: 'reviewing' | 'followup' })
         <PageLayout>
           <PageHeader
             title="Ask Emma"
-            actions={<SidebarSimple className="size-4.5 text-text-muted" />}
+            actions={<SidebarSimple className="size-4.5 text-muted" />}
           />
           <PageBody className="mx-auto flex w-full max-w-[720px] flex-col gap-8 pb-6">
             {turns.map((turn, i) => {
@@ -57,7 +57,7 @@ export function ChatThreadScreen({ state }: { state: 'reviewing' | 'followup' })
 function UserBubble({ children, showAvatar }: { children: React.ReactNode; showAvatar: boolean }) {
   return (
     <div className="flex items-end justify-end gap-2.5">
-      <p className="max-w-[80%] rounded-2xl rounded-tr-sm bg-brand-base px-3.5 py-2.5 text-paragraph-sm text-brand-text">
+      <p className="max-w-[80%] rounded-2xl rounded-tr-sm bg-brand-base px-3.5 py-2.5 text-paragraph-small text-brand">
         {children}
       </p>
       {showAvatar ? (
@@ -73,19 +73,19 @@ function EmmaTurn({ children, emphasis }: { children: React.ReactNode; emphasis?
   return (
     <div className="flex items-start gap-2.5">
       <EmmaMark className={emphasis ? 'mt-0.5 size-7 shrink-0' : 'mt-0.5 size-6 shrink-0'} />
-      <p className="min-w-0 flex-1 whitespace-pre-line text-paragraph-sm text-text-primary">{children}</p>
+      <p className="min-w-0 flex-1 whitespace-pre-line text-paragraph-small text-primary">{children}</p>
     </div>
   )
 }
 
 function SmartActionCard({ turn }: { turn: Extract<ThreadTurn, { kind: 'smart-action' }> }) {
   return (
-    <div className="ml-[34px] flex items-center gap-3 rounded-xl bg-background-base p-3 shadow-card">
-      <Spinner className="size-5 shrink-0 animate-spin text-text-muted" />
-      <p className="min-w-0 flex-1 text-label-sm text-text-primary">{turn.label}</p>
+    <div className="ml-[34px] flex items-center gap-3 rounded-xl bg-base p-3 card">
+      <Spinner className="size-5 shrink-0 animate-spin text-muted" />
+      <p className="min-w-0 flex-1 text-label-small text-primary">{turn.label}</p>
       <button
         type="button"
-        className="flex shrink-0 items-center gap-1 text-label-sm text-brand-text hover:underline"
+        className="flex shrink-0 items-center gap-1 text-label-small text-brand hover:underline"
       >
         {turn.buttonLabel}
         <ArrowUpRight className="size-4" />

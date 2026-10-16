@@ -108,16 +108,16 @@ function ReportParametersCard({
   const line = parametersLine(draft, dateShape, nextRunIso)
 
   return (
-    <section className="rounded-xl bg-background-highlight p-3">
+    <section className="rounded-xl bg-highlight p-3">
       <div className="mb-2 flex items-center justify-between gap-3">
-        <p className="text-label-xs text-text-primary">
-          Report parameters <span className="font-normal text-text-muted">(carried from the report)</span>
+        <p className="text-label-xsmall text-primary">
+          Report parameters <span className="font-normal text-muted">(carried from the report)</span>
         </p>
         {onChange && (
           <button
             type="button"
             onClick={() => setEditing((v) => !v)}
-            className="flex items-center gap-1 text-label-xs text-brand-text hover:text-brand-primary"
+            className="flex items-center gap-1 text-label-xsmall text-brand hover:text-brand-primary"
           >
             <PencilSimple className="size-3.5" />
             {editing ? 'Done' : 'Edit'}
@@ -158,7 +158,7 @@ function ReportParametersCard({
           {line.split(' · ').map((part) => (
             <span
               key={part}
-              className="flex h-7 items-center rounded-full bg-background-base px-2.5 text-caption-md text-text-primary shadow-button-gray"
+              className="flex h-7 items-center rounded-full bg-base px-2.5 text-caption-sm font-medium text-primary borders-base"
             >
               {part}
             </span>
@@ -215,15 +215,15 @@ function HowOftenCard({
     draft.cadence === 'once' && oneTimePeriodEnd ? validateOneTime(draft.runDate ?? WORLD_TODAY, oneTimePeriodEnd) : null
 
   return (
-    <section className="rounded-xl border border-border-highlight p-3">
+    <section className="rounded-xl border border-base p-3">
       <div className="mb-3 flex items-center justify-between gap-3">
         <div>
-          <p className="text-label-xs text-text-primary">
-            How often <span className="text-text-error-base">*</span>
+          <p className="text-label-xsmall text-primary">
+            How often <span className="text-error">*</span>
           </p>
-          <p className="text-caption-md text-text-muted">Choose whether this report runs once or repeats automatically.</p>
+          <p className="text-caption-sm font-medium text-muted">Choose whether this report runs once or repeats automatically.</p>
         </div>
-        <div className="flex h-9 shrink-0 items-center rounded-lg border border-border-base bg-surface-2 p-0.5">
+        <div className="flex h-9 shrink-0 items-center rounded-lg border border-base bg-surface-page p-0.5">
           {(['once', 'recurring'] as const).map((v) => (
             <button
               key={v}
@@ -231,8 +231,8 @@ function HowOftenCard({
               disabled={!onChange}
               onClick={() => onChange?.({ cadence: v })}
               className={cn(
-                'flex h-full items-center rounded-md px-3 text-caption-md transition-colors',
-                draft.cadence === v ? 'bg-background-base text-text-primary shadow-button-gray' : 'text-text-muted',
+                'flex h-full items-center rounded-md px-3 text-caption-sm font-medium transition-colors',
+                draft.cadence === v ? 'bg-base text-primary borders-base' : 'text-muted',
               )}
             >
               {v === 'once' ? 'One-time' : 'Recurring'}
@@ -287,8 +287,8 @@ function HowOftenCard({
           </div>
 
           {dateShape === 'none' ? (
-            <div className="flex items-center gap-2 rounded-lg bg-background-highlight p-2.5 text-paragraph-xs text-text-primary">
-              <Info className="size-4 shrink-0 text-brand-text" />
+            <div className="flex items-center gap-2 rounded-lg bg-highlight p-2.5 text-paragraph-xsmall text-primary">
+              <Info className="size-4 shrink-0 text-brand" />
               Captures a snapshot at run time - this report type has no reporting-period param.
             </div>
           ) : (
@@ -408,7 +408,7 @@ function HowOftenCard({
           </div>
 
           {draft.afterEachRun && (
-            <div className="flex items-center gap-2 rounded-lg bg-brand-muted p-2.5 text-paragraph-xs text-brand-text">
+            <div className="flex items-center gap-2 rounded-lg bg-brand-muted p-2.5 text-paragraph-xsmall text-brand">
               <Info className="size-4 shrink-0" />
               After each run selected - runs automatically once payroll status changes to {draft.statusFilter?.join(' or ')}.
             </div>
@@ -439,7 +439,7 @@ function HowOftenCard({
         </div>
       </div>
 
-      <div className="mt-3 flex items-start gap-2 rounded-xl bg-background-info-muted px-3 py-2.5 text-paragraph-xs text-text-info-base">
+      <div className="mt-3 flex items-start gap-2 rounded-xl bg-info-muted px-3 py-2.5 text-paragraph-xsmall text-info">
         <Info className="mt-0.5 size-4 shrink-0" />
         {banner}
       </div>
@@ -496,9 +496,9 @@ function DeliverySetupStep({
 
   return (
     <div className="flex flex-col gap-4">
-      <section className="rounded-xl border border-border-highlight p-3">
-        <p className="text-label-xs text-text-primary">Deliver to</p>
-        <p className="mb-3 text-caption-md text-text-muted">Choose how recipients receive this report.</p>
+      <section className="rounded-xl border border-base p-3">
+        <p className="text-label-xsmall text-primary">Deliver to</p>
+        <p className="mb-3 text-caption-sm font-medium text-muted">Choose how recipients receive this report.</p>
         <div className="grid grid-cols-3 gap-2">
           {DELIVERY_METHODS.map((m) => (
             <button
@@ -508,13 +508,13 @@ function DeliverySetupStep({
               onClick={() => toggleMethod(m.key)}
               className={cn(
                 'flex items-start gap-2 rounded-lg border p-2.5 text-left transition-colors',
-                draft.delivery[m.key] ? 'border-brand-primary bg-brand-base' : 'border-border-highlight',
+                draft.delivery[m.key] ? 'border-brand bg-brand-base' : 'border-base',
               )}
             >
               <Checkbox checked={draft.delivery[m.key]} onCheckedChange={() => {}} className="mt-0.5" />
               <span>
-                <p className="text-label-xs text-text-primary">{m.label}</p>
-                <p className="text-caption-md text-text-muted">{m.desc}</p>
+                <p className="text-label-xsmall text-primary">{m.label}</p>
+                <p className="text-caption-sm font-medium text-muted">{m.desc}</p>
               </span>
             </button>
           ))}
@@ -522,8 +522,8 @@ function DeliverySetupStep({
       </section>
 
       {draft.delivery.email && (
-        <section className="rounded-xl border border-border-highlight p-3">
-          <p className="mb-2 text-label-xs text-text-primary">Email recipients</p>
+        <section className="rounded-xl border border-base p-3">
+          <p className="mb-2 text-label-xsmall text-primary">Email recipients</p>
           <div className="flex flex-wrap items-center gap-1.5">
             {draft.emailRecipients.map((r) => (
               <RecipientChip key={r.email} recipient={r} onRemove={onChange && (() => removeRecipient('emailRecipients', r.email))} />
@@ -542,8 +542,8 @@ function DeliverySetupStep({
       )}
 
       {draft.delivery.link && (
-        <section className="rounded-xl border border-border-highlight p-3">
-          <p className="mb-2 text-label-xs text-text-primary">External link recipients</p>
+        <section className="rounded-xl border border-base p-3">
+          <p className="mb-2 text-label-xsmall text-primary">External link recipients</p>
           <div className="flex flex-wrap items-center gap-1.5">
             {draft.linkRecipients.map((r) => (
               <RecipientChip key={r.email} recipient={r} onRemove={onChange && (() => removeRecipient('linkRecipients', r.email))} />
@@ -559,14 +559,14 @@ function DeliverySetupStep({
       )}
 
       {externalRecipients.length > 0 && (
-        <div className="flex items-start gap-2 rounded-lg bg-background-warning-muted p-2.5 text-paragraph-xs text-text-primary">
-          <ShieldWarning weight="fill" className="mt-0.5 size-4 shrink-0 text-text-warning-base" />
+        <div className="flex items-start gap-2 rounded-lg bg-warning-muted p-2.5 text-paragraph-xsmall text-primary">
+          <ShieldWarning weight="fill" className="mt-0.5 size-4 shrink-0 text-warning" />
           {externalRecipients.length} external recipient{externalRecipients.length > 1 ? 's' : ''} - this report may contain
           PII and will be sent outside the organization.
         </div>
       )}
 
-      <div className="flex items-start gap-2 rounded-xl bg-background-info-muted px-3 py-2.5 text-paragraph-xs text-text-info-base">
+      <div className="flex items-start gap-2 rounded-xl bg-info-muted px-3 py-2.5 text-paragraph-xsmall text-info">
         <Info className="mt-0.5 size-4 shrink-0" />
         Recipients get a secure link. They verify with email and a one-time code, then download. Link expires in 7 days.
       </div>
@@ -578,9 +578,9 @@ function DeliverySetupStep({
 
 function SummaryRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="flex items-baseline justify-between gap-3 border-b border-border-highlight px-1 py-3 last:border-0">
-      <span className="text-paragraph-xs text-text-muted">{label}</span>
-      <span className="text-right text-paragraph-xs text-text-primary">{value}</span>
+    <div className="flex items-baseline justify-between gap-3 border-b border-base px-1 py-3 last:border-0">
+      <span className="text-paragraph-xsmall text-muted">{label}</span>
+      <span className="text-right text-paragraph-xsmall text-primary">{value}</span>
     </div>
   )
 }
@@ -614,14 +614,14 @@ function ReviewStep({
 
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-paragraph-xs text-text-muted">Review the details below before saving.</p>
-      <section className="rounded-xl border border-border-highlight px-3">
+      <p className="text-paragraph-xsmall text-muted">Review the details below before saving.</p>
+      <section className="rounded-xl border border-base px-3">
         <SummaryRow
           label="Report"
           value={
             <span className="flex items-center justify-end gap-1.5">
               {report.name}
-              <span className="rounded bg-background-highlight px-1.5 py-0.5 text-caption-md text-text-muted">{report.category}</span>
+              <span className="rounded bg-highlight px-1.5 py-0.5 text-caption-sm font-medium text-muted">{report.category}</span>
             </span>
           }
         />
@@ -676,7 +676,7 @@ export function ScheduleConfigModal({
     <ModalShell
       title={
         <>
-          {editing ? 'Edit' : 'Schedule'} <span className="text-brand-text">{report.name}</span>
+          {editing ? 'Edit' : 'Schedule'} <span className="text-brand">{report.name}</span>
         </>
       }
       onClose={onClose}

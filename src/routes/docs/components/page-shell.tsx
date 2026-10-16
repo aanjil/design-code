@@ -20,7 +20,7 @@ function PageShellDoc() {
     >
       <DocSection title="PageHeader" note="56px, hairline bottom border. onBack renders the chevron for detail/form pages.">
         <Specimen className="p-0">
-          <div className="flex flex-col overflow-hidden rounded-xl bg-background-base">
+          <div className="flex flex-col overflow-hidden rounded-xl bg-base">
             <PageHeader
               title="Payroll Schedule"
               actions={
@@ -36,10 +36,10 @@ function PageShellDoc() {
 
       <DocSection title="Body + footer" note="PageBody scrolls; PageFooter pins actions.">
         <Specimen className="p-0">
-          <div className="flex h-64 flex-col overflow-hidden rounded-xl bg-background-base">
+          <div className="flex h-64 flex-col overflow-hidden rounded-xl bg-base">
             <PageHeader title="Example" />
-            <PageBody className="bg-surface-1">
-              <div className="grid h-24 place-items-center rounded-lg border border-dashed border-border-base text-paragraph-xs text-text-muted">
+            <PageBody className="bg-surface-frame">
+              <div className="grid h-24 place-items-center rounded-lg border border-dashed border-base text-paragraph-xsmall text-muted">
                 page content
               </div>
             </PageBody>
@@ -69,7 +69,7 @@ function PageShellDoc() {
       </DocSection>
 
       <DocSection title="Form flows">
-        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-muted marker:text-text-disabled">
+        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-small text-muted marker:text-disabled">
           <li>
             Wizards and hire flows skip the shell entirely -{' '}
             <InlineCode>FormShell</InlineCode> (multi-payroll) renders a slim title bar,

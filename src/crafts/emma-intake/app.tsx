@@ -101,7 +101,7 @@ function Screen({ view }: { view: IntakeView }) {
 
 export function renderWithChrome(view: IntakeView, remountKey: string): React.ReactNode {
   return (
-    <div key={remountKey} className="h-full min-h-0 overflow-hidden bg-background-highlight/30">
+    <div key={remountKey} className="h-full min-h-0 overflow-hidden bg-highlight/30">
       <Screen view={view} />
     </div>
   )

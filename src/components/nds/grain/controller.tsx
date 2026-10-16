@@ -66,7 +66,7 @@ export function GrainController() {
           <select
             value={kind}
             onChange={(e) => loadScenario(e.target.value as typeof kind)}
-            className="h-8 w-full rounded-lg border border-border-base bg-background-base px-2 text-paragraph-sm text-text-primary outline-none focus:shadow-border-focus"
+            className="h-8 w-full rounded-lg border border-base bg-base px-2 text-paragraph-small text-primary outline-none focus:borders-focus"
           >
             {GRAIN_SCENARIOS.map((s) => (
               <option key={s.kind} value={s.kind}>
@@ -83,9 +83,9 @@ export function GrainController() {
             max={100}
             value={confidence}
             onChange={(e) => setConfidence(Number(e.target.value))}
-            className="w-full accent-brand-primary"
+            className="w-full accent-brand"
           />
-          <div className="mt-1 flex justify-between text-caption text-text-disabled">
+          <div className="mt-1 flex justify-between text-caption-sm text-disabled">
             <span>low</span>
             <span>medium</span>
             <span>high</span>
@@ -140,12 +140,12 @@ export function GrainController() {
 
         <Control label="Shell (Floater at line density)">
           <div className="flex items-center justify-between">
-            <span className="text-paragraph-xs text-text-muted">Dock this grain above a prompt bar</span>
+            <span className="text-paragraph-xsmall text-muted">Dock this grain above a prompt bar</span>
             <Switch isChecked={showShell} onChange={setShowShell} />
           </div>
           {showShell && (
             <div className="mt-2 flex items-center justify-between">
-              <span className="text-paragraph-xs text-text-muted">Emma off (degrades to search)</span>
+              <span className="text-paragraph-xsmall text-muted">Emma off (degrades to search)</span>
               <Switch isChecked={shellOff} onChange={setShellOff} />
             </div>
           )}
@@ -164,7 +164,7 @@ export function GrainController() {
         </Button>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col items-center gap-4 rounded-2xl bg-surface-1 p-8">
+      <div className="flex min-w-0 flex-1 flex-col items-center gap-4 rounded-2xl bg-surface-frame p-8">
         <div className="flex flex-wrap items-center gap-1.5 self-start">
           <MetaPill tone="brand">{scenario.title.toUpperCase()}</MetaPill>
           <MetaPill>{densityLabel(resolvedDensity)}</MetaPill>
@@ -216,7 +216,7 @@ export function GrainController() {
 function Control({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="mb-1.5 text-label-xs text-text-muted">{label}</p>
+      <p className="mb-1.5 text-label-xsmall text-muted">{label}</p>
       {children}
     </div>
   )

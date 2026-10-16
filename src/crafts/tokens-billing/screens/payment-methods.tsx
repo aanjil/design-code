@@ -37,33 +37,33 @@ export function PaymentMethodsScreen({ view, balances }: { view: PaymentMethodsV
     >
       <div className="grid grid-cols-[minmax(0,1fr)_312px] items-start gap-5">
         <div>
-          <p className="mb-2.5 text-label-sm text-text-primary">Bank accounts</p>
+          <p className="mb-2.5 text-label-small text-primary">Bank accounts</p>
           <div className="flex flex-col gap-2">
             {(view.hasAccounts ? ACCOUNTS : []).map((a) => (
-              <div key={a.name} className="flex items-center gap-3 rounded-xl bg-background-base p-3.5 shadow-card">
+              <div key={a.name} className="flex items-center gap-3 rounded-xl bg-base p-3.5 card">
                 <span
                   className={
                     a.primary
-                      ? 'flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-muted text-brand-text'
-                      : 'flex size-9 shrink-0 items-center justify-center rounded-full bg-background-highlight text-text-muted'
+                      ? 'flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-muted text-brand'
+                      : 'flex size-9 shrink-0 items-center justify-center rounded-full bg-highlight text-muted'
                   }
                 >
                   <Bank className="size-[18px]" />
                 </span>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <p className="text-label-sm text-text-primary">{a.name}</p>
+                    <p className="text-label-small text-primary">{a.name}</p>
                     {a.primary && <Chip tone="accent">Primary</Chip>}
                   </div>
-                  <p className="mt-0.5 text-paragraph-xs text-text-muted">{a.detail}</p>
+                  <p className="mt-0.5 text-paragraph-xsmall text-muted">{a.detail}</p>
                 </div>
               </div>
             ))}
           </div>
 
-          <p className="mt-5 mb-2.5 text-label-sm text-text-primary">Crypto</p>
-          <div className="rounded-xl bg-background-base p-6 text-center shadow-card">
-            <p className="text-paragraph-xs text-text-muted">Connect a crypto wallet to fund in USDC or USDT.</p>
+          <p className="mt-5 mb-2.5 text-label-small text-primary">Crypto</p>
+          <div className="rounded-xl bg-base p-6 text-center card">
+            <p className="text-paragraph-xsmall text-muted">Connect a crypto wallet to fund in USDC or USDT.</p>
             <Button type="button" size="sm" variant="solid" shade="neutral" className="mt-2.5" leftIcon={<WalletIcon className="size-4" />}>
               Connect wallet
             </Button>
@@ -72,7 +72,7 @@ export function PaymentMethodsScreen({ view, balances }: { view: PaymentMethodsV
 
         <aside>
           <div className="mb-2.5 flex items-center justify-between">
-            <p className="text-label-sm text-text-primary">Send a wire to Niural</p>
+            <p className="text-label-small text-primary">Send a wire to Niural</p>
             <div className="flex gap-1">
               <IconButton size="small" variant="ghost" shade="neutral" aria-label="Copy details">
                 <Copy className="size-4" />
@@ -82,31 +82,31 @@ export function PaymentMethodsScreen({ view, balances }: { view: PaymentMethodsV
               </IconButton>
             </div>
           </div>
-          <div className="rounded-xl bg-background-base p-4 shadow-card">
-            <dl className="grid grid-cols-[106px_minmax(0,1fr)] gap-y-1 gap-x-3 text-paragraph-xs">
-              <dt className="text-text-muted">Reference</dt>
+          <div className="rounded-xl bg-base p-4 card">
+            <dl className="grid grid-cols-[106px_minmax(0,1fr)] gap-y-1 gap-x-3 text-paragraph-xsmall">
+              <dt className="text-muted">Reference</dt>
               <dd>
-                <code className="rounded bg-brand-muted px-1.5 py-0.5 text-brand-text">{WIRE_REFERENCE}</code>
+                <code className="rounded bg-brand-muted px-1.5 py-0.5 text-brand">{WIRE_REFERENCE}</code>
               </dd>
               {WIRE_DETAILS.map(([label, value]) => (
                 <Fragment key={label}>
-                  <dt className="text-text-muted">{label}</dt>
-                  <dd className="text-text-primary">{value}</dd>
+                  <dt className="text-muted">{label}</dt>
+                  <dd className="text-primary">{value}</dd>
                 </Fragment>
               ))}
             </dl>
           </div>
           <div className="mt-2.5 flex items-start gap-2.5 rounded-lg bg-brand-muted p-3">
-            <Info weight="fill" className="mt-px size-4 shrink-0 text-brand-text" />
-            <p className="text-paragraph-xs text-brand-text">
+            <Info weight="fill" className="mt-px size-4 shrink-0 text-brand" />
+            <p className="text-paragraph-xsmall text-brand">
               Include the reference code so we can match your transfer to Acme Robotics. Send from an account in
               your company's name - we can't accept third-party wires.
             </p>
           </div>
-          <p className="mt-2.5 text-paragraph-xs text-text-muted">
+          <p className="mt-2.5 text-paragraph-xsmall text-muted">
             Your details on file: Niural Employer, 4298 Pin Oak Drive, Long Beach, CA 90802.
           </p>
-          <p className="mt-1.5 text-paragraph-xs text-text-muted">
+          <p className="mt-1.5 text-paragraph-xsmall text-muted">
             Wires usually clear the same day. We email you when funds land.
           </p>
         </aside>

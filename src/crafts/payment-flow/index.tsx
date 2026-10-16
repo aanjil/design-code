@@ -69,7 +69,10 @@ function ScenarioFrame({ screenId }: { screenId: string }) {
   const local = resolveLocal(def, global)
 
   return useMemo(() => {
-    const store = createFlowStore(local, def.prepare)
+    const store = createFlowStore(local, (d) => {
+      if (!def.credit) d.credit.balance = 0
+      def.prepare?.(d)
+    })
     const key = `${screenId}:${def.id}:${local ?? 'usd'}`
     if (def.admin) {
       return (
@@ -134,7 +137,7 @@ function ConfigSwitcher() {
     <DropdownMenu>
       <DropdownMenuTrigger
         title="Employer currency configuration"
-        className="flex h-7 items-center gap-1 rounded-lg px-1.5 text-label-xs text-text-primary shadow-button-gray hover:bg-background-highlight"
+        className="flex h-7 items-center gap-1 rounded-lg px-1.5 text-label-xsmall text-primary borders-base hover:bg-highlight"
       >
         <span aria-hidden>{local ? CCY_FLAG[local] : CCY_FLAG.USD}</span>
         {local ?? 'USD'}

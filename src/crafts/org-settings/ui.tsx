@@ -136,10 +136,10 @@ export function PageTitle({
   divider?: boolean
 }) {
   return (
-    <div className={cn('mb-8 flex items-start justify-between gap-4', divider && 'border-b border-border-highlight pb-4')}>
+    <div className={cn('mb-8 flex items-start justify-between gap-4', divider && 'border-b border-base pb-4')}>
       <div className="min-w-0">
-        <h1 className="text-title-h5 text-text-primary">{title}</h1>
-        {subtitle && <p className="mt-2 text-paragraph-sm text-text-muted">{subtitle}</p>}
+        <h1 className="text-title-h5 text-primary">{title}</h1>
+        {subtitle && <p className="mt-2 text-paragraph-small text-muted">{subtitle}</p>}
       </div>
       {actions && <div className="flex shrink-0 items-center gap-3">{actions}</div>}
     </div>
@@ -160,8 +160,8 @@ export function SectionTitle({
   return (
     <div className={cn('mb-3 flex items-end justify-between gap-4', className)}>
       <div className="min-w-0">
-        <h2 className="text-label-md text-text-primary">{title}</h2>
-        {subtitle && <p className="text-paragraph-xs text-text-muted">{subtitle}</p>}
+        <h2 className="text-label-medium text-primary">{title}</h2>
+        {subtitle && <p className="text-paragraph-xsmall text-muted">{subtitle}</p>}
       </div>
       {actions && <div className="flex shrink-0 items-center gap-3">{actions}</div>}
     </div>
@@ -171,7 +171,7 @@ export function SectionTitle({
 /* ---------------- card + field grid ---------------- */
 
 export function Card({ className, children }: { className?: string; children: React.ReactNode }) {
-  return <div className={cn('rounded-xl bg-background-base p-5 shadow-card', className)}>{children}</div>
+  return <div className={cn('rounded-xl bg-base p-5 card', className)}>{children}</div>
 }
 
 export function FieldGrid({ children }: { children: React.ReactNode }) {
@@ -192,10 +192,10 @@ export function Field({
   return (
     <div className="min-w-0">
       <div className="flex items-center gap-2">
-        <p className="text-caption text-text-muted">{label}</p>
+        <p className="text-caption-sm text-muted">{label}</p>
         {labelAction}
       </div>
-      <div className={cn('mt-1.5 text-label-sm text-text-primary', mono && 'font-mono text-mono-sm')}>{children}</div>
+      <div className={cn('mt-1.5 text-label-small text-primary', mono && 'tabular-nums text-label-small')}>{children}</div>
     </div>
   )
 }
@@ -207,7 +207,7 @@ export function useReveal() {
     <button
       type="button"
       onClick={() => setShown((v) => !v)}
-      className="text-caption-md text-text-info-base hover:underline"
+      className="text-caption-sm font-medium text-info hover:underline"
     >
       {shown ? 'Hide' : 'Show'}
     </button>
@@ -221,7 +221,7 @@ export function mask(value: string) {
 }
 
 export function Dash() {
-  return <span className="text-text-muted">—</span>
+  return <span className="text-muted">—</span>
 }
 
 /* ---------------- tags ---------------- */
@@ -229,21 +229,21 @@ export function Dash() {
 export type TagTone = 'neutral' | 'success' | 'warning' | 'error' | 'info' | 'brand' | 'pink' | 'teal' | 'orange'
 
 const TAG_TONE: Record<TagTone, string> = {
-  neutral: 'bg-background-highlight text-text-primary',
-  success: 'bg-background-success-highlight text-text-success-base',
-  warning: 'bg-background-warning-highlight text-text-warning-base',
-  error: 'bg-background-error-highlight text-text-error-base',
-  info: 'bg-background-info-highlight text-text-info-base',
-  brand: 'bg-brand-muted text-brand-text',
+  neutral: 'bg-highlight text-primary',
+  success: 'bg-success-highlight text-success',
+  warning: 'bg-warning-highlight text-warning',
+  error: 'bg-error-highlight text-error',
+  info: 'bg-info-highlight text-info',
+  brand: 'bg-brand-muted text-brand',
   // Accent tones are decorative: role tags, not status.
-  pink: 'bg-accent-pink-highlight text-text-primary',
-  teal: 'bg-accent-teal-highlight text-text-primary',
-  orange: 'bg-accent-orange-highlight text-text-primary',
+  pink: 'bg-accent-pink-highlight text-primary',
+  teal: 'bg-accent-teal-highlight text-primary',
+  orange: 'bg-accent-orange-highlight text-primary',
 }
 
 export function Tag({ tone = 'neutral', children, className }: { tone?: TagTone; children: React.ReactNode; className?: string }) {
   return (
-    <span className={cn('inline-flex h-6 shrink-0 items-center rounded-md px-2 text-caption-md whitespace-nowrap', TAG_TONE[tone], className)}>
+    <span className={cn('inline-flex h-6 shrink-0 items-center rounded-md px-2 text-caption-sm font-medium whitespace-nowrap', TAG_TONE[tone], className)}>
       {children}
     </span>
   )
@@ -273,11 +273,11 @@ export function Avatar({ name, size = 'sm' }: { name: string; size?: 'sm' | 'md'
     <span
       title={name}
       className={cn(
-        'flex shrink-0 items-center justify-center rounded-full text-text-on-color',
+        'flex shrink-0 items-center justify-center rounded-full text-on-color',
         tone,
         size === 'sm' && 'size-6 text-[10px] leading-none font-[550]',
-        size === 'md' && 'size-8 text-caption-md',
-        size === 'lg' && 'size-10 text-label-sm',
+        size === 'md' && 'size-8 text-caption-sm font-medium',
+        size === 'lg' && 'size-10 text-label-small',
       )}
     >
       {initialsOf(name)}
@@ -289,7 +289,7 @@ export function Avatar({ name, size = 'sm' }: { name: string; size?: 'sm' | 'md'
 
 export function TableCard({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <div className={cn('overflow-hidden rounded-xl bg-background-base shadow-card', className)}>
+    <div className={cn('overflow-hidden rounded-xl bg-base card', className)}>
       <table className="w-full border-collapse">{children}</table>
     </div>
   )
@@ -311,10 +311,10 @@ export function Th({
   return (
     <th
       style={width ? { width } : undefined}
-      className={cn('h-10 bg-background-highlight px-3 text-left text-label-sm text-text-primary', align === 'right' && 'text-right')}
+      className={cn('h-10 bg-highlight px-3 text-left text-label-small text-primary', align === 'right' && 'text-right')}
     >
       {onSort ? (
-        <button type="button" onClick={onSort} className="inline-flex items-center gap-1 hover:text-brand-text">
+        <button type="button" onClick={onSort} className="inline-flex items-center gap-1 hover:text-brand">
           {children}
           <SortGlyph dir={sorted ?? null} />
         </button>
@@ -328,8 +328,8 @@ export function Th({
 function SortGlyph({ dir }: { dir: 'asc' | 'desc' | null }) {
   return (
     <span className="flex flex-col text-[8px] leading-[7px]">
-      <span className={dir === 'asc' ? 'text-brand-text' : 'text-text-muted'}>▲</span>
-      <span className={dir === 'desc' ? 'text-brand-text' : 'text-text-muted'}>▼</span>
+      <span className={dir === 'asc' ? 'text-brand' : 'text-muted'}>▲</span>
+      <span className={dir === 'desc' ? 'text-brand' : 'text-muted'}>▼</span>
     </span>
   )
 }
@@ -344,7 +344,7 @@ export function Td({
   align?: 'right'
 }) {
   return (
-    <td className={cn('border-t border-border-highlight px-3 py-3 align-middle text-paragraph-sm text-text-primary', align === 'right' && 'text-right', className)}>
+    <td className={cn('border-t border-base px-3 py-3 align-middle text-paragraph-small text-primary', align === 'right' && 'text-right', className)}>
       {children}
     </td>
   )
@@ -365,13 +365,13 @@ export function EmptyTable({
 }) {
   return (
     <tr>
-      <td colSpan={colSpan} className="border-t border-border-highlight">
+      <td colSpan={colSpan} className="border-t border-base">
         <div className="flex flex-col items-center px-6 py-12 text-center">
-          <span className="mb-3 flex size-10 items-center justify-center rounded-xl bg-background-base text-text-muted shadow-button-gray">
+          <span className="mb-3 flex size-10 items-center justify-center rounded-xl bg-base text-muted borders-base">
             <EmptyIcon className="size-5" />
           </span>
-          <p className="text-label-sm text-text-primary">{title}</p>
-          {description && <p className="max-w-[360px] text-paragraph-xs text-text-muted">{description}</p>}
+          <p className="text-label-small text-primary">{title}</p>
+          {description && <p className="max-w-[360px] text-paragraph-xsmall text-muted">{description}</p>}
           {action && <div className="mt-3">{action}</div>}
         </div>
       </td>
@@ -390,14 +390,14 @@ export function RowMenu({ label, actions }: { label: string; actions: Array<RowA
   return (
     <DropdownMenu>
       <DropdownMenuTrigger
-        render={<IconButton variant="ghost" shade="neutral" size="small" className="text-text-muted" />}
+        render={<IconButton variant="ghost" shade="neutral" size="small" className="text-muted" />}
         aria-label={`Actions for ${label}`}
       >
         <DotsThreeVertical weight="bold" className="size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-48">
         {actions.map(({ label: actionLabel, icon: ActionIcon, destructive, onClick }) => (
-          <DropdownMenuItem key={actionLabel} onClick={onClick} className={cn(destructive && 'text-text-error-base')}>
+          <DropdownMenuItem key={actionLabel} onClick={onClick} className={cn(destructive && 'text-error')}>
             {ActionIcon && <ActionIcon />}
             {actionLabel}
           </DropdownMenuItem>
@@ -429,23 +429,23 @@ export function Pagination({
       aria-label={label}
       disabled={disabled}
       onClick={() => onPage(target)}
-      className="flex size-8 items-center justify-center rounded-full bg-background-base text-text-primary shadow-pagination transition-colors hover:bg-background-highlight disabled:text-text-disabled disabled:hover:bg-background-base"
+      className="flex size-8 items-center justify-center rounded-full bg-base text-primary buttons-neutral transition-colors hover:bg-highlight disabled:text-disabled disabled:hover:bg-base"
     >
       <Icon className="size-3.5" />
     </button>
   )
   return (
     <div className="mt-4 flex items-center justify-between gap-4">
-      <p className="text-paragraph-sm text-text-muted">
+      <p className="text-paragraph-small text-muted">
         {total} {total === 1 ? 'record' : 'records'}
       </p>
       <div className="flex items-center gap-3">
-        <span className="text-paragraph-sm text-text-muted">Records per page</span>
+        <span className="text-paragraph-small text-muted">Records per page</span>
         <select
           value={pageSize}
           onChange={(e) => onPageSize(Number(e.target.value))}
           aria-label="Records per page"
-          className="h-9 w-24 rounded-btn bg-background-base px-3 font-mono text-mono-sm text-text-primary shadow-button-gray outline-none focus:shadow-border-focus"
+          className="h-9 w-24 rounded-control bg-base px-3 tabular-nums text-label-small text-primary borders-base outline-none focus:borders-focus"
         >
           {[5, 10, 25, 100].map((n) => (
             <option key={n} value={n}>
@@ -453,7 +453,7 @@ export function Pagination({
             </option>
           ))}
         </select>
-        <span className="text-paragraph-sm text-text-muted">
+        <span className="text-paragraph-small text-muted">
           Page {page} of {pages}
         </span>
         <div className="flex items-center gap-1.5">
@@ -513,20 +513,20 @@ export function Modal({
 
   return (
     <div
-      className="absolute inset-0 z-40 grid place-items-center bg-overlay-background-base p-6 backdrop-blur-[2px]"
+      className="absolute inset-0 z-40 grid place-items-center bg-overlay p-6 backdrop-blur-[2px]"
       onMouseDown={(e) => e.target === e.currentTarget && onClose()}
     >
-      <div role="dialog" aria-label={title} className={cn('flex max-h-full min-w-0 flex-col rounded-2xl bg-background-base shadow-flyout', width)}>
+      <div role="dialog" aria-label={title} className={cn('flex max-h-full min-w-0 flex-col rounded-2xl bg-base flyout', width)}>
         <div className="flex shrink-0 items-start justify-between gap-3 px-6 pt-5 pb-2">
           <div>
-            <p className="text-label-lg text-text-primary">{title}</p>
-            {subtitle && <p className="text-paragraph-xs text-text-muted">{subtitle}</p>}
+            <p className="text-label-large text-primary">{title}</p>
+            {subtitle && <p className="text-paragraph-xsmall text-muted">{subtitle}</p>}
           </div>
           <button
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="flex size-7 shrink-0 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+            className="flex size-7 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-highlight hover:text-primary"
           >
             <X className="size-4" />
           </button>
@@ -565,9 +565,9 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
           <div
             key={toast.id}
             role="status"
-            className="absolute bottom-20 left-1/2 z-50 flex -translate-x-1/2 animate-in items-center gap-2 rounded-xl bg-grain-ink px-4 py-2.5 text-label-sm text-grain-ink-foreground shadow-flyout fade-in slide-in-from-bottom-2"
+            className="absolute bottom-20 left-1/2 z-50 flex -translate-x-1/2 animate-in items-center gap-2 rounded-xl bg-(--text-base) px-4 py-2.5 text-label-small text-(--background-base) flyout fade-in slide-in-from-bottom-2"
           >
-            <CheckCircle weight="fill" className="size-4 text-text-success-base" />
+            <CheckCircle weight="fill" className="size-4 text-success" />
             {toast.message}
           </div>
         )}

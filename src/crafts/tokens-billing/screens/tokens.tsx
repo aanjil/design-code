@@ -42,10 +42,10 @@ function TokenOverviewCard({ view }: { view: TokensView }) {
 
   if (loading) {
     return (
-      <div className="rounded-2xl bg-background-base p-4.5 shadow-card">
-        <div className="h-3 w-24 animate-pulse rounded bg-background-highlight" />
-        <div className="mt-3 h-7 w-32 animate-pulse rounded bg-background-highlight" />
-        <div className="mt-3 h-3 w-40 animate-pulse rounded bg-background-highlight" />
+      <div className="rounded-2xl bg-base p-4.5 card">
+        <div className="h-3 w-24 animate-pulse rounded bg-highlight" />
+        <div className="mt-3 h-7 w-32 animate-pulse rounded bg-highlight" />
+        <div className="mt-3 h-3 w-40 animate-pulse rounded bg-highlight" />
       </div>
     )
   }
@@ -100,11 +100,11 @@ function CreditCrossLink({ view }: { view: TokensView }) {
         ? 'You have no credit, so purchases come from your wallet.'
         : 'Your credit is spent, so purchases come from your wallet.'
   return (
-    <div className="mt-3 flex items-start gap-2.5 rounded-lg bg-background-highlight p-3">
-      <Gift weight="fill" className="mt-px size-4 shrink-0 text-text-success-base" />
-      <p className="min-w-0 flex-1 text-paragraph-xs text-text-muted">
+    <div className="mt-3 flex items-start gap-2.5 rounded-lg bg-highlight p-3">
+      <Gift weight="fill" className="mt-px size-4 shrink-0 text-success" />
+      <p className="min-w-0 flex-1 text-paragraph-xsmall text-muted">
         Buying tokens spends your credit first when you have any. {line}{' '}
-        <button type="button" onClick={() => show('B1')} className="text-brand-text">
+        <button type="button" onClick={() => show('B1')} className="text-brand">
           Credit balance
         </button>
       </p>
@@ -116,15 +116,15 @@ const AR_CONFIG: Record<
   'ok' | 'off' | 'risk',
   { icon: React.ElementType; tone: 'success' | 'warning' | 'error'; head: string; wrap: string }
 > = {
-  ok: { icon: ShieldCheck, tone: 'success', head: "You won't run out", wrap: 'bg-background-base' },
-  off: { icon: ShieldWarning, tone: 'warning', head: 'Emma will stop when you hit zero', wrap: 'bg-background-warning-highlight' },
-  risk: { icon: ShieldSlash, tone: 'error', head: 'Auto-reload will fail next time', wrap: 'bg-background-error-highlight' },
+  ok: { icon: ShieldCheck, tone: 'success', head: "You won't run out", wrap: 'bg-base' },
+  off: { icon: ShieldWarning, tone: 'warning', head: 'Emma will stop when you hit zero', wrap: 'bg-warning-highlight' },
+  risk: { icon: ShieldSlash, tone: 'error', head: 'Auto-reload will fail next time', wrap: 'bg-error-highlight' },
 }
 
 const AR_ICON_CLS: Record<'success' | 'warning' | 'error', string> = {
-  success: 'text-text-success-base',
-  warning: 'text-text-warning-base',
-  error: 'text-text-error-base',
+  success: 'text-success',
+  warning: 'text-warning',
+  error: 'text-error',
 }
 
 function AutoReloadRow({ view }: { view: TokensView }) {
@@ -142,11 +142,11 @@ function AutoReloadRow({ view }: { view: TokensView }) {
         : `Topping up ${num(b.arAmt)} tokens costs ${usd(topup)}. Credit and wallet hold ${usd(held)} between them.`
   const RowIcon = cfg.icon
   return (
-    <div className={`mt-3 flex items-center gap-3 rounded-2xl p-3.5 shadow-card ${cfg.wrap}`}>
+    <div className={`mt-3 flex items-center gap-3 rounded-2xl p-3.5 card ${cfg.wrap}`}>
       <RowIcon weight="fill" className={`size-5 shrink-0 ${AR_ICON_CLS[cfg.tone]}`} />
       <div className="min-w-0 flex-1">
-        <p className="text-label-sm text-text-primary">{cfg.head}</p>
-        <p className="mt-0.5 text-paragraph-xs text-text-muted">{summary}</p>
+        <p className="text-label-small text-primary">{cfg.head}</p>
+        <p className="mt-0.5 text-paragraph-xsmall text-muted">{summary}</p>
       </div>
       <Button type="button" size="sm" variant="solid" shade="neutral" onClick={() => show('A2', 'ok')}>
         Auto-reload settings
@@ -164,28 +164,28 @@ function BlockedCard({ view }: { view: TokensView }) {
     : `This payroll run needs about ${RUN_COST} tokens and auto-reload is off.`
   return (
     <div className="mt-4">
-      <p className="mb-2 text-paragraph-xs text-text-muted">What Emma shows right now</p>
-      <div className="rounded-2xl bg-background-base p-4 shadow-card">
+      <p className="mb-2 text-paragraph-xsmall text-muted">What Emma shows right now</p>
+      <div className="rounded-2xl bg-base p-4 card">
         <div className="mb-2.5 flex items-start gap-2.5">
-          <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-background-highlight">
-            <Bell className="size-3.5 text-text-muted" />
+          <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-highlight">
+            <Bell className="size-3.5 text-muted" />
           </span>
-          <p className="text-paragraph-xs text-text-primary">Run July payroll for the US team</p>
+          <p className="text-paragraph-xsmall text-primary">Run July payroll for the US team</p>
         </div>
         {b.mid && (
-          <div className="mb-2.5 flex items-start gap-2.5 rounded-lg bg-background-warning-highlight p-3">
-            <PlayPause weight="fill" className="mt-px size-4 shrink-0 text-text-warning-base" />
-            <p className="text-paragraph-xs text-text-warning-base">
+          <div className="mb-2.5 flex items-start gap-2.5 rounded-lg bg-warning-highlight p-3">
+            <PlayPause weight="fill" className="mt-px size-4 shrink-0 text-warning" />
+            <p className="text-paragraph-xsmall text-warning">
               <b className="font-medium">Paused part-way through.</b> Emma finished 2 of 5 steps and stopped before
               spending tokens it didn't have. The completed steps are saved - topping up resumes from step 3.
             </p>
           </div>
         )}
-        <div className="rounded-lg bg-background-error-highlight p-3.5">
-          <p className="flex items-center gap-1.5 text-label-sm text-text-error-base">
+        <div className="rounded-lg bg-error-highlight p-3.5">
+          <p className="flex items-center gap-1.5 text-label-small text-error">
             <Flame weight="fill" className="size-4" /> You're out of tokens
           </p>
-          <p className="mt-1.5 text-paragraph-xs text-text-error-base">{why}</p>
+          <p className="mt-1.5 text-paragraph-xsmall text-error">{why}</p>
           <div className="mt-2.5 flex items-center gap-2">
             <Button type="button" size="sm" onClick={() => show('D1')}>
               Buy tokens
@@ -194,7 +194,7 @@ function BlockedCard({ view }: { view: TokensView }) {
               Fund wallet
             </Button>
           </div>
-          <p className="mt-2.5 text-paragraph-xs text-text-error-base">
+          <p className="mt-2.5 text-paragraph-xsmall text-error">
             Nothing was charged and your payroll wasn't started.
           </p>
         </div>
@@ -208,7 +208,7 @@ function PurchasesLedger({ view }: { view: TokensView }) {
   return (
     <div className="mt-6">
       <div className="mb-2 flex items-baseline justify-between">
-        <h3 className="text-label-md text-text-primary">Purchases and top-ups</h3>
+        <h3 className="text-label-medium text-primary">Purchases and top-ups</h3>
         <Button type="button" size="sm" variant="ghost" shade="neutral">
           Export
         </Button>
@@ -237,10 +237,10 @@ function PurchasesLedger({ view }: { view: TokensView }) {
                     {r.flag}
                   </Chip>
                 )}
-                <p className="mt-0.5 text-caption-md text-text-muted">{r.sub}</p>
+                <p className="mt-0.5 text-caption-sm font-medium text-muted">{r.sub}</p>
               </Td>
               <Td align="right">
-                <span className="text-text-success-base">+{num(r.amount)}</span>
+                <span className="text-success">+{num(r.amount)}</span>
               </Td>
               <Td align="right" muted>
                 {num(r.balance)}
@@ -264,16 +264,16 @@ function PurchasesLedger({ view }: { view: TokensView }) {
 
 function NotificationPrefs() {
   return (
-    <div className="mt-8 border-t border-border-highlight pt-6">
-      <h3 className="text-label-md text-text-primary">Settings</h3>
-      <p className="mt-1.5 mb-4 text-paragraph-xs text-text-muted">
+    <div className="mt-8 border-t border-base pt-6">
+      <h3 className="text-label-medium text-primary">Settings</h3>
+      <p className="mt-1.5 mb-4 text-paragraph-xsmall text-muted">
         Auto-reload keeps Emma running. Notifications tell you when something needs you.
       </p>
-      <div className="rounded-2xl bg-background-base p-4.5 shadow-card">
+      <div className="rounded-2xl bg-base p-4.5 card">
         <div className="mb-3.5 flex items-baseline justify-between">
           <div>
-            <p className="text-label-sm text-text-primary">Notifications</p>
-            <p className="mt-0.5 text-paragraph-xs text-text-muted">
+            <p className="text-label-small text-primary">Notifications</p>
+            <p className="mt-0.5 text-paragraph-xsmall text-muted">
               Token and credit events. Emma's task updates are in Emma settings.
             </p>
           </div>
@@ -282,45 +282,45 @@ function NotificationPrefs() {
         <div className="flex flex-col gap-2.5">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-paragraph-xs text-text-primary">Emma stopped - you're out of tokens</p>
-              <p className="text-caption-md text-text-muted">Always on. Work is blocked until you top up.</p>
+              <p className="text-paragraph-xsmall text-primary">Emma stopped - you're out of tokens</p>
+              <p className="text-caption-sm font-medium text-muted">Always on. Work is blocked until you top up.</p>
             </div>
-            <Lock className="size-3.5 shrink-0 text-text-muted" />
+            <Lock className="size-3.5 shrink-0 text-muted" />
           </div>
           <div className="flex items-center justify-between gap-3">
             <div>
-              <p className="text-paragraph-xs text-text-primary">Auto-reload failed</p>
-              <p className="text-caption-md text-text-muted">Always on. Nothing was charged.</p>
+              <p className="text-paragraph-xsmall text-primary">Auto-reload failed</p>
+              <p className="text-caption-sm font-medium text-muted">Always on. Nothing was charged.</p>
             </div>
-            <Lock className="size-3.5 shrink-0 text-text-muted" />
+            <Lock className="size-3.5 shrink-0 text-muted" />
           </div>
           <div className="flex items-center justify-between gap-3">
-            <p className="text-paragraph-xs text-text-primary">Token balance running low</p>
+            <p className="text-paragraph-xsmall text-primary">Token balance running low</p>
             <Switch isChecked />
           </div>
           <div className="flex items-center justify-between gap-3">
-            <p className="text-paragraph-xs text-text-primary">Niural added credit to your account</p>
+            <p className="text-paragraph-xsmall text-primary">Niural added credit to your account</p>
             <Switch isChecked />
           </div>
         </div>
-        <div className="mt-3.5 rounded-lg bg-background-highlight p-3">
+        <div className="mt-3.5 rounded-lg bg-highlight p-3">
           <div className="flex items-baseline justify-between gap-3">
             <div>
-              <p className="text-label-xs text-text-primary">"Running low" means</p>
-              <p className="mt-0.5 text-paragraph-xs text-text-muted">
+              <p className="text-label-xsmall text-primary">"Running low" means</p>
+              <p className="mt-0.5 text-paragraph-xsmall text-muted">
                 Separate from the auto-reload trigger, so you hear about it before the top-up fires.
               </p>
             </div>
-            <span className="shrink-0 text-label-sm text-text-primary">200 tokens</span>
+            <span className="shrink-0 text-label-small text-primary">200 tokens</span>
           </div>
         </div>
         <div className="mt-3.5">
-          <p className="mb-1.5 text-label-xs text-text-primary">Sent to</p>
+          <p className="mb-1.5 text-label-xsmall text-primary">Sent to</p>
           <div className="flex flex-wrap items-center gap-1.5">
             <Chip tone="accent">anjil@niural.com · owner</Chip>
             <Chip>priya@acme.com · billing admin</Chip>
           </div>
-          <p className="mt-2 text-paragraph-xs text-text-muted">
+          <p className="mt-2 text-paragraph-xsmall text-muted">
             The PRD says "the employer is notified" without saying who that is.
           </p>
         </div>
@@ -355,18 +355,18 @@ function AutoReloadModal({ view }: { view: TokensView }) {
     >
       <label className="mb-4 flex items-center gap-2">
         <Switch isChecked={b.autoOn} />
-        <span className="text-paragraph-sm text-text-primary">Auto-reload is {b.autoOn ? 'on' : 'off'}</span>
+        <span className="text-paragraph-small text-primary">Auto-reload is {b.autoOn ? 'on' : 'off'}</span>
       </label>
-      <p className="mb-1.5 text-label-xs text-text-primary">Funding sources, in order</p>
+      <p className="mb-1.5 text-label-xsmall text-primary">Funding sources, in order</p>
       <div className="mb-3.5 flex flex-col gap-1.5">
         {(['credit', 'wallet'] as const).map((s) => {
           const on = sources.includes(s)
           const order = sources.indexOf(s)
           return (
-            <div key={s} className="flex items-center gap-2 rounded-lg border border-border-highlight px-2.5 py-2">
+            <div key={s} className="flex items-center gap-2 rounded-lg border border-base px-2.5 py-2">
               {on && <Chip tone="accent">{order === 0 ? '1st' : '2nd'}</Chip>}
-              <span className="flex-1 text-paragraph-xs text-text-primary capitalize">{s} balance</span>
-              <span className="text-caption-md text-text-muted">{s === 'credit' ? usd(b.credit) : usd(b.wallet)}</span>
+              <span className="flex-1 text-paragraph-xsmall text-primary capitalize">{s} balance</span>
+              <span className="text-caption-sm font-medium text-muted">{s === 'credit' ? usd(b.credit) : usd(b.wallet)}</span>
               <Switch isChecked={on} />
             </div>
           )
@@ -374,13 +374,13 @@ function AutoReloadModal({ view }: { view: TokensView }) {
       </div>
       <div className="mb-3.5 grid grid-cols-2 gap-2.5">
         <div>
-          <p className="mb-1 text-label-xs text-text-primary">When balance drops to</p>
+          <p className="mb-1 text-label-xsmall text-primary">When balance drops to</p>
           <input
             type="number"
             defaultValue={b.arTh}
-            className="h-9 w-full rounded-lg bg-background-highlight px-2.5 text-paragraph-sm text-text-primary outline-none"
+            className="h-9 w-full rounded-lg bg-highlight px-2.5 text-paragraph-small text-primary outline-none"
           />
-          <p className={`mt-1 text-caption-md ${fieldError?.startsWith('threshold') ? 'text-text-error-base' : 'text-text-muted'}`}>
+          <p className={`mt-1 text-caption-sm font-medium ${fieldError?.startsWith('threshold') ? 'text-error' : 'text-muted'}`}>
             {fieldError === 'threshold-zero'
               ? AR_FIELD_ERROR_COPY['threshold-zero']
               : fieldError === 'threshold-negative'
@@ -389,13 +389,13 @@ function AutoReloadModal({ view }: { view: TokensView }) {
           </p>
         </div>
         <div>
-          <p className="mb-1 text-label-xs text-text-primary">Buy this many</p>
+          <p className="mb-1 text-label-xsmall text-primary">Buy this many</p>
           <input
             type="number"
             defaultValue={b.arAmt}
-            className="h-9 w-full rounded-lg bg-background-highlight px-2.5 text-paragraph-sm text-text-primary outline-none"
+            className="h-9 w-full rounded-lg bg-highlight px-2.5 text-paragraph-small text-primary outline-none"
           />
-          <p className={`mt-1 text-caption-md ${fieldError === 'below-min' ? 'text-text-error-base' : 'text-text-muted'}`}>
+          <p className={`mt-1 text-caption-sm font-medium ${fieldError === 'below-min' ? 'text-error' : 'text-muted'}`}>
             {fieldError === 'below-min' ? AR_FIELD_ERROR_COPY['below-min'] : 'tokens · minimum 250'}
           </p>
         </div>
@@ -406,16 +406,16 @@ function AutoReloadModal({ view }: { view: TokensView }) {
         </Banner>
       )}
       <div className="mb-3.5 flex items-start gap-2.5 rounded-lg bg-brand-muted p-3">
-        <Wallet weight="fill" className="mt-px size-4 shrink-0 text-brand-text" />
-        <p className="text-paragraph-xs text-brand-text">
+        <Wallet weight="fill" className="mt-px size-4 shrink-0 text-brand" />
+        <p className="text-paragraph-xsmall text-brand">
           Auto-reload only uses the sources you tick. It won't fall back to an unticked source, even if it has funds.
         </p>
       </div>
-      <div className="rounded-2xl bg-background-highlight p-3">
-        <p className="flex items-center gap-1.5 text-label-xs text-text-primary">
+      <div className="rounded-2xl bg-highlight p-3">
+        <p className="flex items-center gap-1.5 text-label-xsmall text-primary">
           <Clock className="size-4" /> Top-ups wait 60 seconds between fires
         </p>
-        <p className="mt-1 text-paragraph-xs text-text-muted">
+        <p className="mt-1 text-paragraph-xsmall text-muted">
           A burst of Emma tasks can cross the threshold several times in a few seconds. We top up once, then pause.
         </p>
       </div>

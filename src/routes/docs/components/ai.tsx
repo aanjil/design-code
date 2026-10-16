@@ -41,7 +41,7 @@ function AiComponentsIndex() {
       title="AI patterns"
       description="Patterns for AI-native surfaces - agent status, conversational input, human-in-the-loop decisions, and how an agent surfaces knowledge or lets people navigate what it found. An older, external-reference survey."
     >
-      <p className="-mt-6 max-w-[560px] rounded-lg bg-background-info-highlight px-3 py-2 text-paragraph-xs text-text-info-base">
+      <p className="-mt-6 max-w-[560px] rounded-lg bg-info-highlight px-3 py-2 text-paragraph-xsmall text-info">
         Looking for Niural's own AI-native design language instead? That's{' '}
         <Link to="/docs/grain" className="underline">
           Grain
@@ -58,13 +58,13 @@ function AiComponentsIndex() {
             <Link
               key={page.to}
               to={page.to}
-              className="group flex flex-col gap-1 rounded-xl bg-background-base p-4 shadow-border-base transition-shadow hover:shadow-button-gray"
+              className="group flex flex-col gap-1 rounded-xl bg-base p-4 borders-base transition-shadow hover:borders-base"
             >
               <span className="flex items-center justify-between gap-2">
-                <span className="text-label-sm text-text-primary">{page.title}</span>
-                <CaretRight className="size-3.5 text-text-disabled transition-transform group-hover:translate-x-0.5 group-hover:text-brand-text" />
+                <span className="text-label-small text-primary">{page.title}</span>
+                <CaretRight className="size-3.5 text-disabled transition-transform group-hover:translate-x-0.5 group-hover:text-brand" />
               </span>
-              <span className="text-paragraph-xs text-text-muted">{page.blurb}</span>
+              <span className="text-paragraph-xsmall text-muted">{page.blurb}</span>
             </Link>
           ))}
         </div>

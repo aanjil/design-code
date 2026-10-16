@@ -117,7 +117,7 @@ function ButtonsDoc() {
       </DocSection>
 
       <DocSection title="Rules">
-        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-muted marker:text-text-disabled">
+        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-small text-muted marker:text-disabled">
           <li>
             Pass plain text as children. The label already has 4px optical padding, so
             don't wrap it in <InlineCode>&lt;span className="px-1"&gt;</InlineCode>.

@@ -44,7 +44,7 @@ function BiometricLogin({ step }: { step: 'biometric-framing' | 'biometric-promp
             <div className="flex size-20 items-center justify-center rounded-[28px] border border-white/15 bg-white/5">
               <ScanSmiley className="size-9 text-white" />
             </div>
-            <p className="text-paragraph-sm text-white/70">Look at iPhone to unlock Niural</p>
+            <p className="text-paragraph-small text-white/70">Look at iPhone to unlock Niural</p>
           </>
         )}
       </div>
@@ -53,7 +53,7 @@ function BiometricLogin({ step }: { step: 'biometric-framing' | 'biometric-promp
           <button
             type="button"
             onClick={() => show('A2')}
-            className="text-label-sm text-white/60 underline-offset-4 hover:underline"
+            className="text-label-small text-white/60 underline-offset-4 hover:underline"
           >
             Use password instead
           </button>
@@ -71,25 +71,25 @@ function PasswordLogin({ error }: { error?: boolean }) {
   return (
     <MobileScreen>
       <div className="flex h-full flex-col px-6 pt-10">
-        <p className="text-title-h5 text-text-primary">Welcome, let&apos;s log you in</p>
-        <p className="mt-1 text-paragraph-sm text-text-muted">Sign in with your Niural account.</p>
+        <p className="text-title-h5 text-primary">Welcome, let&apos;s log you in</p>
+        <p className="mt-1 text-paragraph-small text-muted">Sign in with your Niural account.</p>
 
         <div className="mt-8 flex flex-col gap-3">
           <div className="flex flex-col gap-1.5">
-            <label className="text-label-xs text-text-muted">Email</label>
+            <label className="text-label-xsmall text-muted">Email</label>
             <input
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="h-11 rounded-xl bg-background-highlight px-3.5 text-paragraph-sm text-text-primary outline-none"
+              className="h-11 rounded-xl bg-highlight px-3.5 text-paragraph-small text-primary outline-none"
             />
           </div>
           <div className="flex flex-col gap-1.5">
-            <label className="text-label-xs text-text-muted">Password</label>
+            <label className="text-label-xsmall text-muted">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="h-11 rounded-xl bg-background-highlight px-3.5 text-paragraph-sm text-text-primary outline-none"
+              className="h-11 rounded-xl bg-highlight px-3.5 text-paragraph-small text-primary outline-none"
             />
           </div>
 
@@ -102,7 +102,7 @@ function PasswordLogin({ error }: { error?: boolean }) {
           <Button type="button" size="lg" width="full" className="mt-2 h-12 rounded-xl" onClick={() => show('B1')}>
             Log in
           </Button>
-          <button type="button" className="text-center text-label-xs text-brand-text">
+          <button type="button" className="text-center text-label-xsmall text-brand">
             Forgot password?
           </button>
         </div>
@@ -111,16 +111,16 @@ function PasswordLogin({ error }: { error?: boolean }) {
           <button
             type="button"
             onClick={() => show('C1', 'password')}
-            className="text-label-xs text-text-muted underline-offset-4 hover:underline"
+            className="text-label-xsmall text-muted underline-offset-4 hover:underline"
           >
             New here? Create an account
           </button>
           <div className="flex items-center gap-1.5">
-            <ScanSmiley className="size-4 text-text-muted" />
+            <ScanSmiley className="size-4 text-muted" />
             <button
               type="button"
               onClick={() => show('A1', 'framing')}
-              className="text-label-sm text-text-muted underline-offset-4 hover:underline"
+              className="text-label-small text-muted underline-offset-4 hover:underline"
             >
               Use Face ID instead
             </button>

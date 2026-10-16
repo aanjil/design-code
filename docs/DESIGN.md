@@ -2,43 +2,62 @@
 
 Read this file before ANY UI work. It is the distilled, always-current contract.
 Full foundations live in `docs/foundations/*.md` - consult them only when this file
-isn't enough (they cost far more tokens). Tokens are machine-enforced: Tailwind's
-default palette is **disabled** in `src/styles.css` - `bg-red-500` doesn't exist,
-`bg-background-error-base` does. If a color class doesn't compile, use a token.
+isn't enough (they cost far more tokens).
 
-## Colors - utility suffix == token name from colors.md
+**niural-fe-pkg is the only token source.** `tailwind.config.ts` loads fe-pkg's Tailwind
+preset (`@niural/components/preset`) via `@config` in `src/styles.css`, so the class names
+below are fe-pkg's own - the same ones its components use. Tailwind's default palette is
+**disabled**: `bg-red-500` doesn't exist, `bg-error` does. If a class doesn't compile, fe-pkg
+doesn't have that token. To add or change a token, change it in niural-fe-pkg.
 
-- Backgrounds: `bg-background-{base|muted|emphasis|disabled|highlight|item}`,
-  `bg-background-{success|warning|info|error}-{base|emphasis|muted|muted-hover|highlight}`
-- Text: `text-text-{primary|muted|disabled|on-color}`,
-  `text-text-{success|warning|info|error}-{base|subtle}`
-- Borders: `border-border-{base|muted|card|highlight}`,
-  `border-border-{success|warning|info|error}-{base|muted}`
-- Brand: `bg-brand-{primary|emphasis|muted|base|surface}`, `text-brand-text`,
-  `bg-brand-wallet-{primary|secondary}`
-- Surfaces: `bg-surface-{0|1|2}` (2 = most elevated; inverts in dark)
+Lookup order: (1) fe-pkg class · (2) fe-pkg CSS variable when it has the var but no class:
+`bg-(--elevation-alpha-12)`, `border-(--text-muted)` · (3) nearest fe-pkg class. Never a hex.
+
+## Colors (fe-pkg preset: backgroundColor / textColor / borderColor / colors)
+
+- Backgrounds: `bg-{base|muted|emphasis|disabled|highlight|item|popover}`,
+  `bg-{success|warning|info|error}` (solid) + `-{emphasis|muted|muted-hover|highlight}`
+- Text: `text-{primary|muted|subtle|emphasis|disabled|on-color|on-inverted}`,
+  `text-{success|warning|info|error}` + `-subtle`, `text-brand` (brand text),
+  `text-interactive`
+- Borders: `border-{base|muted|emphasis|card|disabled}`, `border-{success|warning|info|error}`
+  + `-muted`, `border-overlay`. (No `border-highlight` class - use `border-base`.)
+- Brand: `bg-brand` (primary) / `bg-brand-{emphasis|muted|base|surface}`, `border-brand`,
+  `ring-brand`, `text-brand-primary`. Wallet: `bg-wallet`, `bg-wallet-secondary`.
+- Surfaces: `bg-surface-{app|frame|page}` (page = most elevated; inverts in dark)
 - Accents (decorative only - NEVER for status): `bg-accent-{orange|pink|teal|violet}-{base|muted|highlight}`
-- Overlays: `bg-overlay-background-base`, `bg-elevation-alpha-{0|4|8|12|16|24|60}`
-- `white` / `black` exist; nothing else does.
+- Overlays: `bg-overlay`; alpha tints have no class - `bg-(--elevation-alpha-12)`.
+- `white` / `black` / `pureWhite` / `pureBlack` exist (fe-pkg values). Nothing else does.
 
 Rules: dark mode is automatic via tokens - never write `dark:` color overrides.
-Status UIs pair bg + text + border from the SAME family (banner = `bg-background-warning-highlight`
-+ `text-text-warning-base` + `border-border-warning-muted`). `text-text-on-color` on any
-colored/brand background.
+Status UIs pair bg + text + border from the SAME family (banner = `bg-warning-highlight`
++ `text-warning` + `border-warning-muted`). `text-on-color` on any colored/brand background.
+Inverted ink (Grain claim bar): `bg-(--text-base)` + `text-(--background-base)`.
 
-## Typography - one class sets size + weight + line-height + tracking
+## Typography - fe-pkg `<Text type>` as classes
 
-- Titles: `text-title-h1..h5` - Inter 520, lh 1. Short copy only, never truncate.
-- Paragraph: `text-paragraph-{xl|lg|md|sm|xs}` (425) - reading text. Body default = paragraph-sm (14px).
-- Labels: `text-label-{xl|lg|md|sm|xs}` (550; sm=530) - buttons, form labels, table headers,
-  nav, badges, tabs. **`text-label-sm` is the platform default UI text.**
-- Caption: `text-caption` (425) / `text-caption-md` (500) - 12px metadata, timestamps.
-- Mono: `font-mono text-mono-{xl|lg|md|sm|xs}` - ALL numbers: money, IDs, dates in tables,
-  account numbers. md/sm are semibold for data emphasis. Always pair with `font-mono`.
+fe-pkg only ships its type scale as the `<Text type="...">` component (textStyles in
+`components/text/text.tsx`). `src/styles.css` mirrors it 1:1 as utilities, same names:
+`text-label-small` == `<Text type="label-small">`. Each class sets size + line-height +
+tracking + weight.
+
+- Titles: `text-title-h1..h5` (56 / 48 / 36 / 32 / 24px, weight 520). Short copy only.
+- Labels: `text-label-{xsmall|small|medium|large|xlarge}` (13/14/16/18/20px, 560, -0.03em) -
+  buttons, form labels, table headers, nav, badges, tabs. **`text-label-small` is the
+  platform default UI text.**
+- Paragraph: `text-paragraph-{xsmall|small|medium|large}` (13/14/16/18px, 450) - reading text.
+  Body default = paragraph-small (14px).
+- Caption: `text-caption-sm` (12px) / `text-caption-xs` (10px). Add `font-medium` for the
+  emphasized caption (badges, metadata labels).
+- Numbers: money, IDs, dates in tables, account numbers stay in Inter - add `tabular-nums`
+  on top of a label/paragraph size, e.g. `tabular-nums text-label-small`. Never `font-mono`
+  for numbers; Geist Mono (`font-mono`) is only for code: class names, paths, snippets.
+- Weights are fe-pkg's: `font-normal` 450, `font-medium` 560, `font-heading` 520,
+  `font-semibold` 600.
 
 Rules: max 2 type sizes per component · no custom font sizes · Label for UI, Paragraph for
 reading · NO `gap-*` between stacked text lines (title+subtitle, label+value) - line-height
-handles it, remove `gap-1` on sight.
+handles it, remove `gap-1` on sight. Never `text-base` (fe-pkg's `--text-base` is a color).
 
 ## Spacing (px → Tailwind unit)
 
@@ -55,14 +74,19 @@ interior 24 · page body `p-4`. Specials: `pb-form-bottom` (196px form-page scro
 Philosophy: group with space, not dividers/borders. Optical > mathematical - deviate only if
 you can say why, and never invent new token values.
 
-## Shadows / elevation
+## Shadows / elevation (fe-pkg preset plugin utilities - set box-shadow directly)
 
-- Semantic: `shadow-card`, `shadow-card-hover`, `shadow-tooltip`, `shadow-flyout`, `shadow-ai`
-- Border-rings (inputs/interactive states): `shadow-border-base`, `-focus`, `-active`, `-error`, `-brand`
-- Depth scale: `shadow-sm|shadow|md|lg|xl|2xl|inner`, `shadow-component`
+- Cards: `card`, `card-hover`, `elevation-card*` (rest/info/success/warning/error)
+- Floating: `flyout` (menus/popovers), `elevation-tooltip`, `elevation-modal`, `elevation-ai`
+- Rings (inputs/interactive states): `borders-base`, `borders-focus`, `borders-active`,
+  `borders-error`, `borders-shadow` (brand ring)
+- Buttons: `buttons-primary`, `buttons-neutral`; fills `bg-button-primary` / `bg-button-neutral`
+- Generic depth (no semantic meaning): `shadow-sm|shadow|md|lg|xl|2xl|inner`
+- Radius (fe-pkg named scale): `rounded-{tight 4|snug 6|control 9|surface 12|panel 16|overlay 20|pill}`
 
-Card recipe: `rounded-xl bg-background-base p-3 shadow-card hover:shadow-card-hover` - the
-1px ring is built into the shadow, do NOT add a border on top.
+Card recipe: `rounded-xl bg-base p-3 card hover:card-hover` - the 1px ring is built into the
+shadow, do NOT add a border on top. These utilities replace each other (not compose) and
+`cn()` knows that, so `className="shadow-none"` cleanly overrides a component's `card`.
 
 ## Components
 
@@ -79,9 +103,10 @@ Card recipe: `rounded-xl bg-background-base p-3 shadow-card hover:shadow-card-ho
   `DropdownMenuGroup` (it renders `Menu.GroupLabel`) or the menu throws at runtime.
 - `CommandDialog` does NOT wrap children in a cmdk root - always nest
   `<Command>` yourself: `<CommandDialog><Command><CommandInput/>…</Command></CommandDialog>`.
-- NDS type utilities (text-label-sm, …) are registered as font-size classes in
-  `src/lib/utils.ts` (extendTailwindMerge). Add any NEW `--text-*` token there too, or
-  tailwind-merge will treat it as a color and silently drop it next to `text-text-*`.
+- `src/lib/utils.ts` (`cn` / extendTailwindMerge) knows fe-pkg's type classes
+  (font-size group), elevation utilities (shadow group) and named radii. Add any NEW
+  type/shadow utility there too, or tailwind-merge silently drops or keeps the wrong one
+  (e.g. `text-label-small` read as a color next to `text-muted`).
 - Adding one: `pnpm dlx shadcn@latest add <name> --yes`, then grep it for default-palette
   classes (e.g. `bg-neutral-*`) and remap to tokens - the palette is disabled. Also remove
   unused React imports (strict `noUnusedLocals`).
@@ -94,18 +119,17 @@ Card recipe: `rounded-xl bg-background-base p-3 shadow-card hover:shadow-card-ho
 ## NDS app components (`src/components/nds/`) - from the Figma Web design system
 
 - Layout: `AppShell > AppBar + MainLayout(Sidebar + PageLayout(PageHeader/PageBody/PageFooter))`.
-  AppBar 58px on surface-2; content panel floats with 8px gutter, rounded-xl,
-  border-highlight. Sidebar 200px, translucent (`bg-overlay-background-base` + blur),
-  active item = white pill + `shadow-button-gray` + `text-brand-text`.
-- Buttons (ui/button restyled): h-[34px], `rounded-btn` (9px), Label/Small.
-  `default` = violet radial gradient + `shadow-button-primary`; `secondary` = white→highlight
-  gradient + `shadow-button-gray`; `outline` = flat white + ring; `ghost-destructive` = error
+  AppBar 58px on surface-page; content panel floats with 8px gutter, rounded-xl,
+  border-base. Sidebar 200px, translucent (`bg-overlay` + blur),
+  active item = white pill + `borders-base` + `text-brand`.
+- Buttons (ui/button restyled): h-[34px], `rounded-control` (9px), `text-label-small`.
+  `default` = violet radial gradient + `buttons-primary`; `secondary` = white→highlight
+  gradient + `borders-base`; `outline` = flat white + ring; `ghost-destructive` = error
   text. Wrap text children in `<span className="px-1">` (4px optical label pad).
-- New tokens: `--surface-button-{gray|primary}`, `--elevation-alpha-22`, gradients
-  (`btn-gradient-primary|gray` utilities), `rounded-btn` 9px, `rounded-kbd` 6px,
-  `shadow-button-{gray|primary}`, `shadow-pagination`. Flyout panels: menu `rounded-xl`
-  p-1 on surface-2; combobox/value panels `rounded-2xl` on base; items h-[34px] rounded-lg.
-  Menu/select item highlight (hover + arrow keys + open submenu) = `background-muted`
+- Button fills `bg-button-primary|neutral` + rings `buttons-primary|neutral`
+  (all fe-pkg), `rounded-control` 9px, kbd `rounded-snug` 6px. Flyout panels: menu `rounded-xl`
+  p-1 on surface-page; combobox/value panels `rounded-2xl` on base; items h-[34px] rounded-lg.
+  Menu/select item highlight (hover + arrow keys + open submenu) = `bg-muted`
   via Base UI's `data-highlighted`/`data-popup-open` attributes - never `bg-accent`:
   accent maps to `background-highlight`, which IS the menu panel bg (invisible highlight).
 - Sidebar nav sets: `PEOPLE_SIDEBAR` (default) and `PAYMENTS_SIDEBAR` (Payroll,
@@ -128,18 +152,18 @@ Card recipe: `rounded-xl bg-background-base p-3 shadow-card hover:shadow-card-ho
   (`@max-xl/toolbar`) that expands to a full-row field (autofocus, Esc/Cancel collapse,
   brand dot on the icon when a query is active).
 - Editable table (`nds/editable-table.tsx`, Figma 9738:11698): CSS grid + subgrid rows
-  with `gap-px` over `bg-border-base` = grid lines; cells 44px `px-3 py-1.5`
+  with `gap-px` over `bg-(--border-default)` = grid lines; cells 44px `px-3 py-1.5`
   Paragraph/Small (numbers right-aligned, **Inter not mono - pattern-level DS spec**),
-  headers 32px highlight bg Label/XSmall. States: hover `bg-background-highlight`,
-  editing `focus-within:shadow-border-brand`, open select `shadow-border-active`.
+  headers 32px highlight bg Label/XSmall. States: hover `bg-highlight`,
+  editing `focus-within:borders-shadow`, open select `borders-active`.
   Cell types: Text, Number (2dp on blur), SelectAndType (unit select, DS default
   unit-first), Select, Date, Icon (48px), Caret (40px). `ExpandedRowPanel` =
   col-span-full highlight surface with form fields; `AddRowFooter` = ghost brand
   ListPlus row. Form primitives: FieldLabel/TextInput/TextArea (controls) +
-  SelectField - 36px, `shadow-button-gray`, focus `shadow-border-focus`.
-- Table recipe: rows 54px, cells px-5, header Label/Small muted + CaretUpDown sort,
-  IDs/amounts in `font-mono text-mono-xs`, `StatusPill` (white pill + ring + status dot),
-  pagination = circular 36px buttons + rows-per-page pill (`shadow-pagination`).
+  SelectField - 36px, `borders-base`, focus `borders-focus`.
+- Table recipe: rows 54px, cells px-5, header text-label-small muted + CaretUpDown sort,
+  IDs/amounts in `tabular-nums text-paragraph-xsmall`, `StatusPill` (white pill + ring + status dot),
+  pagination = circular 36px buttons + rows-per-page pill (`buttons-neutral`).
 - Canvas crafts: `<CanvasCraft slug windows=[…]>` + route
   `staticData: { layout: 'canvas' }`. The route fills the viewport (root hides the top
   nav), Safari-chrome `BrowserWindow`s drag via titlebar / resize via corner / click to
@@ -162,7 +186,7 @@ Card recipe: `rounded-xl bg-background-base p-3 shadow-card hover:shadow-card-ho
   16,16) → FloatingDock (Back + settings, `top-16`) → windows stack (`top-28`).
 - Blueprint tooling: 20/100px line grid, edge rulers with adaptive logical-px labels,
   and a per-window readout above each titlebar (`w × h` of the content viewport +
-  `x · y`) for eyeballing responsive sizes. (Ruler/readout use 10–12px mono - a
+  `x · y`) for eyeballing responsive sizes. (Ruler/readout use 10–12px tabular-nums - a
   deliberate canvas-tooling exception to the type scale.)
 - Windows panel (top-right): lists source windows and snapshots; click to jump/focus,
   `×` removes a snapshot. The **camera button** on a window's chrome freezes its
@@ -250,7 +274,57 @@ window contents differ per craft).
   bottom-center on every Master App section; its `leading` slot carries the Master
   App's "Go to" menu (sections, this section's crafts, all crafts - replaces the old
   top-right switcher). The dock minimizes to a small handle (remembered in
-  localStorage).
+  localStorage) and drags anywhere by its grip (position remembered; double-click the
+  grip to snap home - bottom-left, above the Bezel lane). Its panel opens toward the
+  half of the screen with room.
+- Bezel across the Master App (`crafts/bezel/master-bezel.tsx`, `MasterBezelLayout`): ONE
+  Emma object mounted around every section (not per craft), so it survives navigation -
+  a bar OR the copilot column, never both. Three homes (`placement-menu.tsx`, a popover in
+  the bar and the thread header; remembered in localStorage `nds-bezel:placement`):
+  **Dock** = the bar in the app's bottom ground strip (fixed, default); **Sidebar** = the
+  copilot column on the right, resized by dragging its inner edge (340-760px, remembered);
+  **Immersive** = Emma as a Messenger-style chat head (`chat-head.tsx`): a 56px orb on any
+  edge, anywhere along it, with a badge (this page's finding + other sections' pins) and a
+  preview bubble with the latest claim. Tap = open/close a card beside the head (440px;
+  620px for bulk/context); hold = the Orbit menu (`components/nds/orbit-menu.tsx`, a CSS-only
+  recreation of uiarc's spec: press-hold, drag toward an action, release; pie targeting with
+  a 34px dead zone; label pill; done confirmation; full keyboard; motion-reduce) with Ask /
+  Show me / Sidebar / Voice / Back to the bar / Hide; drag = move it, snapping to the nearest
+  edge. Also **⌃⌥ + arrows** or the menu's edge pad. Every move
+  and bar<->column change morphs via a view transition (`emma-bezel` / `emma-app`). Docked,
+  the app (AppBar included) reflows beside the column.
+- Bezel visuals (`Shell variant="bezel"` + `BEZEL_SURFACE` in grain/shell.tsx): glass surface
+  (`bg-base/88` + blur + fe-pkg elevation-alpha ring/shadow), the AI gradient
+  (`bg-niural-ai-colors-gradient`) as a territory hairline on the bar's edge and as the full
+  fill for Run in flight (Bezel doc D-11), 54px row, label-small claim over a mono caption-xs
+  sub-line, borderless 32px circular controls, pill buttons. Docs callers of `<Shell>` keep
+  `variant="default"`, unchanged.
+- Bezel selection channel (`crafts/bezel/selection.tsx`): a page reports its ticked rows via
+  `useReportSelection` (rows as label/value/facets, a total, "what they share", its actions,
+  an `answer()` grain) and the Bezel goes Bulk - inside the Master App it IS the bulk bar
+  (Invoices hides its own). "Ask about these" -> chips -> the question docks the copilot with
+  an answer computed from exactly those rows (`src/mocks/bezel-selections.ts`). Found claims
+  tint the rows they're about (`script.found.rowIds` + `data-bezel-row` on the page's rows).
+- Bezel director (`crafts/bezel/director.ts` + `dock-tab.tsx`): the Master App mock dock has a
+  **Bezel** tab (via `MockDock`'s `extraTabs`) that forces any mode/situation on the live Bezel -
+  every state, Bulk/As context (uses the page's ticked rows, else 3 demo rows), Ask / voice /
+  sidebar thread, the voice -> agent run, placement (Dock / Sidebar / Immersive + edge), pins,
+  reset to the page's own claim, and a ▶ Play states tour. MasterBezelLayout registers its
+  controls and publishes its state (a small external store - the dock renders in another tree).
+- Bezel presence + hotkeys (Master App; departs from the Bezel doc's "always present"): a
+  quiet page shows NO bar. It shows itself only when there is something - the section's
+  script sets `attention` (Payments: overdue invoices; Settings: blocked state payroll) and
+  the page opens on its Found claim - or a run is in flight / an undo window is open.
+  Otherwise summon it: **⌘E / Ctrl+E** = Ask (new `ask` mode: the claim yields to a focused
+  input; again or Esc puts it back where it was; sending travels the bar into the copilot
+  column with the question), **⇧⌘E** = open/close the Sidebar (⌘E when it's open focuses its
+  composer), **⌃⌥ + arrows** = Immersive, to that edge, **Esc** = step back (sheet -> claim). The AppBar "Ask Emma" pill = ⌘E, via
+  `AppBarLinksContext.onAiClick`. The Bezel craft itself still demos the always-present bar. `FloatingBezel`
+  renders a `BezelScript` (`src/mocks/bezel.ts`); each section's script lives in
+  `src/mocks/master-bezel.ts`, computed from that section's mocks - Payments reads the same
+  live store the mock dock drives, so claims move with the dataset/time machine. A run in
+  flight keeps its origin page's words as it follows you; other sections' open tensions
+  pin into the copilot thread with a "Go to" exit.
 - Form flows: `FormShell` (multi-payroll ui) = no AppBar/Sidebar - slim title bar +
   left `Stepper` rail (nds/stepper, Figma 89:5507: 24px brand check / brand spinner /
   muted check, Label/XSmall, 24px hairline connectors) + centered `FormCard` column.
@@ -266,7 +340,7 @@ job and built with mock data from `src/mocks/ai-components.ts`. Docs at
 - `agent-status.tsx` - `LoadingState`, `Thinking`, `StreamingText`, `TaskRows`.
 - `conversational.tsx` - `Chat`, `PromptBar`, `SelectionActions`.
 - `decisions.tsx` - `ApprovalCard`, `RecommendationCard`, `FineTuneCard` (Approval/
-  Recommendation mirror `nds/feedback.tsx`'s `EmmaCard` shell: `shadow-ai` glow,
+  Recommendation mirror `nds/feedback.tsx`'s `EmmaCard` shell: `elevation-ai` glow,
   brand Sparkle header).
 - `knowledge.tsx` - `ContextCards`, `DiffTable`, `RecordsTable`, `FilterTable`,
   `InsightCards`, `CodeBlock`. The three tables reuse `ui/table` + `StatusPill`
@@ -300,7 +374,7 @@ catalogs without checking first.
   color, and risk-footer tint all derive from `confidence`/`liveness`/`risk`
   props - callers never pick a "variant." Supports `streaming` (mocked
   token-by-token claim reveal via `useStreamedText`, `hooks.ts`).
-  Never uses `shadow-ai` (see below).
+  Never uses `elevation-ai` (see below).
 - `process.tsx` - `Skeleton`, `StepList`, `ToolChip`. Work-in-progress only -
   no claim bar, ever; the moment something asserts it belongs in `grain.tsx`.
 - `shell.tsx` - `<Shell>`, the Floater as Grain-at-line-density docked above a
@@ -335,11 +409,11 @@ catalogs without checking first.
   `src/mocks/employees.ts` via `src/mocks/bezel.ts`, not authored copy.
 
 **Token note - do not use `--shadow-ai` (the purple glow, see `decisions.tsx`'s
-`shadow-ai glow, brand Sparkle header` above) inside `grain/*`.** Grain's color
+`elevation-ai glow, brand Sparkle header` above) inside `grain/*`.** Grain's color
 law is contrast, not hue; new tokens `grain-ink` / `grain-ink-foreground` /
 `grain-ink-muted` (near-black in light mode, inverted to near-white in dark,
 `src/styles.css`) carry the claim bar instead. This is a deliberate token
-split, not an oversight - `shadow-ai` predates Grain and is what the language's
+split, not an oversight - `elevation-ai` predates Grain and is what the language's
 own decision log rejects.
 
 ## Gaps - TBD in foundations (flag, don't invent)

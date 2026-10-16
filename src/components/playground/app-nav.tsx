@@ -28,8 +28,8 @@ import {
 import { cn } from '@/lib/utils'
 
 const railIconLink =
-  'flex size-9 shrink-0 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary'
-const railIconLinkActive = 'bg-background-highlight text-text-primary'
+  'flex size-9 shrink-0 items-center justify-center rounded-full text-muted transition-colors hover:bg-highlight hover:text-primary'
+const railIconLinkActive = 'bg-highlight text-primary'
 
 /** Rail tooltips wait a beat so sweeping the rail doesn't flash every label. */
 const RAIL_TOOLTIP_DELAY = 300
@@ -111,7 +111,7 @@ export function AppNav() {
 
   return (
     <>
-      <aside className="fixed inset-y-0 left-0 z-50 flex w-16 shrink-0 flex-col items-center gap-1 border-r border-border-base bg-background-base/85 py-3 backdrop-blur">
+      <aside className="fixed inset-y-0 left-0 z-50 flex w-16 shrink-0 flex-col items-center gap-1 border-r border-base bg-base/85 py-3 backdrop-blur">
         <Tooltip
           content="NDS Playground"
           side="right"
@@ -121,13 +121,13 @@ export function AppNav() {
           <Link
             to="/"
             aria-label="NDS Playground"
-            className="flex size-9 shrink-0 items-center justify-center rounded-md bg-brand-primary text-caption-md text-text-on-color"
+            className="flex size-9 shrink-0 items-center justify-center rounded-md bg-brand text-caption-sm font-medium text-on-color"
           >
             N
           </Link>
         </Tooltip>
 
-        <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
+        <span className="my-2 h-px w-8 shrink-0 bg-(--border-muted)" />
 
         <nav className="flex flex-col items-center gap-1">
           <RailLink to="/" label="Crafts" icon={SquaresFour} active={railTarget === '/'} />
@@ -143,7 +143,7 @@ export function AppNav() {
           <RailLink to="/app" label="Run the app" icon={Rocket} active={railTarget === '/app'} />
         </nav>
 
-        <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
+        <span className="my-2 h-px w-8 shrink-0 bg-(--border-muted)" />
 
         <DropdownMenu>
           <DropdownMenuTrigger
@@ -153,13 +153,13 @@ export function AppNav() {
             title={
               current ? `Switch craft - currently ${current.title}` : 'Switch craft'
             }
-            className={cn(railIconLink, 'data-popup-open:bg-background-highlight data-popup-open:text-text-primary')}
+            className={cn(railIconLink, 'data-popup-open:bg-highlight data-popup-open:text-primary')}
           >
             <Flask className="size-[18px]" />
           </DropdownMenuTrigger>
           <DropdownMenuContent side="right" align="start" className="w-72">
             <DropdownMenuGroup>
-              <DropdownMenuLabel className="text-caption-md text-text-muted">
+              <DropdownMenuLabel className="text-caption-sm font-medium text-muted">
                 Switch craft
               </DropdownMenuLabel>
               {crafts.map((e) => (
@@ -171,7 +171,7 @@ export function AppNav() {
                     )}
                   />
                   <span className="truncate">{e.title}</span>
-                  <span className="ml-auto text-caption text-text-muted">
+                  <span className="ml-auto text-caption-sm text-muted">
                     {statusLabel[e.status]}
                   </span>
                 </DropdownMenuItem>

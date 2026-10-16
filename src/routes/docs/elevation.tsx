@@ -13,13 +13,13 @@ function ShadowCard({ cls, name, use }: { cls: string; name: string; use: string
     <div className="min-w-0">
       <div
         className={cn(
-          'flex h-20 items-center justify-center rounded-xl bg-background-base',
+          'flex h-20 items-center justify-center rounded-xl bg-base',
           cls,
         )}
       >
-        <span className="text-caption text-text-muted">{use}</span>
+        <span className="text-caption-sm text-muted">{use}</span>
       </div>
-      <p className="mt-2 truncate font-mono text-caption-md text-text-primary">
+      <p className="mt-2 truncate font-mono text-caption-sm font-medium text-primary">
         {name}
       </p>
     </div>
@@ -27,20 +27,20 @@ function ShadowCard({ cls, name, use }: { cls: string; name: string; use: string
 }
 
 const SEMANTIC = [
-  { cls: 'shadow-card', name: 'shadow-card', use: 'Default card (ring built in)' },
-  { cls: 'shadow-card-hover', name: 'shadow-card-hover', use: 'Card on hover' },
-  { cls: 'shadow-tooltip', name: 'shadow-tooltip', use: 'Tooltips' },
-  { cls: 'shadow-flyout', name: 'shadow-flyout', use: 'Menus, popovers, panels' },
-  { cls: 'shadow-ai', name: 'shadow-ai', use: 'AI surfaces (Emma)' },
+  { cls: 'card', name: 'card', use: 'Default card (ring built in)' },
+  { cls: 'card-hover', name: 'card-hover', use: 'Card on hover' },
+  { cls: 'elevation-tooltip', name: 'elevation-tooltip', use: 'Tooltips' },
+  { cls: 'flyout', name: 'flyout', use: 'Menus, popovers, panels' },
+  { cls: 'elevation-ai', name: 'elevation-ai', use: 'AI surfaces (Emma)' },
 ]
 
 const RINGS = [
-  { cls: 'shadow-button-gray', name: 'shadow-button-gray', use: 'Buttons, inputs, pills' },
-  { cls: 'shadow-button-primary', name: 'shadow-button-primary', use: 'Primary button ring' },
-  { cls: 'shadow-border-focus', name: 'shadow-border-focus', use: 'Focused input' },
-  { cls: 'shadow-border-active', name: 'shadow-border-active', use: 'Active / selected' },
-  { cls: 'shadow-border-error', name: 'shadow-border-error', use: 'Error state' },
-  { cls: 'shadow-pagination', name: 'shadow-pagination', use: 'Pagination circles' },
+  { cls: 'borders-base', name: 'borders-base', use: 'Buttons, inputs, pills' },
+  { cls: 'buttons-primary', name: 'buttons-primary', use: 'Primary button ring' },
+  { cls: 'borders-focus', name: 'borders-focus', use: 'Focused input' },
+  { cls: 'borders-active', name: 'borders-active', use: 'Active / selected' },
+  { cls: 'borders-error', name: 'borders-error', use: 'Error state' },
+  { cls: 'buttons-neutral', name: 'buttons-neutral', use: 'Pagination circles' },
 ]
 
 const DEPTH = [
@@ -92,7 +92,7 @@ function ElevationDoc() {
         title="Button recipes"
         note="@niural/components Button: 34px tall (md), control radius, Label/Small. The label carries its own 4px optical pad."
       >
-        <div className="flex flex-wrap items-center gap-3 rounded-xl bg-surface-1 p-4">
+        <div className="flex flex-wrap items-center gap-3 rounded-xl bg-surface-frame p-4">
           <Button variant="solid" shade="primary" type="button">
             Primary
           </Button>
@@ -109,7 +109,7 @@ function ElevationDoc() {
             Destructive
           </Button>
         </div>
-        <p className="mt-3 text-paragraph-xs text-text-muted">
+        <p className="mt-3 text-paragraph-xsmall text-muted">
           Primary (solid + primary) = <InlineCode>bg-button-primary</InlineCode> +{' '}
           <InlineCode>buttons-primary</InlineCode>. Secondary (solid + neutral) ={' '}
           <InlineCode>bg-base</InlineCode> + <InlineCode>borders-base</InlineCode>.

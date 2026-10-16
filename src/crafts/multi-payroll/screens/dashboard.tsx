@@ -51,7 +51,7 @@ import { Button, Checkbox, IconButton } from '@niural/components'
 
 function V2Chip() {
   return (
-    <span className="rounded bg-brand-muted px-1 text-caption-md text-brand-text">v2</span>
+    <span className="rounded bg-brand-muted px-1 text-caption-sm font-medium text-brand">v2</span>
   )
 }
 
@@ -64,15 +64,15 @@ function membersOf(schedule: PaySchedule) {
 function CardStat({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <div className="min-w-0">
-      <p className="text-caption-md text-text-muted">{label}</p>
-      <p className="mt-0.5 truncate text-paragraph-xs text-text-primary">{value}</p>
+      <p className="text-caption-sm font-medium text-muted">{label}</p>
+      <p className="mt-0.5 truncate text-paragraph-xsmall text-primary">{value}</p>
     </div>
   )
 }
 
 function TabBar({ tab, onChange }: { tab: 'active' | 'archived'; onChange: (t: 'active' | 'archived') => void }) {
   return (
-    <div className="flex h-9 w-fit items-center rounded-lg bg-background-highlight p-1">
+    <div className="flex h-9 w-fit items-center rounded-lg bg-highlight p-1">
       {(
         [
           { id: 'active', label: 'Active schedules', icon: undefined },
@@ -84,8 +84,8 @@ function TabBar({ tab, onChange }: { tab: 'active' | 'archived'; onChange: (t: '
           type="button"
           onClick={() => onChange(t.id)}
           className={cn(
-            'flex h-7 items-center gap-1.5 rounded-md px-3 text-label-xs transition-colors',
-            tab === t.id ? 'bg-background-base text-text-primary shadow-button-gray' : 'text-text-muted',
+            'flex h-7 items-center gap-1.5 rounded-md px-3 text-label-xsmall transition-colors',
+            tab === t.id ? 'bg-base text-primary borders-base' : 'text-muted',
           )}
         >
           {t.icon && <t.icon className="size-3.5" />}
@@ -110,15 +110,15 @@ function ScheduleCard({
   const members = membersOf(schedule)
   const period = periodOf(schedule.frequency, WORLD_TODAY)
   return (
-    <div className="flex flex-col gap-4 rounded-xl bg-background-base p-4 shadow-card">
+    <div className="flex flex-col gap-4 rounded-xl bg-base p-4 card">
       <div className="flex items-start justify-between gap-3">
         <div className="flex min-w-0 items-baseline gap-2">
-          <p className="truncate text-label-sm text-text-primary">{schedule.name}</p>
-          {schedule.isDefault && <span className="shrink-0 text-label-xs text-brand-text">Default · everyone else</span>}
+          <p className="truncate text-label-small text-primary">{schedule.name}</p>
+          {schedule.isDefault && <span className="shrink-0 text-label-xsmall text-brand">Default · everyone else</span>}
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <AvatarStack names={members.map((e) => e.name)} max={3} />
-          <span className="text-label-xs text-text-primary">{schedule.memberCount} people</span>
+          <span className="text-label-xsmall text-primary">{schedule.memberCount} people</span>
           <FreqTag>{schedule.payDayRule}</FreqTag>
           <DropdownMenu open={open} onOpenChange={setOpen}>
             <DropdownMenuTrigger
@@ -127,7 +127,7 @@ function ScheduleCard({
                   variant="ghost"
                   shade="neutral"
                   size="small"
-                  className="text-text-muted"
+                  className="text-muted"
                 />
               }
               aria-label={`Actions for ${schedule.name}`}
@@ -210,21 +210,21 @@ function SuggestedScheduleCard({
   onCustomize?: () => void
 }) {
   return (
-    <div className="flex flex-col gap-3 rounded-xl border border-dashed border-border-base bg-background-base p-4">
+    <div className="flex flex-col gap-3 rounded-xl border border-dashed border-base bg-base p-4">
       <div className="flex flex-wrap items-start justify-between gap-x-3 gap-y-1.5">
         <div className="flex items-baseline gap-2">
-          <p className="text-label-sm text-text-primary">{suggestion.name}</p>
-          <span className="shrink-0 rounded bg-brand-muted px-1 text-caption-md text-brand-text">
+          <p className="text-label-small text-primary">{suggestion.name}</p>
+          <span className="shrink-0 rounded bg-brand-muted px-1 text-caption-sm font-medium text-brand">
             Suggested
           </span>
         </div>
         <div className="flex shrink-0 items-center gap-2">
           <AvatarStack names={suggestion.matched.map((e) => e.name)} max={3} />
-          <span className="text-label-xs text-text-primary">{suggestion.matched.length} people</span>
+          <span className="text-label-xsmall text-primary">{suggestion.matched.length} people</span>
           <FreqTag>{suggestion.frequency}</FreqTag>
         </div>
       </div>
-      <p className="text-paragraph-xs text-text-muted">{describeRule(suggestion.rule)}</p>
+      <p className="text-paragraph-xsmall text-muted">{describeRule(suggestion.rule)}</p>
       {suggestion.complianceNote && (
         <Banner tone="info" title="Frequency adjusted for compliance">
           {suggestion.complianceNote}
@@ -325,11 +325,11 @@ function CopilotThinking() {
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-20 text-center">
       <div className="flex items-center gap-1.5">
-        <span className="size-2 animate-bounce rounded-full bg-brand-primary [animation-delay:-0.3s]" />
-        <span className="size-2 animate-bounce rounded-full bg-brand-primary [animation-delay:-0.15s]" />
-        <span className="size-2 animate-bounce rounded-full bg-brand-primary" />
+        <span className="size-2 animate-bounce rounded-full bg-brand [animation-delay:-0.3s]" />
+        <span className="size-2 animate-bounce rounded-full bg-brand [animation-delay:-0.15s]" />
+        <span className="size-2 animate-bounce rounded-full bg-brand" />
       </div>
-      <p className="max-w-56 text-paragraph-xs text-text-muted">
+      <p className="max-w-56 text-paragraph-xsmall text-muted">
         Looking at work location, employee type, and compensation type across all {employees.length}{' '}
         employees…
       </p>
@@ -347,7 +347,7 @@ function CopilotSuggestions({
   const { show } = useExplorer()
   return (
     <div className="flex flex-col gap-3">
-      <p className="text-paragraph-xs text-text-primary">
+      <p className="text-paragraph-xsmall text-primary">
         I grouped everyone into {suggestions.length} schedules that keep pay compliant with state law from day
         one.{' '}
         {canBulkCreate
@@ -406,14 +406,14 @@ function CopilotPanel({
 
   return (
     <div
-      className="absolute inset-0 z-40 flex justify-end bg-overlay-background-base backdrop-blur-[2px]"
+      className="absolute inset-0 z-40 flex justify-end bg-overlay backdrop-blur-[2px]"
       onClick={onClose}
     >
       <div
-        className="animate-in flex h-full w-full max-w-[420px] flex-col bg-background-base shadow-flyout slide-in-from-right duration-300"
+        className="animate-in flex h-full w-full max-w-[420px] flex-col bg-base flyout slide-in-from-right duration-300"
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="flex shrink-0 items-center gap-3 border-b border-border-highlight px-4 py-3.5">
+        <div className="flex shrink-0 items-center gap-3 border-b border-base px-4 py-3.5">
           <span
             className={cn(
               'flex size-9 shrink-0 items-center justify-center rounded-full',
@@ -424,14 +424,14 @@ function CopilotPanel({
             <Sparkle weight="fill" className="size-4 text-white" />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-label-sm text-text-primary">Emma</p>
-            <p className="text-caption-md text-text-muted">Pay schedule copilot</p>
+            <p className="text-label-small text-primary">Emma</p>
+            <p className="text-caption-sm font-medium text-muted">Pay schedule copilot</p>
           </div>
           <button
             type="button"
             aria-label="Close"
             onClick={onClose}
-            className="flex size-7 shrink-0 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+            className="flex size-7 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-highlight hover:text-primary"
           >
             <X className="size-4" />
           </button>
@@ -444,7 +444,7 @@ function CopilotPanel({
           )}
         </div>
         {stage === 'suggestions' && (
-          <div className="flex shrink-0 items-center justify-end gap-2 border-t border-border-highlight px-4 py-3">
+          <div className="flex shrink-0 items-center justify-end gap-2 border-t border-base px-4 py-3">
             <Button type="button" variant="ghost" shade="neutral" size="sm" onClick={onClose}>
               {canBulkCreate ? 'Not now' : 'Close'}
             </Button>
@@ -516,14 +516,14 @@ function ArchiveConfirmModal({ onClose }: { onClose: () => void }) {
           Archiving removes it from new runs and rules. Past runs, payslips and
           reports stay viewable.
         </Banner>
-        <label className="flex cursor-pointer items-center gap-2.5 rounded-lg bg-background-highlight p-2.5">
+        <label className="flex cursor-pointer items-center gap-2.5 rounded-lg bg-highlight p-2.5">
           <Checkbox
             size="md"
             checked={ack}
             onCheckedChange={(v) => setAck(v === true)}
             aria-label="Acknowledge archive"
           />
-          <span className="text-paragraph-xs text-text-primary">
+          <span className="text-paragraph-xsmall text-primary">
             I understand no future runs will use this schedule.
           </span>
         </label>
@@ -620,15 +620,15 @@ export function DashboardScreen({ view }: { view: DashboardView }) {
           </Button>
         }
       />
-      <PageBody className="relative bg-surface-1">
+      <PageBody className="relative bg-surface-frame">
         {view.empty ? (
           view.aiSuggest ? (
             <AiSuggestPanel />
           ) : (
             <div className="flex h-full flex-col items-center justify-center gap-2">
-              <CalendarCheck className="size-6 text-text-disabled" />
-              <p className="text-label-sm text-text-primary">No payroll schedules yet</p>
-              <p className="max-w-80 text-center text-paragraph-xs text-text-muted">
+              <CalendarCheck className="size-6 text-disabled" />
+              <p className="text-label-small text-primary">No payroll schedules yet</p>
+              <p className="max-w-80 text-center text-paragraph-xsmall text-muted">
                 A schedule decides who gets paid on which cadence. Start with one
                 for everyone - split later as you grow.
               </p>
@@ -668,13 +668,13 @@ export function DashboardScreen({ view }: { view: DashboardView }) {
                 ))}
               </div>
             ) : view.vision === 'full' ? (
-              <div className="flex flex-col gap-3 rounded-xl border border-dashed border-border-base p-4 opacity-90">
+              <div className="flex flex-col gap-3 rounded-xl border border-dashed border-base p-4 opacity-90">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0">
-                    <p className="truncate text-label-sm text-text-muted">
+                    <p className="truncate text-label-small text-muted">
                       {ARCHIVED_SCHEDULE.name}
                     </p>
-                    <p className="mt-0.5 text-paragraph-xs text-text-disabled">
+                    <p className="mt-0.5 text-paragraph-xsmall text-disabled">
                       Archived · 14 runs of history
                     </p>
                   </div>
@@ -683,7 +683,7 @@ export function DashboardScreen({ view }: { view: DashboardView }) {
                 <div className="flex items-center gap-1.5">
                   <FreqTag>{ARCHIVED_SCHEDULE.frequency}</FreqTag>
                   <FreqTag>
-                    <UsersThree className="mr-1 size-3.5 text-text-muted" />0
+                    <UsersThree className="mr-1 size-3.5 text-muted" />0
                   </FreqTag>
                 </div>
                 <div>
@@ -701,9 +701,9 @@ export function DashboardScreen({ view }: { view: DashboardView }) {
               </div>
             ) : (
               <div className="flex flex-col items-center justify-center gap-1.5 py-16">
-                <Archive className="size-5 text-text-disabled" />
-                <p className="text-label-xs text-text-primary">No archived schedules yet</p>
-                <p className="max-w-72 text-center text-paragraph-xs text-text-muted">
+                <Archive className="size-5 text-disabled" />
+                <p className="text-label-xsmall text-primary">No archived schedules yet</p>
+                <p className="max-w-72 text-center text-paragraph-xsmall text-muted">
                   Schedules with run history move here once they're archived instead of deleted.
                 </p>
               </div>

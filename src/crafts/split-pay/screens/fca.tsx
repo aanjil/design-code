@@ -31,7 +31,7 @@ export function FcaScreen({ view }: { view: FcaView }) {
       <FlowShell title="Investor categorization" progress="Regulatory steps · 1 of 3">
         <div className="flex flex-col gap-4">
           <FormCard className="flex flex-col gap-3">
-            <p className="text-label-sm text-text-primary">{q.q}</p>
+            <p className="text-label-small text-primary">{q.q}</p>
             <div className="flex flex-col gap-2">
               {q.options.map((opt, i) => (
                 <OptionRow key={opt} label={opt} selected={i === 0} />
@@ -54,29 +54,29 @@ export function FcaScreen({ view }: { view: FcaView }) {
       <FlowShell title="Risk disclosure and investor agreement" progress="Regulatory steps · 2 of 3">
         <div className="flex flex-col gap-4">
           <FormCard className="flex flex-col gap-3">
-            <div className="relative max-h-64 overflow-y-auto rounded-lg border border-border-highlight p-4">
-              <div className="flex flex-col gap-3 text-paragraph-xs text-text-muted">
+            <div className="relative max-h-64 overflow-y-auto rounded-lg border border-base p-4">
+              <div className="flex flex-col gap-3 text-paragraph-xsmall text-muted">
                 {DISCLOSURE_PARAS.map((p) => (
                   <p key={p.slice(0, 24)}>{p}</p>
                 ))}
               </div>
               {!scrolled && (
-                <div className="pointer-events-none sticky right-0 -bottom-4 left-0 h-12 bg-gradient-to-t from-background-base to-transparent" />
+                <div className="pointer-events-none sticky right-0 -bottom-4 left-0 h-12 bg-gradient-to-t from-(--background-base) to-transparent" />
               )}
             </div>
             {!scrolled && (
-              <p className="text-caption-md text-text-muted">Read to the end to enable accept.</p>
+              <p className="text-caption-sm font-medium text-muted">Read to the end to enable accept.</p>
             )}
             <div
               className={cn(
                 'flex h-16 items-center justify-center rounded-lg border border-dashed',
-                scrolled ? 'border-brand-primary' : 'border-border-highlight opacity-50',
+                scrolled ? 'border-brand' : 'border-base opacity-50',
               )}
             >
               {scrolled ? (
-                <span className="font-serif text-lg text-text-primary italic">Amelia Clarke</span>
+                <span className="font-serif text-lg text-primary italic">Amelia Clarke</span>
               ) : (
-                <span className="flex items-center gap-1.5 text-caption-md text-text-muted">
+                <span className="flex items-center gap-1.5 text-caption-sm font-medium text-muted">
                   <Signature className="size-4" />
                   Signature
                 </span>
@@ -99,14 +99,14 @@ export function FcaScreen({ view }: { view: FcaView }) {
       <FlowShell title="Risk assessment" progress="Regulatory steps · 3 of 3">
         <div className="flex flex-col gap-4">
           {failed && (
-            <div className="rounded-xl bg-background-warning-muted px-4 py-3 text-paragraph-xs text-text-primary">
+            <div className="rounded-xl bg-warning-muted px-4 py-3 text-paragraph-xsmall text-primary">
               That didn't pass this time. Have another look at the risk disclosure, then try again
               with a fresh set of questions.
             </div>
           )}
           {FCA_RISK_QUESTIONS.map((q, qi) => (
             <FormCard key={q.q} className="flex flex-col gap-3">
-              <p className="text-label-sm text-text-primary">{q.q}</p>
+              <p className="text-label-small text-primary">{q.q}</p>
               <div className="flex flex-col gap-2">
                 {q.options.map((opt, i) => (
                   <OptionRow key={opt} label={opt} selected={!failed && i === q.correct && qi === 0} />
@@ -128,12 +128,12 @@ export function FcaScreen({ view }: { view: FcaView }) {
   return (
     <FlowShell title="Cooling off">
       <FormCard className="flex flex-col items-center gap-4 py-10 text-center">
-        <span className="flex size-12 items-center justify-center rounded-full bg-background-warning-muted">
-          <ClockCountdown className="size-6 text-text-warning-base" />
+        <span className="flex size-12 items-center justify-center rounded-full bg-warning-muted">
+          <ClockCountdown className="size-6 text-warning" />
         </span>
         <div className="flex flex-col gap-1">
-          <p className="text-label-md text-text-primary">One short wait before you're ready</p>
-          <p className="max-w-md text-paragraph-xs text-text-muted">
+          <p className="text-label-medium text-primary">One short wait before you're ready</p>
+          <p className="max-w-md text-paragraph-xsmall text-muted">
             UK regulation requires a short cooling-off period after your risk assessment. It applies
             to everyone - it's not about you. Typically clears within {COOLING_OFF_ESTIMATE}. We'll
             email you the moment it's done. Nothing needed from you.

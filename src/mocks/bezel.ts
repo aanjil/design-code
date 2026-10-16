@@ -178,3 +178,73 @@ export const VOICE_RESULT = `Resent ${pendingInvites.length} pending invite${pen
 /* ---------- Run in flight ---------- */
 
 export const RUN_CLAIM = `Run payroll · Aug 16-31 - one pay-equity flag left`
+
+/* ---------- Script: everything the bezel says on one page ---------- */
+
+/**
+ * What the one floating object says on a given page. FloatingBezel renders
+ * any script; the Employees page and every Master App section each supply
+ * their own (src/mocks/master-bezel.ts), computed from that page's mocks.
+ */
+export interface BezelScript {
+  /** The page has something to say on arrival - the bar shows itself in
+   *  Found. Otherwise the page is quiet and (in the Master App) the bezel
+   *  stays out of sight until summoned (⌘E). */
+  attention?: boolean
+  /** "Ask Emma about ___" in the Ask input. */
+  askAbout?: string
+  /** Idle line - always true, never alarming. */
+  quiet: { claim: string; sub: string }
+  /** What Emma is reading while it scans (a count of real records). */
+  scanLabel: string
+  found: {
+    claim: string
+    confidence: number
+    facts: Array<GrainFact>
+    provenance: string
+    nextLabel: string
+    /** Rows the claim is about - they tint on the page so it points at something. */
+    rowIds?: Array<string>
+  }
+  tension: {
+    claim: string
+    confidence: number
+    facts: Array<GrainFact>
+    provenance: string
+    exits: (onResolve: (result: string) => void) => Array<GrainExit>
+    /** Where resolving the tension leads, if anywhere. */
+    continueLabel?: string
+  }
+  run: { claim: string; sub: string }
+  voice: { command: string; scope: string; result: string }
+  thread: { title: string; question: string; followUp: string }
+}
+
+export const EMPLOYEES_BEZEL: BezelScript = {
+  askAbout: 'your people',
+  quiet: { claim: 'Nothing needs you on this page', sub: `${employees.length} employees · headcount steady this week · click to ask Emma` },
+  scanLabel: `Reading ${employees.length} employee records`,
+  found: {
+    claim: FOUND_CLAIM,
+    confidence: FOUND_CONFIDENCE,
+    facts: FOUND_FACTS,
+    provenance: FOUND_PROVENANCE,
+    nextLabel: 'See the pay-equity flag',
+    rowIds: euContractors.map((e) => e.id),
+  },
+  tension: {
+    claim: TENSION_CLAIM,
+    confidence: TENSION_CONFIDENCE,
+    facts: TENSION_FACTS,
+    provenance: TENSION_PROVENANCE,
+    exits: tensionExits,
+    continueLabel: 'Continue to payroll run',
+  },
+  run: { claim: RUN_CLAIM, sub: 'step 2 of 3 · nothing submitted · follows you across pages' },
+  voice: { command: VOICE_COMMAND, scope: VOICE_SCOPE, result: VOICE_RESULT },
+  thread: {
+    title: 'Why is pay so spread out?',
+    question: `why is pay so spread out for ${PAY_SPREAD.jobTitle.toLowerCase()}s?`,
+    followUp: 'Role median lands in the low six figures - most reports are within 12% of it. This pair is the only outlier I found.',
+  },
+}

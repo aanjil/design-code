@@ -29,10 +29,10 @@ const CATEGORY_ICON: Record<ReportCategory, typeof Coins> = {
 }
 
 const CATEGORY_TINT: Record<ReportCategory, string> = {
-  Payroll: 'bg-background-warning-muted text-text-warning-base',
-  Payments: 'bg-background-info-muted text-text-primary',
-  People: 'bg-background-success-muted text-text-success-base',
-  'Niural Pay': 'bg-brand-muted text-brand-text',
+  Payroll: 'bg-warning-muted text-warning',
+  Payments: 'bg-info-muted text-primary',
+  People: 'bg-success-muted text-success',
+  'Niural Pay': 'bg-brand-muted text-brand',
 }
 
 const CATEGORIES: Array<ReportCategory | 'All'> = ['All', 'Payroll', 'Payments', 'People', 'Niural Pay']
@@ -69,25 +69,25 @@ export function LandingScreen({ view }: { view: LandingView }) {
       />
       <PageBody className="flex flex-col gap-4">
         <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-1 rounded-full bg-background-highlight p-1">
+          <div className="flex items-center gap-1 rounded-full bg-highlight p-1">
             {CATEGORIES.map((c) => (
               <span
                 key={c}
                 className={cn(
-                  'flex h-7 items-center rounded-full px-3 text-label-xs',
+                  'flex h-7 items-center rounded-full px-3 text-label-xsmall',
                   c === (view.category ?? 'All')
-                    ? 'bg-background-base text-text-primary shadow-button-gray'
-                    : 'text-text-muted',
+                    ? 'bg-base text-primary borders-base'
+                    : 'text-muted',
                 )}
               >
                 {c}
               </span>
             ))}
           </div>
-          <div className="flex h-8 w-64 items-center gap-2 rounded-lg border border-input px-2.5 text-paragraph-xs text-text-muted">
+          <div className="flex h-8 w-64 items-center gap-2 rounded-lg border border-input px-2.5 text-paragraph-xsmall text-muted">
             <MagnifyingGlass className="size-4" />
             Search in insights...
-            <span className="ml-auto rounded border border-border-highlight px-1 text-caption-md">/</span>
+            <span className="ml-auto rounded border border-base px-1 text-caption-sm font-medium">/</span>
           </div>
         </div>
 
@@ -102,22 +102,22 @@ export function LandingScreen({ view }: { view: LandingView }) {
                 title={!r.schedulable ? "Scheduling isn't available for this report type" : undefined}
                 onClick={() => show('A3', 'view')}
                 className={cn(
-                  'flex flex-col gap-2 rounded-xl border border-border-highlight p-4 text-left transition-colors',
-                  r.schedulable ? 'hover:bg-background-highlight' : 'cursor-default opacity-70',
+                  'flex flex-col gap-2 rounded-xl border border-base p-4 text-left transition-colors',
+                  r.schedulable ? 'hover:bg-highlight' : 'cursor-default opacity-70',
                 )}
               >
                 <div className="flex items-center justify-between">
                   <span className={cn('flex size-8 items-center justify-center rounded-lg', CATEGORY_TINT[r.category])}>
                     <Icon weight="fill" className="size-4" />
                   </span>
-                  <span className="rounded-full bg-background-highlight px-2 py-0.5 text-caption-md text-text-muted">
+                  <span className="rounded-full bg-highlight px-2 py-0.5 text-caption-sm font-medium text-muted">
                     {r.category}
                   </span>
                 </div>
-                <p className="text-label-sm text-text-primary">{r.name}</p>
-                <p className="text-paragraph-xs text-text-muted">{r.description}</p>
+                <p className="text-label-small text-primary">{r.name}</p>
+                <p className="text-paragraph-xsmall text-muted">{r.description}</p>
                 {!r.schedulable && (
-                  <p className="flex items-center gap-1 text-caption-md text-text-muted">
+                  <p className="flex items-center gap-1 text-caption-sm font-medium text-muted">
                     <CalendarX className="size-3.5" />
                     Scheduling unavailable
                   </p>

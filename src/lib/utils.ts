@@ -2,9 +2,12 @@ import { clsx, type ClassValue } from 'clsx'
 import { extendTailwindMerge } from 'tailwind-merge'
 
 /**
- * tailwind-merge must be taught the NDS type-scale utilities (text-label-sm,
- * text-title-h1, …) are font-size classes - otherwise it treats them as text
- * COLORS and silently drops them when combined with text-text-* tokens.
+ * tailwind-merge only knows Tailwind's built-in names. Teach it fe-pkg's:
+ * - type scale (text-label-small, text-title-h5, ...) are font SIZES -
+ *   otherwise it reads them as text colors and drops them next to text-muted.
+ * - elevation utilities (card, flyout, borders-*, buttons-*, elevation-*) set
+ *   box-shadow - so `shadow-none` passed in a className beats a default `card`.
+ * - named radii (rounded-control, rounded-surface, ...) - fe-pkg radius.ts.
  */
 const twMerge = extendTailwindMerge({
   extend: {
@@ -17,26 +20,43 @@ const twMerge = extendTailwindMerge({
             'title-h3',
             'title-h4',
             'title-h5',
-            'paragraph-xl',
-            'paragraph-lg',
-            'paragraph-md',
-            'paragraph-sm',
-            'paragraph-xs',
-            'label-xl',
-            'label-lg',
-            'label-md',
-            'label-sm',
-            'label-xs',
-            'caption',
-            'caption-md',
-            'mono-xl',
-            'mono-lg',
-            'mono-md',
-            'mono-sm',
-            'mono-xs',
+            'label-xlarge',
+            'label-large',
+            'label-medium',
+            'label-small',
+            'label-xsmall',
+            'paragraph-large',
+            'paragraph-medium',
+            'paragraph-small',
+            'paragraph-xsmall',
+            'caption-sm',
+            'caption-xs',
           ],
         },
       ],
+      shadow: [
+        'card',
+        'card-hover',
+        'flyout',
+        {
+          borders: ['base', 'focus', 'error', 'active', 'shadow', 'interactive-with-shadow'],
+          buttons: ['primary', 'neutral', 'danger'],
+          elevation: [
+            'card',
+            'card-hover',
+            'card-rest',
+            'card-info',
+            'card-success',
+            'card-warning',
+            'card-error',
+            'ai',
+            'flyout',
+            'tooltip',
+            'modal',
+          ],
+        },
+      ],
+      rounded: [{ rounded: ['tight', 'snug', 'control', 'surface', 'panel', 'overlay', 'pill'] }],
     },
   },
 })

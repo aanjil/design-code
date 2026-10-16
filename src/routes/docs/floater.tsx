@@ -21,38 +21,38 @@ function FloaterDoc() {
       </DocSection>
 
       <DocSection title="Reading the controls">
-        <ul className="flex max-w-[640px] list-disc flex-col gap-2 pl-5 text-paragraph-sm text-text-muted marker:text-text-disabled">
+        <ul className="flex max-w-[640px] list-disc flex-col gap-2 pl-5 text-paragraph-small text-muted marker:text-disabled">
           <li>
-            <b className="text-text-primary">Pill</b> is the collapsed launcher - "Ask Emma" plus its ⌘E
-            hint, <InlineCode>shadow-floater</InlineCode> ring, nothing else. It only renders when idle;
-            once a grain docks the shell always expands to <b className="text-text-primary">default</b>.
+            <b className="text-primary">Pill</b> is the collapsed launcher - "Ask Emma" plus its ⌘E
+            hint, <InlineCode>--elevation-alpha-brand-11</InlineCode> ring, nothing else. It only renders when idle;
+            once a grain docks the shell always expands to <b className="text-primary">default</b>.
           </li>
           <li>
-            <b className="text-text-primary">Default, nothing docked</b> is the full-width composer - a
+            <b className="text-primary">Default, nothing docked</b> is the full-width composer - a
             true pill shape (<InlineCode>rounded-full</InlineCode>) with a mic icon that swaps to send the
             moment there's text, matching the idle "default size" Floater in Figma.
           </li>
           <li>
-            <b className="text-text-primary">Grain docked</b> switches the shape to{' '}
-            <InlineCode>rounded-xl</InlineCode> and the ring to <InlineCode>border-grain-ink</InlineCode> -
+            <b className="text-primary">Grain docked</b> switches the shape to{' '}
+            <InlineCode>rounded-xl</InlineCode> and the ring to <InlineCode>border-(--text-base)</InlineCode> -
             the near-black claim bar takes over as the anchor, per the color law (contrast, not hue). The
-            violet <InlineCode>shadow-floater</InlineCode> ring is chrome for an idle entry point, not a
+            violet <InlineCode>--elevation-alpha-brand-11</InlineCode> ring is chrome for an idle entry point, not a
             grain, so it steps aside once one is showing.
           </li>
           <li>
-            <b className="text-text-primary">Emma off</b> degrades to the page's own unstyled search input
+            <b className="text-primary">Emma off</b> degrades to the page's own unstyled search input
             regardless of size or dock state - nothing else missing (ship-gate question 3).
           </li>
         </ul>
       </DocSection>
 
       <DocSection title="See also">
-        <p className="max-w-[70ch] text-paragraph-sm text-text-muted">
-          <Link to="/docs/grain-component" className="text-brand-text hover:underline">
+        <p className="max-w-[70ch] text-paragraph-small text-muted">
+          <Link to="/docs/grain-component" className="text-brand hover:underline">
             The Grain component
           </Link>{' '}
           controls the grain that docks inside a Floater - confidence, liveness, streaming, undo.{' '}
-          <Link to="/docs/grain-composition" className="text-brand-text hover:underline">
+          <Link to="/docs/grain-composition" className="text-brand hover:underline">
             Composition
           </Link>{' '}
           covers how the same idea scales from one docked grain up to a full page. Source:{' '}

@@ -70,13 +70,13 @@ function ComponentsIndex() {
             <Link
               key={page.to}
               to={page.to}
-              className="group flex flex-col gap-1 rounded-xl bg-background-base p-4 shadow-border-base transition-shadow hover:shadow-button-gray"
+              className="group flex flex-col gap-1 rounded-xl bg-base p-4 borders-base transition-shadow hover:borders-base"
             >
               <span className="flex items-center justify-between gap-2">
-                <span className="text-label-sm text-text-primary">{page.title}</span>
-                <CaretRight className="size-3.5 text-text-disabled transition-transform group-hover:translate-x-0.5 group-hover:text-brand-text" />
+                <span className="text-label-small text-primary">{page.title}</span>
+                <CaretRight className="size-3.5 text-disabled transition-transform group-hover:translate-x-0.5 group-hover:text-brand" />
               </span>
-              <span className="text-paragraph-xs text-text-muted">{page.blurb}</span>
+              <span className="text-paragraph-xsmall text-muted">{page.blurb}</span>
             </Link>
           ))}
         </div>
@@ -86,10 +86,10 @@ function ComponentsIndex() {
         title="shadcn/ui primitives"
         note="src/components/ui - shadcn on Base UI, restyled to NDS. Composition via the render prop, not asChild."
       >
-        <p className="font-mono text-mono-xs leading-relaxed text-text-muted">
+        <p className="font-mono text-paragraph-xsmall leading-relaxed text-muted">
           {UI_PRIMITIVES}
         </p>
-        <p className="mt-3 text-paragraph-xs text-text-muted">
+        <p className="mt-3 text-paragraph-xsmall text-muted">
           Add more with{' '}
           <InlineCode>pnpm dlx shadcn@latest add &lt;name&gt; --yes</InlineCode> - then
           remap any default-palette classes to tokens (the palette is disabled, so

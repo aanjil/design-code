@@ -9,7 +9,7 @@ import { cn } from '@/lib/utils'
 
 export function Skeleton({ widths = ['70%', '45%'], note }: { widths?: Array<string>; note?: string }) {
   return (
-    <div className="rounded-lg border border-border-base bg-background-base p-3">
+    <div className="rounded-lg border border-base bg-base p-3">
       {widths.map((w, i) => (
         <div
           key={i}
@@ -17,7 +17,7 @@ export function Skeleton({ widths = ['70%', '45%'], note }: { widths?: Array<str
           style={{ width: w }}
         />
       ))}
-      {note && <p className="mt-1.5 text-caption text-text-muted">{note}</p>}
+      {note && <p className="mt-1.5 text-caption-sm text-muted">{note}</p>}
     </div>
   )
 }
@@ -31,18 +31,18 @@ export interface ProcessStep {
 
 export function StepList({ steps }: { steps: Array<ProcessStep> }) {
   return (
-    <div className="rounded-lg border border-border-base bg-background-base p-3">
+    <div className="rounded-lg border border-base bg-base p-3">
       {steps.map((s, i) => (
-        <div key={i} className="flex items-center gap-2 py-1 text-paragraph-sm text-text-muted">
+        <div key={i} className="flex items-center gap-2 py-1 text-paragraph-small text-muted">
           <span
             className={cn(
               'block size-1.5 shrink-0 rounded-full',
-              s.status === 'done' && 'bg-grain-ink',
-              s.status === 'active' && 'bg-background-warning-base',
-              s.status === 'pending' && 'bg-border-muted',
+              s.status === 'done' && 'bg-(--text-base)',
+              s.status === 'active' && 'bg-warning',
+              s.status === 'pending' && 'bg-(--border-muted)',
             )}
           />
-          <span className={s.status !== 'pending' ? 'text-text-primary' : undefined}>{s.label}</span>
+          <span className={s.status !== 'pending' ? 'text-primary' : undefined}>{s.label}</span>
         </div>
       ))}
     </div>
@@ -51,8 +51,8 @@ export function StepList({ steps }: { steps: Array<ProcessStep> }) {
 
 export function ToolChip({ label, value }: { label: string; value: string }) {
   return (
-    <span className="mr-1.5 mb-1.5 inline-flex items-center gap-1.5 rounded-md border border-border-base bg-surface-1 px-2 py-1 font-mono text-mono-xs text-text-muted">
-      {label} <b className="font-semibold text-text-primary">{value}</b>
+    <span className="mr-1.5 mb-1.5 inline-flex items-center gap-1.5 rounded-md border border-base bg-surface-frame px-2 py-1 font-mono text-paragraph-xsmall text-muted">
+      {label} <b className="font-semibold text-primary">{value}</b>
     </span>
   )
 }

@@ -36,9 +36,9 @@ function SpacingDoc() {
             { px: 16, use: 'page padding · grid X' },
             { px: 20, use: 'grid Y · item groups' },
           ].map((q) => (
-            <div key={q.px} className="rounded-xl bg-surface-1 p-3">
-              <p className="font-mono text-mono-md text-text-primary">{q.px}px</p>
-              <p className="mt-0.5 text-paragraph-xs text-text-muted">{q.use}</p>
+            <div key={q.px} className="rounded-xl bg-surface-frame p-3">
+              <p className="tabular-nums text-label-medium text-primary">{q.px}px</p>
+              <p className="mt-0.5 text-paragraph-xsmall text-muted">{q.use}</p>
             </div>
           ))}
         </div>
@@ -48,17 +48,17 @@ function SpacingDoc() {
         <div className="flex flex-col gap-2.5">
           {SCALE.map((s) => (
             <div key={s.px} className="flex items-center gap-4">
-              <span className="w-10 shrink-0 text-right font-mono text-mono-xs text-text-primary">
+              <span className="w-10 shrink-0 text-right tabular-nums text-paragraph-xsmall text-primary">
                 {s.px}
               </span>
               <span
                 className="h-4 shrink-0 rounded-[3px] bg-brand-muted"
                 style={{ width: s.px * 4 }}
               />
-              <span className="w-24 shrink-0 font-mono text-caption text-text-muted">
+              <span className="w-24 shrink-0 font-mono text-caption-sm text-muted">
                 {s.cls}
               </span>
-              <span className="min-w-0 truncate text-paragraph-xs text-text-muted">
+              <span className="min-w-0 truncate text-paragraph-xsmall text-muted">
                 {s.use}
               </span>
             </div>
@@ -85,7 +85,7 @@ function SpacingDoc() {
       </DocSection>
 
       <DocSection title="Rules">
-        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-primary marker:text-text-disabled">
+        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-small text-primary marker:text-disabled">
           <li>Group with space, not dividers - proximity signals hierarchy.</li>
           <li>
             Stacked text takes no gap; line-height handles it (see Typography).

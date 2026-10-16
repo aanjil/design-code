@@ -24,32 +24,32 @@ const TITLES: Array<Specimen> = [
 ]
 
 const PARAGRAPHS: Array<Specimen> = [
-  { cls: 'text-paragraph-xl', name: 'Paragraph/XLarge', meta: '20 · 425 · 150% · −2%' },
-  { cls: 'text-paragraph-lg', name: 'Paragraph/Large', meta: '18 · 425 · 150% · −2%' },
-  { cls: 'text-paragraph-md', name: 'Paragraph/Medium', meta: '16 · 425 · 150% · −2%' },
-  { cls: 'text-paragraph-sm', name: 'Paragraph/Small', meta: '14 · 425 · 150% · −2%' },
-  { cls: 'text-paragraph-xs', name: 'Paragraph/XSmall', meta: '13 · 425 · 150% · −2%' },
+  { cls: 'text-paragraph-large', name: 'Paragraph/XLarge', meta: '20 · 425 · 150% · −2%' },
+  { cls: 'text-paragraph-large', name: 'Paragraph/Large', meta: '18 · 425 · 150% · −2%' },
+  { cls: 'text-paragraph-medium', name: 'Paragraph/Medium', meta: '16 · 425 · 150% · −2%' },
+  { cls: 'text-paragraph-small', name: 'Paragraph/Small', meta: '14 · 425 · 150% · −2%' },
+  { cls: 'text-paragraph-xsmall', name: 'Paragraph/XSmall', meta: '13 · 425 · 150% · −2%' },
 ]
 
 const LABELS: Array<Specimen> = [
-  { cls: 'text-label-xl', name: 'Label/XLarge', meta: '20 · 550 · 150% · −2%' },
-  { cls: 'text-label-lg', name: 'Label/Large', meta: '18 · 550 · 150% · −2%' },
-  { cls: 'text-label-md', name: 'Label/Medium', meta: '16 · 550 · 150% · −2%' },
-  { cls: 'text-label-sm', name: 'Label/Small', meta: '14 · 530 · 150% · −2%' },
-  { cls: 'text-label-xs', name: 'Label/XSmall', meta: '13 · 550 · 150% · −2%' },
+  { cls: 'text-label-xlarge', name: 'Label/XLarge', meta: '20 · 550 · 150% · −2%' },
+  { cls: 'text-label-large', name: 'Label/Large', meta: '18 · 550 · 150% · −2%' },
+  { cls: 'text-label-medium', name: 'Label/Medium', meta: '16 · 550 · 150% · −2%' },
+  { cls: 'text-label-small', name: 'Label/Small', meta: '14 · 530 · 150% · −2%' },
+  { cls: 'text-label-xsmall', name: 'Label/XSmall', meta: '13 · 550 · 150% · −2%' },
 ]
 
 const CAPTIONS: Array<Specimen> = [
-  { cls: 'text-caption-md', name: 'Caption/medium', meta: '12 · 500 · 130% · −2%' },
-  { cls: 'text-caption', name: 'Caption/regular', meta: '12 · 425 · 130% · −2%' },
+  { cls: 'text-caption-sm font-medium', name: 'Caption/medium', meta: '12 · 500 · 130% · −2%' },
+  { cls: 'text-caption-sm', name: 'Caption/regular', meta: '12 · 425 · 130% · −2%' },
 ]
 
 const MONO: Array<Specimen> = [
-  { cls: 'text-mono-xl', name: 'Mono/XLarge', meta: '20 · 425 · 150% · −1%', mono: true },
-  { cls: 'text-mono-lg', name: 'Mono/Large', meta: '18 · 425 · 150% · −1%', mono: true },
-  { cls: 'text-mono-md', name: 'Mono/Medium', meta: '16 · 600 · 150% · −1%', mono: true },
-  { cls: 'text-mono-sm', name: 'Mono/Small', meta: '14 · 600 · 150% · −1%', mono: true },
-  { cls: 'text-mono-xs', name: 'Mono/XSmall', meta: '13 · 425 · 150% · −1%', mono: true },
+  { cls: 'text-label-xlarge', name: 'Mono/XLarge', meta: '20 · 425 · 150% · −1%', mono: true },
+  { cls: 'text-paragraph-large', name: 'Mono/Large', meta: '18 · 425 · 150% · −1%', mono: true },
+  { cls: 'text-label-medium', name: 'Mono/Medium', meta: '16 · 600 · 150% · −1%', mono: true },
+  { cls: 'text-label-small', name: 'Mono/Small', meta: '14 · 600 · 150% · −1%', mono: true },
+  { cls: 'text-paragraph-xsmall', name: 'Mono/XSmall', meta: '13 · 425 · 150% · −1%', mono: true },
 ]
 
 function SpecimenList({
@@ -64,15 +64,15 @@ function SpecimenList({
       {specimens.map((s) => (
         <div
           key={s.cls}
-          className="flex flex-wrap items-baseline gap-x-6 gap-y-1 border-b border-border-highlight py-3"
+          className="flex flex-wrap items-baseline gap-x-6 gap-y-1 border-b border-base py-3"
         >
           <div className="w-44 shrink-0">
-            <p className="text-label-xs text-text-primary">{s.name}</p>
-            <p className="font-mono text-caption text-text-muted">{s.meta}</p>
+            <p className="text-label-xsmall text-primary">{s.name}</p>
+            <p className="tabular-nums text-caption-sm text-muted">{s.meta}</p>
           </div>
           <p
             className={cn(
-              'min-w-0 truncate text-text-primary',
+              'min-w-0 truncate text-primary',
               s.mono && 'font-mono',
               s.cls,
             )}
@@ -121,13 +121,13 @@ function TypographyDoc() {
 
       <DocSection
         title="Mono"
-        note="Geist Mono for anything that benefits from fixed-width digits. Pair the class with font-mono. Medium/Small are semibold for data emphasis."
+        note="Geist Mono is for code only - class names, file paths, snippets. Numbers stay in Inter with tabular-nums."
       >
-        <SpecimenList specimens={MONO} sample="$128,450.00 · EMP120636" />
+        <SpecimenList specimens={MONO} sample="text-label-small · src/styles.css" />
       </DocSection>
 
       <DocSection title="Rules">
-        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-primary marker:text-text-disabled">
+        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-small text-primary marker:text-disabled">
           <li>Max two type sizes per component.</li>
           <li>
             No custom font sizes - if a size isn't in the scale, the design
@@ -140,8 +140,8 @@ function TypographyDoc() {
           </li>
           <li>Label for interactive/UI text, Paragraph for reading text.</li>
           <li>
-            All money, IDs, dates-in-tables:{' '}
-            <InlineCode>font-mono text-mono-*</InlineCode>.
+            All money, IDs, dates-in-tables: Inter with{' '}
+            <InlineCode>tabular-nums</InlineCode> - never mono.
           </li>
           <li>
             New <InlineCode>--text-*</InlineCode> tokens must also be registered

@@ -27,13 +27,13 @@ function Gallery() {
       <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-3">
         <div className="max-w-[640px]">
           <h1 className="text-title-h4">Crafts</h1>
-          <p className="mt-2 text-paragraph-sm text-text-muted">
+          <p className="mt-2 text-paragraph-small text-muted">
             Flow explorers, components, and patterns on mock data - most
             recently touched first.
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <p className="text-caption text-text-muted">
+          <p className="text-caption-sm text-muted">
             {crafts.length}{' '}
             {crafts.length === 1 ? 'craft' : 'crafts'}
           </p>
@@ -56,18 +56,18 @@ function Gallery() {
           <Link
             key={craft.slug}
             to={craft.to}
-            className="group -mx-3 flex items-center gap-4 rounded-lg border-b border-border-base px-3 py-4 transition-colors last:border-b-0 hover:bg-background-highlight"
+            className="group -mx-3 flex items-center gap-4 rounded-lg border-b border-base px-3 py-4 transition-colors last:border-b-0 hover:bg-highlight"
           >
             <div className="min-w-0 flex-1">
-              <p className="text-label-md">{craft.title}</p>
-              <p className="mt-0.5 line-clamp-1 text-paragraph-xs text-text-muted">
+              <p className="text-label-medium">{craft.title}</p>
+              <p className="mt-0.5 line-clamp-1 text-paragraph-xsmall text-muted">
                 {craft.description}
               </p>
               <div className="mt-1.5 flex flex-wrap gap-1">
                 {craft.tags.map((tag) => (
                   <span
                     key={tag}
-                    className="rounded-full bg-background-highlight px-2 py-px text-caption text-text-muted"
+                    className="rounded-full bg-highlight px-2 py-px text-caption-sm text-muted"
                   >
                     {tag}
                   </span>
@@ -75,10 +75,10 @@ function Gallery() {
               </div>
             </div>
             <div className="flex shrink-0 items-center gap-3 pl-2">
-              <span className="whitespace-nowrap text-caption text-text-muted">
+              <span className="whitespace-nowrap text-caption-sm text-muted">
                 {formatUpdated(craft.added)}
               </span>
-              <ArrowUpRight className="size-4 text-text-disabled transition-colors group-hover:text-text-muted" />
+              <ArrowUpRight className="size-4 text-disabled transition-colors group-hover:text-muted" />
             </div>
           </Link>
         ))}

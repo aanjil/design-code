@@ -57,8 +57,8 @@ export function HireScreen({ view }: { view: HireView }) {
       <FormShell title="Add employee" rail={<Stepper steps={STEPS} current={2} />}>
         <div className="flex flex-col gap-3">
           <FormCard>
-            <h2 className="text-title-h5 text-text-primary">Payroll schedule</h2>
-            <p className="mt-1 text-paragraph-sm text-text-muted">
+            <h2 className="text-title-h5 text-primary">Payroll schedule</h2>
+            <p className="mt-1 text-paragraph-small text-muted">
               {candidate.name.split(' ')[0]} fits {matchedSchedules.length} schedules. Choose where they belong.
             </p>
             <div className="mt-4 grid grid-cols-2 gap-3">
@@ -67,24 +67,24 @@ export function HireScreen({ view }: { view: HireView }) {
                   key={s.id}
                   type="button"
                   onClick={() => setResolved(s.id)}
-                  className="rounded-lg border border-border-highlight p-3 text-left hover:bg-background-highlight"
+                  className="rounded-lg border border-base p-3 text-left hover:bg-highlight"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <p className="text-label-xs text-text-primary">{s.name}</p>
+                    <p className="text-label-xsmall text-primary">{s.name}</p>
                     <ScheduleTag aligned={checkStateCompliance(candidate, s.frequency)} />
                   </div>
-                  <p className="mt-0.5 text-paragraph-xs text-text-muted">
+                  <p className="mt-0.5 text-paragraph-xsmall text-muted">
                     {s.frequency} · Matched “{s.name}”
                   </p>
                 </button>
               ))}
             </div>
             <div className="mt-5 flex items-center justify-between">
-              <p className="text-label-xs text-text-primary">Or choose a different schedule</p>
+              <p className="text-label-xsmall text-primary">Or choose a different schedule</p>
               <ShowAllToggle showAll={showAll} onChange={setShowAll} />
             </div>
             {showAll && rest.length > 0 && (
-              <div className="mt-2 overflow-hidden rounded-lg border border-border-highlight">
+              <div className="mt-2 overflow-hidden rounded-lg border border-base">
                 {rest.map((s) => (
                   <ScheduleRow
                     key={s.id}
@@ -126,20 +126,20 @@ export function HireScreen({ view }: { view: HireView }) {
         </Banner>
 
         <FormCard>
-          <h2 className="text-title-h5 text-text-primary">Payroll schedule</h2>
-          <p className="mt-1 text-paragraph-sm text-text-muted">
+          <h2 className="text-title-h5 text-primary">Payroll schedule</h2>
+          <p className="mt-1 text-paragraph-small text-muted">
             {how === 'default'
               ? 'Assigned to your default schedule so this hire is always paid.'
               : 'Assigned automatically from your membership rules.'}
           </p>
 
-          <div className="mt-4 flex items-center gap-2.5 rounded-lg bg-background-highlight p-3">
-            <UsersThree className="size-4 shrink-0 text-text-muted" />
+          <div className="mt-4 flex items-center gap-2.5 rounded-lg bg-highlight p-3">
+            <UsersThree className="size-4 shrink-0 text-muted" />
             <div className="min-w-0 flex-1">
-              <p className="text-label-xs text-text-primary">
+              <p className="text-label-xsmall text-primary">
                 {effective.name} · {effective.frequency}
               </p>
-              <p className="text-paragraph-xs text-text-muted">First payday {effective.nextPayday}</p>
+              <p className="text-paragraph-xsmall text-muted">First payday {effective.nextPayday}</p>
             </div>
             <ScheduleTag aligned={aligned} />
           </div>
@@ -168,11 +168,11 @@ export function HireScreen({ view }: { view: HireView }) {
           )}
 
           <div className="mt-5 flex items-center justify-between">
-            <p className="text-label-xs text-text-primary">Select schedule</p>
+            <p className="text-label-xsmall text-primary">Select schedule</p>
             <ShowAllToggle showAll={showAll} onChange={setShowAll} />
           </div>
           {shownOthers.length > 0 ? (
-            <div className="mt-2 overflow-hidden rounded-lg border border-border-highlight">
+            <div className="mt-2 overflow-hidden rounded-lg border border-base">
               {shownOthers.map((s) => (
                 <ScheduleRow
                   key={s.id}
@@ -185,15 +185,15 @@ export function HireScreen({ view }: { view: HireView }) {
               ))}
             </div>
           ) : (
-            <p className="mt-2 text-paragraph-xs text-text-muted">
+            <p className="mt-2 text-paragraph-xsmall text-muted">
               No other schedules match this hire's rules.{' '}
-              <button type="button" className="text-brand-text" onClick={() => setShowAll(true)}>
+              <button type="button" className="text-brand" onClick={() => setShowAll(true)}>
                 Show all schedules
               </button>{' '}
               to pick a different one by hand.
             </p>
           )}
-          <p className="mt-3 text-paragraph-xs text-text-muted">
+          <p className="mt-3 text-paragraph-xsmall text-muted">
             {how === 'manual'
               ? 'Set by you. Rules won’t change this until you update it.'
               : 'Pick the matched schedule to follow the rule, or choose a different one by hand. Rules won’t change a manual pick.'}

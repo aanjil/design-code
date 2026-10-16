@@ -90,18 +90,18 @@ const CARD_META: Record<Exclude<WalletCardState, 'no-wallet'>, CardMeta> = {
 function BankCard({ bank }: { bank: (typeof BANK_ACCOUNTS)[number] }) {
   const { show } = useExplorer()
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-background-base p-4 shadow-card">
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-background-highlight">
-        <Bank className="size-4.5 text-text-muted" />
+    <div className="flex items-center gap-3 rounded-xl bg-base p-4 card">
+      <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-highlight">
+        <Bank className="size-4.5 text-muted" />
       </span>
       <div className="min-w-0 flex-1">
-        <p className="flex items-center gap-2 text-label-sm text-text-primary">
+        <p className="flex items-center gap-2 text-label-small text-primary">
           {bank.bank} · {bank.label}
           {bank.primary && (
-            <span className="rounded bg-background-highlight px-1 text-caption-md text-text-muted">Primary</span>
+            <span className="rounded bg-highlight px-1 text-caption-sm font-medium text-muted">Primary</span>
           )}
         </p>
-        <p className="text-paragraph-xs text-text-muted">Account ending {bank.last4}</p>
+        <p className="text-paragraph-xsmall text-muted">Account ending {bank.last4}</p>
       </div>
       <IconButton
         variant="ghost"
@@ -123,18 +123,18 @@ function WalletCard({ state }: { state: Exclude<WalletCardState, 'no-wallet'> })
     state === 'needs-attention' ? 'Transak status: INACTIVE — re-verification required' : undefined
 
   return (
-    <div className="flex flex-col gap-3 rounded-xl bg-background-base p-4 shadow-card">
+    <div className="flex flex-col gap-3 rounded-xl bg-base p-4 card">
       <div className="flex items-center gap-3">
-        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-background-highlight">
-          <CurrencyEth className="size-4.5 text-text-muted" />
+        <span className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-highlight">
+          <CurrencyEth className="size-4.5 text-muted" />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="flex items-center gap-2 text-label-sm text-text-primary">
+          <p className="flex items-center gap-2 text-label-small text-primary">
             {WALLET.label}
             {meta.pill && <StatusPill tone={meta.pill.tone}>{meta.pill.label}</StatusPill>}
           </p>
-          <p className="text-paragraph-xs text-text-muted">{meta.line}</p>
-          {detail && <p className="mt-0.5 text-caption-md text-text-muted">{detail}</p>}
+          <p className="text-paragraph-xsmall text-muted">{meta.line}</p>
+          {detail && <p className="mt-0.5 text-caption-sm font-medium text-muted">{detail}</p>}
         </div>
         {meta.cta && (
           <Button
@@ -158,7 +158,7 @@ function WalletCard({ state }: { state: Exclude<WalletCardState, 'no-wallet'> })
         </IconButton>
       </div>
       {meta.trackerStep !== undefined && (
-        <div className="border-t border-border-highlight pt-3">
+        <div className="border-t border-base pt-3">
           <StepTracker current={meta.trackerStep} nothingNeeded={meta.nothingNeeded} />
         </div>
       )}
@@ -180,7 +180,7 @@ export function PaymentMethodsScreen({ view }: { view: PaymentMethodsView }) {
           </Button>
         }
       />
-      <PageBody className="relative flex flex-col gap-3 bg-surface-1">
+      <PageBody className="relative flex flex-col gap-3 bg-surface-frame">
         <div className="flex flex-col gap-2">
           {BANK_ACCOUNTS.map((b) => (
             <BankCard key={b.id} bank={b} />
@@ -190,10 +190,10 @@ export function PaymentMethodsScreen({ view }: { view: PaymentMethodsView }) {
 
         {/* Split payment row - §1.4 "no wallet": visible, disabled. */}
         {noWallet && (
-          <div className="flex items-center gap-3 rounded-xl bg-background-base p-4 opacity-70 shadow-card">
+          <div className="flex items-center gap-3 rounded-xl bg-base p-4 opacity-70 card">
             <div className="min-w-0 flex-1">
-              <p className="text-label-sm text-text-primary">Split payment</p>
-              <p className="text-paragraph-xs text-text-muted">
+              <p className="text-label-small text-primary">Split payment</p>
+              <p className="text-paragraph-xsmall text-muted">
                 Send part of your pay to a crypto wallet. Add a wallet to get started.
               </p>
             </div>
@@ -219,7 +219,7 @@ export function PaymentMethodsScreen({ view }: { view: PaymentMethodsView }) {
               </>
             }
           >
-            <p className="text-paragraph-xs text-text-muted">
+            <p className="text-paragraph-xsmall text-muted">
               Receiving part of your pay in stablecoins requires a one-time identity verification,
               handled by our partner Transak. Your regular pay is not affected.
             </p>
@@ -243,19 +243,19 @@ export function PaymentMethodsScreen({ view }: { view: PaymentMethodsView }) {
               </>
             }
           >
-            <div className="flex flex-col gap-3 text-paragraph-xs text-text-muted">
+            <div className="flex flex-col gap-3 text-paragraph-xsmall text-muted">
               <p>To verify your identity, we'll share with Transak:</p>
               <ul className="flex flex-col gap-1.5">
                 {['Full name', 'Home address', 'Date of birth', 'ID documents you provide'].map((item) => (
-                  <li key={item} className="flex items-center gap-2 text-text-primary">
-                    <span className="size-1 rounded-full bg-text-muted" />
+                  <li key={item} className="flex items-center gap-2 text-primary">
+                    <span className="size-1 rounded-full bg-(--text-muted)" />
                     {item}
                   </li>
                 ))}
               </ul>
               <p>
                 This is required for UK identity verification.{' '}
-                <span className="cursor-pointer text-brand-text">How Transak handles your data</span>
+                <span className="cursor-pointer text-brand">How Transak handles your data</span>
               </p>
               <GuaranteeNote />
             </div>

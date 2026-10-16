@@ -121,6 +121,12 @@ export interface RunsView {
   schedules?: Array<PaySchedule>
 }
 
+/** F3: one run opened from the runs list - the Resolve/Confirm timeline. */
+export interface RunDetailView {
+  /** Live App only — real, mutable schedule list. */
+  schedules?: Array<PaySchedule>
+}
+
 /** Which real seeded hire candidate H1 is demonstrating - each produces a
  *  genuinely different, really-matched outcome against the real schedules
  *  (see mocks/payroll.ts's HIRE_CANDIDATES), not a cosmetic label. */
@@ -135,4 +141,5 @@ export type AppView =
   | { kind: 'wizard'; wizard: WizardView }
   | { kind: 'scheduleDetail'; scheduleDetail: ScheduleDetailView }
   | { kind: 'runs'; runs: RunsView }
+  | { kind: 'run'; run: RunDetailView }
   | { kind: 'hire'; hire: HireView }

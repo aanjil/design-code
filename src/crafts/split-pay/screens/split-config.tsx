@@ -18,13 +18,13 @@ const gbp = (n: number) =>
 
 function SegUnit({ unit }: { unit: 'percent' | 'amount' }) {
   return (
-    <div className="flex h-8 w-fit items-center rounded-lg bg-background-highlight p-0.5">
+    <div className="flex h-8 w-fit items-center rounded-lg bg-highlight p-0.5">
       {(['percent', 'amount'] as const).map((u) => (
         <span
           key={u}
           className={cn(
-            'flex h-full items-center rounded-md px-3 text-label-xs',
-            unit === u ? 'bg-background-base text-text-primary shadow-button-gray' : 'text-text-muted',
+            'flex h-full items-center rounded-md px-3 text-label-xsmall',
+            unit === u ? 'bg-base text-primary borders-base' : 'text-muted',
           )}
         >
           {u === 'percent' ? '%' : '£'}
@@ -45,12 +45,12 @@ export function SplitConfigScreen({ view }: { view: SplitConfigView }) {
     return (
       <FlowShell title={editing ? 'Edit split payment' : 'Set up split payment'}>
         <FormCard className="flex flex-col items-center gap-4 py-10 text-center">
-          <CheckCircle weight="fill" className="size-10 text-text-success-base" />
+          <CheckCircle weight="fill" className="size-10 text-success" />
           <div className="flex flex-col gap-1">
-            <p className="text-label-md text-text-primary">
+            <p className="text-label-medium text-primary">
               {editing ? 'Split updated' : 'Split saved'}
             </p>
-            <p className="text-paragraph-xs text-text-muted">
+            <p className="text-paragraph-xsmall text-muted">
               Applies from your {ACTIVE_SPLIT.appliesFrom} pay cycle.
             </p>
           </div>
@@ -72,9 +72,9 @@ export function SplitConfigScreen({ view }: { view: SplitConfigView }) {
               { label: WALLET.label, value: unit === 'percent' ? `${ACTIVE_SPLIT.percent}% · ${gbp(toWallet)} estimated` : gbp(toWallet) },
               { label: 'Network', value: ACTIVE_SPLIT.network },
             ].map((row) => (
-              <div key={row.label} className="flex items-baseline justify-between gap-4 border-b border-border-highlight py-2 last:border-0">
-                <span className="shrink-0 text-paragraph-xs text-text-muted">{row.label}</span>
-                <span className="text-right text-label-xs text-text-primary">{row.value}</span>
+              <div key={row.label} className="flex items-baseline justify-between gap-4 border-b border-base py-2 last:border-0">
+                <span className="shrink-0 text-paragraph-xsmall text-muted">{row.label}</span>
+                <span className="text-right text-label-xsmall text-primary">{row.value}</span>
               </div>
             ))}
             <GuaranteeNote />
@@ -104,11 +104,11 @@ export function SplitConfigScreen({ view }: { view: SplitConfigView }) {
           {/* 1 - primary bank (selector only if >1 bank) */}
           <div>
             <FieldLabel required>Primary bank account</FieldLabel>
-            <div className="flex h-8 items-center justify-between rounded-lg border border-input px-2.5 text-paragraph-xs text-text-primary">
+            <div className="flex h-8 items-center justify-between rounded-lg border border-input px-2.5 text-paragraph-xsmall text-primary">
               {BANK_ACCOUNTS[0].bank} · {BANK_ACCOUNTS[0].label} ·· {BANK_ACCOUNTS[0].last4}
-              <CaretDown className="size-3.5 text-text-muted" />
+              <CaretDown className="size-3.5 text-muted" />
             </div>
-            <p className="mt-1 text-caption-md text-text-muted">
+            <p className="mt-1 text-caption-sm font-medium text-muted">
               Receives the rest of your pay, and any amount that can't reach your wallet.
             </p>
           </div>
@@ -119,23 +119,23 @@ export function SplitConfigScreen({ view }: { view: SplitConfigView }) {
               <FieldLabel required>To your crypto wallet</FieldLabel>
               <SegUnit unit={unit} />
             </div>
-            <div className="flex h-8 items-center rounded-lg border border-input px-2.5 text-paragraph-xs text-text-primary">
+            <div className="flex h-8 items-center rounded-lg border border-input px-2.5 text-paragraph-xsmall text-primary">
               {unit === 'percent' ? `${ACTIVE_SPLIT.percent} %` : `£ ${ACTIVE_SPLIT.amount.toFixed(2)}`}
             </div>
           </div>
 
           {/* 3 - live preview */}
-          <div className="rounded-xl bg-background-highlight px-3 py-2.5">
+          <div className="rounded-xl bg-highlight px-3 py-2.5">
             {view.noHistory ? (
-              <p className="text-paragraph-xs text-text-primary">
+              <p className="text-paragraph-xsmall text-primary">
                 {100 - ACTIVE_SPLIT.percent}% of net pay to your primary account, {ACTIVE_SPLIT.percent}% to your wallet.
               </p>
             ) : (
-              <p className="text-paragraph-xs text-text-primary">
+              <p className="text-paragraph-xsmall text-primary">
                 Estimated to your primary account: <strong>{gbp(toBank)}</strong>
               </p>
             )}
-            <p className="mt-0.5 text-caption-md text-text-muted">
+            <p className="mt-0.5 text-caption-sm font-medium text-muted">
               {view.noHistory
                 ? 'Estimates appear after your first pay cycle.'
                 : 'Based on your last net pay. Actual amounts vary by cycle.'}
@@ -145,11 +145,11 @@ export function SplitConfigScreen({ view }: { view: SplitConfigView }) {
           {/* 4 - network */}
           <div>
             <FieldLabel required>Network</FieldLabel>
-            <div className="flex h-8 items-center justify-between rounded-lg border border-input px-2.5 text-paragraph-xs text-text-primary">
+            <div className="flex h-8 items-center justify-between rounded-lg border border-input px-2.5 text-paragraph-xsmall text-primary">
               {ACTIVE_SPLIT.network} · recommended
-              <CaretDown className="size-3.5 text-text-muted" />
+              <CaretDown className="size-3.5 text-muted" />
             </div>
-            <p className="mt-1 text-caption-md text-text-muted">
+            <p className="mt-1 text-caption-sm font-medium text-muted">
               Must match your wallet. Funds sent on the wrong network can't be recovered.
             </p>
           </div>

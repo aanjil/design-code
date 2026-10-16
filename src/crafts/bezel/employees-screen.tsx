@@ -15,7 +15,6 @@ import {
   TENSION_FACTS,
   TENSION_PROVENANCE,
   VOICE_RESULT,
-  describeSelection,
   tensionExits,
 } from '@/mocks/bezel'
 import { AppBar } from '@/components/nds/app-bar'
@@ -26,14 +25,16 @@ import { Checkbox } from '@niural/components'
 import type { GrainProps } from '@/components/nds/grain/grain'
 import type { PinnedInitiative, ThreadTurn } from '@/components/nds/grain/thread'
 import { FloatingBezel, type BezelMode } from './floating-bezel'
+import { employeeRow, employeesAnswer, employeesSummary } from '@/mocks/bezel-selections'
+import { ChatCircle, Export } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 import { useWorldEmployees } from './world'
 
 const statusDot: Record<EmployeeStatus, string> = {
-  active: 'bg-background-success-base',
-  invited: 'bg-background-info-base',
-  onboarding: 'bg-background-warning-base',
-  offboarded: 'bg-background-emphasis',
+  active: 'bg-success',
+  invited: 'bg-info',
+  onboarding: 'bg-warning',
+  offboarded: 'bg-emphasis',
 }
 
 /**
@@ -186,19 +187,7 @@ export function EmployeesBezelScreen({
     setThreadTitle('New chat')
     setThreadTurns([{ from: 'user', text: `${text} · with ${rows.length} row${rows.length === 1 ? '' : 's'} attached` }])
     window.setTimeout(() => {
-      const summary = describeSelection(rows)
-      setThreadTurns((t) => [
-        ...t,
-        {
-          from: 'emma',
-          grain: {
-            claim: summary.note,
-            confidence: 0.76,
-            facts: summary.facts,
-            provenance: `from the ${rows.length} rows you attached`,
-          },
-        },
-      ])
+      setThreadTurns((t) => [...t, { from: 'emma', grain: employeesAnswer(rows, world) }])
     }, 550)
     setSelectedIds(new Set())
     setMode('copilot')
@@ -269,19 +258,19 @@ export function EmployeesBezelScreen({
                 className="max-w-[290px]"
               />
               {selectedIds.size > 0 && (
-                <span className="text-label-sm text-text-muted">{selectedIds.size} selected</span>
+                <span className="text-label-small text-muted">{selectedIds.size} selected</span>
               )}
             </div>
 
-            <div className="min-w-0 shadow-card rounded-xl overflow-x-auto">
-              <table className="w-full min-w-[820px] border-collapse text-paragraph-sm">
-                <thead className="bg-surface-1 sticky top-0 z-10">
-                  <tr className="border-b border-border-base">
+            <div className="min-w-0 card rounded-xl overflow-x-auto">
+              <table className="w-full min-w-[820px] border-collapse text-paragraph-small">
+                <thead className="bg-surface-frame sticky top-0 z-10">
+                  <tr className="border-b border-base">
                     <th className="w-12 px-5 py-2.5" />
-                    <th className="px-5 py-2.5 text-left text-label-sm font-[530] text-text-muted">Employee</th>
-                    <th className="px-5 py-2.5 text-left text-label-sm font-[530] text-text-muted">Job title</th>
-                    <th className="px-5 py-2.5 text-left text-label-sm font-[530] text-text-muted">Status</th>
-                    <th className="px-5 py-2.5 text-right text-label-sm font-[530] text-text-muted">Compensation</th>
+                    <th className="px-5 py-2.5 text-left text-label-small font-[530] text-muted">Employee</th>
+                    <th className="px-5 py-2.5 text-left text-label-small font-[530] text-muted">Job title</th>
+                    <th className="px-5 py-2.5 text-left text-label-small font-[530] text-muted">Status</th>
+                    <th className="px-5 py-2.5 text-right text-label-small font-[530] text-muted">Compensation</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -289,8 +278,8 @@ export function EmployeesBezelScreen({
                     <tr>
                       <td colSpan={5}>
                         <div className="flex h-table-empty flex-col items-center justify-center">
-                          <MagnifyingGlass className="size-6 text-text-disabled" />
-                          <p className="mt-6 text-label-sm text-text-primary">No employees match this search</p>
+                          <MagnifyingGlass className="size-6 text-disabled" />
+                          <p className="mt-6 text-label-small text-primary">No employees match this search</p>
                         </div>
                       </td>
                     </tr>
@@ -299,8 +288,8 @@ export function EmployeesBezelScreen({
                     <tr
                       key={employee.id}
                       className={cn(
-                        'border-b border-border-highlight transition-colors hover:bg-surface-2',
-                        selectedIds.has(employee.id) && 'bg-surface-1',
+                        'border-b border-base transition-colors hover:bg-surface-page',
+                        selectedIds.has(employee.id) && 'bg-surface-frame',
                       )}
                     >
                       <td className="w-12 px-5 py-4">
@@ -312,14 +301,14 @@ export function EmployeesBezelScreen({
                         />
                       </td>
                       <td className="px-5 py-3">
-                        <p className="truncate text-label-sm text-text-primary">{employee.name}</p>
-                        <p className="truncate text-paragraph-xs text-text-muted">{employee.email}</p>
+                        <p className="truncate text-label-small text-primary">{employee.name}</p>
+                        <p className="truncate text-paragraph-xsmall text-muted">{employee.email}</p>
                       </td>
-                      <td className="px-5 py-4 text-paragraph-sm text-text-primary">{employee.jobTitle}</td>
+                      <td className="px-5 py-4 text-paragraph-small text-primary">{employee.jobTitle}</td>
                       <td className="px-5 py-4">
                         <StatusPill dotClassName={statusDot[employee.status]}>{statusLabels[employee.status]}</StatusPill>
                       </td>
-                      <td className="px-5 py-4 text-right font-mono text-mono-xs text-text-primary">
+                      <td className="px-5 py-4 text-right tabular-nums text-paragraph-xsmall text-primary">
                         {fmtCompensation(employee)}
                       </td>
                     </tr>
@@ -329,10 +318,10 @@ export function EmployeesBezelScreen({
             </div>
 
             <div className="flex items-center justify-between pt-1">
-              <p className="text-label-sm text-text-muted">
+              <p className="text-label-small text-muted">
                 {filtered.length} {filtered.length === 1 ? 'Record' : 'Records'}
               </p>
-              <p className="font-mono text-mono-xs text-text-disabled">
+              <p className="tabular-nums text-paragraph-xsmall text-disabled">
                 hired {fmtHireDate(pageRows[0]?.hireDate ?? employees[0].hireDate)} and onward
               </p>
             </div>
@@ -352,7 +341,16 @@ export function EmployeesBezelScreen({
             }}
             pinned={pins}
             onDismissPins={() => setPinCount(0)}
-            selection={selection}
+            selection={selection.map(employeeRow)}
+            bulk={{
+              noun: 'person',
+              nounPlural: 'people',
+              ...employeesSummary(selection),
+              actions: [
+                { label: 'Message', icon: <ChatCircle className="size-3.5" />, onSelect: () => `Messaged ${selection.length} people` },
+                { label: 'Export', icon: <Export className="size-3.5" />, onSelect: () => `Exported ${selection.length} rows` },
+              ],
+            }}
             onClearSelection={clearSelection}
             onRemoveFromSelection={removeFromSelection}
             acting={acting}

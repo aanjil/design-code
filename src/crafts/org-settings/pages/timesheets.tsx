@@ -51,21 +51,21 @@ export function TimesheetsPage() {
       <div className="space-y-4">
         <LinkCard
           icon={Clock}
-          tone="bg-accent-orange-highlight text-text-warning-base"
+          tone="bg-accent-orange-highlight text-warning"
           title="Timesheets settings"
           description="Create, update and remove permissions for each worker type."
           onClick={() => setSub('timesheets')}
         />
         <LinkCard
           icon={Timer}
-          tone="bg-accent-pink-highlight text-text-error-base"
+          tone="bg-accent-pink-highlight text-error"
           title="Time tracker settings"
           description="Create, update and remove permissions for each worker type."
           onClick={() => setSub('tracker')}
         />
       </div>
 
-      <div className="my-8 h-px bg-border-highlight" />
+      <div className="my-8 h-px bg-(--border-highlight)" />
 
       <Schedules />
     </>
@@ -89,16 +89,16 @@ function LinkCard({
     <button
       type="button"
       onClick={onClick}
-      className="flex w-full items-center gap-3 rounded-xl bg-background-base p-4 text-left shadow-card transition-shadow hover:shadow-card-hover"
+      className="flex w-full items-center gap-3 rounded-xl bg-base p-4 text-left card transition-shadow hover:card-hover"
     >
       <span className={cn('flex size-9 shrink-0 items-center justify-center rounded-lg', tone)}>
         <CardIcon className="size-4" />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-label-md text-text-primary">{title}</span>
-        <span className="block text-paragraph-xs text-text-muted">{description}</span>
+        <span className="block text-label-medium text-primary">{title}</span>
+        <span className="block text-paragraph-xsmall text-muted">{description}</span>
       </span>
-      <CaretRight className="size-4 shrink-0 text-text-muted" />
+      <CaretRight className="size-4 shrink-0 text-muted" />
     </button>
   )
 }
@@ -108,7 +108,7 @@ function PermissionsSubPage({ sub, onBack }: { sub: SubPage; onBack: () => void 
   const { title, rows } = PERMISSIONS[sub]
   return (
     <>
-      <button type="button" onClick={onBack} className="mb-4 text-label-sm text-text-info-base hover:underline">
+      <button type="button" onClick={onBack} className="mb-4 text-label-small text-info hover:underline">
         ← Timesheets
       </button>
       <PageTitle title={title} subtitle="Turn each permission on or off per worker type. Changes apply from the next pay period." divider />
@@ -124,8 +124,8 @@ function PermissionsSubPage({ sub, onBack }: { sub: SubPage; onBack: () => void 
           {rows.map((r) => (
             <tr key={r.label}>
               <Td>
-                <p className="text-label-sm">{r.label}</p>
-                <p className="text-paragraph-xs text-text-muted">{r.detail}</p>
+                <p className="text-label-small">{r.label}</p>
+                <p className="text-paragraph-xsmall text-muted">{r.detail}</p>
               </Td>
               <Td>
                 <Switch isChecked={r.employee} size="small" onChange={(on) => toast(`${r.label} ${on ? 'on' : 'off'} for employees`)} />
@@ -204,20 +204,20 @@ function Schedules() {
             />
           ) : (
             paging.visible.map((s) => (
-              <tr key={s.id} className="transition-colors hover:bg-background-highlight">
+              <tr key={s.id} className="transition-colors hover:bg-highlight">
                 <Td>
-                  <p className="text-label-sm">{s.name}</p>
-                  <p className="font-mono text-mono-xs text-text-muted">{s.hours}</p>
+                  <p className="text-label-small">{s.name}</p>
+                  <p className="tabular-nums text-paragraph-xsmall text-muted">{s.hours}</p>
                 </Td>
                 <Td>{s.description}</Td>
                 <Td>{s.workday}</Td>
                 <Td>
                   {s.workers.length === 0 ? (
-                    <span className="text-text-muted">—</span>
+                    <span className="text-muted">—</span>
                   ) : (
                     <span className="flex -space-x-1.5">
                       {s.workers.map((w) => (
-                        <span key={w} className="rounded-full ring-2 ring-background-base">
+                        <span key={w} className="rounded-full ring-2 ring-(--background-base)">
                           <Avatar name={w} />
                         </span>
                       ))}
@@ -312,7 +312,7 @@ function ScheduleModal({
         </div>
         <div className="space-y-1.5">
           <FieldLabel htmlFor="ws-hours">Hours per week</FieldLabel>
-          <TextInput id="ws-hours" type="number" min={1} max={80} value={hours} className="font-mono text-mono-sm" onChange={(e) => setHours(Number(e.target.value))} />
+          <TextInput id="ws-hours" type="number" min={1} max={80} value={hours} className="tabular-nums text-label-small" onChange={(e) => setHours(Number(e.target.value))} />
         </div>
       </div>
     </Modal>

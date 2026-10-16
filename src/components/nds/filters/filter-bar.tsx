@@ -34,7 +34,7 @@ export function FilterBar({
   if (conditions.length === 0) return null
 
   return (
-    <div className="flex items-center gap-4 rounded-xl bg-background-highlight/50 shadow-border-base p-2.5 ">
+    <div className="flex items-center gap-4 rounded-xl bg-highlight/50 borders-base p-2.5 ">
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
         {conditions.map((condition) => {
           const field = fields.find((f) => f.id === condition.fieldId)
@@ -63,7 +63,7 @@ export function FilterBar({
                   .join(' · '),
               )
             }
-            className="flex h-7 items-center gap-1 rounded-lg px-1.5 text-label-sm text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+            className="flex h-7 items-center gap-1 rounded-lg px-1.5 text-label-small text-muted transition-colors hover:bg-highlight hover:text-primary"
           >
             <BookmarkSimple className="size-4" />
             <span className="px-1">Save view</span>
@@ -72,7 +72,7 @@ export function FilterBar({
         <button
           type="button"
           onClick={onClear}
-          className="flex h-7 items-center rounded-btn bg-background-error-highlight px-1.5 text-label-sm text-text-error-base transition-colors hover:bg-background-error-muted"
+          className="flex h-7 items-center rounded-control bg-error-highlight px-1.5 text-label-small text-error transition-colors hover:bg-error-muted"
         >
           <span className="px-1">Clear</span>
         </button>
@@ -82,7 +82,7 @@ export function FilterBar({
 }
 
 function ChipDivider() {
-  return <span className="w-px self-stretch bg-border-highlight" />
+  return <span className="w-px self-stretch bg-(--border-highlight)" />
 }
 
 function FilterChip({
@@ -99,18 +99,18 @@ function FilterChip({
   const [editing, setEditing] = useState(false)
 
   return (
-    <div className="flex h-9 shrink-0 items-stretch overflow-hidden rounded-md bg-background-muted shadow-button-gray">
-      <span className="flex items-center gap-1.5 px-2 text-label-sm whitespace-nowrap text-text-primary">
+    <div className="flex h-9 shrink-0 items-stretch overflow-hidden rounded-md bg-muted borders-base">
+      <span className="flex items-center gap-1.5 px-2 text-label-small whitespace-nowrap text-primary">
         <field.icon className="size-4 shrink-0" />
         {field.label}
       </span>
       <ChipDivider />
-      <span className="flex items-center px-2 text-label-xs whitespace-nowrap text-text-muted">
+      <span className="flex items-center px-2 text-label-xsmall whitespace-nowrap text-muted">
         {condition.operator === 'is' ? 'is' : 'is any of'}
       </span>
       <ChipDivider />
       <Popover open={editing} onOpenChange={setEditing}>
-        <PopoverTrigger className="flex max-w-[280px] items-center px-2 text-label-sm text-text-primary transition-colors hover:bg-background-highlight">
+        <PopoverTrigger className="flex max-w-[280px] items-center px-2 text-label-small text-primary transition-colors hover:bg-highlight">
           <span className="truncate">{conditionSummary(condition)}</span>
         </PopoverTrigger>
         <PopoverContent
@@ -138,7 +138,7 @@ function FilterChip({
           type="button"
           aria-label={`Remove ${field.label} filter`}
           onClick={() => onRemove(field.id)}
-          className="flex size-7 items-center justify-center rounded-full text-text-muted transition-colors hover:bg-background-error-highlight hover:text-text-error-base"
+          className="flex size-7 items-center justify-center rounded-full text-muted transition-colors hover:bg-error-highlight hover:text-error"
         >
           <X className="size-4" />
         </button>

@@ -661,6 +661,11 @@ export const SCENARIOS: Array<GroupDef> = [
           },
         ],
       },
+      {
+        id: 'F3',
+        label: 'F3 Review a run',
+        states: [{ id: 'open', label: 'Three tensions open', make: () => ({ kind: 'run', run: {} }) }],
+      },
     ],
   },
   {

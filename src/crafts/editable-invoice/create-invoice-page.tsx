@@ -167,14 +167,14 @@ export function CreateInvoicePage({
                   placeholder="Select department"
                 />
               </div>
-              <div className="border-t border-dashed border-border-base" />
+              <div className="border-t border-dashed border-base" />
 
               {/* Invoice details */}
               <section>
-                <h2 className="text-label-lg text-text-primary">
+                <h2 className="text-label-large text-primary">
                   Invoice details
                 </h2>
-                <p className="text-paragraph-sm text-text-muted">
+                <p className="text-paragraph-small text-muted">
                   Enter the details below to create a new invoice.
                 </p>
                 <div className="mt-6 grid grid-cols-3 gap-x-3 gap-y-5">
@@ -203,7 +203,7 @@ export function CreateInvoicePage({
                       Invoice date
                     </FieldLabel>
                     <div className="relative">
-                      <CalendarBlank className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-text-muted" />
+                      <CalendarBlank className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted" />
                       <TextInput
                         id="inv-date"
                         className="pl-9"
@@ -226,7 +226,7 @@ export function CreateInvoicePage({
                       Payment due
                     </FieldLabel>
                     <div className="relative">
-                      <CalendarBlank className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-text-muted" />
+                      <CalendarBlank className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted" />
                       <TextInput
                         id="inv-due"
                         className="pl-9"
@@ -241,7 +241,7 @@ export function CreateInvoicePage({
 
               {/* Line level fields */}
               <section>
-                <h2 className="text-label-lg text-text-primary">
+                <h2 className="text-label-large text-primary">
                   Line level fields
                 </h2>
                 <div className="mt-4">
@@ -328,7 +328,7 @@ export function CreateInvoicePage({
                                     })
                                   }
                                   placeholder="Description..."
-                                  className="min-h-16 bg-background-base"
+                                  className="min-h-16 bg-base"
                                 />
                               </div>
                               <div className="flex w-[250px] flex-col gap-1.5">
@@ -372,11 +372,11 @@ export function CreateInvoicePage({
                   <div className="flex flex-col gap-1.5">
                     <FieldLabel>
                       Additional attachment{' '}
-                      <span className="text-paragraph-xs text-text-muted">
+                      <span className="text-paragraph-xsmall text-muted">
                         (Optional)
                       </span>
                     </FieldLabel>
-                    <div className="flex items-center gap-3 rounded-btn p-2 shadow-button-gray">
+                    <div className="flex items-center gap-3 rounded-control p-2 borders-base">
                       <Button
                         type="button"
                         variant="solid"
@@ -385,7 +385,7 @@ export function CreateInvoicePage({
                       >
                         Upload file
                       </Button>
-                      <span className="text-paragraph-xs text-text-muted">
+                      <span className="text-paragraph-xsmall text-muted">
                         or drop file to upload
                       </span>
                     </div>
@@ -395,10 +395,10 @@ export function CreateInvoicePage({
                 <div className="flex flex-col gap-3 pt-1">
                   <TotalRow label="Subtotal" value={totals.subtotal} />
                   <div className="flex items-center gap-2">
-                    <span className="shrink-0 text-paragraph-sm text-text-muted">
+                    <span className="shrink-0 text-paragraph-small text-muted">
                       Additional discount
                     </span>
-                    <span className="flex h-8 items-center overflow-hidden rounded-lg shadow-button-gray">
+                    <span className="flex h-8 items-center overflow-hidden rounded-lg borders-base">
                       <input
                         type="text"
                         inputMode="decimal"
@@ -407,7 +407,7 @@ export function CreateInvoicePage({
                           const v = parseFloat(e.target.value)
                           setAddlDiscount(Number.isFinite(v) ? v : 0)
                         }}
-                        className="w-14 bg-background-base px-2 text-right text-paragraph-sm outline-none focus:bg-background-highlight"
+                        className="w-14 bg-base px-2 text-right text-paragraph-small outline-none focus:bg-highlight"
                         aria-label="Additional discount"
                       />
                       <button
@@ -415,24 +415,24 @@ export function CreateInvoicePage({
                         onClick={() =>
                           setAddlDiscountUnit((u) => (u === '%' ? '$' : '%'))
                         }
-                        className="flex h-full items-center border-l border-border-highlight bg-background-base px-2 text-paragraph-sm text-text-muted hover:text-text-primary"
+                        className="flex h-full items-center border-l border-base bg-base px-2 text-paragraph-small text-muted hover:text-primary"
                         aria-label="Toggle discount unit"
                       >
                         {addlDiscountUnit}
                       </button>
                     </span>
-                    <span className="mx-1 min-w-6 flex-1 self-center border-b border-dotted border-border-muted" />
-                    <span className="text-paragraph-sm text-text-primary">
+                    <span className="mx-1 min-w-6 flex-1 self-center border-b border-dotted border-muted" />
+                    <span className="text-paragraph-small text-primary">
                       {money.format(totals.extra)}
                     </span>
                   </div>
                   <TotalRow label="Tax amount" value={totals.tax} />
                   <div className="mt-2 flex items-baseline gap-2">
-                    <span className="shrink-0 text-label-md text-text-primary">
+                    <span className="shrink-0 text-label-medium text-primary">
                       Net amount
                     </span>
                     <span className="flex-1" />
-                    <span className="text-label-md text-text-primary">
+                    <span className="text-label-medium text-primary">
                       {money.format(totals.net)}
                     </span>
                   </div>
@@ -455,9 +455,9 @@ export function CreateInvoicePage({
 function TotalRow({ label, value }: { label: string; value: number }) {
   return (
     <div className="flex items-baseline gap-2">
-      <span className="shrink-0 text-paragraph-sm text-text-muted">{label}</span>
-      <span className="mx-1 min-w-6 flex-1 self-center border-b border-dotted border-border-muted" />
-      <span className="text-paragraph-sm text-text-primary">
+      <span className="shrink-0 text-paragraph-small text-muted">{label}</span>
+      <span className="mx-1 min-w-6 flex-1 self-center border-b border-dotted border-muted" />
+      <span className="text-paragraph-small text-primary">
         {money.format(value)}
       </span>
     </div>

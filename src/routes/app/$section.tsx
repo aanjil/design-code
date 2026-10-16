@@ -2,6 +2,9 @@ import type { ComponentType } from 'react'
 import { createFileRoute, useNavigate } from '@tanstack/react-router'
 import { MASTER_IA } from '@/crafts/master-ia'
 import { MasterGoToMenu } from '@/components/playground/master-app-dock'
+import { MasterBezelLayout } from '@/crafts/bezel/master-bezel'
+import { BezelDockTab } from '@/crafts/bezel/dock-tab'
+import { Sparkle } from '@phosphor-icons/react'
 import { AppBar, AppBarLinksContext } from '@/components/nds/app-bar'
 import { Sidebar } from '@/components/nds/sidebar'
 import {
@@ -41,11 +44,10 @@ export const Route = createFileRoute('/app/$section')({
  * Every craft below already composes its own full AppShell/AppBar/Sidebar
  * (that's the standing convention for every screen in this repo - see
  * docs/DESIGN.md), so it mounts directly, unwrapped. Sections with no live
- * craft fall back to a bare shell built from the Master IA below instead -
- * that fallback's AppBar is the one wired to Ask Emma (onAiClick below).
- * The LiveComponents' own embedded AppBars aren't wired yet - doing that
- * for all six would mean threading onAiClick through each craft's own
- * AppBar usage, a separate, broader change than this pass covers.
+ * craft fall back to a bare shell built from the Master IA below instead.
+ * Every AppBar - embedded or fallback - reaches the Master App through
+ * AppBarLinksContext (settings gear here; Ask Emma = summon the Bezel, from
+ * MasterBezelLayout), so no craft needs the handlers threaded through.
  */
 interface LiveComponentProps {
   onNavItemClick?: (label: string) => void
@@ -102,6 +104,9 @@ function MasterAppSection() {
 
   return (
     <AppBarLinksContext.Provider value={appBarLinks}>
+      {/* One Emma object for the whole app; the copilot is a column of the
+          screen beside it (mobile renders its own device frames). */}
+      <MasterBezelLayout sectionKey={section.key} enabled={section.key !== 'emma-mobile'}>
       {LiveComponent ? (
         <LiveComponent
           key={`${section.key}:${liveRef?.slug}`}
@@ -115,7 +120,6 @@ function MasterAppSection() {
           <AppBar
             activeItem={section.label}
             onNavItemClick={handleNavItemClick}
-            onAiClick={() => navigate({ to: '/crafts/ask-emma' })}
             onWalletClick={goWallet}
           />
           <MainLayout>
@@ -125,7 +129,7 @@ function MasterAppSection() {
             <PageLayout>
               <PageHeader title={section.label} />
               <PageBody>
-                <p className="text-paragraph-sm text-text-muted">
+                <p className="text-paragraph-small text-muted">
                   Nothing live in this section yet - see Information
                   Architecture (<code>/docs/ia</code>) for what's prototyped
                   elsewhere.
@@ -135,7 +139,11 @@ function MasterAppSection() {
           </MainLayout>
         </AppShell>
       )}
-      <LiveMockDock leading={<MasterGoToMenu section={section} />} />
+      </MasterBezelLayout>
+      <LiveMockDock
+        leading={<MasterGoToMenu section={section} />}
+        extraTabs={section.key === 'emma-mobile' ? [] : [{ id: 'bezel', label: 'Bezel', icon: Sparkle, render: () => <BezelDockTab /> }]}
+      />
     </AppBarLinksContext.Provider>
   )
 }

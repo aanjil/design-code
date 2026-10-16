@@ -70,26 +70,26 @@ const EMAILS: Record<EmailKind, EmailDef> = {
 export function EmailScreen({ view }: { view: EmailView }) {
   const email = EMAILS[view.kind]
   return (
-    <div className="flex h-full min-h-0 flex-col items-center overflow-y-auto bg-surface-2 px-6 py-10">
+    <div className="flex h-full min-h-0 flex-col items-center overflow-y-auto bg-surface-page px-6 py-10">
       <div className="w-full max-w-[520px]">
         {/* client chrome */}
-        <div className="mb-3 rounded-xl bg-background-base p-4 shadow-card">
-          <p className="text-caption-md text-text-muted">
+        <div className="mb-3 rounded-xl bg-base p-4 card">
+          <p className="text-caption-sm font-medium text-muted">
             From: Niural &lt;no-reply@niural.com&gt; · To: {SPLIT_EMPLOYEE.email}
           </p>
-          <p className="mt-1 text-label-sm text-text-primary">{email.subject}</p>
+          <p className="mt-1 text-label-small text-primary">{email.subject}</p>
         </div>
 
         {/* template body */}
-        <div className="overflow-hidden rounded-xl bg-background-base shadow-card">
-          <div className="flex h-14 items-center border-b border-border-highlight px-6">
-            <span className="flex size-7 items-center justify-center rounded-lg bg-brand-primary text-label-sm text-text-on-color">
+        <div className="overflow-hidden rounded-xl bg-base card">
+          <div className="flex h-14 items-center border-b border-base px-6">
+            <span className="flex size-7 items-center justify-center rounded-lg bg-brand text-label-small text-on-color">
               N
             </span>
           </div>
           <div className="flex flex-col gap-3 px-6 py-6">
             {email.paragraphs.map((p) => (
-              <p key={p.slice(0, 24)} className="text-paragraph-sm text-text-primary">
+              <p key={p.slice(0, 24)} className="text-paragraph-small text-primary">
                 {p}
               </p>
             ))}
@@ -101,8 +101,8 @@ export function EmailScreen({ view }: { view: EmailView }) {
               </div>
             )}
           </div>
-          <div className="border-t border-border-highlight px-6 py-4">
-            <p className="text-caption-md text-text-muted">
+          <div className="border-t border-base px-6 py-4">
+            <p className="text-caption-sm font-medium text-muted">
               Niural · 447 Broadway, New York, NY · You're receiving this because split payment is
               set up on your account.
             </p>

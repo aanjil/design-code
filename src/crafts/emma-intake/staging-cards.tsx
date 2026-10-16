@@ -25,9 +25,9 @@ export function StagingCards({
   return (
     <div className="flex flex-col gap-4">
       {scenario.dedupe && (
-        <div className="flex items-start gap-2 rounded-lg bg-background-info-highlight p-3">
-          <LinkSimple weight="fill" className="mt-px size-4 shrink-0 text-text-info-base" />
-          <p className="text-paragraph-xs text-text-info-base">{scenario.dedupe.message}</p>
+        <div className="flex items-start gap-2 rounded-lg bg-info-highlight p-3">
+          <LinkSimple weight="fill" className="mt-px size-4 shrink-0 text-info" />
+          <p className="text-paragraph-xsmall text-info">{scenario.dedupe.message}</p>
         </div>
       )}
       {scenario.cards.map((card) => (
@@ -55,16 +55,16 @@ export function StagingCardView({
   onFieldEdit: (fieldId: string, value: string) => void
 }) {
   return (
-    <div className="rounded-xl bg-background-base p-4 shadow-card">
+    <div className="rounded-xl bg-base p-4 card">
       <div className="mb-1 flex items-center justify-between gap-2">
-        <p className="text-label-sm text-text-primary">{card.title}</p>
+        <p className="text-label-small text-primary">{card.title}</p>
         {card.badge && (
-          <span className="rounded-full bg-brand-muted px-2 py-0.5 text-caption-md text-brand-text">
+          <span className="rounded-full bg-brand-muted px-2 py-0.5 text-caption-sm font-medium text-brand">
             {card.badge}
           </span>
         )}
       </div>
-      <div className="flex flex-col divide-y divide-border-muted">
+      <div className="flex flex-col divide-y divide-(--border-muted)">
         {card.fields.map((field) => (
           <FieldRow
             key={field.id}
@@ -96,14 +96,14 @@ function FieldRow({
   if (field.status === 'empty-required') {
     return (
       <div className="flex items-center justify-between gap-3 py-2.5">
-        <span className="text-label-xs text-text-muted">{field.label}</span>
+        <span className="text-label-xsmall text-muted">{field.label}</span>
         {value ? (
-          <span className="text-paragraph-sm text-text-primary">{value}</span>
+          <span className="text-paragraph-small text-primary">{value}</span>
         ) : (
           <select
             defaultValue=""
             onChange={(e) => onEdit(e.target.value)}
-            className="h-8 rounded-md border border-dashed border-border-base bg-background-highlight px-2 text-label-xs text-text-muted outline-none focus:border-brand-primary focus:text-text-primary"
+            className="h-8 rounded-md border border-dashed border-base bg-highlight px-2 text-label-xsmall text-muted outline-none focus:border-brand focus:text-primary"
           >
             <option value="" disabled>
               Select {field.label}
@@ -121,42 +121,42 @@ function FieldRow({
 
   return (
     <div className="group flex items-center justify-between gap-3 py-2.5">
-      <span className="text-label-xs text-text-muted">{field.label}</span>
+      <span className="text-label-xsmall text-muted">{field.label}</span>
       <div className="flex items-center gap-1.5">
         <button
           type="button"
           onClick={onFocus}
           disabled={!field.blockId}
           className={cn(
-            'text-right text-paragraph-sm text-text-primary',
-            field.mono && 'font-mono text-mono-sm',
-            field.blockId && 'underline-offset-2 hover:text-brand-text hover:underline',
+            'text-right text-paragraph-small text-primary',
+            field.mono && 'tabular-nums text-label-small',
+            field.blockId && 'underline-offset-2 hover:text-brand hover:underline',
           )}
         >
           {value}
         </button>
         {field.status === 'warning' && (
-          <span title={field.note} className="flex items-center text-text-warning-base">
+          <span title={field.note} className="flex items-center text-warning">
             <Warning weight="fill" className="size-3.5" />
           </span>
         )}
         {field.status === 'confirmed' && (
-          <CheckCircle weight="fill" className="size-3.5 shrink-0 text-text-success-base" />
+          <CheckCircle weight="fill" className="size-3.5 shrink-0 text-success" />
         )}
         <Popover open={editing} onOpenChange={setEditing}>
           <PopoverTrigger
             aria-label={`Edit ${field.label}`}
-            className="text-text-disabled opacity-0 transition-opacity group-hover:opacity-100 hover:text-text-primary"
+            className="text-disabled opacity-0 transition-opacity group-hover:opacity-100 hover:text-primary"
           >
             <PencilSimple className="size-3.5" />
           </PopoverTrigger>
           <PopoverContent className="w-56 p-3" align="end">
             <div className="flex flex-col gap-2">
-              <label className="text-label-xs text-text-primary">{field.label}</label>
+              <label className="text-label-xsmall text-primary">{field.label}</label>
               <input
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
-                className="h-8 rounded-md bg-background-base px-2 text-paragraph-sm shadow-button-gray outline-none focus:shadow-border-focus"
+                className="h-8 rounded-md bg-base px-2 text-paragraph-small borders-base outline-none focus:borders-focus"
               />
               <Button
                 type="button"

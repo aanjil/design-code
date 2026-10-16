@@ -11,11 +11,11 @@ import { CHAT_LIST } from './data'
  */
 export function ChatSidebar({ activeId = 'current' }: { activeId?: string }) {
   return (
-    <aside className="flex w-65 shrink-0 flex-col gap-5 border-r border-border-base bg-background-base/72 p-5">
+    <aside className="flex w-65 shrink-0 flex-col gap-5 border-r border-base bg-base/72 p-5">
       <div className="flex items-center gap-2">
         <button
           type="button"
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-border-muted bg-background-base px-3 py-2 text-label-sm text-brand-text shadow-button-gray"
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-full border border-muted bg-base px-3 py-2 text-label-small text-brand borders-base"
         >
           <Plus className="size-4" />
           New chat
@@ -23,14 +23,14 @@ export function ChatSidebar({ activeId = 'current' }: { activeId?: string }) {
         <button
           type="button"
           aria-label="Notes"
-          className="flex size-9 shrink-0 items-center justify-center rounded-full border border-border-muted bg-background-base text-text-muted shadow-button-gray"
+          className="flex size-9 shrink-0 items-center justify-center rounded-full border border-muted bg-base text-muted borders-base"
         >
           <NotePencil className="size-4" />
         </button>
       </div>
 
       <div>
-        <p className="mb-1.5 px-2 text-caption-md text-text-muted">Your chats</p>
+        <p className="mb-1.5 px-2 text-caption-sm font-medium text-muted">Your chats</p>
         <div className="flex flex-col gap-0.5">
           {CHAT_LIST.map((item) => {
             const active = item.id === activeId
@@ -39,8 +39,8 @@ export function ChatSidebar({ activeId = 'current' }: { activeId?: string }) {
                 key={item.id}
                 type="button"
                 className={cn(
-                  'truncate rounded-lg px-2 py-2 text-left text-label-sm',
-                  active ? 'bg-background-highlight font-medium text-text-primary' : 'text-text-primary hover:bg-background-highlight/60',
+                  'truncate rounded-lg px-2 py-2 text-left text-label-small',
+                  active ? 'bg-highlight font-medium text-primary' : 'text-primary hover:bg-highlight/60',
                 )}
               >
                 {item.title}

@@ -167,7 +167,7 @@ function PanelIconButton({
       aria-label={label}
       title={label}
       onClick={onClick}
-      className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+      className="flex size-6 items-center justify-center rounded-md text-muted transition-colors hover:bg-highlight hover:text-primary"
     >
       {children}
     </button>
@@ -176,7 +176,7 @@ function PanelIconButton({
 
 function ScopeBadge({ label = 'v2' }: { label?: string }) {
   return (
-    <span className="shrink-0 rounded bg-brand-muted px-1 text-caption-md text-brand-text">
+    <span className="shrink-0 rounded bg-brand-muted px-1 text-caption-sm font-medium text-brand">
       {label}
     </span>
   )
@@ -207,7 +207,7 @@ export function ExplorerPanel({
         aria-label={`Explorer - ${checked}/${total} designed, ${pins.length} notes`}
         title="Expand explorer panel"
         onClick={() => setUserMinimized(false)}
-        className="fixed top-4 right-4 z-[80] flex size-9 items-center justify-center rounded-full bg-background-base/90 text-text-primary shadow-border-base backdrop-blur transition-colors hover:bg-background-highlight"
+        className="fixed top-4 right-4 z-[80] flex size-9 items-center justify-center rounded-full bg-base/90 text-primary borders-base backdrop-blur transition-colors hover:bg-highlight"
       >
         <ListChecks className="size-4.5" />
       </button>
@@ -215,17 +215,17 @@ export function ExplorerPanel({
   }
 
   return (
-    <div className="fixed top-4 right-4 bottom-4 z-[80] flex w-80 flex-col overflow-hidden rounded-2xl bg-background-base/90 shadow-border-base backdrop-blur">
+    <div className="fixed top-4 right-4 bottom-4 z-[80] flex w-80 flex-col overflow-hidden rounded-2xl bg-base/90 borders-base backdrop-blur">
       <div className="flex shrink-0 items-center gap-1 p-2">
-        <div className="flex flex-1 items-center gap-0.5 rounded-lg bg-background-highlight p-0.5">
+        <div className="flex flex-1 items-center gap-0.5 rounded-lg bg-highlight p-0.5">
           <button
             type="button"
             onClick={() => setTab('flows')}
             className={cn(
-              'flex-1 rounded-md px-2 py-1 text-center text-label-xs transition-colors',
+              'flex-1 rounded-md px-2 py-1 text-center text-label-xsmall transition-colors',
               tab === 'flows'
-                ? 'bg-background-base text-text-primary shadow-button-gray'
-                : 'text-text-muted hover:text-text-primary',
+                ? 'bg-base text-primary borders-base'
+                : 'text-muted hover:text-primary',
             )}
           >
             Flows
@@ -234,10 +234,10 @@ export function ExplorerPanel({
             type="button"
             onClick={() => setTab('notes')}
             className={cn(
-              'flex-1 rounded-md px-2 py-1 text-center text-label-xs transition-colors',
+              'flex-1 rounded-md px-2 py-1 text-center text-label-xsmall transition-colors',
               tab === 'notes'
-                ? 'bg-background-base text-text-primary shadow-button-gray'
-                : 'text-text-muted hover:text-text-primary',
+                ? 'bg-base text-primary borders-base'
+                : 'text-muted hover:text-primary',
             )}
           >
             Notes{pins.length > 0 && ` · ${pins.length}`}
@@ -266,16 +266,16 @@ function FlowsTab() {
     <>
       <div className="shrink-0 px-2.5 pb-1.5">
         <div className="flex items-center gap-1">
-          <span className="flex-1 text-caption-md text-text-muted">
+          <span className="flex-1 text-caption-sm font-medium text-muted">
             {checked} / {total} designed
           </span>
           <PanelIconButton label="Reset checklist" onClick={resetDone}>
             <ArrowCounterClockwise className="size-3.5" />
           </PanelIconButton>
         </div>
-        <span className="mt-1.5 block h-1 overflow-hidden rounded-full bg-background-muted">
+        <span className="mt-1.5 block h-1 overflow-hidden rounded-full bg-muted">
           <span
-            className="block h-full rounded-full bg-background-success-base transition-[width]"
+            className="block h-full rounded-full bg-success transition-[width]"
             style={{ width: `${pct}%` }}
           />
         </span>
@@ -284,7 +284,7 @@ function FlowsTab() {
       <div className="min-h-0 flex-1 overflow-y-auto p-1.5 pt-0">
         {catalog.map((group) => (
           <div key={group.group}>
-            <p className="px-2 pt-2.5 pb-1 text-caption-md text-text-muted">
+            <p className="px-2 pt-2.5 pb-1 text-caption-sm font-medium text-muted">
               {group.group}
             </p>
             <div className="flex flex-col gap-0.5">
@@ -305,8 +305,8 @@ function FlowsTab() {
                         if (e.key === 'Enter' || e.key === ' ') show(screen.id)
                       }}
                       className={cn(
-                        'flex w-full cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-background-highlight',
-                        selected && 'bg-background-highlight',
+                        'flex w-full cursor-pointer items-center gap-2 rounded-lg px-2 py-1.5 text-left transition-colors hover:bg-highlight',
+                        selected && 'bg-highlight',
                       )}
                     >
                       <span
@@ -323,9 +323,9 @@ function FlowsTab() {
                       </span>
                       <span
                         className={cn(
-                          'min-w-0 flex-1 truncate text-paragraph-xs',
-                          selected ? 'text-brand-text' : 'text-text-primary',
-                          isDone && 'text-text-muted line-through',
+                          'min-w-0 flex-1 truncate text-paragraph-xsmall',
+                          selected ? 'text-brand' : 'text-primary',
+                          isDone && 'text-muted line-through',
                         )}
                       >
                         {screen.label}
@@ -335,7 +335,7 @@ function FlowsTab() {
 
                     {/* selected screen's states expand inline, right below it */}
                     {selected && screen.states.length > 0 && (
-                      <div className="mt-0.5 mb-1 ml-3 flex flex-col gap-0.5 border-l border-border-highlight pl-3">
+                      <div className="mt-0.5 mb-1 ml-3 flex flex-col gap-0.5 border-l border-base pl-3">
                         {screen.states.map((state) => {
                           const activeState = state.id === stateId
                           return (
@@ -344,10 +344,10 @@ function FlowsTab() {
                               type="button"
                               onClick={() => show(screen.id, state.id)}
                               className={cn(
-                                'flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-paragraph-xs transition-colors',
+                                'flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-paragraph-xsmall transition-colors',
                                 activeState
-                                  ? 'bg-brand-muted text-brand-text'
-                                  : 'text-text-muted hover:bg-background-highlight hover:text-text-primary',
+                                  ? 'bg-brand-muted text-brand'
+                                  : 'text-muted hover:bg-highlight hover:text-primary',
                               )}
                             >
                               <span className="min-w-0 flex-1">{state.label}</span>
@@ -373,7 +373,7 @@ function NotesTab() {
 
   if (pins.length === 0) {
     return (
-      <p className="p-4 text-center text-paragraph-xs text-text-muted">
+      <p className="p-4 text-center text-paragraph-xsmall text-muted">
         No design notes yet. Toggle Annotate in the canvas zoom controls,
         then click anywhere to pin one.
       </p>
@@ -386,20 +386,20 @@ function NotesTab() {
         {pins.map((pin) => (
           <div
             key={pin.id}
-            className="group flex w-full items-start gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-background-highlight"
+            className="group flex w-full items-start gap-2 rounded-lg px-2 py-1.5 transition-colors hover:bg-highlight"
           >
             <button
               type="button"
               onClick={() => requestJump(pin.id)}
               className="flex min-w-0 flex-1 items-start gap-2 text-left"
             >
-              <span className="mt-px flex size-4 shrink-0 items-center justify-center rounded-full bg-brand-primary text-caption-md text-text-on-color">
+              <span className="mt-px flex size-4 shrink-0 items-center justify-center rounded-full bg-brand text-caption-sm font-medium text-on-color">
                 {pin.n}
               </span>
               <span
                 className={cn(
-                  'min-w-0 flex-1 truncate text-paragraph-xs',
-                  pin.text.trim() ? 'text-text-primary' : 'text-text-muted',
+                  'min-w-0 flex-1 truncate text-paragraph-xsmall',
+                  pin.text.trim() ? 'text-primary' : 'text-muted',
                 )}
               >
                 {pin.text.trim() || 'Empty note'}
@@ -409,7 +409,7 @@ function NotesTab() {
               type="button"
               aria-label={`Delete note ${pin.n}`}
               onClick={() => removePin(pin.id)}
-              className="flex size-5 shrink-0 items-center justify-center rounded-md text-text-muted opacity-0 transition-opacity group-hover:opacity-100 hover:bg-background-error-highlight hover:text-text-error-base"
+              className="flex size-5 shrink-0 items-center justify-center rounded-md text-muted opacity-0 transition-opacity group-hover:opacity-100 hover:bg-error-highlight hover:text-error"
             >
               <X className="size-3.5" />
             </button>

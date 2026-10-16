@@ -40,7 +40,7 @@ export function FilterMenu({
             leftIcon={<FunnelSimple className="size-4" />}
             rightIcon={
               conditions.length > 0 ? (
-                <span className="rounded-full bg-brand-muted px-1.5 text-caption-md text-brand-text">
+                <span className="rounded-full bg-brand-muted px-1.5 text-caption-sm font-medium text-brand">
                   {conditions.length}
                 </span>
               ) : undefined
@@ -62,10 +62,10 @@ export function FilterMenu({
           return (
             <DropdownMenuSub key={field.id}>
               <DropdownMenuSubTrigger>
-                <field.icon className="text-text-primary" />
+                <field.icon className="text-primary" />
                 <span className="min-w-0 flex-1 truncate">{field.label}</span>
                 {current.length > 0 && (
-                  <span className="rounded-full bg-brand-muted px-1.5 text-caption-md text-brand-text">
+                  <span className="rounded-full bg-brand-muted px-1.5 text-caption-sm font-medium text-brand">
                     {current.length}
                   </span>
                 )}

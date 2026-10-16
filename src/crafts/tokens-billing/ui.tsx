@@ -222,11 +222,11 @@ export function SettingsShell({
 export type ChipTone = 'success' | 'accent' | 'danger' | 'warning' | 'neutral'
 
 const CHIP_TONE: Record<ChipTone, string> = {
-  success: 'bg-background-success-highlight text-text-success-base',
-  accent: 'bg-brand-muted text-brand-text',
-  danger: 'bg-background-error-highlight text-text-error-base',
-  warning: 'bg-background-warning-highlight text-text-warning-base',
-  neutral: 'bg-background-highlight text-text-muted',
+  success: 'bg-success-highlight text-success',
+  accent: 'bg-brand-muted text-brand',
+  danger: 'bg-error-highlight text-error',
+  warning: 'bg-warning-highlight text-warning',
+  neutral: 'bg-highlight text-muted',
 }
 
 export function Chip({
@@ -239,7 +239,7 @@ export function Chip({
   className?: string
 }) {
   return (
-    <span className={cn('inline-flex h-5 shrink-0 items-center rounded-md px-2 text-caption-md', CHIP_TONE[tone], className)}>
+    <span className={cn('inline-flex h-5 shrink-0 items-center rounded-md px-2 text-caption-sm font-medium', CHIP_TONE[tone], className)}>
       {children}
     </span>
   )
@@ -265,7 +265,7 @@ export function StatCard({
   className?: string
 }) {
   return (
-    <div className={cn('rounded-2xl bg-background-base p-4.5 shadow-card', className)}>
+    <div className={cn('rounded-2xl bg-base p-4.5 card', className)}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="flex items-center gap-1.5">
@@ -275,10 +275,10 @@ export function StatCard({
                 className={cn('size-4', tokenToIconColor(iconTone))}
               />
             )}
-            <p className="text-label-xs text-text-muted">{label}</p>
+            <p className="text-label-xsmall text-muted">{label}</p>
           </div>
-          <p className="mt-1.5 text-title-h5 text-text-primary">{value}</p>
-          {sub && <p className="mt-1.5 text-paragraph-xs text-text-muted">{sub}</p>}
+          <p className="mt-1.5 text-title-h5 text-primary">{value}</p>
+          {sub && <p className="mt-1.5 text-paragraph-xsmall text-muted">{sub}</p>}
         </div>
         {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
       </div>
@@ -289,13 +289,13 @@ export function StatCard({
 function tokenToIconColor(tone: ChipTone): string {
   switch (tone) {
     case 'success':
-      return 'text-text-success-base'
+      return 'text-success'
     case 'danger':
-      return 'text-text-error-base'
+      return 'text-error'
     case 'warning':
-      return 'text-text-warning-base'
+      return 'text-warning'
     case 'neutral':
-      return 'text-text-muted'
+      return 'text-muted'
     default:
       return 'text-brand-primary'
   }
@@ -304,8 +304,8 @@ function tokenToIconColor(tone: ChipTone): string {
 export function MiniStat({ label, value, tone }: { label: string; value: React.ReactNode; tone?: ChipTone }) {
   return (
     <div>
-      <p className="text-caption-md text-text-muted">{label}</p>
-      <p className={cn('mt-1 text-label-md', tone ? tokenToIconColor(tone) : 'text-text-primary')}>{value}</p>
+      <p className="text-caption-sm font-medium text-muted">{label}</p>
+      <p className={cn('mt-1 text-label-medium', tone ? tokenToIconColor(tone) : 'text-primary')}>{value}</p>
     </div>
   )
 }
@@ -317,7 +317,7 @@ export function Th({ children, align, width }: { children: React.ReactNode; alig
     <th
       style={width ? { width } : undefined}
       className={cn(
-        'bg-background-highlight px-3.5 py-2.5 text-left text-caption-md font-medium text-text-muted first:rounded-tl-xl last:rounded-tr-xl',
+        'bg-highlight px-3.5 py-2.5 text-left text-caption-sm font-medium font-medium text-muted first:rounded-tl-xl last:rounded-tr-xl',
         align === 'right' && 'text-right',
       )}
     >
@@ -330,9 +330,9 @@ export function Td({ children, align, muted }: { children: React.ReactNode; alig
   return (
     <td
       className={cn(
-        'border-t border-border-highlight px-3.5 py-3 align-top text-paragraph-xs',
-        muted ? 'text-text-muted' : 'text-text-primary',
-        align === 'right' && 'text-right font-mono tabular-nums',
+        'border-t border-base px-3.5 py-3 align-top text-paragraph-xsmall',
+        muted ? 'text-muted' : 'text-primary',
+        align === 'right' && 'text-right tabular-nums',
       )}
     >
       {children}
@@ -342,8 +342,8 @@ export function Td({ children, align, muted }: { children: React.ReactNode; alig
 
 export function TableCard({ children }: { children: React.ReactNode }) {
   return (
-    <div className="overflow-hidden rounded-2xl bg-background-base shadow-card">
-      <table className="w-full border-collapse text-paragraph-xs">{children}</table>
+    <div className="overflow-hidden rounded-2xl bg-base card">
+      <table className="w-full border-collapse text-paragraph-xsmall">{children}</table>
     </div>
   )
 }
@@ -361,9 +361,9 @@ export function EmptyRow({
 }) {
   return (
     <div className="flex flex-col items-center gap-1 px-6 py-10 text-center">
-      {EmptyIcon && <EmptyIcon className="mb-1 size-6 text-text-muted" />}
-      <p className="text-label-sm text-text-primary">{title}</p>
-      {description && <p className="max-w-[360px] text-paragraph-xs text-text-muted">{description}</p>}
+      {EmptyIcon && <EmptyIcon className="mb-1 size-6 text-muted" />}
+      <p className="text-label-small text-primary">{title}</p>
+      {description && <p className="max-w-[360px] text-paragraph-xsmall text-muted">{description}</p>}
       {action && <div className="mt-2">{action}</div>}
     </div>
   )
@@ -381,15 +381,15 @@ export function Segmented<T extends string>({
   onChange: (value: T) => void
 }) {
   return (
-    <div className="inline-flex items-center gap-0.5 rounded-lg bg-background-highlight p-0.5">
+    <div className="inline-flex items-center gap-0.5 rounded-lg bg-highlight p-0.5">
       {options.map((opt) => (
         <button
           key={opt.value}
           type="button"
           onClick={() => onChange(opt.value)}
           className={cn(
-            'rounded-md px-2.5 py-1 text-caption-md transition-colors',
-            value === opt.value ? 'bg-background-base text-text-primary shadow-button-gray' : 'text-text-muted',
+            'rounded-md px-2.5 py-1 text-caption-sm font-medium transition-colors',
+            value === opt.value ? 'bg-base text-primary borders-base' : 'text-muted',
           )}
         >
           {opt.label}
@@ -417,19 +417,19 @@ export function ModalShell({
   width?: string
 }) {
   return (
-    <div className="absolute inset-0 z-40 grid place-items-center bg-overlay-background-base p-6 backdrop-blur-[2px]">
-      <div className={cn('flex max-h-full min-w-0 flex-col rounded-2xl bg-background-base shadow-flyout', width)}>
+    <div className="absolute inset-0 z-40 grid place-items-center bg-overlay p-6 backdrop-blur-[2px]">
+      <div className={cn('flex max-h-full min-w-0 flex-col rounded-2xl bg-base flyout', width)}>
         <div className="flex shrink-0 items-start justify-between gap-3 px-5 pt-4 pb-2">
           <div>
-            <p className="text-label-md text-text-primary">{title}</p>
-            {subtitle && <p className="mt-0.5 text-paragraph-xs text-text-muted">{subtitle}</p>}
+            <p className="text-label-medium text-primary">{title}</p>
+            {subtitle && <p className="mt-0.5 text-paragraph-xsmall text-muted">{subtitle}</p>}
           </div>
           {onClose && (
             <button
               type="button"
               aria-label="Close"
               onClick={onClose}
-              className="flex size-7 shrink-0 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+              className="flex size-7 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-highlight hover:text-primary"
             >
               <X className="size-4" />
             </button>

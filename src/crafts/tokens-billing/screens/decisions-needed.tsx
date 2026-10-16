@@ -33,21 +33,21 @@ export function DecisionsNeededScreen() {
   return (
     <AppShell>
       <AppBar activeItem="Payments" />
-      <div className="flex min-h-0 flex-1 items-start justify-center overflow-y-auto bg-surface-2 p-10">
-        <div className="w-full max-w-[640px] rounded-2xl bg-background-base p-6 shadow-card">
+      <div className="flex min-h-0 flex-1 items-start justify-center overflow-y-auto bg-surface-page p-10">
+        <div className="w-full max-w-[640px] rounded-2xl bg-base p-6 card">
           <div className="flex items-center gap-2">
-            <Warning weight="fill" className="size-5 text-text-warning-base" />
-            <h1 className="text-label-md text-text-primary">Decisions needed before this can be designed</h1>
+            <Warning weight="fill" className="size-5 text-warning" />
+            <h1 className="text-label-medium text-primary">Decisions needed before this can be designed</h1>
           </div>
-          <p className="mt-2 text-paragraph-sm text-text-muted">
+          <p className="mt-2 text-paragraph-small text-muted">
             These 13 items block high-fidelity design work, not just this prototype - each is a real product call
             nobody has made yet, ported as-is from the design workbench's own checklist rather than resolved here.
           </p>
           <ul className="mt-5 flex flex-col gap-3">
             {DECISIONS.map((d) => (
-              <li key={d.title} className="rounded-lg bg-background-warning-highlight p-3">
-                <p className="text-paragraph-sm text-text-primary">{d.title}</p>
-                {d.note && <p className="mt-1 text-paragraph-xs text-text-warning-base">{d.note}</p>}
+              <li key={d.title} className="rounded-lg bg-warning-highlight p-3">
+                <p className="text-paragraph-small text-primary">{d.title}</p>
+                {d.note && <p className="mt-1 text-paragraph-xsmall text-warning">{d.note}</p>}
               </li>
             ))}
           </ul>

@@ -36,7 +36,7 @@ function SidebarNavGroup({
 }) {
   return (
     <div>
-      <p className="px-2 pb-3 text-caption-md text-text-muted uppercase">{title}</p>
+      <p className="px-2 pb-3 text-caption-sm font-medium text-muted uppercase">{title}</p>
       <div className="flex flex-col gap-0.5">
         {items.map(({ label, badge }) => {
           const active = label === activeItem
@@ -46,15 +46,15 @@ function SidebarNavGroup({
               type="button"
               onClick={() => onNavigate?.(label)}
               className={cn(
-                'flex w-full items-center justify-between gap-2 rounded-lg p-2 text-left text-label-sm transition-colors',
+                'flex w-full items-center justify-between gap-2 rounded-lg p-2 text-left text-label-small transition-colors',
                 active
-                  ? 'bg-background-base text-brand-text shadow-button-gray'
-                  : 'text-text-primary hover:bg-background-highlight',
+                  ? 'bg-base text-brand borders-base'
+                  : 'text-primary hover:bg-highlight',
               )}
             >
               <span className="truncate">{label}</span>
               {badge !== undefined && (
-                <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-background-muted px-1.5 text-label-xs text-text-muted">
+                <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-muted px-1.5 text-label-xsmall text-muted">
                   {badge}
                 </span>
               )}
@@ -81,27 +81,27 @@ export function SidebarNav({
   return (
     <aside
       className={cn(
-        'flex w-50 shrink-0 flex-col border-r border-border-base sidebar-background backdrop-blur-[2px]',
+        'flex w-50 shrink-0 flex-col border-r border-base sidebar-background backdrop-blur-[2px]',
         className,
       )}
     >
       <div className="flex shrink-0 flex-col gap-2 p-4 pb-2">
         <button
           type="button"
-          className="flex items-center gap-2 rounded-lg p-2 text-left hover:bg-background-highlight"
+          className="flex items-center gap-2 rounded-lg p-2 text-left hover:bg-highlight"
         >
-          <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-background-highlight text-label-sm text-text-primary">
+          <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-highlight text-label-small text-primary">
             {sidebarNav.workspaceName.charAt(0)}
           </span>
           <span className="min-w-0 flex-1">
-            <span className="block truncate text-label-sm text-text-primary">
+            <span className="block truncate text-label-small text-primary">
               {sidebarNav.workspaceName}
             </span>
-            <span className="block truncate text-caption text-text-muted">
+            <span className="block truncate text-caption-sm text-muted">
               {sidebarNav.workspaceSubtitle}
             </span>
           </span>
-          <CaretUpDown className="size-4 shrink-0 text-text-muted" />
+          <CaretUpDown className="size-4 shrink-0 text-muted" />
         </button>
         <Button
           type="button"
@@ -141,7 +141,7 @@ export function Search({ className }: { className?: string }) {
     : searchPanel.suggestedPrompts
 
   return (
-    <Command shouldFilter={false} className={cn('shadow-flyout', className)}>
+    <Command shouldFilter={false} className={cn('flyout', className)}>
       <CommandInput
         value={query}
         onValueChange={setQuery}
@@ -160,7 +160,7 @@ export function Search({ className }: { className?: string }) {
               className="justify-start gap-2"
             >
               {trimmed ? (
-                <MagnifyingGlass className="size-4 text-text-muted" />
+                <MagnifyingGlass className="size-4 text-muted" />
               ) : (
                 <Sparkle weight="fill" className="size-4 text-brand-primary" />
               )}

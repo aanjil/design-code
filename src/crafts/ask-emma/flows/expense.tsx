@@ -16,8 +16,8 @@ const CHIP = 'RUN · TOP-DOWN · STARTS FROM AN ARTEFACT'
 export function ExpenseDropScreen({ state }: { state: 'empty' | 'ready' }) {
   return (
     <EmmaChrome activeId="expense-run" title="Expense report" subtitle="DROP FILES" chip={CHIP} wide>
-      <h1 className="text-title-h3 text-text-primary">Drop receipts anywhere on this page</h1>
-      <p className="mt-1.5 mb-6 max-w-[60ch] text-paragraph-sm text-text-muted">
+      <h1 className="text-title-h3 text-primary">Drop receipts anywhere on this page</h1>
+      <p className="mt-1.5 mb-6 max-w-[60ch] text-paragraph-small text-muted">
         The whole screen is the drop target. A run can start from a button or from an artefact —
         dropping six receipts is the same act as pressing "run payroll".
       </p>
@@ -25,22 +25,22 @@ export function ExpenseDropScreen({ state }: { state: 'empty' | 'ready' }) {
       <div
         className={
           state === 'ready'
-            ? 'rounded-xl border-[1.5px] border-dashed border-grain-ink bg-background-base p-8 text-center'
-            : 'rounded-xl border-[1.5px] border-dashed border-border-muted bg-surface-1 p-10 text-center'
+            ? 'rounded-xl border-[1.5px] border-dashed border-(--text-base) bg-base p-8 text-center'
+            : 'rounded-xl border-[1.5px] border-dashed border-muted bg-surface-frame p-10 text-center'
         }
       >
-        <UploadSimple className="mx-auto mb-2 size-6 text-text-disabled" />
+        <UploadSimple className="mx-auto mb-2 size-6 text-disabled" />
         {state === 'ready' ? (
           <>
-            <b className="block text-label-md text-text-primary">6 files ready</b>
-            <span className="text-paragraph-xs text-text-muted">JPEG, PNG, PDF and HEIC up to 50 MB</span>
+            <b className="block text-label-medium text-primary">6 files ready</b>
+            <span className="text-paragraph-xsmall text-muted">JPEG, PNG, PDF and HEIC up to 50 MB</span>
             <div className="mt-4 flex flex-wrap justify-center gap-2">
               {DROP_FILES.map((f) => (
                 <span
                   key={f}
-                  className="flex items-center gap-1.5 rounded-lg border border-border-base bg-surface-1 px-2.5 py-1.5 text-paragraph-xs text-text-primary"
+                  className="flex items-center gap-1.5 rounded-lg border border-base bg-surface-frame px-2.5 py-1.5 text-paragraph-xsmall text-primary"
                 >
-                  <File className="size-3.5 shrink-0 text-text-disabled" />
+                  <File className="size-3.5 shrink-0 text-disabled" />
                   {f}
                 </span>
               ))}
@@ -48,31 +48,31 @@ export function ExpenseDropScreen({ state }: { state: 'empty' | 'ready' }) {
           </>
         ) : (
           <>
-            <b className="block text-label-md text-text-muted">Drag receipts here, or browse</b>
-            <span className="text-paragraph-xs text-text-disabled">JPEG, PNG, PDF and HEIC up to 50 MB</span>
+            <b className="block text-label-medium text-muted">Drag receipts here, or browse</b>
+            <span className="text-paragraph-xsmall text-disabled">JPEG, PNG, PDF and HEIC up to 50 MB</span>
           </>
         )}
       </div>
 
-      <div className="mt-3 flex items-center gap-2.5 rounded-xl border border-border-base bg-background-base px-3 py-2.5">
-        <span className="shrink-0 font-mono text-[9.5px] tracking-wide text-text-disabled">OPTIONAL</span>
+      <div className="mt-3 flex items-center gap-2.5 rounded-xl border border-base bg-base px-3 py-2.5">
+        <span className="shrink-0 font-mono text-[9.5px] tracking-wide text-disabled">OPTIONAL</span>
         <input
           readOnly
           value={state === 'ready' ? 'all from the Berlin summit, 12–14 Aug' : ''}
           placeholder="Add context the files can't carry"
-          className="min-w-0 flex-1 bg-transparent text-paragraph-sm text-text-primary outline-none placeholder:text-text-disabled"
+          className="min-w-0 flex-1 bg-transparent text-paragraph-small text-primary outline-none placeholder:text-disabled"
         />
         <button
           type="button"
           disabled={state !== 'ready'}
-          className="shrink-0 rounded-md bg-grain-ink px-2.5 py-1.5 text-label-xs text-grain-ink-foreground disabled:opacity-40"
+          className="shrink-0 rounded-md bg-(--text-base) px-2.5 py-1.5 text-label-xsmall text-(--background-base) disabled:opacity-40"
         >
           Extract
         </button>
       </div>
 
       <Note className="mt-4">
-        <b className="text-text-primary">THIS BOX IS SCOPING, NOT CONVERSATION.</b> one line, before the run, to
+        <b className="text-primary">THIS BOX IS SCOPING, NOT CONVERSATION.</b> one line, before the run, to
         give context the files can't carry. it never appears again — the run drives from here. that is the
         difference between a prompt and a chat.
       </Note>
@@ -98,7 +98,7 @@ export function ExpenseReadingScreen() {
         <ToolChip label="LEDGER" value="read only" />
       </div>
       <Note className="mt-4">
-        <b className="text-text-primary">PROCESS LAYER — NO CLAIM BAR.</b> nothing here asserts anything. the
+        <b className="text-primary">PROCESS LAYER — NO CLAIM BAR.</b> nothing here asserts anything. the
         moment it does, it graduates into a grain.
       </Note>
     </EmmaChrome>
@@ -118,7 +118,7 @@ export function ExpenseExtractedScreen() {
             exits={EXTRACTED.exits}
           />
           <Note className="mt-2.5">
-            <b className="text-text-primary">UNREADABLE IS A CLAIM.</b> it never guesses a number off a dark
+            <b className="text-primary">UNREADABLE IS A CLAIM.</b> it never guesses a number off a dark
             photo. saying "I couldn't read this" is worth more than a confident wrong figure.
           </Note>
         </Step>
@@ -173,7 +173,7 @@ export function ExpenseCreateScreen({ state }: { state: 'locked' | 'open' | 'don
                 exits={EXPENSE_DRAFT.exits}
               />
               <Note className="mt-1">
-                <b className="text-text-primary">EDIT MODE LIVES ON THE OBJECT, NOT IN A CHAT BUBBLE.</b> one
+                <b className="text-primary">EDIT MODE LIVES ON THE OBJECT, NOT IN A CHAT BUBBLE.</b> one
                 field is missing and it says why — "not on any receipt". the door stays open for anything
                 longer.
               </Note>
@@ -189,7 +189,7 @@ export function ExpenseCreateScreen({ state }: { state: 'locked' | 'open' | 'don
                 exits={EXPENSE_SUBMITTED.exits}
               />
               <Note className="mt-1">
-                <b className="text-text-primary">THE UNRESOLVED ITEM SURVIVES THE STAMP.</b> a run that closes
+                <b className="text-primary">THE UNRESOLVED ITEM SURVIVES THE STAMP.</b> a run that closes
                 while something is still open must say so on the way out, or it quietly becomes a missing $180
                 next month.
               </Note>

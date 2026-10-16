@@ -1,4 +1,7 @@
 import { useMemo, useState } from 'react'
+import { ChatCircle, Export as ExportIcon } from '@phosphor-icons/react'
+import { useReportSelection } from '@/crafts/bezel/selection'
+import { employeeRow, employeesAnswer, employeesSummary } from '@/mocks/bezel-selections'
 import {
   ArrowsCounterClockwise,
   BookmarkSimple,
@@ -174,10 +177,10 @@ export const DEFAULT_DISPLAY: DisplayConfig = {
 }
 
 const statusDot: Record<EmployeeStatus, string> = {
-  active: 'bg-background-success-base',
-  invited: 'bg-background-info-base',
-  onboarding: 'bg-background-warning-base',
-  offboarded: 'bg-background-emphasis',
+  active: 'bg-success',
+  invited: 'bg-info',
+  onboarding: 'bg-warning',
+  offboarded: 'bg-emphasis',
 }
 
 /* ---------- Page ---------- */
@@ -201,6 +204,44 @@ export function EmployeesPage({
   const [page, setPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [selected, setSelected] = useState<Set<string>>(() => new Set())
+
+  // Inside the Master App, ticked rows become the Bezel's Bulk state.
+  const selectedRows = useMemo(() => employees.filter((e) => selected.has(e.id)), [selected])
+  useReportSelection(
+    selectedRows.length
+      ? {
+          key: `employees:${selectedRows.map((e) => e.id).join(',')}`,
+          noun: 'person',
+          nounPlural: 'people',
+          rows: selectedRows.map(employeeRow),
+          ...employeesSummary(selectedRows),
+          actions: [
+            {
+              label: 'Message',
+              icon: <ChatCircle className="size-3.5" />,
+              onSelect: () => {
+                const n = selectedRows.length
+                setSelected(new Set())
+                return `Messaged ${n} ${n === 1 ? 'person' : 'people'}`
+              },
+            },
+            {
+              label: 'Export',
+              icon: <ExportIcon className="size-3.5" />,
+              onSelect: () => `Exported ${selectedRows.length} rows to CSV`,
+            },
+          ],
+          answer: () => employeesAnswer(selectedRows, employees),
+          clear: () => setSelected(new Set()),
+          remove: (id) =>
+            setSelected((prev) => {
+              const next = new Set(prev)
+              next.delete(id)
+              return next
+            }),
+        }
+      : null,
+  )
   const [savedViews, setSavedViews] = useState<
     Array<{ name: string; conditions: Array<FilterCondition> }>
   >([])
@@ -373,7 +414,7 @@ export function EmployeesPage({
                     >
                       <MagnifyingGlass className="size-4.5" />
                       {search.trim() !== '' && (
-                        <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-brand-primary" />
+                        <span className="absolute top-1.5 right-1.5 size-1.5 rounded-full bg-brand" />
                       )}
                     </ToolbarIconButton>
                     <ToolbarIconButton label="Refresh">
@@ -385,7 +426,7 @@ export function EmployeesPage({
                           render={
                             <UiButton
                               variant="ghost"
-                              className="text-text-muted"
+                              className="text-muted"
                               aria-label={`Views (${savedViews.length})`}
                               title="Views"
                             />
@@ -395,17 +436,17 @@ export function EmployeesPage({
                           <span className="px-1 @max-3xl/toolbar:hidden">
                             Views · {savedViews.length}
                           </span>
-                          <span className="hidden h-4 min-w-4 items-center justify-center rounded-full bg-brand-muted px-1 text-caption-md text-brand-text @max-3xl/toolbar:inline-flex">
+                          <span className="hidden h-4 min-w-4 items-center justify-center rounded-full bg-brand-muted px-1 text-caption-sm font-medium text-brand @max-3xl/toolbar:inline-flex">
                             {savedViews.length}
                           </span>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="start" className="w-80 bg-surface-2">
+                        <DropdownMenuContent align="start" className="w-80 bg-surface-page">
                           {savedViews.map((view, i) => (
                             <DropdownMenuItem
                               key={i}
                               onClick={() => updateConditions(view.conditions)}
                             >
-                              <BookmarkSimple className="text-text-muted" />
+                              <BookmarkSimple className="text-muted" />
                               <span className="min-w-0 flex-1 truncate">{view.name}</span>
                             </DropdownMenuItem>
                           ))}
@@ -457,10 +498,10 @@ export function EmployeesPage({
             />
 
             {/* Table */}
-            <div className="min-w-0 shadow-card rounded-xl overflow-x-auto">
+            <div className="min-w-0 card rounded-xl overflow-x-auto">
               <table className="w-full shadow min-w-[1080px] border-collapse">
-                <thead className="bg-surface-1 sticky top-0 z-10">
-                  <tr className="border-b border-border-base">
+                <thead className="bg-surface-frame sticky top-0 z-10">
+                  <tr className="border-b border-base">
                     <th className="w-14 px-5 py-2.5">
                       <Checkbox
                         size="md"
@@ -497,11 +538,11 @@ export function EmployeesPage({
                     <tr>
                       <td colSpan={shownColumns.length + 2}>
                         <div className="flex h-table-empty flex-col items-center justify-center">
-                          <FunnelSimple className="size-6 text-text-disabled" />
-                          <p className="mt-6 text-label-sm text-text-primary">
+                          <FunnelSimple className="size-6 text-disabled" />
+                          <p className="mt-6 text-label-small text-primary">
                             No employees match these filters
                           </p>
-                          <p className="text-paragraph-xs text-text-muted">
+                          <p className="text-paragraph-xsmall text-muted">
                             Try removing a filter, or clear them all.
                           </p>
                           <Button
@@ -523,14 +564,14 @@ export function EmployeesPage({
 
             {/* Pagination (Figma 9131:12889) */}
             <div className="flex items-center justify-between pt-1">
-              <p className="text-label-sm text-text-muted">
+              <p className="text-label-small text-muted">
                 {sorted.length} {sorted.length === 1 ? 'Record' : 'Records'}
               </p>
               <div className="flex items-center gap-6">
                 <div className="flex items-center gap-4">
-                  <p className="text-label-sm text-text-muted">Rows per page</p>
+                  <p className="text-label-small text-muted">Rows per page</p>
                   <DropdownMenu>
-                    <DropdownMenuTrigger className="flex h-9 items-center gap-2 rounded-full bg-background-base pr-3 pl-4 text-label-sm text-text-muted shadow-pagination">
+                    <DropdownMenuTrigger className="flex h-9 items-center gap-2 rounded-full bg-base pr-3 pl-4 text-label-small text-muted buttons-neutral">
                       {rowsPerPage}
                       <CaretUpDown className="size-4" />
                     </DropdownMenuTrigger>
@@ -550,7 +591,7 @@ export function EmployeesPage({
                   </DropdownMenu>
                 </div>
                 <div className="flex items-center gap-6">
-                  <p className="text-label-sm text-text-muted">
+                  <p className="text-label-small text-muted">
                     Page {safePage} of {pageCount}
                   </p>
                   <div className="flex items-center gap-2">
@@ -612,7 +653,7 @@ function PageButton({
       aria-label={label}
       disabled={disabled}
       onClick={onClick}
-      className="flex size-9 items-center justify-center rounded-full bg-background-base text-text-primary shadow-pagination transition-colors hover:bg-background-highlight disabled:pointer-events-none disabled:opacity-40"
+      className="flex size-9 items-center justify-center rounded-full bg-base text-primary buttons-neutral transition-colors hover:bg-highlight disabled:pointer-events-none disabled:opacity-40"
     >
       {children}
     </button>
@@ -635,7 +676,7 @@ function HeaderCell({
   return (
     <th
       className={cn(
-        'px-5 py-2.5 text-left whitespace-nowrap text-label-sm font-[530] text-text-muted',
+        'px-5 py-2.5 text-left whitespace-nowrap text-label-small font-[530] text-muted',
         column.value === 'compensation' && 'text-right',
       )}
     >
@@ -649,8 +690,8 @@ function HeaderCell({
             )
           }
           className={cn(
-            'inline-flex items-center gap-1 transition-colors hover:text-text-primary',
-            active && 'text-text-primary',
+            'inline-flex items-center gap-1 transition-colors hover:text-primary',
+            active && 'text-primary',
           )}
         >
           {column.label}
@@ -679,9 +720,9 @@ function GroupRows({
   return (
     <>
       {group.title && (
-        <tr className="border-b border-border-highlight bg-surface-1">
+        <tr className="border-b border-base bg-surface-frame">
           <td colSpan={colSpan} className="px-5 py-1.5">
-            <span className="text-caption-md text-text-muted">
+            <span className="text-caption-sm font-medium text-muted">
               {group.title} · {group.rows.length}
             </span>
           </td>
@@ -690,7 +731,8 @@ function GroupRows({
       {group.rows.map((employee) => (
         <tr
           key={employee.id}
-          className="border-b border-border-highlight transition-colors hover:bg-surface-2"
+          data-bezel-row={employee.id}
+          className="border-b border-base transition-colors hover:bg-surface-page"
         >
           <td className="w-14 px-5 py-4">
             <Checkbox
@@ -722,42 +764,42 @@ function BodyCell({
   switch (column) {
     case 'id':
       return (
-        <td className="px-5 py-4 font-mono text-mono-xs text-text-muted">
+        <td className="px-5 py-4 tabular-nums text-paragraph-xsmall text-muted">
           {employee.id}
         </td>
       )
     case 'name':
       return (
         <td className="px-5 py-3">
-          <p className="truncate text-label-sm text-text-primary">
+          <p className="truncate text-label-small text-primary">
             {employee.name}
           </p>
-          <p className="truncate text-paragraph-xs text-text-muted">
+          <p className="truncate text-paragraph-xsmall text-muted">
             {employee.email}
           </p>
         </td>
       )
     case 'jobTitle':
       return (
-        <td className="px-5 py-4 text-paragraph-sm text-text-primary">
+        <td className="px-5 py-4 text-paragraph-small text-primary">
           {employee.jobTitle}
         </td>
       )
     case 'employeeType':
       return (
-        <td className="px-5 py-4 text-paragraph-sm text-text-primary">
+        <td className="px-5 py-4 text-paragraph-small text-primary">
           {employee.employeeType}
         </td>
       )
     case 'workLocation':
       return (
-        <td className="px-5 py-4 text-paragraph-sm text-text-primary">
+        <td className="px-5 py-4 text-paragraph-small text-primary">
           {employee.workLocation}
         </td>
       )
     case 'hireDate':
       return (
-        <td className="px-5 py-4 text-paragraph-sm text-text-muted">
+        <td className="px-5 py-4 text-paragraph-small text-muted">
           {fmtHireDate(employee.hireDate)}
         </td>
       )
@@ -771,7 +813,7 @@ function BodyCell({
       )
     case 'compensation':
       return (
-        <td className="px-5 py-4 text-right font-mono text-mono-xs text-text-primary">
+        <td className="px-5 py-4 text-right tabular-nums text-paragraph-xsmall text-primary">
           {fmtCompensation(employee)}
         </td>
       )
@@ -785,7 +827,7 @@ function RowMenu({ employee }: { employee: Employee }) {
     <DropdownMenu>
       <DropdownMenuTrigger
         render={
-          <IconButton variant="ghost" shade="neutral" size="small" className="text-text-muted" />
+          <IconButton variant="ghost" shade="neutral" size="small" className="text-muted" />
         }
         aria-label={`Actions for ${employee.name}`}
       >

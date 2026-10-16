@@ -71,7 +71,7 @@ function StepperDoc() {
       </DocSection>
 
       <DocSection title="Usage">
-        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-muted marker:text-text-disabled">
+        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-small text-muted marker:text-disabled">
           <li>
             Lives in the left rail of <InlineCode>FormShell</InlineCode> - form flows
             have no AppBar/Sidebar.

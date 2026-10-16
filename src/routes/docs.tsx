@@ -99,8 +99,8 @@ function fileForPath(pathname: string): { key: string; label: string } | undefin
 }
 
 const navLinkClass =
-  'block rounded-lg px-2 py-1.5 text-label-sm text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary'
-const navLinkActiveProps = { className: 'bg-background-highlight text-text-primary' }
+  'block rounded-lg px-2 py-1.5 text-label-small text-muted transition-colors hover:bg-highlight hover:text-primary'
+const navLinkActiveProps = { className: 'bg-highlight text-primary' }
 
 /** Which area owns the current path - checked most-specific first, since
  *  AI patterns' pages physically live under `/docs/components/ai-*` and
@@ -150,7 +150,7 @@ function DocsLayout() {
 
         {area && (
           <div className="mt-5">
-            <p className="px-2 pb-2 text-caption-md text-text-muted">
+            <p className="px-2 pb-2 text-caption-sm font-medium text-muted">
               {area.label}
             </p>
             <div className="flex flex-col gap-0.5">
@@ -198,9 +198,9 @@ function DocsLayout() {
           </div>
           {showCode && source && (
             <aside className="sticky top-20 hidden w-[440px] shrink-0 xl:block">
-              <div className="overflow-hidden rounded-xl border border-border-base bg-surface-1">
-                <div className="flex items-center justify-between border-b border-border-highlight px-3 py-2">
-                  <span className="truncate font-mono text-mono-xs text-text-muted">
+              <div className="overflow-hidden rounded-xl border border-base bg-surface-frame">
+                <div className="flex items-center justify-between border-b border-base px-3 py-2">
+                  <span className="truncate font-mono text-paragraph-xsmall text-muted">
                     {file?.label}
                   </span>
                   <IconButton
@@ -214,7 +214,7 @@ function DocsLayout() {
                     {copied ? <Check className="size-4" /> : <Copy className="size-4" />}
                   </IconButton>
                 </div>
-                <pre className="max-h-[calc(100vh-8rem)] overflow-auto p-4 font-mono text-mono-xs leading-relaxed text-text-primary">
+                <pre className="max-h-[calc(100vh-8rem)] overflow-auto p-4 font-mono text-paragraph-xsmall leading-relaxed text-primary">
                   <code>{source}</code>
                 </pre>
               </div>

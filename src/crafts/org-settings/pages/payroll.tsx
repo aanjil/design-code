@@ -20,25 +20,25 @@ export function PayrollPage() {
 
   return (
     <>
-      <h1 className="mb-8 text-title-h5 text-text-primary">Payroll</h1>
+      <h1 className="mb-8 text-title-h5 text-primary">Payroll</h1>
 
       <Card className="mb-12 flex items-center gap-6 p-6">
         <div className="min-w-0 flex-1">
-          <p className="text-label-lg text-text-primary">Customize your workers' pay</p>
-          <p className="mt-1.5 text-paragraph-sm text-text-muted">
+          <p className="text-label-large text-primary">Customize your workers' pay</p>
+          <p className="mt-1.5 text-paragraph-small text-muted">
             Set up the foundations for your payroll by managing payroll schedules, custom earnings and job codes.
           </p>
         </div>
         <div className="flex shrink-0 gap-2">
           {[CalendarCheck, Coins, Hash].map((Glyph, i) => (
-            <span key={i} className="flex size-10 items-center justify-center rounded-xl bg-background-highlight text-brand-text">
+            <span key={i} className="flex size-10 items-center justify-center rounded-xl bg-highlight text-brand">
               <Glyph className="size-5" />
             </span>
           ))}
         </div>
       </Card>
 
-      <h2 className="mb-6 text-title-h5 text-text-primary">Earnings</h2>
+      <h2 className="mb-6 text-title-h5 text-primary">Earnings</h2>
 
       <SectionTitle
         title="Custom earnings"
@@ -64,8 +64,8 @@ export function PayrollPage() {
       <div className="space-y-3">
         {rows.length === 0 && (
           <Card className="py-8 text-center">
-            <p className="text-label-sm text-text-primary">No {status} custom earnings</p>
-            <p className="text-paragraph-xs text-text-muted">
+            <p className="text-label-small text-primary">No {status} custom earnings</p>
+            <p className="text-paragraph-xsmall text-muted">
               {status === 'active' ? 'Add bonuses, stipends or differentials your team gets paid.' : 'Deactivated earnings show up here.'}
             </p>
           </Card>
@@ -73,10 +73,10 @@ export function PayrollPage() {
         {rows.map((e) => (
           <Card key={e.id} className="flex items-center gap-4 py-3.5">
             <div className="min-w-0 flex-1">
-              <p className="text-label-sm text-text-primary">{e.name}</p>
-              <p className="text-caption text-text-muted">{e.description}</p>
+              <p className="text-label-small text-primary">{e.name}</p>
+              <p className="text-caption-sm text-muted">{e.description}</p>
             </div>
-            <span className="text-paragraph-sm text-text-muted">Include in overtime pay:</span>
+            <span className="text-paragraph-small text-muted">Include in overtime pay:</span>
             <Tag tone={e.overtime ? 'success' : 'neutral'} className="w-10 justify-center">
               {e.overtime ? 'Yes' : 'No'}
             </Tag>
@@ -151,16 +151,16 @@ function EarningModal({
           Earning name
         </FieldLabel>
         <TextInput id="ce-name" autoFocus value={name} placeholder="e.g. Holiday bonus" onChange={(e) => setName(e.target.value)} />
-        <p className="text-caption text-text-muted">Shows on pay stubs exactly as written.</p>
+        <p className="text-caption-sm text-muted">Shows on pay stubs exactly as written.</p>
       </div>
       <div className="space-y-1.5">
         <FieldLabel htmlFor="ce-desc">Description</FieldLabel>
         <TextInput id="ce-desc" value={description} placeholder="Internal note for admins" onChange={(e) => setDescription(e.target.value)} />
       </div>
-      <div className="flex items-start justify-between gap-4 rounded-lg bg-background-highlight px-3 py-2.5">
+      <div className="flex items-start justify-between gap-4 rounded-lg bg-highlight px-3 py-2.5">
         <div>
-          <p className="text-label-sm text-text-primary">Include in overtime pay</p>
-          <p className="text-paragraph-xs text-text-muted">Counts toward the regular rate when overtime is calculated (FLSA).</p>
+          <p className="text-label-small text-primary">Include in overtime pay</p>
+          <p className="text-paragraph-xsmall text-muted">Counts toward the regular rate when overtime is calculated (FLSA).</p>
         </div>
         <Switch isChecked={overtime} onChange={setOvertime} size="small" disableInternalStateManagement />
       </div>

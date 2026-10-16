@@ -52,7 +52,7 @@ function TableRow({ className, ...props }: ComponentProps<'tr'>) {
   return (
     <tr
       className={cn(
-        'border-b transition-colors hover:bg-background-muted/50 has-aria-expanded:bg-background-muted/50 data-[state=selected]:bg-background-muted',
+        'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
         className,
       )}
       {...props}
@@ -102,7 +102,7 @@ export function ContextCards({
 }) {
   return (
     <div className={cn('flex flex-col gap-3', className)}>
-      <p className="text-label-xs text-text-muted">
+      <p className="text-label-xsmall text-muted">
         All chunks · {totalChunks}
       </p>
       <div className="flex flex-col gap-2">
@@ -111,20 +111,20 @@ export function ContextCards({
           return (
             <div
               key={chunk.title}
-              className="rounded-xl bg-background-base p-3 shadow-card"
+              className="rounded-xl bg-base p-3 card"
             >
               <div className="flex items-start justify-between gap-3">
-                <p className="text-label-sm text-text-primary">{chunk.title}</p>
-                <span className="shrink-0 text-caption text-text-muted">
+                <p className="text-label-small text-primary">{chunk.title}</p>
+                <span className="shrink-0 text-caption-sm text-muted">
                   {chunk.chars} chars
                 </span>
               </div>
-              <p className="mt-1 text-paragraph-xs text-text-muted">
+              <p className="mt-1 text-paragraph-xsmall text-muted">
                 {chunk.snippet}
               </p>
-              <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-background-muted px-2 py-0.5">
-                <SourceIcon className="size-3.5 text-text-muted" />
-                <span className="text-caption-md text-text-muted">
+              <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-muted px-2 py-0.5">
+                <SourceIcon className="size-3.5 text-muted" />
+                <span className="text-caption-sm font-medium text-muted">
                   {chunk.sourceLabel}
                 </span>
               </div>
@@ -160,7 +160,7 @@ export function DiffTable({
           {columns.map((column) => (
             <TableHead
               key={column}
-              className="h-8 bg-background-highlight text-label-xs text-text-muted"
+              className="h-8 bg-highlight text-label-xsmall text-muted"
             >
               {column}
             </TableHead>
@@ -177,14 +177,14 @@ export function DiffTable({
                 <TableCell
                   key={column}
                   className={cn(
-                    'px-5 text-paragraph-sm text-text-primary',
-                    isChanged && 'bg-background-success-muted',
+                    'px-5 text-paragraph-small text-primary',
+                    isChanged && 'bg-success-muted',
                   )}
                 >
                   <span className="inline-flex items-center gap-1.5">
                     {row[key]}
                     {isChanged && (
-                      <span className="inline-flex h-4 items-center rounded-full bg-background-success-base px-1.5 text-label-xs text-text-on-color">
+                      <span className="inline-flex h-4 items-center rounded-full bg-success px-1.5 text-label-xsmall text-on-color">
                         Changed
                       </span>
                     )}
@@ -202,11 +202,11 @@ export function DiffTable({
 /* ---------------- Records table ---------------- */
 
 const STRENGTH_DOT: Record<ConnectionStrength, string> = {
-  'very strong': 'bg-background-success-base',
-  strong: 'bg-background-success-base',
-  weak: 'bg-background-warning-base',
-  'very weak': 'bg-background-disabled',
-  'no communication': 'bg-background-disabled',
+  'very strong': 'bg-success',
+  strong: 'bg-success',
+  weak: 'bg-warning',
+  'very weak': 'bg-disabled',
+  'no communication': 'bg-disabled',
 }
 
 export function RecordsTable({
@@ -220,19 +220,19 @@ export function RecordsTable({
     <Table className={className}>
       <TableHeader>
         <TableRow>
-          <TableHead className="h-8 bg-background-highlight text-label-xs text-text-muted">
+          <TableHead className="h-8 bg-highlight text-label-xsmall text-muted">
             Vendor
           </TableHead>
-          <TableHead className="h-8 bg-background-highlight text-label-xs text-text-muted">
+          <TableHead className="h-8 bg-highlight text-label-xsmall text-muted">
             Categories
           </TableHead>
-          <TableHead className="h-8 bg-background-highlight text-label-xs text-text-muted">
+          <TableHead className="h-8 bg-highlight text-label-xsmall text-muted">
             Last interaction
           </TableHead>
-          <TableHead className="h-8 bg-background-highlight text-label-xs text-text-muted">
+          <TableHead className="h-8 bg-highlight text-label-xsmall text-muted">
             Connection
           </TableHead>
-          <TableHead className="h-8 bg-background-highlight text-label-xs text-text-muted">
+          <TableHead className="h-8 bg-highlight text-label-xsmall text-muted">
             Link
           </TableHead>
         </TableRow>
@@ -241,22 +241,22 @@ export function RecordsTable({
         {records.map((record) => (
           <TableRow key={record.name} className="h-[54px]">
             <TableCell className="px-5">
-              <p className="text-label-sm text-text-primary">{record.name}</p>
-              <p className="text-caption text-text-muted">{record.location}</p>
+              <p className="text-label-small text-primary">{record.name}</p>
+              <p className="text-caption-sm text-muted">{record.location}</p>
             </TableCell>
             <TableCell className="px-5">
               <div className="flex flex-wrap gap-1">
                 {record.categories.map((category) => (
                   <span
                     key={category}
-                    className="inline-flex h-5 items-center rounded-full bg-background-muted px-2 text-label-xs text-text-muted"
+                    className="inline-flex h-5 items-center rounded-full bg-muted px-2 text-label-xsmall text-muted"
                   >
                     {category}
                   </span>
                 ))}
               </div>
             </TableCell>
-            <TableCell className="px-5 text-paragraph-sm text-text-muted">
+            <TableCell className="px-5 text-paragraph-small text-muted">
               {record.lastInteraction}
             </TableCell>
             <TableCell className="px-5">
@@ -270,19 +270,19 @@ export function RecordsTable({
                   href={`https://${record.link}`}
                   target="_blank"
                   rel="noreferrer"
-                  className="inline-flex items-center gap-1 text-paragraph-sm text-brand-text hover:underline"
+                  className="inline-flex items-center gap-1 text-paragraph-small text-brand hover:underline"
                 >
                   {record.link}
                   <ArrowSquareOut className="size-3.5 shrink-0" />
                 </a>
               ) : (
-                <span className="text-paragraph-sm text-text-disabled">—</span>
+                <span className="text-paragraph-small text-disabled">—</span>
               )}
             </TableCell>
           </TableRow>
         ))}
         <TableRow className="h-10">
-          <TableCell colSpan={5} className="px-5 text-label-xs text-text-muted">
+          <TableCell colSpan={5} className="px-5 text-label-xsmall text-muted">
             {records.length} vendors
           </TableCell>
         </TableRow>
@@ -294,9 +294,9 @@ export function RecordsTable({
 /* ---------------- Filter table ---------------- */
 
 const FILTER_STATUS_DOT: Record<FilterTableStatus, string> = {
-  'To do': 'bg-background-emphasis',
-  'In Progress': 'bg-background-info-base',
-  Completed: 'bg-background-success-base',
+  'To do': 'bg-emphasis',
+  'In Progress': 'bg-info',
+  Completed: 'bg-success',
 }
 
 export function FilterTable({
@@ -330,16 +330,16 @@ export function FilterTable({
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="h-8 bg-background-highlight text-label-xs text-text-muted">
+            <TableHead className="h-8 bg-highlight text-label-xsmall text-muted">
               Task
             </TableHead>
-            <TableHead className="h-8 bg-background-highlight text-label-xs text-text-muted">
+            <TableHead className="h-8 bg-highlight text-label-xsmall text-muted">
               Owner
             </TableHead>
-            <TableHead className="h-8 bg-background-highlight text-label-xs text-text-muted">
+            <TableHead className="h-8 bg-highlight text-label-xsmall text-muted">
               Date
             </TableHead>
-            <TableHead className="h-8 bg-background-highlight text-label-xs text-text-muted">
+            <TableHead className="h-8 bg-highlight text-label-xsmall text-muted">
               Status
             </TableHead>
           </TableRow>
@@ -347,13 +347,13 @@ export function FilterTable({
         <TableBody>
           {visibleRows.map((row) => (
             <TableRow key={row.task} className="h-[54px]">
-              <TableCell className="px-5 text-paragraph-sm text-text-primary">
+              <TableCell className="px-5 text-paragraph-small text-primary">
                 {row.task}
               </TableCell>
-              <TableCell className="px-5 text-paragraph-sm text-text-muted">
+              <TableCell className="px-5 text-paragraph-small text-muted">
                 {row.owner}
               </TableCell>
-              <TableCell className="px-5 font-mono text-mono-xs text-text-muted">
+              <TableCell className="px-5 tabular-nums text-paragraph-xsmall text-muted">
                 {row.date}
               </TableCell>
               <TableCell className="px-5">
@@ -383,10 +383,10 @@ function FilterChip({
       type="button"
       onClick={onClick}
       className={cn(
-        'inline-flex h-8 items-center rounded-full px-3 text-label-xs transition-colors',
+        'inline-flex h-8 items-center rounded-full px-3 text-label-xsmall transition-colors',
         active
-          ? 'bg-background-highlight text-text-primary'
-          : 'border border-border-base text-text-muted hover:bg-background-highlight hover:text-text-primary',
+          ? 'bg-highlight text-primary'
+          : 'border border-base text-muted hover:bg-highlight hover:text-primary',
       )}
     >
       {children}
@@ -408,11 +408,11 @@ function formatSignedAmount(value: number) {
 
 function InsightMetricRow({ metric }: { metric: InsightMetric }) {
   const positive = metric.changePct >= 0
-  const tone = positive ? 'text-text-success-base' : 'text-text-error-base'
+  const tone = positive ? 'text-success' : 'text-error'
   return (
     <div className="flex items-center justify-between gap-3 py-1.5">
-      <p className="text-paragraph-sm text-text-primary">{metric.label}</p>
-      <p className={cn('font-mono text-mono-sm', tone)}>
+      <p className="text-paragraph-small text-primary">{metric.label}</p>
+      <p className={cn('tabular-nums text-label-small', tone)}>
         {formatSignedPct(metric.changePct)} · {formatSignedAmount(metric.changeAmount)}
       </p>
     </div>
@@ -433,17 +433,17 @@ export function InsightCards({
   className?: string
 }) {
   return (
-    <div className={cn('rounded-xl bg-background-base p-4 shadow-card', className)}>
-      <p className="text-label-xs text-text-muted">Insights · {totalInsights}</p>
-      <p className="mt-1.5 text-paragraph-sm text-text-primary">{headline}</p>
-      <div className="mt-3 flex flex-col divide-y divide-border-highlight">
+    <div className={cn('rounded-xl bg-base p-4 card', className)}>
+      <p className="text-label-xsmall text-muted">Insights · {totalInsights}</p>
+      <p className="mt-1.5 text-paragraph-small text-primary">{headline}</p>
+      <div className="mt-3 flex flex-col divide-y divide-(--border-highlight)">
         {metrics.map((metric) => (
           <InsightMetricRow key={metric.label} metric={metric} />
         ))}
       </div>
       <button
         type="button"
-        className="mt-3 inline-flex h-8 items-center rounded-full bg-background-highlight px-3 text-label-xs text-text-primary transition-colors hover:bg-background-emphasis"
+        className="mt-3 inline-flex h-8 items-center rounded-full bg-highlight px-3 text-label-xsmall text-primary transition-colors hover:bg-emphasis"
       >
         {followUp}
       </button>
@@ -468,11 +468,11 @@ export function CodeBlock({
   }
 
   return (
-    <div className={cn('overflow-hidden rounded-xl bg-surface-2 shadow-card', className)}>
-      <div className="flex items-center justify-between gap-3 border-b border-border-highlight px-3 py-2">
+    <div className={cn('overflow-hidden rounded-xl bg-surface-page card', className)}>
+      <div className="flex items-center justify-between gap-3 border-b border-base px-3 py-2">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-mono-xs text-text-primary">{filename}</span>
-          <span className="rounded-full bg-background-highlight px-2 py-0.5 text-label-xs text-text-muted">
+          <span className="font-mono text-paragraph-xsmall text-primary">{filename}</span>
+          <span className="rounded-full bg-highlight px-2 py-0.5 text-label-xsmall text-muted">
             {language}
           </span>
         </div>
@@ -480,10 +480,10 @@ export function CodeBlock({
           type="button"
           onClick={handleCopy}
           aria-label="Copy code"
-          className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+          className="flex size-6 items-center justify-center rounded-md text-muted transition-colors hover:bg-highlight hover:text-primary"
         >
           {copied ? (
-            <Check className="size-3.5 text-text-success-base" />
+            <Check className="size-3.5 text-success" />
           ) : (
             <Copy className="size-3.5" />
           )}
@@ -492,10 +492,10 @@ export function CodeBlock({
       <div className="overflow-x-auto px-3 py-2">
         {lines.map((line, i) => (
           <div key={i} className="flex gap-3">
-            <span className="w-5 shrink-0 select-none text-right font-mono text-mono-xs text-text-disabled">
+            <span className="w-5 shrink-0 select-none text-right font-mono text-paragraph-xsmall text-disabled">
               {i + 1}
             </span>
-            <span className="whitespace-pre font-mono text-mono-xs text-text-primary">
+            <span className="whitespace-pre font-mono text-paragraph-xsmall text-primary">
               {line}
             </span>
           </div>

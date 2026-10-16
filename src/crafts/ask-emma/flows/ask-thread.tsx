@@ -38,7 +38,7 @@ export function AskThreadScreen({ state }: { state: 'q1' | 'q2' }) {
       <div className="flex flex-col gap-3.5">
         <UserBubble>what's our carryover policy for PTO?</UserBubble>
         <EmmaMessage>
-          <p className="mb-2 text-paragraph-sm text-text-muted">
+          <p className="mb-2 text-paragraph-small text-muted">
             Different by entity — here's the one that actually bites.
           </p>
           <Grain
@@ -75,11 +75,11 @@ export function AskThreadScreen({ state }: { state: 'q1' | 'q2' }) {
       <div className="mt-4">
         <PromptBar sources={promptBar.sources} placeholder="Ask a follow-up" />
       </div>
-      <p className="mt-1.5 border-t border-dashed border-border-base pt-1.5 text-center font-mono text-[10px] text-text-disabled">
+      <p className="mt-1.5 border-t border-dashed border-base pt-1.5 text-center font-mono text-[10px] text-disabled">
         ↑ NEWEST AT THE BOTTOM · THE THREAD HAS NO END
       </p>
       <Note className="mt-2.5">
-        <b className="text-text-primary">SAME GRAINS, OPPOSITE DIRECTION.</b> here the user owns what comes next,
+        <b className="text-primary">SAME GRAINS, OPPOSITE DIRECTION.</b> here the user owns what comes next,
         so the composer is anchored at the bottom and the thread stays open. in a run the system owns it, so the
         sequence is visible from the top and it closes. that is the entire difference between the two surfaces.
       </Note>
@@ -89,7 +89,7 @@ export function AskThreadScreen({ state }: { state: 'q1' | 'q2' }) {
 
 function UserBubble({ children }: { children: React.ReactNode }) {
   return (
-    <p className="ml-auto max-w-[74%] rounded-2xl rounded-br-sm bg-brand-muted px-3.5 py-2 text-paragraph-sm text-brand-text">
+    <p className="ml-auto max-w-[74%] rounded-2xl rounded-br-sm bg-brand-muted px-3.5 py-2 text-paragraph-small text-brand">
       {children}
     </p>
   )
@@ -98,7 +98,7 @@ function UserBubble({ children }: { children: React.ReactNode }) {
 function EmmaMessage({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex items-start gap-2.5">
-      <span className="mt-0.5 size-5 shrink-0 rounded-md bg-grain-ink" />
+      <span className="mt-0.5 size-5 shrink-0 rounded-md bg-(--text-base)" />
       <div className="min-w-0 flex-1">{children}</div>
     </div>
   )

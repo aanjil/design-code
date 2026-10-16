@@ -1,5 +1,5 @@
 import { PaymentFlowApp } from './app'
-import { MockDock } from './mock-dock'
+import { MockDock, type MockDockTab } from './mock-dock'
 import { LiveEmployerConfig, StoreProvider, liveStore } from './store'
 import type { Screen } from './types'
 
@@ -37,11 +37,11 @@ export function LiveApp({
 }
 
 /** The mock data dock, floating bottom-center over any Master App page. */
-export function LiveMockDock({ leading }: { leading?: React.ReactNode }) {
+export function LiveMockDock({ leading, extraTabs }: { leading?: React.ReactNode; extraTabs?: Array<MockDockTab> }) {
   return (
     <StoreProvider value={liveStore}>
       <LiveEmployerConfig>
-        <MockDock fixed leading={leading} />
+        <MockDock fixed leading={leading} extraTabs={extraTabs} />
       </LiveEmployerConfig>
     </StoreProvider>
   )

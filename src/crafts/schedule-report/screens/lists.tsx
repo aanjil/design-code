@@ -45,15 +45,15 @@ function scheduleCadenceLabel(s: ScheduleConfig): string {
 
 function TabBar({ tab, onChange }: { tab: 'generated' | 'scheduled'; onChange: (t: 'generated' | 'scheduled') => void }) {
   return (
-    <div className="flex items-center gap-1 border-b border-border-highlight">
+    <div className="flex items-center gap-1 border-b border-base">
       {(['generated', 'scheduled'] as const).map((t) => (
         <button
           key={t}
           type="button"
           onClick={() => onChange(t)}
           className={cn(
-            'px-3 pb-2 text-label-xs transition-colors',
-            tab === t ? 'border-b-2 border-brand-primary text-brand-text' : 'text-text-muted hover:text-text-primary',
+            'px-3 pb-2 text-label-xsmall transition-colors',
+            tab === t ? 'border-b-2 border-brand text-brand' : 'text-muted hover:text-primary',
           )}
         >
           {t === 'generated' ? 'Generated reports' : 'Scheduled reports'}
@@ -96,7 +96,7 @@ function ActionMenu({
           ]
   return (
     <div className="absolute inset-0 z-30" onClick={onClose}>
-      <div className="absolute top-10 right-4 w-44 rounded-xl bg-background-base p-1 shadow-flyout">
+      <div className="absolute top-10 right-4 w-44 rounded-xl bg-base p-1 flyout">
         {items.map((it) => (
           <button
             key={it.label}
@@ -105,9 +105,9 @@ function ActionMenu({
               e.stopPropagation()
               onAction(it.action)
             }}
-            className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-label-xs text-text-primary hover:bg-background-highlight"
+            className="flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-label-xsmall text-primary hover:bg-highlight"
           >
-            <it.icon className="size-4 text-text-muted" />
+            <it.icon className="size-4 text-muted" />
             {it.label}
           </button>
         ))}
@@ -127,16 +127,16 @@ function ScheduleDrawer({
 }) {
   const report = getReport(schedule.reportId)
   return (
-    <div className="absolute inset-0 z-40 flex justify-end bg-overlay-background-base">
-      <div className="flex h-full w-[380px] flex-col gap-4 overflow-y-auto bg-background-base p-5 shadow-flyout">
+    <div className="absolute inset-0 z-40 flex justify-end bg-overlay">
+      <div className="flex h-full w-[380px] flex-col gap-4 overflow-y-auto bg-base p-5 flyout">
         <div className="flex items-start justify-between gap-2">
           <div>
-            <p className="text-label-md text-text-primary">{report.name}</p>
-            <p className="mt-0.5 flex items-center gap-1.5 text-caption-md text-text-muted">
+            <p className="text-label-medium text-primary">{report.name}</p>
+            <p className="mt-0.5 flex items-center gap-1.5 text-caption-sm font-medium text-muted">
               {report.category} · <ScheduleStatusBadge status={schedule.status} />
             </p>
           </div>
-          <button type="button" aria-label="Close" onClick={onClose} className="text-text-muted hover:text-text-primary">
+          <button type="button" aria-label="Close" onClick={onClose} className="text-muted hover:text-primary">
             <XCircle className="size-5" />
           </button>
         </div>
@@ -163,18 +163,18 @@ function ScheduleDrawer({
         </div>
 
         <section className="flex flex-col gap-2">
-          <p className="text-caption-md text-text-muted">Configuration</p>
-          <div className="flex items-baseline justify-between text-paragraph-xs">
-            <span className="text-text-muted">Reporting period</span>
-            <span className="text-text-primary">{scheduleCadenceLabel(schedule)}</span>
+          <p className="text-caption-sm font-medium text-muted">Configuration</p>
+          <div className="flex items-baseline justify-between text-paragraph-xsmall">
+            <span className="text-muted">Reporting period</span>
+            <span className="text-primary">{scheduleCadenceLabel(schedule)}</span>
           </div>
-          <div className="flex items-baseline justify-between text-paragraph-xs">
-            <span className="text-text-muted">Run time</span>
-            <span className="text-text-primary">{schedule.runTime} {schedule.timezone}</span>
+          <div className="flex items-baseline justify-between text-paragraph-xsmall">
+            <span className="text-muted">Run time</span>
+            <span className="text-primary">{schedule.runTime} {schedule.timezone}</span>
           </div>
-          <div className="flex items-baseline justify-between text-paragraph-xs">
-            <span className="text-text-muted">Delivery</span>
-            <span className="text-text-primary">
+          <div className="flex items-baseline justify-between text-paragraph-xsmall">
+            <span className="text-muted">Delivery</span>
+            <span className="text-primary">
               {[schedule.delivery.platform && 'Platform', schedule.delivery.email && 'Email', schedule.delivery.link && 'External link']
                 .filter(Boolean)
                 .join(' + ')}
@@ -190,20 +190,20 @@ function ScheduleDrawer({
         </section>
 
         <section className="flex flex-col gap-2">
-          <p className="text-caption-md text-text-muted">Run history · {schedule.history.length} runs</p>
+          <p className="text-caption-sm font-medium text-muted">Run history · {schedule.history.length} runs</p>
           <div className="flex flex-col gap-1.5">
             {schedule.history.map((r) => (
-              <div key={r.id} className="flex items-center justify-between rounded-lg border border-border-highlight px-2.5 py-2">
-                <div className="text-paragraph-xs">
-                  <p className="text-text-primary">{fmtHuman(r.at.slice(0, 10))}, {r.at.slice(11, 16)}</p>
-                  <p className="text-caption-md text-text-muted">
+              <div key={r.id} className="flex items-center justify-between rounded-lg border border-base px-2.5 py-2">
+                <div className="text-paragraph-xsmall">
+                  <p className="text-primary">{fmtHuman(r.at.slice(0, 10))}, {r.at.slice(11, 16)}</p>
+                  <p className="text-caption-sm font-medium text-muted">
                     {r.platform && 'Platform'}
                     {r.emailCount > 0 && ` - ${r.emailCount} Email`}
                   </p>
                 </div>
                 <div className="flex items-center gap-2">
                   <RunStatusPill status={r.status} emailFailed={r.emailFailed} />
-                  <Download className="size-4 text-text-muted" />
+                  <Download className="size-4 text-muted" />
                 </div>
               </div>
             ))}
@@ -228,7 +228,7 @@ function ScheduledTable({
     return (
       <div className="flex flex-col gap-2">
         {Array.from({ length: 5 }).map((_, i) => (
-          <div key={i} className="h-12 animate-pulse rounded-lg bg-background-highlight" />
+          <div key={i} className="h-12 animate-pulse rounded-lg bg-highlight" />
         ))}
       </div>
     )
@@ -258,9 +258,9 @@ function ScheduledTable({
     )
   }
   return (
-    <table className="w-full text-left text-paragraph-xs">
-      <thead className="text-text-muted">
-        <tr className="border-b border-border-highlight">
+    <table className="w-full text-left text-paragraph-xsmall">
+      <thead className="text-muted">
+        <tr className="border-b border-base">
           {['Report type', 'Schedule', 'When', 'Delivery', 'Status', 'Actions'].map((h) => (
             <th key={h} className="px-3 py-2 font-medium">{h}</th>
           ))}
@@ -270,10 +270,10 @@ function ScheduledTable({
         {schedules.map((s) => {
           const report = getReport(s.reportId)
           return (
-            <tr key={s.id} className="relative border-b border-border-highlight last:border-0 hover:bg-background-highlight">
+            <tr key={s.id} className="relative border-b border-base last:border-0 hover:bg-highlight">
               <td className="px-3 py-2.5">
-                <p className="text-label-xs text-text-primary">{report.name}</p>
-                <p className="text-caption-md text-text-muted">
+                <p className="text-label-xsmall text-primary">{report.name}</p>
+                <p className="text-caption-sm font-medium text-muted">
                   {report.category} · {s.history.length ? `Last run ${fmtHuman(s.history[0].at.slice(0, 10))}, ${s.history.length} runs` : 'No runs yet'}
                 </p>
               </td>
@@ -298,9 +298,9 @@ function ScheduledTable({
                       scheduleId: s.id,
                     })
                   }}
-                  className="flex size-7 items-center justify-center rounded-lg hover:bg-background-base"
+                  className="flex size-7 items-center justify-center rounded-lg hover:bg-base"
                 >
-                  <CaretDown className="size-4 text-text-muted" />
+                  <CaretDown className="size-4 text-muted" />
                 </button>
                 {view.menuFor === s.id && (
                   <ActionMenu
@@ -333,7 +333,7 @@ function GeneratedTable({ rows }: { rows: Array<GeneratedRow> }) {
         .filter((b) => rows.some((r) => r.bucket === b))
         .map((bucket) => (
           <div key={bucket}>
-            <p className="mb-1.5 px-1 text-caption-md text-text-muted">{bucket}</p>
+            <p className="mb-1.5 px-1 text-caption-sm font-medium text-muted">{bucket}</p>
             <div className="flex flex-col gap-1.5">
               {rows
                 .filter((r) => r.bucket === bucket)
@@ -343,20 +343,20 @@ function GeneratedTable({ rows }: { rows: Array<GeneratedRow> }) {
                     <div
                       key={r.id}
                       className={cn(
-                        'flex items-center gap-3 rounded-lg border border-border-highlight px-3 py-2.5',
+                        'flex items-center gap-3 rounded-lg border border-base px-3 py-2.5',
                         (r.status === 'failed' || r.delivery.emailFailed > 0) && 'shadow-[inset_3px_0_0_var(--border-error-base)]',
                       )}
                     >
                       <div className="min-w-0 flex-1">
-                        <p className="flex items-center gap-1.5 text-label-xs text-text-primary">
+                        <p className="flex items-center gap-1.5 text-label-xsmall text-primary">
                           {report.name}
                           {r.scheduleId && (
-                            <span className="rounded bg-brand-muted px-1 text-caption-md text-brand-text">Scheduled</span>
+                            <span className="rounded bg-brand-muted px-1 text-caption-sm font-medium text-brand">Scheduled</span>
                           )}
                         </p>
-                        <p className="text-caption-md text-text-muted">
+                        <p className="text-caption-sm font-medium text-muted">
                           {report.category} · {fmtHuman(r.generatedAt.slice(0, 10))}
-                          {r.delivery.emailFailed > 0 && <span className="text-text-warning-base"> · {r.delivery.emailFailed} email failed</span>}
+                          {r.delivery.emailFailed > 0 && <span className="text-warning"> · {r.delivery.emailFailed} email failed</span>}
                         </p>
                       </div>
                       <DeliveryChips platform={r.delivery.platform} emailCount={r.delivery.emailCount} emailFailed={r.delivery.emailFailed} />
@@ -422,15 +422,15 @@ export function ListsScreen({
         <TabBar tab={view.tab} onChange={(t) => show(t === 'scheduled' ? 'C1' : 'C2', 'default')} />
 
         <div className="flex items-center justify-between gap-3">
-          <div className="flex h-8 w-72 items-center gap-2 rounded-lg border border-input px-2.5 text-paragraph-xs text-text-muted">
+          <div className="flex h-8 w-72 items-center gap-2 rounded-lg border border-input px-2.5 text-paragraph-xsmall text-muted">
             <MagnifyingGlass className="size-4" />
             {view.tab === 'scheduled' ? 'Search schedules' : 'Search'}
           </div>
           <div className="flex items-center gap-2">
             {(view.tab === 'scheduled' ? ['Status', 'When', 'Category'] : ['Status', 'Generated at', 'Category']).map((f) => (
-              <span key={f} className="flex h-8 items-center gap-1 rounded-lg border border-input px-2.5 text-label-xs text-text-primary">
+              <span key={f} className="flex h-8 items-center gap-1 rounded-lg border border-input px-2.5 text-label-xsmall text-primary">
                 {f}
-                <CaretDown className="size-3.5 text-text-muted" />
+                <CaretDown className="size-3.5 text-muted" />
               </span>
             ))}
           </div>
@@ -443,7 +443,7 @@ export function ListsScreen({
         )}
 
         {view.tab === 'scheduled' && !view.loading && !view.error && schedules.length > 0 && (
-          <div className="flex items-center justify-between text-caption-md text-text-muted">
+          <div className="flex items-center justify-between text-caption-sm font-medium text-muted">
             <span>{schedules.length} schedules</span>
           </div>
         )}

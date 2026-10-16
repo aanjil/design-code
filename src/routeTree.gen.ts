@@ -33,6 +33,7 @@ import { Route as CraftsMultiPayrollRouteImport } from './routes/crafts/multi-pa
 import { Route as CraftsEmployeeFiltersRouteImport } from './routes/crafts/employee-filters'
 import { Route as CraftsEmmaMobileRouteImport } from './routes/crafts/emma-mobile'
 import { Route as CraftsEmmaIntakeRouteImport } from './routes/crafts/emma-intake'
+import { Route as CraftsEmmaAvatarRouteImport } from './routes/crafts/emma-avatar'
 import { Route as CraftsEditableInvoiceRouteImport } from './routes/crafts/editable-invoice'
 import { Route as CraftsDynamicTimelineRouteImport } from './routes/crafts/dynamic-timeline'
 import { Route as CraftsDemoAnnotationsRouteImport } from './routes/crafts/demo-annotations'
@@ -176,6 +177,11 @@ const CraftsEmmaIntakeRoute = CraftsEmmaIntakeRouteImport.update({
   path: '/crafts/emma-intake',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CraftsEmmaAvatarRoute = CraftsEmmaAvatarRouteImport.update({
+  id: '/crafts/emma-avatar',
+  path: '/crafts/emma-avatar',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CraftsEditableInvoiceRoute = CraftsEditableInvoiceRouteImport.update({
   id: '/crafts/editable-invoice',
   path: '/crafts/editable-invoice',
@@ -302,6 +308,7 @@ export interface FileRoutesByFullPath {
   '/crafts/demo-annotations': typeof CraftsDemoAnnotationsRoute
   '/crafts/dynamic-timeline': typeof CraftsDynamicTimelineRoute
   '/crafts/editable-invoice': typeof CraftsEditableInvoiceRoute
+  '/crafts/emma-avatar': typeof CraftsEmmaAvatarRoute
   '/crafts/emma-intake': typeof CraftsEmmaIntakeRoute
   '/crafts/emma-mobile': typeof CraftsEmmaMobileRoute
   '/crafts/employee-filters': typeof CraftsEmployeeFiltersRoute
@@ -349,6 +356,7 @@ export interface FileRoutesByTo {
   '/crafts/demo-annotations': typeof CraftsDemoAnnotationsRoute
   '/crafts/dynamic-timeline': typeof CraftsDynamicTimelineRoute
   '/crafts/editable-invoice': typeof CraftsEditableInvoiceRoute
+  '/crafts/emma-avatar': typeof CraftsEmmaAvatarRoute
   '/crafts/emma-intake': typeof CraftsEmmaIntakeRoute
   '/crafts/emma-mobile': typeof CraftsEmmaMobileRoute
   '/crafts/employee-filters': typeof CraftsEmployeeFiltersRoute
@@ -398,6 +406,7 @@ export interface FileRoutesById {
   '/crafts/demo-annotations': typeof CraftsDemoAnnotationsRoute
   '/crafts/dynamic-timeline': typeof CraftsDynamicTimelineRoute
   '/crafts/editable-invoice': typeof CraftsEditableInvoiceRoute
+  '/crafts/emma-avatar': typeof CraftsEmmaAvatarRoute
   '/crafts/emma-intake': typeof CraftsEmmaIntakeRoute
   '/crafts/emma-mobile': typeof CraftsEmmaMobileRoute
   '/crafts/employee-filters': typeof CraftsEmployeeFiltersRoute
@@ -448,6 +457,7 @@ export interface FileRouteTypes {
     | '/crafts/demo-annotations'
     | '/crafts/dynamic-timeline'
     | '/crafts/editable-invoice'
+    | '/crafts/emma-avatar'
     | '/crafts/emma-intake'
     | '/crafts/emma-mobile'
     | '/crafts/employee-filters'
@@ -495,6 +505,7 @@ export interface FileRouteTypes {
     | '/crafts/demo-annotations'
     | '/crafts/dynamic-timeline'
     | '/crafts/editable-invoice'
+    | '/crafts/emma-avatar'
     | '/crafts/emma-intake'
     | '/crafts/emma-mobile'
     | '/crafts/employee-filters'
@@ -543,6 +554,7 @@ export interface FileRouteTypes {
     | '/crafts/demo-annotations'
     | '/crafts/dynamic-timeline'
     | '/crafts/editable-invoice'
+    | '/crafts/emma-avatar'
     | '/crafts/emma-intake'
     | '/crafts/emma-mobile'
     | '/crafts/employee-filters'
@@ -592,6 +604,7 @@ export interface RootRouteChildren {
   CraftsDemoAnnotationsRoute: typeof CraftsDemoAnnotationsRoute
   CraftsDynamicTimelineRoute: typeof CraftsDynamicTimelineRoute
   CraftsEditableInvoiceRoute: typeof CraftsEditableInvoiceRoute
+  CraftsEmmaAvatarRoute: typeof CraftsEmmaAvatarRoute
   CraftsEmmaIntakeRoute: typeof CraftsEmmaIntakeRoute
   CraftsEmmaMobileRoute: typeof CraftsEmmaMobileRoute
   CraftsEmployeeFiltersRoute: typeof CraftsEmployeeFiltersRoute
@@ -772,6 +785,13 @@ declare module '@tanstack/react-router' {
       path: '/crafts/emma-intake'
       fullPath: '/crafts/emma-intake'
       preLoaderRoute: typeof CraftsEmmaIntakeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/crafts/emma-avatar': {
+      id: '/crafts/emma-avatar'
+      path: '/crafts/emma-avatar'
+      fullPath: '/crafts/emma-avatar'
+      preLoaderRoute: typeof CraftsEmmaAvatarRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/crafts/editable-invoice': {
@@ -1004,6 +1024,7 @@ const rootRouteChildren: RootRouteChildren = {
   CraftsDemoAnnotationsRoute: CraftsDemoAnnotationsRoute,
   CraftsDynamicTimelineRoute: CraftsDynamicTimelineRoute,
   CraftsEditableInvoiceRoute: CraftsEditableInvoiceRoute,
+  CraftsEmmaAvatarRoute: CraftsEmmaAvatarRoute,
   CraftsEmmaIntakeRoute: CraftsEmmaIntakeRoute,
   CraftsEmmaMobileRoute: CraftsEmmaMobileRoute,
   CraftsEmployeeFiltersRoute: CraftsEmployeeFiltersRoute,

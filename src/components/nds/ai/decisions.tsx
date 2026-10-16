@@ -22,19 +22,19 @@ import {
 /**
  * Decisions & human-in-the-loop: cards where the agent blocks on a human
  * call instead of acting alone. Siblings of `EmmaCard` (feedback.tsx) -
- * same shadow-ai glow + brand Sparkle header, different bodies.
+ * same elevation-ai glow + brand Sparkle header, different bodies.
  */
 
 export function ApprovalCard({ className }: { className?: string }) {
   const [selected, setSelected] = useState<string | null>(null)
 
   return (
-    <div className={cn('rounded-xl bg-background-base p-4 shadow-ai', className)}>
+    <div className={cn('rounded-xl bg-base p-4 elevation-ai', className)}>
       <div className="flex items-center gap-1.5">
         <Sparkle weight="fill" className="size-4 text-brand-primary" />
-        <p className="text-label-xs text-brand-text">Emma · Needs your call</p>
+        <p className="text-label-xsmall text-brand">Emma · Needs your call</p>
       </div>
-      <p className="mt-1.5 text-paragraph-sm text-text-primary">
+      <p className="mt-1.5 text-paragraph-small text-primary">
         {approvalQuestion.question}
       </p>
       <div className="mt-3 flex flex-col gap-1.5">
@@ -46,10 +46,10 @@ export function ApprovalCard({ className }: { className?: string }) {
               type="button"
               onClick={() => setSelected(option)}
               className={cn(
-                'flex h-9 items-center justify-between rounded-lg px-3 text-left text-label-sm transition-colors',
+                'flex h-9 items-center justify-between rounded-lg px-3 text-left text-label-small transition-colors',
                 isSelected
-                  ? 'bg-brand-base text-brand-text shadow-border-brand'
-                  : 'bg-background-base text-text-primary shadow-button-gray hover:bg-background-highlight',
+                  ? 'bg-brand-base text-brand borders-shadow'
+                  : 'bg-base text-primary borders-base hover:bg-highlight',
                 selected && !isSelected && 'opacity-60',
               )}
             >
@@ -65,7 +65,7 @@ export function ApprovalCard({ className }: { className?: string }) {
         })}
       </div>
       {selected && (
-        <p className="mt-3 text-paragraph-xs text-text-muted">
+        <p className="mt-3 text-paragraph-xsmall text-muted">
           Got it - defaulting new hires to {selected}.
         </p>
       )}
@@ -79,20 +79,20 @@ const CONFIDENCE: Record<
 > = {
   high: {
     label: 'High confidence',
-    wrap: 'bg-background-success-highlight',
-    text: 'text-text-success-base',
+    wrap: 'bg-success-highlight',
+    text: 'text-success',
     icon: CheckCircle,
   },
   'needs-review': {
     label: 'Needs review',
-    wrap: 'bg-background-warning-highlight',
-    text: 'text-text-warning-base',
+    wrap: 'bg-warning-highlight',
+    text: 'text-warning',
     icon: Warning,
   },
   'no-signal': {
     label: 'No signal',
-    wrap: 'bg-background-muted',
-    text: 'text-text-muted',
+    wrap: 'bg-muted',
+    text: 'text-muted',
     icon: MinusCircle,
   },
 }
@@ -109,7 +109,7 @@ function ConfidenceBadge({ level }: { level: ConfidenceLevel }) {
       )}
     >
       <ConfidenceIcon weight="fill" className="size-3.5" />
-      <span className="text-label-xs">{c.label}</span>
+      <span className="text-label-xsmall">{c.label}</span>
     </span>
   )
 }
@@ -119,25 +119,25 @@ export function RecommendationCard({ className }: { className?: string }) {
   const [accepted, setAccepted] = useState(false)
 
   return (
-    <div className={cn('rounded-xl bg-background-base p-4 shadow-ai', className)}>
+    <div className={cn('rounded-xl bg-base p-4 elevation-ai', className)}>
       <div className="flex items-center gap-1.5">
         <Sparkle weight="fill" className="size-4 text-brand-primary" />
-        <p className="text-label-xs text-brand-text">Emma · Recommendation</p>
+        <p className="text-label-xsmall text-brand">Emma · Recommendation</p>
       </div>
       <div className="mt-1.5 flex items-start justify-between gap-3">
-        <p className="text-paragraph-sm text-text-primary">{recommendation.title}</p>
+        <p className="text-paragraph-small text-primary">{recommendation.title}</p>
         <ConfidenceBadge level={recommendation.confidence} />
       </div>
-      <p className="mt-1 text-paragraph-xs text-text-muted">{recommendation.detail}</p>
+      <p className="mt-1 text-paragraph-xsmall text-muted">{recommendation.detail}</p>
 
       {expanded && (
-        <div className="mt-3 flex flex-col gap-1.5 border-t border-border-highlight pt-3">
+        <div className="mt-3 flex flex-col gap-1.5 border-t border-base pt-3">
           {recommendation.alternatives.map((alt) => (
             <div
               key={alt.label}
-              className="flex items-center justify-between gap-3 rounded-lg bg-background-highlight px-3 py-2"
+              className="flex items-center justify-between gap-3 rounded-lg bg-highlight px-3 py-2"
             >
-              <span className="min-w-0 flex-1 truncate text-paragraph-xs text-text-primary">
+              <span className="min-w-0 flex-1 truncate text-paragraph-xsmall text-primary">
                 {alt.label}
               </span>
               <ConfidenceBadge level={alt.confidence} />
@@ -182,24 +182,24 @@ function NumberStepper({
 }) {
   return (
     <div className="flex flex-col gap-1.5">
-      <label className="text-caption text-text-muted">{label}</label>
-      <div className="flex h-8 items-center rounded-lg bg-background-highlight shadow-button-gray">
+      <label className="text-caption-sm text-muted">{label}</label>
+      <div className="flex h-8 items-center rounded-lg bg-highlight borders-base">
         <button
           type="button"
           aria-label={`Decrease ${label}`}
           onClick={() => onChange(Math.max(0, value - step))}
-          className="flex h-full w-7 shrink-0 items-center justify-center text-text-muted hover:text-text-primary"
+          className="flex h-full w-7 shrink-0 items-center justify-center text-muted hover:text-primary"
         >
           <Minus className="size-3.5" />
         </button>
-        <span className="flex-1 text-center font-mono text-mono-xs text-text-primary">
+        <span className="flex-1 text-center tabular-nums text-paragraph-xsmall text-primary">
           {value}
         </span>
         <button
           type="button"
           aria-label={`Increase ${label}`}
           onClick={() => onChange(value + step)}
-          className="flex h-full w-7 shrink-0 items-center justify-center text-text-muted hover:text-text-primary"
+          className="flex h-full w-7 shrink-0 items-center justify-center text-muted hover:text-primary"
         >
           <Plus className="size-3.5" />
         </button>
@@ -216,15 +216,15 @@ export function FineTuneCard({ className }: { className?: string }) {
   const [type, setType] = useState(fineTune.types[0])
 
   return (
-    <div className={cn('rounded-xl bg-background-base p-4 shadow-card', className)}>
+    <div className={cn('rounded-xl bg-base p-4 card', className)}>
       <div className="flex items-center gap-1.5">
-        <Sliders weight="bold" className="size-4 text-text-muted" />
-        <p className="text-label-xs text-text-primary">{fineTune.targetLabel}</p>
+        <Sliders weight="bold" className="size-4 text-muted" />
+        <p className="text-label-xsmall text-primary">{fineTune.targetLabel}</p>
       </div>
 
       <div className="mt-4 flex flex-col gap-3">
         <div>
-          <p className="text-label-xs text-text-muted">Layout</p>
+          <p className="text-label-xsmall text-muted">Layout</p>
           <div className="mt-1.5 grid grid-cols-2 gap-2">
             <NumberStepper label="W" value={width} onChange={setWidth} />
             <NumberStepper label="H" value={height} onChange={setHeight} />
@@ -232,19 +232,19 @@ export function FineTuneCard({ className }: { className?: string }) {
         </div>
 
         <div className="flex items-center justify-between gap-3">
-          <label className="text-label-xs text-text-muted">Radius</label>
+          <label className="text-label-xsmall text-muted">Radius</label>
           <input
             type="number"
             value={radius}
             onChange={(event) => setRadius(Number(event.target.value))}
-            className="h-8 w-20 rounded-lg bg-background-highlight px-2.5 text-right font-mono text-mono-xs text-text-primary shadow-button-gray outline-none focus:shadow-border-focus [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            className="h-8 w-20 rounded-lg bg-highlight px-2.5 text-right tabular-nums text-paragraph-xsmall text-primary borders-base outline-none focus:borders-focus [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
           />
         </div>
 
         <div>
           <div className="flex items-center justify-between gap-3">
-            <label className="text-label-xs text-text-muted">Opacity</label>
-            <span className="font-mono text-mono-xs text-text-primary">{opacity}%</span>
+            <label className="text-label-xsmall text-muted">Opacity</label>
+            <span className="tabular-nums text-paragraph-xsmall text-primary">{opacity}%</span>
           </div>
           <input
             type="range"
@@ -252,12 +252,12 @@ export function FineTuneCard({ className }: { className?: string }) {
             max={100}
             value={opacity}
             onChange={(event) => setOpacity(Number(event.target.value))}
-            className="mt-1.5 w-full accent-brand-primary"
+            className="mt-1.5 w-full accent-brand"
           />
         </div>
 
         <div className="flex items-center justify-between gap-3">
-          <label className="text-label-xs text-text-muted">Type</label>
+          <label className="text-label-xsmall text-muted">Type</label>
           <SelectField
             value={type}
             options={fineTune.types}

@@ -53,26 +53,26 @@ export function CreditScreen({ view }: { view: CreditView }) {
         }
       />
 
-      <div className="mt-3 flex items-start gap-2.5 rounded-lg bg-background-success-highlight p-3">
-        <Info weight="fill" className="mt-px size-4 shrink-0 text-text-success-base" />
-        <p className="text-paragraph-xs text-text-success-base">
+      <div className="mt-3 flex items-start gap-2.5 rounded-lg bg-success-highlight p-3">
+        <Info weight="fill" className="mt-px size-4 shrink-0 text-success" />
+        <p className="text-paragraph-xsmall text-success">
           Credit pays your Niural fee and buys Emma tokens. It can't be withdrawn, transferred, or used for payroll.
           Only Niural can grant it - there is nothing here to top up.
         </p>
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-3">
-        <div className="rounded-2xl bg-background-base p-4 shadow-card">
+        <div className="rounded-2xl bg-base p-4 card">
           <MiniStat label="Applied to your Niural fee" value={usd(appliedToFee)} />
         </div>
-        <div className="rounded-2xl bg-background-base p-4 shadow-card">
+        <div className="rounded-2xl bg-base p-4 card">
           <MiniStat label="Spent on Emma tokens" value={usd(spentOnTokens)} />
         </div>
       </div>
 
       <div className="mt-6">
         <div className="mb-2 flex items-baseline justify-between">
-          <h3 className="text-label-md text-text-primary">Credit history</h3>
+          <h3 className="text-label-medium text-primary">Credit history</h3>
           <Button type="button" size="sm" variant="ghost" shade="neutral">
             Export
           </Button>
@@ -99,11 +99,11 @@ export function CreditScreen({ view }: { view: CreditView }) {
                   <Td muted>{r.date}</Td>
                   <Td>
                     {r.title}
-                    <p className="mt-0.5 text-caption-md text-text-muted">{r.sub}</p>
+                    <p className="mt-0.5 text-caption-sm font-medium text-muted">{r.sub}</p>
                   </Td>
                   <Td muted>{to}</Td>
                   <Td align="right">
-                    <span className={r.amount > 0 ? 'text-text-success-base' : undefined}>
+                    <span className={r.amount > 0 ? 'text-success' : undefined}>
                       {r.amount > 0 ? '+' : '−'}
                       {usd(Math.abs(r.amount))}
                     </span>
@@ -128,7 +128,7 @@ export function CreditScreen({ view }: { view: CreditView }) {
             </tbody>
           )}
         </TableCard>
-        <p className="mt-2.5 text-paragraph-xs text-text-muted">
+        <p className="mt-2.5 text-paragraph-xsmall text-muted">
           Entries are never edited. A correction is posted as its own line, so this history always adds up to the
           balance above.
         </p>

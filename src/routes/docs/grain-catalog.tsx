@@ -132,19 +132,19 @@ function Interactive({ scenario }: { scenario: GrainScenario }) {
 
 function GrainSection({ index, scenario }: { index: number; scenario: GrainScenario }) {
   return (
-    <section className="border-t border-dashed border-border-muted pt-8 first:border-t-0 first:pt-0">
+    <section className="border-t border-dashed border-muted pt-8 first:border-t-0 first:pt-0">
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <span className="font-mono text-mono-xs text-text-disabled">{String(index).padStart(2, '0')}</span>
-        <h2 className="text-title-h5 text-text-primary">{scenario.title}</h2>
-        <span className="rounded-sm bg-brand-muted px-1.5 py-0.5 font-mono text-[9.5px] font-semibold text-brand-text">
+        <span className="tabular-nums text-paragraph-xsmall text-disabled">{String(index).padStart(2, '0')}</span>
+        <h2 className="text-title-h5 text-primary">{scenario.title}</h2>
+        <span className="rounded-sm bg-brand-muted px-1.5 py-0.5 font-mono text-[9.5px] font-semibold text-brand">
           {scenario.domain}
         </span>
-        <span className="font-mono text-[10px] tracking-wide text-text-disabled">{scenario.declaration}</span>
+        <span className="font-mono text-[10px] tracking-wide text-disabled">{scenario.declaration}</span>
       </div>
 
       <div className="mt-4 max-w-[640px]">
         <Interactive scenario={scenario} />
-        <p className="mt-2 font-mono text-[10.5px] text-text-muted">click an exit to resolve it in place</p>
+        <p className="mt-2 font-mono text-[10.5px] text-muted">click an exit to resolve it in place</p>
       </div>
 
       <div className="mt-4 max-w-[760px]">

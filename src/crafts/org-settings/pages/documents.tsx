@@ -37,7 +37,7 @@ export function DocumentsPage() {
 
   return (
     <>
-      <h1 className="mb-6 text-title-h5 text-text-primary">Documents</h1>
+      <h1 className="mb-6 text-title-h5 text-primary">Documents</h1>
       <Tabs variant="line" className="mb-6" tabs={TABS} value={tab} onChange={(v) => setTab(v as DocTab)} />
       {tab === 'others' ? <OthersTab /> : <FiledTab {...FILED[tab]} />}
     </>
@@ -50,7 +50,7 @@ function DocLink({ name }: { name: string }) {
     <button
       type="button"
       onClick={() => toast(`Opened ${name}`)}
-      className="inline-flex items-start gap-2 text-left text-paragraph-sm text-text-info-base underline underline-offset-2 hover:text-brand-text"
+      className="inline-flex items-start gap-2 text-left text-paragraph-small text-info underline underline-offset-2 hover:text-brand"
     >
       <FileText className="mt-0.5 size-4 shrink-0" />
       {name}
@@ -70,7 +70,7 @@ function FiledTab({ title, periodLabel, rows }: { title: string; periodLabel: st
   return (
     <Card>
       <SectionTitle title={title} />
-      <TableCard className="shadow-none ring-1 ring-border-highlight">
+      <TableCard className="shadow-none ring-1 ring-(--border-highlight)">
         <thead>
           <tr>
             <Th width="42%">Document</Th>
@@ -85,7 +85,7 @@ function FiledTab({ title, periodLabel, rows }: { title: string; periodLabel: st
               <Td>
                 <DocLink name={d.name} />
               </Td>
-              <Td className="text-text-muted">{d.period}</Td>
+              <Td className="text-muted">{d.period}</Td>
               <Td>{d.status}</Td>
               <Td align="right">
                 <RowMenu label={d.name} actions={docActions(d.name, toast)} />
@@ -107,7 +107,7 @@ function OthersTab() {
     <div className="space-y-6">
       <Card>
         <SectionTitle title="Tax documents" />
-        <TableCard className="shadow-none ring-1 ring-border-highlight">
+        <TableCard className="shadow-none ring-1 ring-(--border-highlight)">
           <thead>
             <tr>
               <Th width="42%">Document</Th>
@@ -133,7 +133,7 @@ function OthersTab() {
 
       <Card>
         <SectionTitle title="Legal documents" />
-        <TableCard className="shadow-none ring-1 ring-border-highlight">
+        <TableCard className="shadow-none ring-1 ring-(--border-highlight)">
           <thead>
             <tr>
               <Th width="26%">Document</Th>
@@ -164,7 +164,7 @@ function OthersTab() {
             </div>
           }
         />
-        <TableCard className="shadow-none ring-1 ring-border-highlight">
+        <TableCard className="shadow-none ring-1 ring-(--border-highlight)">
           <thead>
             <tr>
               <Th width="42%">Document</Th>
@@ -186,7 +186,7 @@ function OthersTab() {
                   <Td>
                     <DocLink name={s.name} />
                   </Td>
-                  <Td className="text-text-muted">{s.description}</Td>
+                  <Td className="text-muted">{s.description}</Td>
                   <Td align="right">
                     <RowMenu label={s.name} actions={docActions(s.name, toast)} />
                   </Td>

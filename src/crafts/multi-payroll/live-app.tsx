@@ -184,6 +184,10 @@ function deriveLiveView(
     }
   }
 
+  if (screenId === 'F3') {
+    return { kind: 'run', run: { schedules } }
+  }
+
   if (screenId === 'F1' || screenId === 'F2') {
     return {
       kind: 'runs',

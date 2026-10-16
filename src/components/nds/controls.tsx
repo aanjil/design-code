@@ -27,11 +27,11 @@ export function SearchField({
   return (
     <label
       className={cn(
-        'flex h-9 w-[250px] items-center gap-1 rounded-btn bg-background-base px-3 shadow-button-gray focus-within:shadow-border-focus',
+        'flex h-9 w-[250px] items-center gap-1 rounded-control bg-base px-3 borders-base focus-within:borders-focus',
         className,
       )}
     >
-      <MagnifyingGlass className="size-4 shrink-0 text-text-muted" />
+      <MagnifyingGlass className="size-4 shrink-0 text-muted" />
       <input
         type="text"
         value={value}
@@ -39,9 +39,9 @@ export function SearchField({
         placeholder={placeholder}
         autoFocus={autoFocus}
         onKeyDown={onKeyDown}
-        className="min-w-0 flex-1 bg-transparent px-1 text-paragraph-sm text-text-primary outline-none placeholder:text-text-muted"
+        className="min-w-0 flex-1 bg-transparent px-1 text-paragraph-small text-primary outline-none placeholder:text-muted"
       />
-      {showKbd && <Kbd className="rounded-kbd px-2 py-[3px]">⌘</Kbd>}
+      {showKbd && <Kbd className="rounded-snug px-2 py-[3px]">⌘</Kbd>}
     </label>
   )
 }
@@ -64,7 +64,7 @@ export function ToolbarIconButton({
       title={label}
       onClick={onClick}
       className={cn(
-        'flex size-9 shrink-0 items-center justify-center rounded-btn bg-background-base text-text-primary shadow-button-gray transition-colors hover:bg-background-highlight',
+        'flex size-9 shrink-0 items-center justify-center rounded-control bg-base text-primary borders-base transition-colors hover:bg-highlight',
         className,
       )}
     >
@@ -74,7 +74,7 @@ export function ToolbarIconButton({
 }
 
 export function ToolbarDivider() {
-  return <span className="h-2.5 w-px shrink-0 bg-border-muted" />
+  return <span className="h-2.5 w-px shrink-0 bg-(--border-muted)" />
 }
 
 export function StatusPill({
@@ -89,14 +89,14 @@ export function StatusPill({
   return (
     <span
       className={cn(
-        'inline-flex h-6 items-center gap-0.5 rounded-full bg-background-base px-1 shadow-button-gray',
+        'inline-flex h-6 items-center gap-0.5 rounded-full bg-base px-1 borders-base',
         className,
       )}
     >
       <span className="flex size-4 items-center justify-center">
         <span className={cn('size-1.5 rounded-full', dotClassName)} />
       </span>
-      <span className="px-1 text-label-xs text-text-primary">{children}</span>
+      <span className="px-1 text-label-xsmall text-primary">{children}</span>
     </span>
   )
 }
@@ -115,10 +115,10 @@ export function FieldLabel({
   return (
     <label
       htmlFor={htmlFor}
-      className="flex items-center gap-1 text-label-sm text-text-primary"
+      className="flex items-center gap-1 text-label-small text-primary"
     >
       {children}
-      {required && <span className="text-text-error-base">*</span>}
+      {required && <span className="text-error">*</span>}
     </label>
   )
 }
@@ -131,8 +131,8 @@ export function TextInput({
   return (
     <input
       className={cn(
-        'h-9 w-full rounded-btn bg-background-base px-3 text-paragraph-sm text-text-primary shadow-button-gray transition-shadow outline-none placeholder:text-text-muted focus:shadow-border-focus disabled:bg-background-disabled disabled:text-text-muted',
-        invalid && 'shadow-border-error focus:shadow-border-error',
+        'h-9 w-full rounded-control bg-base px-3 text-paragraph-small text-primary borders-base transition-shadow outline-none placeholder:text-muted focus:borders-focus disabled:bg-disabled disabled:text-muted',
+        invalid && 'borders-error focus:borders-error',
         className,
       )}
       {...props}
@@ -147,7 +147,7 @@ export function TextArea({
   return (
     <textarea
       className={cn(
-        'min-h-20 w-full resize-y rounded-btn bg-background-base px-3 py-2 text-paragraph-sm text-text-primary shadow-button-gray transition-shadow outline-none placeholder:text-text-muted focus:shadow-border-focus',
+        'min-h-20 w-full resize-y rounded-control bg-base px-3 py-2 text-paragraph-small text-primary borders-base transition-shadow outline-none placeholder:text-muted focus:borders-focus',
         className,
       )}
       {...props}

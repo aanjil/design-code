@@ -10,7 +10,7 @@ import { useWorld } from '../store'
 function ProviderMark({ id }: { id: IdentityProvider['id'] }) {
   const letter = { jumpcloud: 'J', okta: 'O', google: 'G' }[id]
   return (
-    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-background-base text-label-md text-text-primary shadow-button-gray">
+    <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-base text-label-medium text-primary borders-base">
       {letter}
     </span>
   )
@@ -24,17 +24,17 @@ export function SecurityPage() {
 
   return (
     <>
-      <h1 className="mb-8 text-title-h5 text-text-primary">Security</h1>
+      <h1 className="mb-8 text-title-h5 text-primary">Security</h1>
 
       <SectionTitle title="Identity providers" subtitle="Configure identity providers that allow users to sign in with Single Sign-On (SSO)." />
 
       {active ? (
-        <div className="mb-3 flex items-center gap-2 rounded-xl border border-border-success-muted bg-background-success-highlight px-3 py-2.5 text-label-sm text-text-success-base">
+        <div className="mb-3 flex items-center gap-2 rounded-xl border border-success-muted bg-success-highlight px-3 py-2.5 text-label-small text-success">
           <CheckCircle weight="fill" className="size-4 shrink-0" />
           SSO is on - users at {active.domain} sign in with {active.name}.
         </div>
       ) : (
-        <div className="mb-3 flex items-center gap-2 rounded-xl border border-border-warning-muted bg-background-warning-highlight px-3 py-2.5 text-label-sm text-text-warning-base">
+        <div className="mb-3 flex items-center gap-2 rounded-xl border border-warning-muted bg-warning-highlight px-3 py-2.5 text-label-small text-warning">
           <Warning weight="fill" className="size-4 shrink-0" />
           Configure an identity provider to enable Single Sign-On.
         </div>
@@ -44,9 +44,9 @@ export function SecurityPage() {
         {idps.map((p) => (
           <Card key={p.id} className="flex items-center gap-3 py-3.5">
             <ProviderMark id={p.id} />
-            <p className="text-label-md text-text-primary">{p.name}</p>
+            <p className="text-label-medium text-primary">{p.name}</p>
             {p.configured ? <Tag tone="success">Configured</Tag> : <Tag>Not configured</Tag>}
-            {p.configured && <span className="text-paragraph-xs text-text-muted">{p.domain}</span>}
+            {p.configured && <span className="text-paragraph-xsmall text-muted">{p.domain}</span>}
             <div className="flex-1" />
             {p.configured ? (
               <Button
@@ -132,7 +132,7 @@ function ConfigureModal({
         <FieldLabel htmlFor="sso-client" required>
           Client ID
         </FieldLabel>
-        <TextInput id="sso-client" value={clientId} placeholder="0oa8f2k1x9…" className="font-mono text-mono-sm" onChange={(e) => setClientId(e.target.value)} />
+        <TextInput id="sso-client" value={clientId} placeholder="0oa8f2k1x9…" className="font-mono text-label-small" onChange={(e) => setClientId(e.target.value)} />
       </div>
       <div className="space-y-1.5">
         <FieldLabel htmlFor="sso-meta" required>
@@ -145,9 +145,9 @@ function ConfigureModal({
           onChange={(e) => setMetadata(e.target.value)}
         />
       </div>
-      <div className="rounded-lg bg-background-highlight px-3 py-2">
-        <p className="text-caption-md text-text-muted">ACS URL to paste into {provider.name}</p>
-        <p className="font-mono text-mono-xs text-text-primary">https://app.niural.com/sso/acs/anjil-crafts</p>
+      <div className="rounded-lg bg-highlight px-3 py-2">
+        <p className="text-caption-sm font-medium text-muted">ACS URL to paste into {provider.name}</p>
+        <p className="font-mono text-paragraph-xsmall text-primary">https://app.niural.com/sso/acs/anjil-crafts</p>
       </div>
     </Modal>
   )

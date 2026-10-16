@@ -43,7 +43,7 @@ export function Chat({
   const [draft, setDraft] = useState('')
 
   return (
-    <div className={cn('flex flex-col rounded-xl bg-background-base shadow-card', className)}>
+    <div className={cn('flex flex-col rounded-xl bg-base card', className)}>
       <div className="px-3 pt-3">
         <Tabs
           variant="segmented"
@@ -54,26 +54,26 @@ export function Chat({
       </div>
 
       <div className="flex flex-col gap-3 p-4">
-        <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-background-muted px-3 py-2 text-paragraph-sm text-text-primary">
+        <p className="ml-auto max-w-[85%] rounded-2xl rounded-br-sm bg-muted px-3 py-2 text-paragraph-small text-primary">
           {prompt}
         </p>
         {messages.map((message, i) => (
           <div key={i} className="flex flex-col gap-1">
-            <span className="inline-flex w-fit items-center gap-1 rounded-full bg-background-highlight px-2 py-0.5 text-label-xs text-text-muted">
+            <span className="inline-flex w-fit items-center gap-1 rounded-full bg-highlight px-2 py-0.5 text-label-xsmall text-muted">
               <Sparkle weight="fill" className="size-3 text-brand-primary" />
               {message.reasoningLabel} · for {message.durationSeconds}s
             </span>
-            <p className="text-paragraph-sm text-text-primary">{message.body}</p>
+            <p className="text-paragraph-small text-primary">{message.body}</p>
           </div>
         ))}
       </div>
 
-      <div className="flex items-center gap-2 border-t border-border-highlight p-3">
+      <div className="flex items-center gap-2 border-t border-base p-3">
         <input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder={placeholder}
-          className="h-9 min-w-0 flex-1 rounded-btn bg-background-base px-3 text-paragraph-sm text-text-primary shadow-button-gray transition-shadow outline-none placeholder:text-text-muted focus:shadow-border-focus"
+          className="h-9 min-w-0 flex-1 rounded-control bg-base px-3 text-paragraph-small text-primary borders-base transition-shadow outline-none placeholder:text-muted focus:borders-focus"
         />
         <IconButton
           type="button"
@@ -104,7 +104,7 @@ export function PromptBar({
   return (
     <div
       className={cn(
-        'flex items-center gap-1 rounded-full bg-background-base p-1.5 shadow-button-gray focus-within:shadow-border-focus',
+        'flex items-center gap-1 rounded-full bg-base p-1.5 borders-base focus-within:borders-focus',
         className,
       )}
     >
@@ -112,7 +112,7 @@ export function PromptBar({
         <DropdownMenuTrigger
           aria-label="Add sources"
           title="Add sources"
-          className="flex size-8 shrink-0 items-center justify-center rounded-full text-text-muted hover:bg-background-highlight hover:text-text-primary"
+          className="flex size-8 shrink-0 items-center justify-center rounded-full text-muted hover:bg-highlight hover:text-primary"
         >
           <Plus className="size-4" />
         </DropdownMenuTrigger>
@@ -133,8 +133,8 @@ export function PromptBar({
                 }
               >
                 <span className="flex flex-col">
-                  <span className="text-label-sm text-text-primary">{source.label}</span>
-                  <span className="text-paragraph-xs text-text-muted">{source.description}</span>
+                  <span className="text-label-small text-primary">{source.label}</span>
+                  <span className="text-paragraph-xsmall text-muted">{source.description}</span>
                 </span>
               </DropdownMenuCheckboxItem>
             ))}
@@ -146,7 +146,7 @@ export function PromptBar({
         value={value}
         onChange={(e) => setValue(e.target.value)}
         placeholder={placeholder}
-        className="h-8 min-w-0 flex-1 bg-transparent px-1 text-paragraph-sm text-text-primary outline-none placeholder:text-text-muted"
+        className="h-8 min-w-0 flex-1 bg-transparent px-1 text-paragraph-small text-primary outline-none placeholder:text-muted"
       />
 
       <div className="flex shrink-0 items-center gap-0.5">
@@ -154,7 +154,7 @@ export function PromptBar({
           type="button"
           aria-label="Attach file"
           title="Attach file"
-          className="flex size-8 items-center justify-center rounded-full text-text-muted hover:bg-background-highlight hover:text-text-primary"
+          className="flex size-8 items-center justify-center rounded-full text-muted hover:bg-highlight hover:text-primary"
         >
           <Paperclip className="size-4" />
         </button>
@@ -162,7 +162,7 @@ export function PromptBar({
           type="button"
           aria-label="Dictate"
           title="Dictate"
-          className="flex size-8 items-center justify-center rounded-full text-text-muted hover:bg-background-highlight hover:text-text-primary"
+          className="flex size-8 items-center justify-center rounded-full text-muted hover:bg-highlight hover:text-primary"
         >
           <Microphone className="size-4" />
         </button>
@@ -200,13 +200,13 @@ export function SelectionActions({
 
   return (
     <div className={cn('flex flex-col gap-3', className)}>
-      <p className="text-paragraph-sm text-text-primary">
-        <mark className="rounded-sm bg-brand-muted px-0.5 text-text-primary">
+      <p className="text-paragraph-small text-primary">
+        <mark className="rounded-sm bg-brand-muted px-0.5 text-primary">
           {highlighted}
         </mark>
         {rest}
       </p>
-      <div className="flex w-fit flex-wrap items-center gap-1 rounded-full bg-background-base p-1 shadow-flyout">
+      <div className="flex w-fit flex-wrap items-center gap-1 rounded-full bg-base p-1 flyout">
         <Sparkle weight="fill" className="ml-1 size-3.5 shrink-0 text-brand-primary" />
         {actions.map((action) => (
           <button
@@ -214,10 +214,10 @@ export function SelectionActions({
             type="button"
             onClick={() => setActiveAction((cur) => (cur === action ? null : action))}
             className={cn(
-              'rounded-full px-2.5 py-1 text-label-xs transition-colors',
+              'rounded-full px-2.5 py-1 text-label-xsmall transition-colors',
               activeAction === action
-                ? 'bg-brand-base text-brand-text'
-                : 'text-text-muted hover:bg-background-highlight hover:text-text-primary',
+                ? 'bg-brand-base text-brand'
+                : 'text-muted hover:bg-highlight hover:text-primary',
             )}
           >
             {action}

@@ -33,9 +33,9 @@ export function UsageScreen({ view }: { view: UsageView }) {
       balances={{ tokens: b.tokens, credit: b.credit, wallet: b.wallet }}
       onNavigate={(key) => show(settingsNavTarget(key) ?? 'A3')}
     >
-      <div className="rounded-2xl bg-background-base p-4.5 shadow-card">
+      <div className="rounded-2xl bg-base p-4.5 card">
         <div className="mb-3.5 flex items-baseline justify-between">
-          <p className="text-label-md text-text-primary">July</p>
+          <p className="text-label-medium text-primary">July</p>
           <Segmented
             value={range}
             onChange={setRange}
@@ -48,28 +48,28 @@ export function UsageScreen({ view }: { view: UsageView }) {
         </div>
         <div className="grid grid-cols-4 gap-4">
           <div>
-            <p className="text-caption-md text-text-muted">Tokens used</p>
-            <p className="mt-1 text-label-md text-text-primary">{num(burned)}</p>
+            <p className="text-caption-sm font-medium text-muted">Tokens used</p>
+            <p className="mt-1 text-label-medium text-primary">{num(burned)}</p>
           </div>
           <div>
-            <p className="text-caption-md text-text-muted">Jobs Emma ran</p>
-            <p className="mt-1 text-label-md text-text-primary">{num(jobs)}</p>
+            <p className="text-caption-sm font-medium text-muted">Jobs Emma ran</p>
+            <p className="mt-1 text-label-medium text-primary">{num(jobs)}</p>
           </div>
           <div>
-            <p className="text-caption-md text-text-muted">Busiest job</p>
-            <p className="mt-1 text-label-md text-text-primary">Payroll</p>
-            <p className="text-caption-md text-text-muted">most tokens per run</p>
+            <p className="text-caption-sm font-medium text-muted">Busiest job</p>
+            <p className="mt-1 text-label-medium text-primary">Payroll</p>
+            <p className="text-caption-sm font-medium text-muted">most tokens per run</p>
           </div>
           <div>
-            <p className="text-caption-md text-text-muted">Cost by hand</p>
-            <p className="mt-1 text-label-md text-text-success-base">~{usd(Math.round(burned * 0.29 * 10) / 10)}</p>
-            <p className="text-caption-md text-text-muted">Estimate, never billed</p>
+            <p className="text-caption-sm font-medium text-muted">Cost by hand</p>
+            <p className="mt-1 text-label-medium text-success">~{usd(Math.round(burned * 0.29 * 10) / 10)}</p>
+            <p className="text-caption-sm font-medium text-muted">Estimate, never billed</p>
           </div>
         </div>
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-1.5">
-        <span className="mr-1 text-caption-md text-text-muted">Show</span>
+        <span className="mr-1 text-caption-sm font-medium text-muted">Show</span>
         {['All jobs', 'Payroll', 'Offer letters', 'Expense review', 'Adjustments'].map((f, i) => (
           <Chip key={f} tone={i === 0 ? 'accent' : 'neutral'}>
             {f}
@@ -103,7 +103,7 @@ export function UsageScreen({ view }: { view: UsageView }) {
                       {r.flag}
                     </Chip>
                   )}
-                  <p className="mt-0.5 text-caption-md text-text-muted">{r.sub}</p>
+                  <p className="mt-0.5 text-caption-sm font-medium text-muted">{r.sub}</p>
                 </Td>
                 <Td muted>{r.unit === 'note' ? 'system' : 'Anjil B.'}</Td>
                 <Td align="right">{r.unit === 'note' ? '—' : `-${num(Math.abs(r.amount))}`}</Td>
@@ -127,7 +127,7 @@ export function UsageScreen({ view }: { view: UsageView }) {
           )}
         </TableCard>
       </div>
-      <p className="mt-2.5 text-paragraph-xs text-text-muted">
+      <p className="mt-2.5 text-paragraph-xsmall text-muted">
         Token cost varies with the size of the job. Payroll for 62 people costs more than payroll for 6. We bill
         actual consumption, never a flat rate per job.
       </p>

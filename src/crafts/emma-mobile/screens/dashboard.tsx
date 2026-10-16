@@ -54,7 +54,7 @@ function DashboardHeader({
           type="button"
           onClick={onMute}
           aria-label={muted ? 'Unmute Emma' : 'Mute Emma'}
-          className="flex size-8 items-center justify-center rounded-full text-text-muted active:bg-background-highlight"
+          className="flex size-8 items-center justify-center rounded-full text-muted active:bg-highlight"
         >
           <SpeakerSimpleSlash weight={muted ? 'fill' : 'regular'} className="size-[18px]" />
         </button>
@@ -62,11 +62,11 @@ function DashboardHeader({
           type="button"
           onClick={onSettings}
           aria-label="Settings"
-          className="flex size-8 items-center justify-center rounded-full text-text-muted active:bg-background-highlight"
+          className="flex size-8 items-center justify-center rounded-full text-muted active:bg-highlight"
         >
           <GearSix className="size-[18px]" />
         </button>
-        <span className="flex size-8 items-center justify-center rounded-full bg-brand-muted text-caption-md text-brand-text">
+        <span className="flex size-8 items-center justify-center rounded-full bg-brand-muted text-caption-sm font-medium text-brand">
           {DEMO_USER_NAME.slice(0, 2).toUpperCase()}
         </span>
       </div>
@@ -84,14 +84,14 @@ function SessionSummary({
   return (
     <div className="rounded-2xl bg-brand-muted p-4">
       <div className="flex items-start justify-between gap-2">
-        <p className="text-label-sm text-brand-text">
+        <p className="text-label-small text-brand">
           Let&apos;s start your day - here&apos;s what happened since you left
         </p>
         <button
           type="button"
           onClick={onDismiss}
           aria-label="Dismiss summary"
-          className="flex size-6 shrink-0 items-center justify-center rounded-full text-brand-text/60"
+          className="flex size-6 shrink-0 items-center justify-center rounded-full text-brand/60"
         >
           <X className="size-3.5" />
         </button>
@@ -99,13 +99,13 @@ function SessionSummary({
       {state === 'has-updates' ? (
         <ul className="mt-2 flex flex-col gap-1">
           {SESSION_SUMMARY_ITEMS.map((item) => (
-            <li key={item} className="text-paragraph-xs text-brand-text/80">
+            <li key={item} className="text-paragraph-xsmall text-brand/80">
               · {item}
             </li>
           ))}
         </ul>
       ) : (
-        <p className="mt-1 text-paragraph-xs text-brand-text/80">Nothing new since you last checked.</p>
+        <p className="mt-1 text-paragraph-xsmall text-brand/80">Nothing new since you last checked.</p>
       )}
     </div>
   )
@@ -118,7 +118,7 @@ function ComposedDashboard({ view }: { view: DashboardView }) {
   const cards = eligibleCards().filter((c) => !view.dismissedCardIds?.includes(c.id))
 
   return (
-    <div className="flex h-full flex-col bg-surface-1">
+    <div className="flex h-full flex-col bg-surface-frame">
       <MobileStatusBar />
       <DashboardHeader muted={muted} onMute={() => setMuted((m) => !m)} onSettings={() => show('D1')} />
 
@@ -145,7 +145,7 @@ function ComposedDashboard({ view }: { view: DashboardView }) {
             details={
               <>
                 <p>{card.details}</p>
-                {view.emmaHealthy && <p className="mt-1 text-brand-text">{card.reason}</p>}
+                {view.emmaHealthy && <p className="mt-1 text-brand">{card.reason}</p>}
               </>
             }
             ctas={[{ label: card.id === 'clock-in' ? 'Clock in' : 'View' }]}
@@ -161,7 +161,7 @@ function ComposedDashboard({ view }: { view: DashboardView }) {
                 key={prompt}
                 type="button"
                 onClick={() => show('B2')}
-                className="shrink-0 rounded-full bg-background-highlight px-3 py-1.5 text-label-xs text-text-primary"
+                className="shrink-0 rounded-full bg-highlight px-3 py-1.5 text-label-xsmall text-primary"
               >
                 {prompt}
               </button>
@@ -189,7 +189,7 @@ function ChatDashboard({ view }: { view: DashboardView }) {
   const messages = view.chatMessages ?? SEEDED_CHAT
 
   return (
-    <div className="flex h-full flex-col bg-surface-1">
+    <div className="flex h-full flex-col bg-surface-frame">
       <MobileStatusBar />
       <MobileAppHeader title="Emma" onBack={() => show('B1', 'default')} />
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-4 py-2">
@@ -216,16 +216,16 @@ const TRADITIONAL_ROWS = [
 function TraditionalDashboard() {
   const { show } = useExplorer()
   return (
-    <div className="flex h-full flex-col bg-surface-1">
+    <div className="flex h-full flex-col bg-surface-frame">
       <MobileStatusBar />
       <div className="flex h-12 shrink-0 items-center justify-between px-4">
-        <p className="text-label-md text-text-primary">Home</p>
+        <p className="text-label-medium text-primary">Home</p>
         <div className="flex items-center gap-2">
           <button
             type="button"
             onClick={() => show('D1')}
             aria-label="Settings"
-            className="flex size-8 items-center justify-center rounded-full text-text-muted active:bg-background-highlight"
+            className="flex size-8 items-center justify-center rounded-full text-muted active:bg-highlight"
           >
             <GearSix className="size-[18px]" />
           </button>
@@ -233,7 +233,7 @@ function TraditionalDashboard() {
             type="button"
             onClick={() => show('B2')}
             aria-label="Ask Emma"
-            className="flex size-8 items-center justify-center rounded-full bg-background-highlight text-brand-text"
+            className="flex size-8 items-center justify-center rounded-full bg-highlight text-brand"
           >
             <Sparkle weight="fill" className="size-4" />
           </button>
@@ -246,12 +246,12 @@ function TraditionalDashboard() {
             return (
               <div
                 key={row.id}
-                className="flex items-center gap-3 rounded-xl bg-background-base p-3.5 shadow-card"
+                className="flex items-center gap-3 rounded-xl bg-base p-3.5 card"
               >
-                <span className="flex size-9 items-center justify-center rounded-full bg-background-highlight">
-                  <RowIcon className="size-[18px] text-text-primary" />
+                <span className="flex size-9 items-center justify-center rounded-full bg-highlight">
+                  <RowIcon className="size-[18px] text-primary" />
                 </span>
-                <span className="text-label-sm text-text-primary">{row.label}</span>
+                <span className="text-label-small text-primary">{row.label}</span>
               </div>
             )
           })}

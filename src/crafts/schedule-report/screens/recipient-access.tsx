@@ -22,9 +22,9 @@ import { useExplorer } from '@/components/playground/explorer'
 
 function Frame({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-full min-h-0 flex-col items-center justify-center bg-surface-2 p-6 text-text-primary">
-      <div className="flex w-full max-w-sm flex-col items-center gap-4 rounded-2xl bg-background-base p-8 text-center shadow-card">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-brand-primary text-text-on-color">
+    <div className="flex h-full min-h-0 flex-col items-center justify-center bg-surface-page p-6 text-primary">
+      <div className="flex w-full max-w-sm flex-col items-center gap-4 rounded-2xl bg-base p-8 text-center card">
+        <div className="flex size-8 items-center justify-center rounded-lg bg-brand text-on-color">
           <ShieldCheck weight="fill" className="size-4" />
         </div>
         {children}
@@ -37,8 +37,8 @@ function EmailEntry({ reportName }: { reportName?: string }) {
   const { show } = useExplorer()
   return (
     <Frame>
-      <p className="text-label-md">Verify your email to view this report</p>
-      <p className="text-paragraph-xs text-text-muted">
+      <p className="text-label-medium">Verify your email to view this report</p>
+      <p className="text-paragraph-xsmall text-muted">
         {reportName ?? 'A report'} is ready. Enter the email address this link was sent to.
       </p>
       <Input type="email" placeholder="you@company.com" inputClassName="text-center" />
@@ -58,9 +58,9 @@ function OtpStep({ view }: { view: RecipientAccessView }) {
   if (locked) {
     return (
       <Frame>
-        <LockKey weight="fill" className="size-6 text-text-error-base" />
-        <p className="text-label-md">Too many attempts</p>
-        <p className="text-paragraph-xs text-text-muted">
+        <LockKey weight="fill" className="size-6 text-error" />
+        <p className="text-label-medium">Too many attempts</p>
+        <p className="text-paragraph-xsmall text-muted">
           This link is temporarily locked for {view.recipientEmail}. Try again in a few minutes, or request a new
           link from the schedule owner.
         </p>
@@ -70,23 +70,23 @@ function OtpStep({ view }: { view: RecipientAccessView }) {
 
   return (
     <Frame>
-      <p className="text-label-md">Enter the code we sent you</p>
-      <p className="text-paragraph-xs text-text-muted">
-        We sent a 6-digit code to <strong className="text-text-primary">{view.recipientEmail}</strong>. It expires in
+      <p className="text-label-medium">Enter the code we sent you</p>
+      <p className="text-paragraph-xsmall text-muted">
+        We sent a 6-digit code to <strong className="text-primary">{view.recipientEmail}</strong>. It expires in
         10 minutes.
       </p>
       <div className="flex gap-2">
         {Array.from({ length: 6 }).map((_, i) => (
           <div
             key={i}
-            className="flex size-9 items-center justify-center rounded-lg border border-input text-label-sm"
+            className="flex size-9 items-center justify-center rounded-lg border border-input text-label-small"
           >
             {wrong && i === 0 ? '9' : ''}
           </div>
         ))}
       </div>
       {wrong && (
-        <p className="flex items-center gap-1 text-caption-md text-text-error-base">
+        <p className="flex items-center gap-1 text-caption-sm font-medium text-error">
           <XCircle className="size-3.5" />
           Incorrect code - {view.attemptsLeft} attempts remaining
         </p>
@@ -94,7 +94,7 @@ function OtpStep({ view }: { view: RecipientAccessView }) {
       <Button type="button" width="full" onClick={() => show('D3', 'default')}>
         Verify
       </Button>
-      <button type="button" disabled className="flex items-center gap-1 text-caption-md text-text-muted">
+      <button type="button" disabled className="flex items-center gap-1 text-caption-sm font-medium text-muted">
         <ClockCountdown className="size-3.5" />
         Resend in {cooldown}s
       </button>
@@ -105,13 +105,13 @@ function OtpStep({ view }: { view: RecipientAccessView }) {
 function DownloadReady({ reportName }: { reportName?: string }) {
   return (
     <Frame>
-      <CheckCircle weight="fill" className="size-6 text-text-success-base" />
-      <p className="text-label-md">Your report is ready</p>
-      <p className="text-paragraph-xs text-text-muted">{reportName ?? 'Report'} · generated Jul 15, 2026 · .xlsx</p>
+      <CheckCircle weight="fill" className="size-6 text-success" />
+      <p className="text-label-medium">Your report is ready</p>
+      <p className="text-paragraph-xsmall text-muted">{reportName ?? 'Report'} · generated Jul 15, 2026 · .xlsx</p>
       <Button type="button" width="full" leftIcon={<Download className="size-4" />}>
         Download report
       </Button>
-      <p className="text-caption-md text-text-muted">This link stays active until it expires 7 days after generation.</p>
+      <p className="text-caption-sm font-medium text-muted">This link stays active until it expires 7 days after generation.</p>
     </Frame>
   )
 }
@@ -120,9 +120,9 @@ function ExpiredOrUnavailable({ view }: { view: RecipientAccessView }) {
   if (view.step === 'expired') {
     return (
       <Frame>
-        <ClockCountdown weight="fill" className="size-6 text-text-muted" />
-        <p className="text-label-md">This link has expired</p>
-        <p className="text-paragraph-xs text-text-muted">
+        <ClockCountdown weight="fill" className="size-6 text-muted" />
+        <p className="text-label-medium">This link has expired</p>
+        <p className="text-paragraph-xsmall text-muted">
           Links expire 7 days after the report is generated. Contact the schedule owner for a new copy.
         </p>
       </Frame>
@@ -131,9 +131,9 @@ function ExpiredOrUnavailable({ view }: { view: RecipientAccessView }) {
   if (view.step === 'unavailable') {
     return (
       <Frame>
-        <FileX weight="fill" className="size-6 text-text-muted" />
-        <p className="text-label-md">This report is no longer available</p>
-        <p className="text-paragraph-xs text-text-muted">
+        <FileX weight="fill" className="size-6 text-muted" />
+        <p className="text-label-medium">This report is no longer available</p>
+        <p className="text-paragraph-xsmall text-muted">
           The link was valid, but the report has since been removed. Contact the schedule owner.
         </p>
       </Frame>
@@ -141,9 +141,9 @@ function ExpiredOrUnavailable({ view }: { view: RecipientAccessView }) {
   }
   return (
     <Frame>
-      <ShieldWarning weight="fill" className="size-6 text-text-muted" />
-      <p className="text-label-md">You don't have access to this report</p>
-      <p className="text-paragraph-xs text-text-muted">
+      <ShieldWarning weight="fill" className="size-6 text-muted" />
+      <p className="text-label-medium">You don't have access to this report</p>
+      <p className="text-paragraph-xsmall text-muted">
         Your access to this schedule has changed. Contact the schedule owner if you believe this is a mistake.
       </p>
     </Frame>

@@ -26,6 +26,16 @@ export interface CraftMeta {
  */
 export const crafts: Array<CraftMeta> = [
   {
+    slug: 'emma-avatar',
+    title: 'Emma avatar',
+    description:
+      "Emma's avatar built from the Emma mark: six honeycomb cells round a sparkle face, in six materials (smooth, crisp, flat, glass, fabric, fluffy). Eight Niural states (idle, listening, thinking, working, speaking, success, attention, sleeping), ten one-shot reactions, page-wide cursor awareness, pointing, and ambient feedback (typing, selection, validation, data-emma hotspots, idle sleep) on a payroll approval screen.",
+    status: 'wip',
+    tags: ['emma', 'ai', 'avatar', 'motion', 'ambient'],
+    to: '/crafts/emma-avatar',
+    added: '2026-10-14',
+  },
+  {
     slug: 'org-settings',
     title: 'Settings - organization',
     description:
@@ -39,9 +49,9 @@ export const crafts: Array<CraftMeta> = [
     slug: 'payment-flow',
     title: 'Payment Flow - local currency wallets',
     description:
-      'Invoices list → Pay → payment screen (invoice summary + payment method accordion) → confirmation → result, with CAD/GBP/EUR wallets from the Local Currency Wallet Funding PRD. Live App + Admin share one store (fund → approve → available). Convert-all FX math, largest-share default wallet, insufficient/pending states, local bank transfer, fund wallet flow, wallet page, and an employer config switcher.',
+      'Invoices list → Pay → payment screen (invoice summary + payment method accordion) → confirmation → result, with CAD/GBP/EUR wallets from the Local Currency Wallet Funding PRD. Live App + Admin share one store (fund → approve → available). Convert-all FX math, matching-wallet default for local invoices, method accordion → switcher → Choose payment method modal, insufficient/pending states, fund wallet flow, wallet page, and an employer config switcher. Experiments (dock): USD credit on Niural fee lines (single + batch split by due date, remove/apply, pay with credit, atomic failure, ledger) and a right-column payment summary breakdown.',
     status: 'wip',
-    tags: ['payments', 'wallet', 'fx', 'explorer', 'states', 'prd'],
+    tags: ['payments', 'wallet', 'fx', 'credits', 'explorer', 'states', 'prd'],
     to: '/crafts/payment-flow',
     added: '2026-10-13',
   },

@@ -15,7 +15,7 @@ export interface IntakeField {
   value: string
   status: FieldStatus
   note?: string
-  /** font-mono per DESIGN.md - money, IDs, dates, percentages. */
+  /** tabular-nums per DESIGN.md - money, IDs, dates, percentages. */
   mono?: boolean
   /** Links this field to a DocBlock - clicking it scrolls + highlights the doc. */
   blockId?: string

@@ -12,18 +12,18 @@ export function OverviewPage() {
 
   return (
     <>
-      <h1 className="mb-8 text-title-h5 text-text-primary">Organization</h1>
+      <h1 className="mb-8 text-title-h5 text-primary">Organization</h1>
 
       <div className="flex items-center gap-3">
-        <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-grain-ink text-grain-ink-foreground shadow-card">
+        <span className="flex size-12 shrink-0 items-center justify-center rounded-xl bg-(--text-base) text-(--background-base) card">
           <Code weight="bold" className="size-6" />
         </span>
         <div className="min-w-0">
           <div className="flex items-center gap-1.5">
-            <p className="text-title-h4 text-text-primary">{ORG.name}</p>
-            {ORG.verified && <SealCheck weight="fill" aria-label="Verified" className="size-5 text-text-success-base" />}
+            <p className="text-title-h4 text-primary">{ORG.name}</p>
+            {ORG.verified && <SealCheck weight="fill" aria-label="Verified" className="size-5 text-success" />}
           </div>
-          <p className="mt-1.5 text-paragraph-sm text-text-muted">
+          <p className="mt-1.5 text-paragraph-small text-muted">
             🇺🇸 · {ORG.city}, {ORG.country}
           </p>
         </div>
@@ -67,7 +67,7 @@ function OverviewTab() {
               {ORG.dateOfRegistration}
             </Field>
             <Field label="Website">
-              <a href={ORG.website} target="_blank" rel="noreferrer" className="text-text-info-base hover:underline">
+              <a href={ORG.website} target="_blank" rel="noreferrer" className="text-info hover:underline">
                 {ORG.website}
               </a>
             </Field>
@@ -79,7 +79,7 @@ function OverviewTab() {
                 <button
                   type="button"
                   onClick={() => setEditing(true)}
-                  className="inline-flex items-center gap-1 text-label-sm text-text-info-base hover:underline"
+                  className="inline-flex items-center gap-1 text-label-small text-info hover:underline"
                 >
                   <PencilSimple className="size-4" />
                   Edit
@@ -95,8 +95,8 @@ function OverviewTab() {
         <Card className="flex items-center gap-3">
           <Avatar name={ORG.admin.name} size="lg" />
           <div>
-            <p className="text-label-md text-text-primary">{ORG.admin.name}</p>
-            <p className="text-paragraph-xs text-text-muted">{ORG.admin.email}</p>
+            <p className="text-label-medium text-primary">{ORG.admin.name}</p>
+            <p className="text-paragraph-xsmall text-muted">{ORG.admin.email}</p>
           </div>
         </Card>
       </section>
@@ -105,9 +105,9 @@ function OverviewTab() {
         <SectionTitle title="Company address" />
         <Card className="py-1">
           {COMPANY_ADDRESSES.map((a, i) => (
-            <div key={a.id} className={i > 0 ? 'border-t border-border-highlight py-3' : 'py-3'}>
-              <p className="text-label-sm text-text-primary">{a.line}</p>
-              <p className="text-caption text-text-muted">{a.kind}</p>
+            <div key={a.id} className={i > 0 ? 'border-t border-base py-3' : 'py-3'}>
+              <p className="text-label-small text-primary">{a.line}</p>
+              <p className="text-caption-sm text-muted">{a.kind}</p>
             </div>
           ))}
         </Card>
@@ -166,7 +166,7 @@ function TaxationStatusModal({
         <SelectField value={value} options={TAXATION_STATUSES} onChange={setValue} />
       </div>
       {value !== current && (
-        <p className="rounded-lg border border-border-warning-muted bg-background-warning-highlight px-3 py-2 text-paragraph-xs text-text-warning-base">
+        <p className="rounded-lg border border-warning-muted bg-warning-highlight px-3 py-2 text-paragraph-xsmall text-warning">
           Electing {value} needs Form {value === 'S Corporation' ? '2553' : '8832'} on file. We'll prepare it for signature in
           Documents.
         </p>
@@ -186,17 +186,17 @@ function VerificationTab() {
       />
       <Card className="py-1">
         {VERIFICATION_STEPS.map((s, i) => (
-          <div key={s.id} className={i > 0 ? 'flex items-start gap-3 border-t border-border-highlight py-3' : 'flex items-start gap-3 py-3'}>
+          <div key={s.id} className={i > 0 ? 'flex items-start gap-3 border-t border-base py-3' : 'flex items-start gap-3 py-3'}>
             {s.status === 'verified' ? (
-              <CheckCircle weight="fill" className="mt-0.5 size-5 shrink-0 text-text-success-base" />
+              <CheckCircle weight="fill" className="mt-0.5 size-5 shrink-0 text-success" />
             ) : (
-              <Clock className="mt-0.5 size-5 shrink-0 text-text-warning-base" />
+              <Clock className="mt-0.5 size-5 shrink-0 text-warning" />
             )}
             <div className="min-w-0 flex-1">
-              <p className="text-label-sm text-text-primary">{s.label}</p>
-              <p className="text-paragraph-xs text-text-muted">{s.detail}</p>
+              <p className="text-label-small text-primary">{s.label}</p>
+              <p className="text-paragraph-xsmall text-muted">{s.detail}</p>
             </div>
-            {s.date && <span className="shrink-0 font-mono text-mono-xs text-text-muted">{s.date}</span>}
+            {s.date && <span className="shrink-0 tabular-nums text-paragraph-xsmall text-muted">{s.date}</span>}
           </div>
         ))}
       </Card>

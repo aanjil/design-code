@@ -62,8 +62,8 @@ export function DocPage({
 }) {
   return (
     <article className="pb-16">
-      <h1 className="text-title-h4 text-text-primary">{title}</h1>
-      <p className="mt-2 max-w-[560px] text-paragraph-sm text-text-muted">
+      <h1 className="text-title-h4 text-primary">{title}</h1>
+      <p className="mt-2 max-w-[560px] text-paragraph-small text-muted">
         {description}
       </p>
       <div className="mt-10 flex flex-col gap-12">{children}</div>
@@ -82,9 +82,9 @@ export function DocSection({
 }) {
   return (
     <section>
-      <h2 className="text-title-h5 text-text-primary">{title}</h2>
+      <h2 className="text-title-h5 text-primary">{title}</h2>
       {note && (
-        <p className="mt-1 max-w-[560px] text-paragraph-xs text-text-muted">
+        <p className="mt-1 max-w-[560px] text-paragraph-xsmall text-muted">
           {note}
         </p>
       )}
@@ -96,7 +96,7 @@ export function DocSection({
 export interface SwatchDef {
   /** Token name as written in colors.md, e.g. "background-muted" */
   name: string
-  /** Literal utility class painting the token, e.g. "bg-background-muted" */
+  /** Literal utility class painting the token, e.g. "bg-muted" */
   cls: string
 }
 
@@ -114,12 +114,12 @@ export function Swatch({ name, cls }: SwatchDef) {
     <div className="min-w-0">
       <div
         ref={ref}
-        className={cn('h-14 rounded-lg shadow-button-gray', cls)}
+        className={cn('h-14 rounded-lg borders-base', cls)}
       />
-      <p className="mt-1.5 truncate text-caption-md text-text-primary">
+      <p className="mt-1.5 truncate text-caption-sm font-medium text-primary">
         {name}
       </p>
-      <p className="truncate font-mono text-caption text-text-muted">
+      <p className="truncate font-mono text-caption-sm text-muted">
         {value}
       </p>
     </div>
@@ -147,11 +147,11 @@ export function SpecTable({
     <div className="overflow-x-auto">
       <table className="w-full border-collapse">
         <thead>
-          <tr className="border-b border-border-base">
+          <tr className="border-b border-base">
             {head.map((h) => (
               <th
                 key={h}
-                className="px-3 py-2 text-left text-label-xs text-text-muted first:pl-0"
+                className="px-3 py-2 text-left text-label-xsmall text-muted first:pl-0"
               >
                 {h}
               </th>
@@ -160,11 +160,11 @@ export function SpecTable({
         </thead>
         <tbody>
           {rows.map((cells, i) => (
-            <tr key={i} className="border-b border-border-highlight">
+            <tr key={i} className="border-b border-base">
               {cells.map((c, j) => (
                 <td
                   key={j}
-                  className="px-3 py-2.5 text-paragraph-sm text-text-primary first:pl-0"
+                  className="px-3 py-2.5 text-paragraph-small text-primary first:pl-0"
                 >
                   {c}
                 </td>
@@ -179,7 +179,7 @@ export function SpecTable({
 
 export function InlineCode({ children }: { children: React.ReactNode }) {
   return (
-    <code className="rounded-md bg-background-highlight px-1.5 py-px font-mono text-mono-xs text-text-primary">
+    <code className="rounded-md bg-highlight px-1.5 py-px font-mono text-paragraph-xsmall text-primary">
       {children}
     </code>
   )
@@ -205,7 +205,7 @@ export function Specimen({
       <div
 
         className={cn(
-          'rounded-xl bg-surface-1 p-5 shadow-border-base',
+          'rounded-xl bg-surface-frame p-5 borders-base',
           wide && 'overflow-x-auto',
           className,
         )}
@@ -213,7 +213,7 @@ export function Specimen({
         {children}
       </div>
       {label && (
-        <figcaption className="mt-1.5 text-caption-md text-text-muted">
+        <figcaption className="mt-1.5 text-caption-sm font-medium text-muted">
           {label}
         </figcaption>
       )}
@@ -254,15 +254,15 @@ export function ShowcaseSection({
   children: React.ReactNode
 }) {
   return (
-    <section className="border-t border-dashed border-border-muted pt-8 first:border-t-0 first:pt-0">
+    <section className="border-t border-dashed border-muted pt-8 first:border-t-0 first:pt-0">
       <div className="flex flex-wrap items-baseline gap-x-2 gap-y-1">
-        <span className="font-mono text-mono-xs text-text-disabled">
+        <span className="tabular-nums text-paragraph-xsmall text-disabled">
           {String(index).padStart(2, '0')}
         </span>
-        <h2 className="text-title-h5 text-text-primary">{title}</h2>
-        <span className="text-paragraph-xs text-text-muted">{description}</span>
+        <h2 className="text-title-h5 text-primary">{title}</h2>
+        <span className="text-paragraph-xsmall text-muted">{description}</span>
       </div>
-      <div className="mt-4 overflow-hidden rounded-2xl border border-border-base bg-surface-1">
+      <div className="mt-4 overflow-hidden rounded-2xl border border-base bg-surface-frame">
         <div
           className={cn(
             'min-h-[220px] p-8',
@@ -272,7 +272,7 @@ export function ShowcaseSection({
           {children}
         </div>
         {variants && (
-          <div className="flex justify-center border-t border-border-muted p-3">
+          <div className="flex justify-center border-t border-muted p-3">
             {variants}
           </div>
         )}
@@ -292,17 +292,17 @@ export function VariantPills<T extends string>({
   onChange: (value: T) => void
 }) {
   return (
-    <div className="inline-flex items-center gap-1 rounded-full bg-background-base p-1 shadow-button-gray">
+    <div className="inline-flex items-center gap-1 rounded-full bg-base p-1 borders-base">
       {options.map((opt) => (
         <button
           key={opt}
           type="button"
           onClick={() => onChange(opt)}
           className={cn(
-            'rounded-full px-3 py-1 text-label-xs capitalize transition-colors',
+            'rounded-full px-3 py-1 text-label-xsmall capitalize transition-colors',
             opt === value
-              ? 'bg-background-highlight text-text-primary shadow-button-gray'
-              : 'text-text-muted hover:text-text-primary',
+              ? 'bg-highlight text-primary borders-base'
+              : 'text-muted hover:text-primary',
           )}
         >
           {opt}
@@ -318,11 +318,11 @@ export function PropsTable({ props }: { props: Array<PropDef> }) {
       head={['Prop', 'Type', 'Default', 'Description']}
       rows={props.map((p) => [
         <InlineCode key="n">{p.name}</InlineCode>,
-        <span key="t" className="font-mono text-mono-xs text-text-muted">
+        <span key="t" className="font-mono text-paragraph-xsmall text-muted">
           {p.type}
         </span>,
         p.default ? <InlineCode key="d">{p.default}</InlineCode> : '-',
-        <span key="x" className="text-paragraph-xs">
+        <span key="x" className="text-paragraph-xsmall">
           {p.description}
         </span>,
       ])}

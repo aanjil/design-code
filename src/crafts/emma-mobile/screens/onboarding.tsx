@@ -35,7 +35,7 @@ function OnboardingChat({ view }: { view: OnboardingChatView }) {
   }
 
   return (
-    <div className="flex h-full flex-col bg-surface-1">
+    <div className="flex h-full flex-col bg-surface-frame">
       <MobileStatusBar />
       <MobileAppHeader title="Create your account" />
       <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-4 py-2">
@@ -78,7 +78,7 @@ function OnboardingChat({ view }: { view: OnboardingChatView }) {
 }
 
 function Spinner() {
-  return <div className="size-8 animate-spin rounded-full border-[3px] border-brand-muted border-t-brand-primary" />
+  return <div className="size-8 animate-spin rounded-full border-[3px] border-brand-muted border-t-brand" />
 }
 
 function DocumentCapture({ view }: { view: DocumentCaptureView }) {
@@ -86,7 +86,7 @@ function DocumentCapture({ view }: { view: DocumentCaptureView }) {
   const { stage } = view
 
   return (
-    <div className="flex h-full flex-col bg-surface-1">
+    <div className="flex h-full flex-col bg-surface-frame">
       <MobileStatusBar />
       <MobileAppHeader title="Verify your identity" />
 
@@ -126,30 +126,30 @@ function DocumentCapture({ view }: { view: DocumentCaptureView }) {
       {stage === 'extracting' && (
         <div className="flex h-full flex-col items-center justify-center gap-4 px-8 text-center">
           <Spinner />
-          <p className="text-paragraph-sm text-text-muted">Reading your ID and extracting details...</p>
+          <p className="text-paragraph-small text-muted">Reading your ID and extracting details...</p>
         </div>
       )}
 
       {stage === 'review' && (
         <div className="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto px-4 py-2">
-          <p className="text-label-sm text-text-primary">Confirm what we found</p>
+          <p className="text-label-small text-primary">Confirm what we found</p>
           {EXTRACTED_DOCUMENT_FIELDS.map((field) => (
             <div
               key={field.label}
               className={
                 field.needsConfirmation
-                  ? 'flex items-center justify-between gap-3 rounded-xl bg-background-warning-highlight p-3.5'
-                  : 'flex items-center justify-between gap-3 rounded-xl bg-background-base p-3.5 shadow-card'
+                  ? 'flex items-center justify-between gap-3 rounded-xl bg-warning-highlight p-3.5'
+                  : 'flex items-center justify-between gap-3 rounded-xl bg-base p-3.5 card'
               }
             >
               <div className="min-w-0">
-                <p className="text-caption-md text-text-muted">{field.label}</p>
-                <p className="mt-0.5 text-paragraph-sm text-text-primary">{field.value}</p>
+                <p className="text-caption-sm font-medium text-muted">{field.label}</p>
+                <p className="mt-0.5 text-paragraph-small text-primary">{field.value}</p>
               </div>
               {field.needsConfirmation ? (
-                <WarningCircle weight="fill" className="size-5 shrink-0 text-text-warning-base" />
+                <WarningCircle weight="fill" className="size-5 shrink-0 text-warning" />
               ) : (
-                <CheckCircle weight="fill" className="size-5 shrink-0 text-text-success-base" />
+                <CheckCircle weight="fill" className="size-5 shrink-0 text-success" />
               )}
             </div>
           ))}
@@ -173,37 +173,37 @@ function RegistrationForm({ view }: { view: RegistrationFormView }) {
   const [password, setPassword] = useState('')
 
   return (
-    <div className="flex h-full flex-col bg-surface-1">
+    <div className="flex h-full flex-col bg-surface-frame">
       <MobileStatusBar />
       <MobileAppHeader title="Create your account" />
       <div className="flex min-h-0 flex-1 flex-col gap-3 overflow-y-auto px-6 py-2">
-        <p className="text-paragraph-sm text-text-muted">
+        <p className="text-paragraph-small text-muted">
           Prefer a regular form? Fill in your details below.
         </p>
         <div className="flex flex-col gap-1.5">
-          <label className="text-label-xs text-text-muted">Full legal name</label>
+          <label className="text-label-xsmall text-muted">Full legal name</label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="h-11 rounded-xl bg-background-highlight px-3.5 text-paragraph-sm text-text-primary outline-none"
+            className="h-11 rounded-xl bg-highlight px-3.5 text-paragraph-small text-primary outline-none"
           />
         </div>
         <div className="flex flex-col gap-1.5">
-          <label className="text-label-xs text-text-muted">Email</label>
+          <label className="text-label-xsmall text-muted">Email</label>
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="h-11 rounded-xl bg-background-highlight px-3.5 text-paragraph-sm text-text-primary outline-none"
+            className="h-11 rounded-xl bg-highlight px-3.5 text-paragraph-small text-primary outline-none"
           />
         </div>
         {PASSWORD_ENABLED && (
           <div className="flex flex-col gap-1.5">
-            <label className="text-label-xs text-text-muted">Password</label>
+            <label className="text-label-xsmall text-muted">Password</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="h-11 rounded-xl bg-background-highlight px-3.5 text-paragraph-sm text-text-primary outline-none"
+              className="h-11 rounded-xl bg-highlight px-3.5 text-paragraph-small text-primary outline-none"
             />
           </div>
         )}
@@ -217,7 +217,7 @@ function RegistrationForm({ view }: { view: RegistrationFormView }) {
         <Button type="button" size="lg" width="full" className="mt-2 h-12 rounded-xl" onClick={() => show('B1')}>
           Create account
         </Button>
-        <button type="button" onClick={() => show(PASSWORD_ENABLED ? 'A2' : 'A1', PASSWORD_ENABLED ? undefined : 'framing')} className="text-center text-label-xs text-brand-text">
+        <button type="button" onClick={() => show(PASSWORD_ENABLED ? 'A2' : 'A1', PASSWORD_ENABLED ? undefined : 'framing')} className="text-center text-label-xsmall text-brand">
           Already have an account? Log in
         </button>
       </div>

@@ -39,11 +39,11 @@ function Page({ page }: { page: SettingsPage }) {
 function NotDesignedYet({ page }: { page: SettingsPage }) {
   return (
     <>
-      <h1 className="mb-8 text-title-h5 text-text-primary">{PAGE_LABEL[page]}</h1>
-      <div className="flex h-table-empty flex-col items-center justify-center rounded-xl border border-dashed border-border-base text-center">
-        <Wrench className="mb-2 size-6 text-text-muted" />
-        <p className="text-label-sm text-text-primary">Not in this pass</p>
-        <p className="max-w-[320px] text-paragraph-xs text-text-muted">
+      <h1 className="mb-8 text-title-h5 text-primary">{PAGE_LABEL[page]}</h1>
+      <div className="flex h-table-empty flex-col items-center justify-center rounded-xl border border-dashed border-base text-center">
+        <Wrench className="mb-2 size-6 text-muted" />
+        <p className="text-label-small text-primary">Not in this pass</p>
+        <p className="max-w-[320px] text-paragraph-xsmall text-muted">
           {PAGE_LABEL[page]} is in the nav for IA completeness - no reference screen was provided yet.
         </p>
       </div>

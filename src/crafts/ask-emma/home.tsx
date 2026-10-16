@@ -15,10 +15,10 @@ import type { StartCard } from './mocks'
 export function HomeScreen({ empty = false }: { empty?: boolean }) {
   return (
     <EmmaChrome title="Emma" subtitle={WORLD_TODAY_LABEL} chip="LAUNCHER">
-      <h1 className="text-title-h3 text-text-primary">
+      <h1 className="text-title-h3 text-primary">
         {empty ? 'Nothing needs you today' : '3 things need you today'}
       </h1>
-      <p className="mt-1.5 mb-6 max-w-[60ch] text-paragraph-sm text-text-muted">
+      <p className="mt-1.5 mb-6 max-w-[60ch] text-paragraph-small text-muted">
         {empty
           ? 'Payroll, expenses and compliance are all clear. Start a run, or ask Emma something.'
           : 'The launcher opens with a claim, not a text box. An empty prompt at the start of a session is a blank-canvas problem the system could have solved itself.'}
@@ -47,7 +47,7 @@ export function HomeScreen({ empty = false }: { empty?: boolean }) {
       <PromptBar sources={promptBar.sources} placeholder="Ask about people, payroll, benefits or policy" />
 
       <Note className="mt-4">
-        <b className="text-text-primary">THE SPLIT.</b> a run has a known sequence, so it gets a button. a
+        <b className="text-primary">THE SPLIT.</b> a run has a known sequence, so it gets a button. a
         question has an unknown one, so it gets a box. the box is present and small — it is the exception
         path, not the front door.
       </Note>
@@ -59,15 +59,15 @@ function StartCardButton({ card }: { card: StartCard }) {
   return (
     <button
       type="button"
-      className="flex items-start gap-3 rounded-xl border border-border-base bg-background-base p-3.5 text-left transition-colors hover:border-text-muted"
+      className="flex items-start gap-3 rounded-xl border border-base bg-base p-3.5 text-left transition-colors hover:border-(--text-muted)"
     >
-      <span className="mt-1.5 block size-2 shrink-0 rounded-sm bg-grain-ink" />
+      <span className="mt-1.5 block size-2 shrink-0 rounded-sm bg-(--text-base)" />
       <span className="min-w-0 flex-1">
-        <span className="block text-label-sm font-medium text-text-primary">{card.title}</span>
-        <span className="mt-0.5 block text-paragraph-xs text-text-muted">{card.blurb}</span>
+        <span className="block text-label-small font-medium text-primary">{card.title}</span>
+        <span className="mt-0.5 block text-paragraph-xsmall text-muted">{card.blurb}</span>
       </span>
       {card.due && (
-        <span className="shrink-0 rounded-sm bg-background-warning-highlight px-1.5 py-1 font-mono text-[9.5px] tracking-wide text-text-warning-base">
+        <span className="shrink-0 rounded-sm bg-warning-highlight px-1.5 py-1 font-mono text-[9.5px] tracking-wide text-warning">
           {card.due}
         </span>
       )}

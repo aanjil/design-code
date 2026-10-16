@@ -39,14 +39,14 @@ export function FilterValuePanel({
     /* stopPropagation keeps menu typeahead/navigation from stealing keys while typing */
     <div className="flex w-[270px] flex-col" onKeyDown={(e) => e.stopPropagation()}>
       <div className="p-1 pb-0">
-        <label className="flex h-10 items-center gap-3 rounded-xl bg-background-highlight p-2">
-          <MagnifyingGlass className="ml-0.5 size-4 shrink-0 text-text-muted" />
+        <label className="flex h-10 items-center gap-3 rounded-xl bg-highlight p-2">
+          <MagnifyingGlass className="ml-0.5 size-4 shrink-0 text-muted" />
           <input
             autoFocus
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search..."
-            className="min-w-0 flex-1 bg-transparent text-label-sm text-text-primary outline-none placeholder:text-text-muted"
+            className="min-w-0 flex-1 bg-transparent text-label-small text-primary outline-none placeholder:text-muted"
           />
         </label>
       </div>
@@ -59,32 +59,32 @@ export function FilterValuePanel({
               key={option}
               type="button"
               onClick={() => toggle(option)}
-              className="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left transition-colors hover:bg-background-highlight"
+              className="flex h-10 w-full items-center gap-3 rounded-lg px-3 text-left transition-colors hover:bg-highlight"
             >
               <span
                 className={cn(
                   'flex size-3.5 shrink-0 items-center justify-center rounded-[4px] transition-colors',
                   checked
-                    ? 'bg-brand-primary text-text-on-color shadow-button-primary'
-                    : 'bg-background-base shadow-button-gray',
+                    ? 'bg-brand text-on-color buttons-primary'
+                    : 'bg-base borders-base',
                 )}
               >
                 {checked && <Check className="size-3" weight="bold" />}
               </span>
-              <span className="min-w-0 flex-1 truncate text-label-sm text-text-primary">
+              <span className="min-w-0 flex-1 truncate text-label-small text-primary">
                 {option}
               </span>
             </button>
           )
         })}
         {visible.length === 0 && (
-          <p className="p-3 text-paragraph-xs text-text-muted">
+          <p className="p-3 text-paragraph-xsmall text-muted">
             No options match “{query}”.
           </p>
         )}
       </div>
 
-      <div className="flex items-center gap-3 border-t border-border-highlight p-3">
+      <div className="flex items-center gap-3 border-t border-base p-3">
         <Button
           type="button"
           variant="ghost"

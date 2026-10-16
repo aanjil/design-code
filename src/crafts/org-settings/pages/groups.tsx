@@ -91,20 +91,20 @@ export function GroupsPage() {
             />
           ) : (
             paging.visible.map((g) => (
-              <tr key={g.id} className="transition-colors hover:bg-background-highlight">
+              <tr key={g.id} className="transition-colors hover:bg-highlight">
                 <Td>
                   <span className="flex items-center gap-2.5">
                     <span className={cn('flex size-6 shrink-0 items-center justify-center rounded-md', TONE_BG[g.tone])}>
                       <Cube weight="fill" className="size-3.5" />
                     </span>
-                    <span className="text-label-sm">{g.name}</span>
+                    <span className="text-label-small">{g.name}</span>
                   </span>
                 </Td>
                 <Td>
                   <span className="line-clamp-2">{g.description}</span>
                 </Td>
-                <Td className="font-mono text-mono-sm">{g.members}</Td>
-                <Td className="font-mono text-mono-sm">{fmtDate(g.updated)}</Td>
+                <Td className="tabular-nums text-label-small">{g.members}</Td>
+                <Td className="tabular-nums text-label-small">{fmtDate(g.updated)}</Td>
                 <Td align="right">
                   <RowMenu
                     label={g.name}
@@ -203,9 +203,9 @@ function GroupModal({
           min={0}
           value={members}
           onChange={(e) => setMembers(e.target.value)}
-          className="w-32 font-mono text-mono-sm"
+          className="w-32 tabular-nums text-label-small"
         />
-        <p className="text-caption text-text-muted">Mock shortcut - the real flow picks workers from People.</p>
+        <p className="text-caption-sm text-muted">Mock shortcut - the real flow picks workers from People.</p>
       </div>
     </Modal>
   )

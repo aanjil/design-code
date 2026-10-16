@@ -194,7 +194,7 @@ export const BANK_ACCOUNTS: Array<BankAccountSeed> = [
 /* ---------------- invoices ---------------- */
 
 export type InvoiceTab = 'contracts' | 'fees'
-export type InvoiceKind = 'contractor' | 'niural-pay' | 'master' | 'payroll' | 'cm-fee'
+export type InvoiceKind = 'contractor' | 'niural-pay' | 'master' | 'payroll' | 'cm-fee' | 'eor-fee'
 export type InvoiceStatus = 'pending' | 'processing' | 'awaiting-transfer' | 'paid'
 
 export interface InvoiceLine {
@@ -387,6 +387,35 @@ function niuralInvoices(local: EmployerLocal): Array<Invoice> {
       lines: [{ label: 'Niural Pay Invoice', amount: amt(236) }],
       status: 'pending',
     },
+    // EOR fees are billed in the employee's country currency - whatever the
+    // employer's own billing currency is - so a fee batch can mix currencies.
+    {
+      id: 'inv-f08',
+      tab: 'fees',
+      kind: 'eor-fee',
+      dueDate: '2026-10-15',
+      periodDate: '2026-10-31',
+      name: 'EOR fee - United Kingdom',
+      description: 'EOR management - Oct 2026',
+      ccy: 'GBP',
+      lines: [
+        { label: 'EOR management fee (2 employees)', amount: 760 },
+        { label: 'Niural platform fee', amount: 85 },
+      ],
+      status: 'pending',
+    },
+    {
+      id: 'inv-f09',
+      tab: 'fees',
+      kind: 'eor-fee',
+      dueDate: '2026-10-22',
+      periodDate: '2026-10-31',
+      name: 'EOR fee - Germany',
+      description: 'EOR management - Oct 2026',
+      ccy: 'EUR',
+      lines: [{ label: 'EOR management fee (1 employee)', amount: 430 }],
+      status: 'pending',
+    },
   ]
 }
 
@@ -395,7 +424,7 @@ function niuralInvoices(local: EmployerLocal): Array<Invoice> {
 export type Dataset = 'realistic' | 'heavy' | 'overdue' | 'nothing-due' | 'empty'
 
 export const DATASETS: Array<{ id: Dataset; label: string; hint: string }> = [
-  { id: 'realistic', label: 'Realistic', hint: '21 invoices, 9 currencies, a few overdue' },
+  { id: 'realistic', label: 'Realistic', hint: '23 invoices, 9 currencies, a few overdue' },
   { id: 'heavy', label: 'Heavy', hint: '+60 generated contractor invoices' },
   { id: 'overdue', label: 'All overdue', hint: 'Every due date 5 to 90 days ago' },
   { id: 'nothing-due', label: 'On time', hint: 'Every due date in the next 30 days' },

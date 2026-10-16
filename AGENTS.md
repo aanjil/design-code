@@ -24,12 +24,14 @@ Before editing files for a substantial task:
    portals can't target the zoomed canvas. Icons come from `@phosphor-icons/react`,
    passed as ReactNode (fe-pkg slots that take an icon *name* don't work - no
    icon registry is mounted).
-4. Tokens come from niural-fe-pkg, not from this repo. `src/styles.css` loads
-   fe-pkg's stylesheet into an `nds` CSS layer; `src/styles/fe-pkg-tokens.css`
-   maps design-code utility names (`bg-background-base`, `text-label-sm`, ...)
-   onto fe-pkg variables. To change a token, change it in niural-fe-pkg.
-   Never use `text-base` (fe-pkg defines `--text-base` as a color) - use
-   `text-paragraph-md`.
+4. niural-fe-pkg is the ONLY token source. `tailwind.config.ts` loads fe-pkg's
+   Tailwind preset (`@config` in `src/styles.css`), and fe-pkg's stylesheet
+   supplies the CSS variables (in an `nds` CSS layer). Write fe-pkg's own class
+   names: `bg-base`, `text-muted`, `border-muted`, `borders-focus`, `card`,
+   `rounded-control`. Type classes mirror fe-pkg `<Text type>`:
+   `text-label-small`, `text-paragraph-small`, `text-title-h5`. To change a
+   token, change it in niural-fe-pkg. Never use `text-base` (fe-pkg defines
+   `--text-base` as a color) - use `text-paragraph-medium`.
 
 ## niural-fe-pkg link (branch `design-system`)
 
@@ -99,7 +101,7 @@ above) instead of guessing at current TanStack patterns.
 - Components: shadcn/ui on **Base UI** primitives (`@base-ui/react`), style
   `base-nova`, configured in `components.json`. Icons: `@phosphor-icons/react`
   (`iconLibrary: "phosphor"`).
-- Fonts: Inter (UI) + Geist Mono (numeric/data) via Google Fonts import.
+- Fonts: Inter (UI, incl. numbers via `tabular-nums`) + Geist Mono (code only) via Google Fonts import.
 - Build: Vite 8. Package manager: pnpm. TypeScript strict mode.
 - Testing: Vitest + `@testing-library/react` scaffolded, no tests written yet.
 - Dev tools: `@tanstack/react-devtools` + `@tanstack/devtools-vite`

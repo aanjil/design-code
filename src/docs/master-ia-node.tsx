@@ -18,14 +18,14 @@ export function MasterIANode({ data }: { data: MasterIANodeData }) {
   const navigate = useNavigate()
   const handles = (
     <>
-      <Handle type="target" position={Position.Left} className="!bg-border-base" />
-      <Handle type="source" position={Position.Right} className="!bg-border-base" />
+      <Handle type="target" position={Position.Left} className="!bg-(--border-default)" />
+      <Handle type="source" position={Position.Right} className="!bg-(--border-default)" />
     </>
   )
 
   if (data.kind === 'root') {
     return (
-      <div className="flex h-10 items-center gap-1.5 rounded-full bg-brand-primary px-3.5 text-label-sm text-text-on-color shadow-button-primary">
+      <div className="flex h-10 items-center gap-1.5 rounded-full bg-brand px-3.5 text-label-small text-on-color buttons-primary">
         {handles}
         <Rocket className="size-4" />
         Master App
@@ -38,11 +38,11 @@ export function MasterIANode({ data }: { data: MasterIANodeData }) {
       <button
         type="button"
         onClick={() => navigate({ to: '/app/$section', params: { section: data.key } })}
-        className="flex h-12 w-[200px] flex-col items-start justify-center gap-0.5 rounded-xl bg-background-base px-3 text-left shadow-border-base transition-shadow hover:shadow-button-gray"
+        className="flex h-12 w-[200px] flex-col items-start justify-center gap-0.5 rounded-xl bg-base px-3 text-left borders-base transition-shadow hover:borders-base"
       >
         {handles}
-        <span className="text-label-sm text-text-primary">{data.label}</span>
-        <span className="text-caption-md text-text-muted">
+        <span className="text-label-small text-primary">{data.label}</span>
+        <span className="text-caption-sm font-medium text-muted">
           {data.liveCount}/{data.totalCount} craft{data.totalCount === 1 ? '' : 's'} live
         </span>
       </button>
@@ -53,10 +53,10 @@ export function MasterIANode({ data }: { data: MasterIANodeData }) {
     return (
       <div
         className={cn(
-          'flex h-9 w-[170px] items-center rounded-lg border px-2.5 text-label-xs',
+          'flex h-9 w-[170px] items-center rounded-lg border px-2.5 text-label-xsmall',
           data.hasCraft
-            ? 'border-border-base bg-background-base text-text-primary'
-            : 'border-dashed border-border-muted text-text-disabled',
+            ? 'border-base bg-base text-primary'
+            : 'border-dashed border-muted text-disabled',
         )}
       >
         {handles}
@@ -71,16 +71,16 @@ export function MasterIANode({ data }: { data: MasterIANodeData }) {
     <button
       type="button"
       onClick={() => navigate({ to: meta.to })}
-      className="flex h-[68px] w-60 flex-col justify-center gap-1 rounded-xl border border-border-base bg-background-base px-3 text-left shadow-border-base transition-shadow hover:shadow-button-gray"
+      className="flex h-[68px] w-60 flex-col justify-center gap-1 rounded-xl border border-base bg-base px-3 text-left borders-base transition-shadow hover:borders-base"
     >
       {handles}
-      <span className="truncate text-label-xs text-text-primary">{meta.title}</span>
+      <span className="truncate text-label-xsmall text-primary">{meta.title}</span>
       <span className="flex items-center gap-1.5">
         <StatusBadge status={meta.status} />
         <span
           className={cn(
-            'text-caption text-text-muted',
-            ref.status === 'live' && 'text-brand-text',
+            'text-caption-sm text-muted',
+            ref.status === 'live' && 'text-brand',
           )}
         >
           {CRAFT_STATUS_LABEL[ref.status]}

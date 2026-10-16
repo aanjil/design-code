@@ -73,7 +73,7 @@ export function PinMarker({
       {/* dotted element highlight */}
       {isRegion && (
         <div
-          className="pointer-events-none absolute rounded-md border-2 border-dashed border-brand-primary bg-brand-primary/10"
+          className="pointer-events-none absolute rounded-md border-2 border-dashed border-brand bg-brand/10"
           style={{ left: 0, top: 0, width: rw, height: rh }}
         />
       )}
@@ -84,7 +84,7 @@ export function PinMarker({
         onPointerDown={(e) => e.stopPropagation()}
         onClick={onToggle}
         className={cn(
-          'flex size-5 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-brand-primary text-caption-md text-text-on-color shadow-sm ring-2 ring-background-base transition-transform hover:scale-110',
+          'flex size-5 -translate-x-1/2 -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-brand text-caption-sm font-medium text-on-color shadow-sm ring-2 ring-(--background-base) transition-transform hover:scale-110',
           isRegion && 'absolute top-0 left-0',
         )}
       >
@@ -93,7 +93,7 @@ export function PinMarker({
       {/* hover preview (read-only) */}
       {!open && (
         <div
-          className="pointer-events-none absolute hidden w-max max-w-[260px] rounded-lg bg-background-base p-2 text-paragraph-xs whitespace-pre-wrap text-text-primary shadow-flyout group-hover/pin:block"
+          className="pointer-events-none absolute hidden w-max max-w-[260px] rounded-lg bg-base p-2 text-paragraph-xsmall whitespace-pre-wrap text-primary flyout group-hover/pin:block"
           style={{ left: 10, top: isRegion ? (rh ?? 0) + 6 : 10 }}
         >
           {pin.text.trim() || 'Empty note - click the pin to write.'}
@@ -101,7 +101,7 @@ export function PinMarker({
       )}
       {open && (
         <div
-          className="absolute w-[240px] rounded-xl bg-background-base p-2 shadow-flyout"
+          className="absolute w-[240px] rounded-xl bg-base p-2 flyout"
           style={{ left: 8, top: isRegion ? (rh ?? 0) + 8 : 8 }}
           onPointerDown={(e) => e.stopPropagation()}
           onKeyDown={(e) => e.stopPropagation()}
@@ -111,7 +111,7 @@ export function PinMarker({
             value={pin.text}
             onChange={(e) => onChange(e.target.value)}
             placeholder="Design note…"
-            className="min-h-16 w-full resize-none rounded-lg bg-background-highlight p-2 text-paragraph-xs text-text-primary outline-none placeholder:text-text-muted"
+            className="min-h-16 w-full resize-none rounded-lg bg-highlight p-2 text-paragraph-xsmall text-primary outline-none placeholder:text-muted"
           />
           <div className="mt-1.5 flex items-center justify-between">
             <Button variant="ghost" shade="error" size="sm" type="button" onClick={onDelete}>

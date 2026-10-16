@@ -134,7 +134,7 @@ function FiltersDoc() {
       </DocSection>
 
       <DocSection title="Rules">
-        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-muted marker:text-text-disabled">
+        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-small text-muted marker:text-disabled">
           <li>The bar only renders with ≥1 condition - no empty container.</li>
           <li>
             Chip segments never wrap (<InlineCode>whitespace-nowrap</InlineCode>); chips

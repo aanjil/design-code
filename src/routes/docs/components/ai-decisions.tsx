@@ -68,9 +68,9 @@ function AiDecisionsDoc() {
         </div>
       </ShowcaseSection>
 
-      <section className="border-t border-dashed border-border-muted pt-8">
-        <h2 className="text-title-h5 text-text-primary">Rules</h2>
-        <ul className="mt-3 flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-muted marker:text-text-disabled">
+      <section className="border-t border-dashed border-muted pt-8">
+        <h2 className="text-title-h5 text-primary">Rules</h2>
+        <ul className="mt-3 flex list-disc flex-col gap-1.5 pl-5 text-paragraph-small text-muted marker:text-disabled">
           <li>
             The agent proposes and waits - every card resolves through an explicit
             click, never a timeout or an implicit default.

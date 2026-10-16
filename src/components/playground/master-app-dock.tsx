@@ -22,19 +22,19 @@ import {
 export function MasterGoToMenu({ section }: { section: MasterIASection }) {
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex h-8 items-center gap-1.5 rounded-full pr-2 pl-2.5 text-label-xs text-grain-ink-foreground transition-colors hover:bg-elevation-alpha-12 data-popup-open:bg-elevation-alpha-12">
+      <DropdownMenuTrigger className="flex h-8 items-center gap-1.5 rounded-full pr-2 pl-2.5 text-label-xsmall text-(--background-base) transition-colors hover:bg-(--elevation-alpha-12) data-popup-open:bg-(--elevation-alpha-12)">
         <Compass className="size-4" />
         Go to
-        <span className="text-grain-ink-muted">· {section.label}</span>
+        <span className="text-muted">· {section.label}</span>
         <CaretUp className="size-3" />
       </DropdownMenuTrigger>
       <DropdownMenuContent side="top" align="start" sideOffset={10} className="w-72">
         <DropdownMenuGroup>
-          <DropdownMenuLabel className="text-caption-md text-text-muted">Master App sections</DropdownMenuLabel>
+          <DropdownMenuLabel className="text-caption-sm font-medium text-muted">Master App sections</DropdownMenuLabel>
           {MASTER_IA.map((s) => (
             <DropdownMenuItem key={s.key} render={<Link to="/app/$section" params={{ section: s.key }} />}>
-              <span className={s.key === section.key ? 'truncate text-brand-text' : 'truncate'}>{s.label}</span>
-              <span className="ml-auto text-caption text-text-muted">
+              <span className={s.key === section.key ? 'truncate text-brand' : 'truncate'}>{s.label}</span>
+              <span className="ml-auto text-caption-sm text-muted">
                 {s.crafts.some((c) => c.status === 'live') ? 'Live' : '—'}
               </span>
             </DropdownMenuItem>
@@ -44,7 +44,7 @@ export function MasterGoToMenu({ section }: { section: MasterIASection }) {
           <>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuLabel className="text-caption-md text-text-muted">Crafts in {section.label}</DropdownMenuLabel>
+              <DropdownMenuLabel className="text-caption-sm font-medium text-muted">Crafts in {section.label}</DropdownMenuLabel>
               {section.crafts.map((ref) => {
                 const meta = getCraft(ref.slug)
                 return (

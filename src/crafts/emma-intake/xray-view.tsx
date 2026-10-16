@@ -72,7 +72,7 @@ export function XRayView({
       <div className="flex min-h-[380px] flex-col gap-4 overflow-y-auto pr-1">
         <div className="flex items-center gap-1.5">
           <Sparkle weight="fill" className="size-4 text-brand-primary" />
-          <p className="text-label-sm text-brand-text">Emma is reading {filename}</p>
+          <p className="text-label-small text-brand">Emma is reading {filename}</p>
         </div>
         <ol className="flex flex-col gap-4">
           {timeline.map((step, i) => {
@@ -91,20 +91,20 @@ export function XRayView({
                   {done ? (
                     <CheckCircle
                       weight="fill"
-                      className="size-4 shrink-0 text-text-success-base"
+                      className="size-4 shrink-0 text-success"
                     />
                   ) : (
                     <span
                       className={cn(
-                        'size-4 shrink-0 rounded-full border-2 border-brand-primary/30',
-                        active && 'animate-spin border-t-brand-primary',
+                        'size-4 shrink-0 rounded-full border-2 border-brand/30',
+                        active && 'animate-spin border-t-brand',
                       )}
                     />
                   )}
                   <span
                     className={cn(
-                      'text-paragraph-sm',
-                      active ? 'text-text-primary' : 'text-text-muted',
+                      'text-paragraph-small',
+                      active ? 'text-primary' : 'text-muted',
                     )}
                   >
                     {step.text}
@@ -136,7 +136,7 @@ export function XRayView({
         <button
           type="button"
           onClick={handleSkip}
-          className="self-start text-label-xs text-text-muted underline-offset-2 transition-colors hover:text-text-primary hover:underline"
+          className="self-start text-label-xsmall text-muted underline-offset-2 transition-colors hover:text-primary hover:underline"
         >
           Skip ahead
         </button>

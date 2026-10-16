@@ -26,6 +26,8 @@ export interface FundDraft {
 
 export type Modal =
   | null
+  /** Big "Choose payment method" modal - opened from the method switcher. */
+  | { kind: 'methods' }
   | { kind: 'confirm' }
   | { kind: 'success'; result: PayResult }
   | { kind: 'fund'; draft: FundDraft }
@@ -38,9 +40,14 @@ export interface UiState {
   /** Invoices on the payment screen. */
   payIds: Array<string>
   methodId: string | null
-  /** Method list expanded (accordion of groups) vs the compact selected card. */
-  methodsOpen: boolean
+  /** Inline accordion (nothing picked yet): which method group is expanded. */
   openGroup: MethodGroup | null
+  /** Credit Apply/Remove: null = follow the default-on config (off unless PM flips it). */
+  creditOn: boolean | null
+  /** Credit to apply as typed, USD. null = as much as the batch can take. */
+  creditAmount: string | null
+  /** Last Confirm failed atomically (P6) - nothing moved. */
+  payFailed: boolean
   /** Invoice cards collapsed on the payment screen (multi only). */
   collapsed: Array<string>
   /** USD wire: verification step done. */
@@ -55,8 +62,10 @@ export const DEFAULT_UI: UiState = {
   selected: [],
   payIds: [],
   methodId: null,
-  methodsOpen: false,
   openGroup: null,
+  creditOn: null,
+  creditAmount: null,
+  payFailed: false,
   collapsed: [],
   wireVerify: 'idle',
   walletCcy: 'USD',

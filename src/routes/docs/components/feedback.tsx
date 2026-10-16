@@ -19,10 +19,10 @@ function FeedbackDoc() {
       <DocSection title="StatusPill">
         <Specimen>
           <div className="flex flex-wrap items-center gap-3">
-            <StatusPill dotClassName="bg-background-success-base">Active</StatusPill>
-            <StatusPill dotClassName="bg-background-info-base">Invited</StatusPill>
-            <StatusPill dotClassName="bg-background-warning-base">Onboarding</StatusPill>
-            <StatusPill dotClassName="bg-background-emphasis">Offboarded</StatusPill>
+            <StatusPill dotClassName="bg-success">Active</StatusPill>
+            <StatusPill dotClassName="bg-info">Invited</StatusPill>
+            <StatusPill dotClassName="bg-warning">Onboarding</StatusPill>
+            <StatusPill dotClassName="bg-emphasis">Offboarded</StatusPill>
             <Kbd>⌘K</Kbd>
           </div>
         </Specimen>
@@ -67,7 +67,7 @@ function FeedbackDoc() {
         </div>
       </DocSection>
 
-      <DocSection title="EmmaCard" note="AI suggestions: shadow-ai glow, filled Sparkle, brand header.">
+      <DocSection title="EmmaCard" note="AI suggestions: elevation-ai glow, filled Sparkle, brand header.">
         <Specimen>
           <div className="max-w-[560px]">
             <EmmaCard
@@ -100,7 +100,7 @@ function FeedbackDoc() {
       </DocSection>
 
       <DocSection title="Rules">
-        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-muted marker:text-text-disabled">
+        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-small text-muted marker:text-disabled">
           <li>Banners inform inside a flow; blocking decisions get a modal instead.</li>
           <li>Emma always proposes, never applies - every card needs an explicit action.</li>
         </ul>

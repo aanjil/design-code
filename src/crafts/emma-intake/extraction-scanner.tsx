@@ -35,7 +35,7 @@ export function ExtractionScanner({ statusText }: { statusText: string }) {
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <div className="relative min-h-[280px] flex-1 overflow-hidden rounded-2xl bg-surface-1">
+      <div className="relative min-h-[280px] flex-1 overflow-hidden rounded-2xl bg-surface-frame">
         <div className="grid h-full grid-cols-5 gap-3 p-4">
           {Array.from({ length: COLUMNS }, (_, col) => (
             <div key={col} className="relative overflow-hidden">
@@ -57,9 +57,9 @@ export function ExtractionScanner({ statusText }: { statusText: string }) {
 
         <ScanFocus activeCol={activeCol} />
 
-        <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gradient-to-t from-surface-1 via-surface-1/90 to-transparent px-4 pt-6 pb-3">
-          <span className="scan-spinner size-4 shrink-0 rounded-full border-2 border-dashed border-brand-primary/70" />
-          <p className="truncate text-label-sm text-brand-text">{statusText}</p>
+        <div className="absolute inset-x-0 bottom-0 flex items-center gap-2 bg-gradient-to-t from-surface-frame via-surface-frame/90 to-transparent px-4 pt-6 pb-3">
+          <span className="scan-spinner size-4 shrink-0 rounded-full border-2 border-dashed border-brand/70" />
+          <p className="truncate text-label-small text-brand">{statusText}</p>
         </div>
 
         <style>{`
@@ -99,19 +99,19 @@ function ScanFocus({ activeCol }: { activeCol: number }) {
     >
       <div className="relative h-full w-full">
         {/* corner brackets */}
-        <span className="absolute -top-1 -left-1 size-3 rounded-tl-sm border-t-2 border-l-2 border-brand-primary" />
-        <span className="absolute -top-1 -right-1 size-3 rounded-tr-sm border-t-2 border-r-2 border-brand-primary" />
-        <span className="absolute -bottom-1 -left-1 size-3 rounded-bl-sm border-b-2 border-l-2 border-brand-primary" />
-        <span className="absolute -right-1 -bottom-1 size-3 rounded-br-sm border-r-2 border-b-2 border-brand-primary" />
-        <span className="absolute inset-0 rounded-md ring-1 ring-brand-primary/40" />
+        <span className="absolute -top-1 -left-1 size-3 rounded-tl-sm border-t-2 border-l-2 border-brand" />
+        <span className="absolute -top-1 -right-1 size-3 rounded-tr-sm border-t-2 border-r-2 border-brand" />
+        <span className="absolute -bottom-1 -left-1 size-3 rounded-bl-sm border-b-2 border-l-2 border-brand" />
+        <span className="absolute -right-1 -bottom-1 size-3 rounded-br-sm border-r-2 border-b-2 border-brand" />
+        <span className="absolute inset-0 rounded-md ring-1 ring-brand/40" />
 
         {/* light wedge, emitted from the badge toward the next lane */}
         <div
-          className="absolute bottom-2 left-1/2 h-[130px] w-[170px] bg-gradient-to-tr from-brand-primary/35 via-brand-primary/10 to-transparent [clip-path:polygon(0%_100%,22%_100%,100%_0%,55%_0%)]"
+          className="absolute bottom-2 left-1/2 h-[130px] w-[170px] bg-gradient-to-tr from-brand/35 via-brand/10 to-transparent [clip-path:polygon(0%_100%,22%_100%,100%_0%,55%_0%)]"
         />
 
         {/* badge */}
-        <span className="absolute -bottom-3 left-1/2 flex size-6 -translate-x-1/2 items-center justify-center rounded-full bg-background-base shadow-ai">
+        <span className="absolute -bottom-3 left-1/2 flex size-6 -translate-x-1/2 items-center justify-center rounded-full bg-base elevation-ai">
           <Sparkle weight="fill" className="size-3.5 text-brand-primary" />
         </span>
       </div>
@@ -121,14 +121,14 @@ function ScanFocus({ activeCol }: { activeCol: number }) {
 
 function DocIcon() {
   return (
-    <svg width="100%" height="112" viewBox="0 0 100 112" preserveAspectRatio="none" className="shrink-0 text-text-muted">
+    <svg width="100%" height="112" viewBox="0 0 100 112" preserveAspectRatio="none" className="shrink-0 text-muted">
       <rect
         x="1.5"
         y="1.5"
         width="97"
         height="109"
         rx="8"
-        className="fill-background-base stroke-border-base"
+        className="fill-(--background-base) stroke-(--border-default)"
         strokeWidth="1.5"
       />
       <rect x="12" y="14" width="40" height="6" rx="3" className="fill-current" opacity="0.25" />
@@ -164,8 +164,8 @@ function ScanDebugPanel({
   activeCol: number
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-2 rounded-lg border border-dashed border-border-base bg-background-highlight/60 px-2.5 py-1.5">
-      <span className="text-caption-md text-text-disabled">Scanner debug</span>
+    <div className="flex flex-wrap items-center gap-2 rounded-lg border border-dashed border-base bg-highlight/60 px-2.5 py-1.5">
+      <span className="text-caption-sm font-medium text-disabled">Scanner debug</span>
 
       <div className="flex items-center gap-0.5">
         <DebugButton label="Previous lane" onClick={onPrev}>
@@ -180,7 +180,7 @@ function ScanDebugPanel({
         <DebugButton label="Next lane" onClick={onNext}>
           <CaretRight className="size-3.5" />
         </DebugButton>
-        <span className="px-1 font-mono text-mono-xs text-text-muted">
+        <span className="px-1 tabular-nums text-paragraph-xsmall text-muted">
           {activeCol + 1}/{COLUMNS}
         </span>
       </div>
@@ -189,27 +189,27 @@ function ScanDebugPanel({
         type="button"
         onClick={onToggleDrift}
         className={cn(
-          'rounded-md px-2 py-1 text-label-xs transition-colors',
+          'rounded-md px-2 py-1 text-label-xsmall transition-colors',
           driftPlaying
-            ? 'text-text-muted hover:bg-background-base hover:text-text-primary'
-            : 'bg-background-base text-brand-text shadow-button-gray',
+            ? 'text-muted hover:bg-base hover:text-primary'
+            : 'bg-base text-brand borders-base',
         )}
       >
         {driftPlaying ? 'Pause drift' : 'Drift paused'}
       </button>
 
       <div className="ml-auto flex items-center gap-1">
-        <span className="text-caption-md text-text-disabled">Speed</span>
+        <span className="text-caption-sm font-medium text-disabled">Speed</span>
         {[0.5, 1, 2].map((s) => (
           <button
             key={s}
             type="button"
             onClick={() => onSpeedChange(s)}
             className={cn(
-              'rounded-md px-2 py-1 font-mono text-mono-xs transition-colors',
+              'rounded-md px-2 py-1 tabular-nums text-paragraph-xsmall transition-colors',
               speed === s
-                ? 'bg-background-base text-brand-text shadow-button-gray'
-                : 'text-text-muted hover:bg-background-base hover:text-text-primary',
+                ? 'bg-base text-brand borders-base'
+                : 'text-muted hover:bg-base hover:text-primary',
             )}
           >
             {s}x
@@ -235,7 +235,7 @@ function DebugButton({
       aria-label={label}
       title={label}
       onClick={onClick}
-      className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-base hover:text-text-primary"
+      className="flex size-6 items-center justify-center rounded-md text-muted transition-colors hover:bg-base hover:text-primary"
     >
       {children}
     </button>

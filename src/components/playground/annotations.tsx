@@ -82,8 +82,8 @@ export function AnnotationsProvider({
     el.scrollIntoView({ behavior: 'smooth', block: 'center' })
     el.animate(
       [
-        { boxShadow: 'var(--shadow-border-active)' },
-        { boxShadow: 'var(--shadow-border-active)', offset: 0.7 },
+        { boxShadow: 'var(--borders-active)' },
+        { boxShadow: 'var(--borders-active)', offset: 0.7 },
         { boxShadow: '0 0 0 0 transparent' },
       ],
       { duration: 1400, easing: 'ease-out' },
@@ -104,7 +104,7 @@ export function AnnotationsProvider({
 }
 
 export const markerChipClass =
-  'flex size-[18px] shrink-0 items-center justify-center rounded-full bg-brand-primary text-caption-md text-text-on-color'
+  'flex size-[18px] shrink-0 items-center justify-center rounded-full bg-brand text-caption-sm font-medium text-on-color'
 
 const markerPosition = {
   'top-right': '-top-2 -right-2',
@@ -153,16 +153,16 @@ export function Annotate({
             aria-label={`Design note ${n}: ${title}`}
             className={cn(
               markerChipClass,
-              'absolute z-10 cursor-pointer ring-2 ring-background-base transition-transform hover:scale-110',
+              'absolute z-10 cursor-pointer ring-2 ring-(--background-base) transition-transform hover:scale-110',
               markerPosition[side],
             )}
           >
             {n}
           </PopoverTrigger>
           <PopoverContent side="top" className="w-64 p-3">
-            <p className="text-caption-md text-brand-text">Note {n}</p>
-            <p className="text-label-sm">{title}</p>
-            <p className="text-paragraph-xs text-text-muted">{note}</p>
+            <p className="text-caption-sm font-medium text-brand">Note {n}</p>
+            <p className="text-label-small">{title}</p>
+            <p className="text-paragraph-xsmall text-muted">{note}</p>
           </PopoverContent>
         </Popover>
       )}

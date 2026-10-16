@@ -28,11 +28,11 @@ const SPEEDS: Array<{ value: number; label: string; title: string }> = [
 ]
 
 const TONE_DOT: Record<Tone, string> = {
-  neutral: 'bg-background-emphasis',
-  info: 'bg-background-info-base',
-  warning: 'bg-background-warning-base',
-  success: 'bg-background-success-base',
-  error: 'bg-background-error-base',
+  neutral: 'bg-emphasis',
+  info: 'bg-info',
+  warning: 'bg-warning',
+  success: 'bg-success',
+  error: 'bg-error',
 }
 
 const clockFmt = new Intl.DateTimeFormat('en-US', {
@@ -77,7 +77,7 @@ export function Director({ className, style }: { className?: string; style?: Rea
   return (
     <div
       className={cn(
-        'z-[85] w-80 overflow-hidden rounded-2xl bg-background-base/90 shadow-flyout backdrop-blur',
+        'z-[85] w-80 overflow-hidden rounded-2xl bg-base/90 flyout backdrop-blur',
         className,
       )}
       style={style}
@@ -99,16 +99,16 @@ export function Director({ className, style }: { className?: string; style?: Rea
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           title="Director (D)"
-          className="flex min-w-0 flex-1 items-center gap-2 rounded-lg px-1.5 py-1 text-left transition-colors hover:bg-background-highlight"
+          className="flex min-w-0 flex-1 items-center gap-2 rounded-lg px-1.5 py-1 text-left transition-colors hover:bg-highlight"
         >
           <span className="min-w-0 flex-1">
-            <span className="block truncate font-mono text-mono-xs text-text-primary">{fmtClock(now)}</span>
-            <span className="block truncate text-caption text-text-muted">
+            <span className="block truncate tabular-nums text-paragraph-xsmall text-primary">{fmtClock(now)}</span>
+            <span className="block truncate text-caption-sm text-muted">
               {elapsed > 0 ? `+${fmtDuration(elapsed)} since start` : 'World start'}
               {nextDue !== null && ` · next in ${fmtDuration(nextDue - now)}`}
             </span>
           </span>
-          <CaretDown className={cn('size-3 shrink-0 text-text-muted transition-transform', open && 'rotate-180')} />
+          <CaretDown className={cn('size-3 shrink-0 text-muted transition-transform', open && 'rotate-180')} />
         </button>
         <IconButton
           variant="ghost"
@@ -124,10 +124,10 @@ export function Director({ className, style }: { className?: string; style?: Rea
       </div>
 
       {open && (
-        <div className="space-y-3 border-t border-border-muted p-3">
+        <div className="space-y-3 border-t border-muted p-3">
           {/* Time controls */}
           <div className="flex items-center gap-1">
-            <FastForward className="size-3 shrink-0 text-text-muted" />
+            <FastForward className="size-3 shrink-0 text-muted" />
             {SPEEDS.map((s) => (
               <button
                 key={s.value}
@@ -136,10 +136,10 @@ export function Director({ className, style }: { className?: string; style?: Rea
                 aria-pressed={speed === s.value}
                 onClick={() => engine.setSpeed(s.value)}
                 className={cn(
-                  'h-6 rounded-md px-1.5 font-mono text-mono-xs transition-colors',
+                  'h-6 rounded-md px-1.5 tabular-nums text-paragraph-xsmall transition-colors',
                   speed === s.value
-                    ? 'bg-brand-primary text-text-on-color'
-                    : 'text-text-muted hover:bg-background-highlight hover:text-text-primary',
+                    ? 'bg-brand text-on-color'
+                    : 'text-muted hover:bg-highlight hover:text-primary',
                 )}
               >
                 {s.label}
@@ -152,7 +152,7 @@ export function Director({ className, style }: { className?: string; style?: Rea
                 type="button"
                 title={`Advance ${step}`}
                 onClick={() => engine.advance(step)}
-                className="flex h-6 items-center gap-1 rounded-md px-1.5 font-mono text-mono-xs text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+                className="flex h-6 items-center gap-1 rounded-md px-1.5 tabular-nums text-paragraph-xsmall text-muted transition-colors hover:bg-highlight hover:text-primary"
               >
                 <ClockClockwise className="size-3" />+{step}
               </button>
@@ -178,8 +178,8 @@ export function Director({ className, style }: { className?: string; style?: Rea
                 .map((l, i) => {
                   const flow = engine.flow(instances[l.instanceId].flowId)
                   return (
-                    <li key={`${l.at}-${l.instanceId}-${i}`} className="flex gap-2 truncate text-caption text-text-muted">
-                      <span className="shrink-0 font-mono">{fmtClock(l.at).split(' · ')[1]}</span>
+                    <li key={`${l.at}-${l.instanceId}-${i}`} className="flex gap-2 truncate text-caption-sm text-muted">
+                      <span className="shrink-0 tabular-nums">{fmtClock(l.at).split(' · ')[1]}</span>
                       <span className="truncate">
                         {instances[l.instanceId].label} → {flow.states[l.to].label}
                         {l.cause !== 'time' && ` (${l.event ? (flow.events?.[l.event] ?? l.event) : 'forced'})`}
@@ -190,7 +190,7 @@ export function Director({ className, style }: { className?: string; style?: Rea
             </ol>
           )}
 
-          <p className="text-caption text-text-muted">
+          <p className="text-caption-sm text-muted">
             <Kbd>D</Kbd> toggles · data is virtual time, same every reload
           </p>
         </div>
@@ -207,15 +207,15 @@ function InstanceRow({ inst, now }: { inst: Instance; now: number }) {
   const nextLabel = state.after ? flow.states[state.after.to].label : null
 
   return (
-    <li className="rounded-lg px-2 py-1.5 hover:bg-background-highlight">
+    <li className="rounded-lg px-2 py-1.5 hover:bg-highlight">
       <div className="flex items-center gap-2">
         <span className={cn('size-2 shrink-0 rounded-full', TONE_DOT[state.tone ?? 'neutral'])} />
-        <span className="min-w-0 flex-1 truncate text-label-xs text-text-primary">{inst.label}</span>
+        <span className="min-w-0 flex-1 truncate text-label-xsmall text-primary">{inst.label}</span>
         <select
           aria-label={`${inst.label} state`}
           value={inst.state}
           onChange={(e) => engine.force(inst.id, e.target.value)}
-          className="h-6 shrink-0 rounded-md bg-transparent px-1 text-caption-md text-text-muted hover:bg-background-base"
+          className="h-6 shrink-0 rounded-md bg-transparent px-1 text-caption-sm font-medium text-muted hover:bg-base"
         >
           {Object.entries(flow.states).map(([id, s]) => (
             <option key={id} value={id}>
@@ -227,7 +227,7 @@ function InstanceRow({ inst, now }: { inst: Instance; now: number }) {
       {(nextLabel || events.length > 0) && (
         <div className="flex items-center gap-1 pl-4">
           {nextLabel && inst.dueAt !== null && (
-            <span className="min-w-0 flex-1 truncate text-caption text-text-muted">
+            <span className="min-w-0 flex-1 truncate text-caption-sm text-muted">
               {nextLabel} in {fmtDuration(inst.dueAt - now)}
             </span>
           )}
@@ -237,7 +237,7 @@ function InstanceRow({ inst, now }: { inst: Instance; now: number }) {
               key={ev}
               type="button"
               onClick={() => engine.send(inst.id, ev)}
-              className="h-5 shrink-0 rounded-md px-1.5 text-caption-md text-brand-text transition-colors hover:bg-background-base"
+              className="h-5 shrink-0 rounded-md px-1.5 text-caption-sm font-medium text-brand transition-colors hover:bg-base"
             >
               {flow.events?.[ev] ?? ev}
             </button>

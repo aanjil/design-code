@@ -16,12 +16,12 @@ export function TaxSetupPage() {
 
   return (
     <>
-      <h1 className="mb-8 text-title-h5 text-text-primary">Tax Setup</h1>
+      <h1 className="mb-8 text-title-h5 text-primary">Tax Setup</h1>
 
       <Card className="mb-12 flex items-center gap-6 p-6">
         <div className="min-w-0 flex-1">
-          <p className="text-label-lg text-text-primary">Hiring in a new state? Let Niural handle your registrations.</p>
-          <p className="mt-1.5 text-paragraph-sm text-text-muted">
+          <p className="text-label-large text-primary">Hiring in a new state? Let Niural handle your registrations.</p>
+          <p className="mt-1.5 text-paragraph-small text-muted">
             Niural registers your business with state tax agencies so you can start payroll without delay. No paperwork, no
             back-and-forth with agencies, and no risk of missed deadlines.
           </p>
@@ -67,7 +67,7 @@ export function TaxSetupPage() {
             />
             <Card>
               {s.status === 'registering' ? (
-                <p className="text-paragraph-sm text-text-muted">
+                <p className="text-paragraph-small text-muted">
                   We're registering {s.state} withholding and unemployment accounts. Agency numbers usually arrive in 2–3 weeks;
                   we'll fill them in here and email you.
                 </p>
@@ -114,7 +114,7 @@ function StateStatusLine({ setup }: { setup: StateTaxSetup }) {
   const missing = setup.fields.filter((f) => !f.value).length
   if (missing > 0)
     return (
-      <span className="text-text-warning-base">
+      <span className="text-warning">
         {missing} {missing === 1 ? 'field' : 'fields'} missing - payroll in {setup.state} is blocked until these are added.
       </span>
     )
@@ -123,11 +123,11 @@ function StateStatusLine({ setup }: { setup: StateTaxSetup }) {
 
 function StatesGlyph({ count }: { count: number }) {
   return (
-    <div className="relative hidden h-28 w-44 shrink-0 items-center justify-center rounded-xl bg-background-highlight sm:flex">
-      <MapPin weight="fill" className="absolute top-5 left-10 size-5 text-text-success-base" />
-      <MapPin weight="fill" className="absolute right-8 bottom-6 size-5 text-text-success-base" />
+    <div className="relative hidden h-28 w-44 shrink-0 items-center justify-center rounded-xl bg-highlight sm:flex">
+      <MapPin weight="fill" className="absolute top-5 left-10 size-5 text-success" />
+      <MapPin weight="fill" className="absolute right-8 bottom-6 size-5 text-success" />
       <MapPin weight="fill" className="absolute top-9 right-14 size-4 text-brand-primary" />
-      <span className="absolute bottom-3 left-4 font-mono text-mono-xs text-text-muted">{count} states</span>
+      <span className="absolute bottom-3 left-4 tabular-nums text-paragraph-xsmall text-muted">{count} states</span>
     </div>
   )
 }
@@ -180,7 +180,7 @@ function EditStateModal({
             value={values[f.key] ?? ''}
             placeholder="Not provided yet"
             onChange={(e) => setValues((v) => ({ ...v, [f.key]: e.target.value }))}
-            className={f.mono ? 'font-mono text-mono-sm' : undefined}
+            className={f.mono ? 'tabular-nums text-label-small' : undefined}
           />
         </div>
       ))}
@@ -229,7 +229,7 @@ function RegisterStateModal({
         <FieldLabel>State</FieldLabel>
         <SelectField value={state} options={options} onChange={setState} placeholder="Select a state" />
       </div>
-      <p className="text-paragraph-xs text-text-muted">
+      <p className="text-paragraph-xsmall text-muted">
         Usually takes 2–3 weeks. You can run payroll in other states meanwhile.
       </p>
     </Modal>

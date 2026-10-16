@@ -1,5 +1,6 @@
 import { CaretLeft } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
+import { Text } from '@niural/components'
 
 /**
  * App shell per layouts.md + Figma: AppBar > MainLayout(Sidebar + PageLayout).
@@ -18,7 +19,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 export function MainLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-0  flex-1 px-2 pb-2 main-layout">
-      <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden rounded-xl border border-border-base   bg-transparent">
+      <div className="flex min-h-0 min-w-0 flex-1 overflow-hidden rounded-xl border border-border   bg-transparent">
         {children}
       </div>
     </div>
@@ -26,7 +27,7 @@ export function MainLayout({ children }: { children: React.ReactNode }) {
 }
 
 export function PageLayout({ children }: { children: React.ReactNode }) {
-  return <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-surface-2">{children}</div>
+  return <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-surface-page">{children}</div>
 }
 
 export function PageHeader({
@@ -46,7 +47,7 @@ export function PageHeader({
   return (
     <div
       className={cn(
-        'flex shrink-0 items-center justify-between gap-3 border-b border-border-highlight pr-4 pl-1',
+        'flex shrink-0 items-center justify-between gap-3  pr-4 pl-1',
         subtitle ? 'py-3' : 'h-14 py-[11px]',
       )}
     >
@@ -62,7 +63,9 @@ export function PageHeader({
           </button>
         )}
         <div className="min-w-0 px-1">
-          <h1 className="truncate text-label-md">{title}</h1>
+          <Text type="label-medium" className="truncate ">
+            {title}
+          </Text>
           {subtitle && <p className="truncate text-paragraph-xs text-text-muted">{subtitle}</p>}
         </div>
       </div>

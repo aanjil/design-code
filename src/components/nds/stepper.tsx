@@ -29,7 +29,7 @@ export function Stepper({
         return (
           <li key={label} className="flex flex-col">
             {i > 0 && (
-              <span aria-hidden className="ml-3 h-6 w-px bg-border-base" />
+              <span aria-hidden className="ml-3 h-6 w-px bg-(--border-default)" />
             )}
             <button
               type="button"
@@ -53,16 +53,16 @@ export function Stepper({
                     'size-6 shrink-0',
                     state === 'done'
                       ? 'text-brand-primary'
-                      : 'text-background-emphasis',
+                      : 'text-(--background-emphasis)',
                   )}
                 />
               )}
               <span
                 className={cn(
-                  'text-label-xs',
-                  state === 'done' && 'text-brand-text',
-                  state === 'current' && 'text-text-primary',
-                  state === 'upcoming' && 'text-text-muted',
+                  'text-label-xsmall',
+                  state === 'done' && 'text-brand',
+                  state === 'current' && 'text-primary',
+                  state === 'upcoming' && 'text-muted',
                 )}
               >
                 {label}

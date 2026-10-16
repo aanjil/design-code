@@ -39,7 +39,7 @@ function buildCanvas() {
     width: FRAME_W,
     height: FRAME_H,
     content: (
-      <div className="h-full min-h-0 overflow-y-auto bg-background-highlight/30 p-8">
+      <div className="h-full min-h-0 overflow-y-auto bg-highlight/30 p-8">
         <DynamicTimeline initialDraft={EMPTY_DRAFT} />
       </div>
     ),

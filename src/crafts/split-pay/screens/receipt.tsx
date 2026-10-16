@@ -29,50 +29,50 @@ export function ReceiptScreen({ view }: { view: ReceiptView }) {
           )
         }
       />
-      <PageBody className="flex flex-col gap-3 bg-surface-1">
-        <div className="rounded-xl bg-background-base p-5 shadow-card">
+      <PageBody className="flex flex-col gap-3 bg-surface-frame">
+        <div className="rounded-xl bg-base p-5 card">
           <div className="mb-4 flex items-baseline justify-between">
             <div>
-              <p className="text-label-md text-text-primary">{SPLIT_EMPLOYEE.name}</p>
-              <p className="text-paragraph-xs text-text-muted">Pay period Jul 1 - Jul 31, 2026 · paid Jul 31</p>
+              <p className="text-label-medium text-primary">{SPLIT_EMPLOYEE.name}</p>
+              <p className="text-paragraph-xsmall text-muted">Pay period Jul 1 - Jul 31, 2026 · paid Jul 31</p>
             </div>
             <div className="text-right">
-              <p className="text-caption-md text-text-muted">Net pay</p>
-              <p className="font-mono text-mono-md text-text-primary">{gbp(SPLIT_EMPLOYEE.lastNetPay)}</p>
+              <p className="text-caption-sm font-medium text-muted">Net pay</p>
+              <p className="tabular-nums text-label-medium text-primary">{gbp(SPLIT_EMPLOYEE.lastNetPay)}</p>
             </div>
           </div>
 
-          <p className="mb-2 text-caption-md text-text-muted">Paid to</p>
+          <p className="mb-2 text-caption-sm font-medium text-muted">Paid to</p>
           <div className="flex flex-col">
-            <div className="flex items-center gap-3 border-b border-border-highlight py-3">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-background-highlight">
-                <Bank className="size-4 text-text-muted" />
+            <div className="flex items-center gap-3 border-b border-base py-3">
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-highlight">
+                <Bank className="size-4 text-muted" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-label-xs text-text-primary">Primary account</p>
-                <p className="text-caption-md text-text-muted">
+                <p className="text-label-xsmall text-primary">Primary account</p>
+                <p className="text-caption-sm font-medium text-muted">
                   {BANK_ACCOUNTS[0].bank} ·· {BANK_ACCOUNTS[0].last4}
                 </p>
               </div>
-              <span className="font-mono text-mono-xs text-text-primary">{gbp(toBank)}</span>
+              <span className="tabular-nums text-paragraph-xsmall text-primary">{gbp(toBank)}</span>
             </div>
             <div className="flex items-center gap-3 py-3">
-              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-background-highlight">
-                <Wallet className="size-4 text-text-muted" />
+              <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-highlight">
+                <Wallet className="size-4 text-muted" />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-label-xs text-text-primary">Virtual account</p>
-                <p className="text-caption-md text-text-muted">Used to deliver your crypto payout</p>
+                <p className="text-label-xsmall text-primary">Virtual account</p>
+                <p className="text-caption-sm font-medium text-muted">Used to deliver your crypto payout</p>
               </div>
-              <span className="font-mono text-mono-xs text-text-primary">{gbp(toWallet)}</span>
+              <span className="tabular-nums text-paragraph-xsmall text-primary">{gbp(toWallet)}</span>
             </div>
           </div>
         </div>
 
         {view.pending && (
-          <div className="flex items-start gap-2 rounded-xl bg-background-info-muted px-4 py-3">
-            <ClockCountdown className="mt-0.5 size-4 shrink-0 text-text-primary" />
-            <p className="text-paragraph-xs text-text-primary">
+          <div className="flex items-start gap-2 rounded-xl bg-info-muted px-4 py-3">
+            <ClockCountdown className="mt-0.5 size-4 shrink-0 text-primary" />
+            <p className="text-paragraph-xsmall text-primary">
               Receipt available once all payments complete. Your crypto portion is processing.
             </p>
           </div>

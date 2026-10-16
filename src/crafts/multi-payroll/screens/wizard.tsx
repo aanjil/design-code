@@ -185,8 +185,8 @@ function DetailsStep({
 
   return (
     <FormCard>
-      <h2 className="text-title-h5 text-text-primary">Schedule details</h2>
-      <p className="mt-1 text-paragraph-sm text-text-muted">
+      <h2 className="text-title-h5 text-primary">Schedule details</h2>
+      <p className="mt-1 text-paragraph-small text-muted">
         Name the schedule and set its cadence.
       </p>
       <div className="mt-6 flex flex-col gap-4">
@@ -229,7 +229,7 @@ function DetailsStep({
               options={effectiveDateOptions.map((o) => o.label)}
               className="w-1/2"
             />
-            <p className="text-caption-md text-text-muted">
+            <p className="text-caption-sm font-medium text-muted">
               A frequency change only takes effect at the end of a pay period - {editing?.frequency.toLowerCase()}{' '}
               periods can&apos;t be split mid-cycle, so only real period-end dates are offered here.
             </p>
@@ -267,25 +267,25 @@ function MembershipStep({ noEmployees }: { noEmployees?: boolean }) {
   const preview = PAYROLL_EMPLOYEES.slice(0, 5)
   return (
     <FormCard>
-      <h2 className="text-title-h5 text-text-primary">Members</h2>
-      <p className="mt-1 text-paragraph-sm text-text-muted">
+      <h2 className="text-title-h5 text-primary">Members</h2>
+      <p className="mt-1 text-paragraph-small text-muted">
         Who this schedule pays.
       </p>
-      <div className="mt-6 flex items-center gap-2.5 rounded-lg bg-background-highlight p-3">
-        <LockSimple weight="fill" className="size-4 shrink-0 text-text-muted" />
+      <div className="mt-6 flex items-center gap-2.5 rounded-lg bg-highlight p-3">
+        <LockSimple weight="fill" className="size-4 shrink-0 text-muted" />
         <div className="min-w-0 flex-1">
-          <p className="text-label-xs text-text-primary">All employees</p>
-          <p className="text-paragraph-xs text-text-muted">
+          <p className="text-label-xsmall text-primary">All employees</p>
+          <p className="text-paragraph-xsmall text-muted">
             The first schedule includes everyone automatically. Membership rules
             unlock with a second schedule.
           </p>
         </div>
       </div>
       {noEmployees ? (
-        <div className="mt-3 flex flex-col items-center gap-2 rounded-lg border border-dashed border-border-base py-8">
-          <UsersThree className="size-5 text-text-disabled" />
-          <p className="text-label-xs text-text-primary">No employees yet</p>
-          <p className="max-w-64 text-center text-paragraph-xs text-text-muted">
+        <div className="mt-3 flex flex-col items-center gap-2 rounded-lg border border-dashed border-base py-8">
+          <UsersThree className="size-5 text-disabled" />
+          <p className="text-label-xsmall text-primary">No employees yet</p>
+          <p className="max-w-64 text-center text-paragraph-xsmall text-muted">
             You can still create the schedule - people join it as you hire.
           </p>
           <Button type="button" variant="solid" shade="neutral" size="sm" className="mt-1">
@@ -297,21 +297,21 @@ function MembershipStep({ noEmployees }: { noEmployees?: boolean }) {
           {preview.map((e) => (
             <div
               key={e.id}
-              className="flex items-center gap-2.5 border-b border-border-highlight py-2 last:border-0"
+              className="flex items-center gap-2.5 border-b border-base py-2 last:border-0"
             >
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-muted text-caption-md text-brand-text">
+              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-muted text-caption-sm font-medium text-brand">
                 {e.name
                   .split(' ')
                   .map((p) => p[0])
                   .join('')}
               </span>
-              <span className="min-w-0 flex-1 truncate text-paragraph-xs text-text-primary">
+              <span className="min-w-0 flex-1 truncate text-paragraph-xsmall text-primary">
                 {e.name}
               </span>
-              <span className="text-paragraph-xs text-text-muted">{e.jobTitle}</span>
+              <span className="text-paragraph-xsmall text-muted">{e.jobTitle}</span>
             </div>
           ))}
-          <p className="pt-2 text-paragraph-xs text-text-muted">
+          <p className="pt-2 text-paragraph-xsmall text-muted">
             + {PAYROLL_EMPLOYEES.length - preview.length + 45} more employees
           </p>
         </div>
@@ -370,14 +370,14 @@ function RuleRow({
             {condition.values.map((v) => (
               <span
                 key={v}
-                className="flex h-7 items-center gap-1 rounded-full bg-background-highlight px-2.5 text-caption-md text-text-primary"
+                className="flex h-7 items-center gap-1 rounded-full bg-highlight px-2.5 text-caption-sm font-medium text-primary"
               >
                 {v}
                 <button
                   type="button"
                   aria-label={`Remove ${v}`}
                   onClick={() => onChange({ values: condition.values.filter((x) => x !== v) })}
-                  className="text-text-muted hover:text-text-error-base"
+                  className="text-muted hover:text-error"
                 >
                   <X className="size-3" />
                 </button>
@@ -406,7 +406,7 @@ function RuleRow({
           type="button"
           aria-label="Remove condition"
           onClick={onRemove}
-          className="flex size-7 shrink-0 items-center justify-center rounded-lg text-text-muted transition-colors hover:bg-background-error-highlight hover:text-text-error-base"
+          className="flex size-7 shrink-0 items-center justify-center rounded-lg text-muted transition-colors hover:bg-error-highlight hover:text-error"
         >
           <X className="size-4" />
         </button>
@@ -427,18 +427,18 @@ function MatchRow({
   mover?: string
 }) {
   return (
-    <div className="flex items-center gap-2.5 border-b border-border-highlight py-2 last:border-0">
-      <span className="min-w-0 flex-1 truncate text-paragraph-xs text-text-primary">
+    <div className="flex items-center gap-2.5 border-b border-base py-2 last:border-0">
+      <span className="min-w-0 flex-1 truncate text-paragraph-xsmall text-primary">
         {name}
       </span>
-      <span className="shrink-0 text-paragraph-xs text-text-muted">{detail}</span>
+      <span className="shrink-0 text-paragraph-xsmall text-muted">{detail}</span>
       {conflictWith && (
-        <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-background-warning-muted px-2 py-0.5 text-caption-md text-text-primary">
+        <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-warning-muted px-2 py-0.5 text-caption-sm font-medium text-primary">
           In {conflictWith}
         </span>
       )}
       {mover && (
-        <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-background-info-muted px-2 py-0.5 text-caption-md text-text-primary">
+        <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-info-muted px-2 py-0.5 text-caption-sm font-medium text-primary">
           <ArrowRight className="size-3" />
           from {mover}
         </span>
@@ -485,8 +485,8 @@ function ManualMembersStep({
       <FormCard>
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-title-h5 text-text-primary">Who's on this schedule?</h2>
-            <p className="mt-1 text-paragraph-sm text-text-muted">
+            <h2 className="text-title-h5 text-primary">Who's on this schedule?</h2>
+            <p className="mt-1 text-paragraph-small text-muted">
               Most schedules don't need a rule - check people in below. You can add one later.
             </p>
           </div>
@@ -495,7 +495,7 @@ function ManualMembersStep({
             variant="ghost"
             shade="neutral"
             size="sm"
-            className="shrink-0 text-brand-text"
+            className="shrink-0 text-brand"
             onClick={onAddRule}
             leftIcon={<Plus className="size-4" />}
           >
@@ -509,25 +509,25 @@ function ManualMembersStep({
         <div className="mt-4 flex flex-col gap-1.5">
           <SearchField value={query} onChange={setQuery} placeholder="Search employees" showKbd={false} />
         </div>
-        <div className="mt-3 max-h-96 overflow-y-auto rounded-lg border border-border-highlight">
+        <div className="mt-3 max-h-96 overflow-y-auto rounded-lg border border-base">
           {filtered.map((e) => (
             <label
               key={e.id}
-              className="group flex cursor-pointer items-center gap-2.5 border-b border-border-highlight px-3 py-2 last:border-0 hover:bg-background-highlight"
+              className="group flex cursor-pointer items-center gap-2.5 border-b border-base px-3 py-2 last:border-0 hover:bg-highlight"
             >
               <Checkbox size="md" checked={selectedSet.has(e.id)} onCheckedChange={() => onToggle(e.id)} />
-              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-muted text-caption-md text-brand-text">
+              <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-brand-muted text-caption-sm font-medium text-brand">
                 {e.name
                   .split(' ')
                   .map((p) => p[0])
                   .join('')}
               </span>
-              <span className="min-w-0 flex-1 truncate text-paragraph-xs text-text-primary">{e.name}</span>
-              <span className="shrink-0 text-paragraph-xs text-text-muted">{e.jobTitle}</span>
+              <span className="min-w-0 flex-1 truncate text-paragraph-xsmall text-primary">{e.name}</span>
+              <span className="shrink-0 text-paragraph-xsmall text-muted">{e.jobTitle}</span>
             </label>
           ))}
           {filtered.length === 0 && (
-            <p className="p-4 text-center text-paragraph-xs text-text-muted">No employees match “{query}”.</p>
+            <p className="p-4 text-center text-paragraph-xsmall text-muted">No employees match “{query}”.</p>
           )}
         </div>
       </FormCard>
@@ -535,9 +535,9 @@ function ManualMembersStep({
       <Card title={`Assigned · ${selected.length}`}>
         {selectedEmployees.length === 0 ? (
           <div className="flex flex-col items-center gap-1.5 py-8">
-            <UsersThree className="size-5 text-text-disabled" />
-            <p className="text-label-xs text-text-primary">No one assigned yet</p>
-            <p className="max-w-72 text-center text-paragraph-xs text-text-muted">
+            <UsersThree className="size-5 text-disabled" />
+            <p className="text-label-xsmall text-primary">No one assigned yet</p>
+            <p className="max-w-72 text-center text-paragraph-xsmall text-muted">
               The schedule is still valid empty - check people above whenever you're ready.
             </p>
           </div>
@@ -545,7 +545,7 @@ function ManualMembersStep({
           selectedEmployees.slice(0, 8).map((e) => <MatchRow key={e.id} name={e.name} detail={e.jobTitle} />)
         )}
         {selectedEmployees.length > 8 && (
-          <p className="pt-2 text-paragraph-xs text-text-muted">+ {selectedEmployees.length - 8} more</p>
+          <p className="pt-2 text-paragraph-xsmall text-muted">+ {selectedEmployees.length - 8} more</p>
         )}
       </Card>
     </div>
@@ -653,8 +653,8 @@ function RulesStep({
       <FormCard>
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-title-h5 text-text-primary">Membership rules</h2>
-            <p className="mt-1 text-paragraph-sm text-text-muted">
+            <h2 className="text-title-h5 text-primary">Membership rules</h2>
+            <p className="mt-1 text-paragraph-small text-muted">
               Employees matching every condition join this schedule.
             </p>
           </div>
@@ -663,7 +663,7 @@ function RulesStep({
             variant="ghost"
             shade="neutral"
             size="sm"
-            className="shrink-0 text-brand-text"
+            className="shrink-0 text-brand"
             onClick={onRemoveRule}
             leftIcon={<X className="size-4" />}
           >
@@ -680,8 +680,8 @@ function RulesStep({
             />
           ))}
           {rule.orGroup && rule.orGroup.length > 0 && (
-            <div className="rounded-lg border border-dashed border-border-base p-2.5">
-              <p className="pb-2 text-caption-md text-text-muted">ANY of (OR)</p>
+            <div className="rounded-lg border border-dashed border-base p-2.5">
+              <p className="pb-2 text-caption-sm font-medium text-muted">ANY of (OR)</p>
               <div className="flex flex-col gap-2">
                 {rule.orGroup.map((condition, i) => (
                   <RuleRow
@@ -697,7 +697,7 @@ function RulesStep({
                 variant="ghost"
                 shade="neutral"
                 size="sm"
-                className="mt-2 text-brand-text"
+                className="mt-2 text-brand"
                 onClick={() => addCondition('orGroup')}
                 leftIcon={<Plus className="size-4" />}
               >
@@ -711,7 +711,7 @@ function RulesStep({
               variant="ghost"
               shade="neutral"
               size="sm"
-              className="text-brand-text"
+              className="text-brand"
               onClick={() => addCondition('and')}
               leftIcon={<Plus className="size-4" />}
             >
@@ -723,7 +723,7 @@ function RulesStep({
                 variant="ghost"
                 shade="neutral"
                 size="sm"
-                className="text-brand-text"
+                className="text-brand"
                 onClick={() => onChangeRule({ ...rule, orGroup: [{ attribute: 'workLocation', operator: 'is', values: [] }] })}
                 leftIcon={<Plus className="size-4" />}
               >
@@ -738,7 +738,7 @@ function RulesStep({
         title={`Matches · ${evaluation.matched.length}`}
         actions={
           evaluation.conflicts.length > 0 ? (
-            <span className="rounded-full bg-background-warning-muted px-2 py-0.5 text-caption-md text-text-primary">
+            <span className="rounded-full bg-warning-muted px-2 py-0.5 text-caption-sm font-medium text-primary">
               {evaluation.conflicts.length} conflict{evaluation.conflicts.length > 1 ? 's' : ''}
             </span>
           ) : undefined
@@ -764,9 +764,9 @@ function RulesStep({
         )}
         {evaluation.matched.length === 0 ? (
           <div className="flex flex-col items-center gap-1.5 py-8">
-            <UsersThree className="size-5 text-text-disabled" />
-            <p className="text-label-xs text-text-primary">No employees match yet</p>
-            <p className="max-w-72 text-center text-paragraph-xs text-text-muted">
+            <UsersThree className="size-5 text-disabled" />
+            <p className="text-label-xsmall text-primary">No employees match yet</p>
+            <p className="max-w-72 text-center text-paragraph-xsmall text-muted">
               The schedule is still valid - it fills automatically as employees
               match these rules.
             </p>
@@ -786,7 +786,7 @@ function RulesStep({
               )
             })}
             {overflow > 0 && (
-              <p className="pt-2 text-paragraph-xs text-text-muted">+ {overflow} more match{overflow > 1 ? 'es' : ''}</p>
+              <p className="pt-2 text-paragraph-xsmall text-muted">+ {overflow} more match{overflow > 1 ? 'es' : ''}</p>
             )}
           </>
         )}
@@ -819,11 +819,11 @@ function ConflictOption({
       onClick={onSelect}
       className={cn(
         'flex-1 rounded-lg w-full border p-3 text-left transition-colors',
-        selected ? 'border-brand-primary bg-brand-muted' : 'border-border-highlight hover:bg-background-highlight',
+        selected ? 'border-brand bg-brand-muted' : 'border-base hover:bg-highlight',
       )}
     >
-      <p className="text-label-xs text-text-primary">{title}</p>
-      <p className="mt-0.5 truncate text-paragraph-xs whitespace-pre-wrap text-text-muted">Matched &quot;{matchedText}&quot;</p>
+      <p className="text-label-xsmall text-primary">{title}</p>
+      <p className="mt-0.5 truncate text-paragraph-xsmall whitespace-pre-wrap text-muted">Matched &quot;{matchedText}&quot;</p>
     </button>
   )
 }
@@ -851,8 +851,8 @@ function ConflictsStep({
     const movers = evaluation.movers
     return (
       <FormCard>
-        <h2 className="text-title-h5 text-text-primary">Review changes</h2>
-        <p className="mt-1 text-paragraph-sm text-text-muted">
+        <h2 className="text-title-h5 text-primary">Review changes</h2>
+        <p className="mt-1 text-paragraph-small text-muted">
           Nothing here needs a decision - every match is either brand new or moving cleanly, with
           no competing schedule to weigh against.
         </p>
@@ -861,25 +861,25 @@ function ConflictsStep({
             {movers.slice(0, 6).map((employee) => (
               <div
                 key={employee.id}
-                className="flex items-center gap-2.5 rounded-lg bg-background-highlight px-3 py-2"
+                className="flex items-center gap-2.5 rounded-lg bg-highlight px-3 py-2"
               >
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand-muted text-caption-md text-brand-text">
+                <span className="flex size-7 shrink-0 items-center justify-center rounded-full bg-brand-muted text-caption-sm font-medium text-brand">
                   {employee.name
                     .split(' ')
                     .map((p) => p[0])
                     .join('')}
                 </span>
-                <p className="min-w-0 flex-1 truncate text-paragraph-xs text-text-primary">
+                <p className="min-w-0 flex-1 truncate text-paragraph-xsmall text-primary">
                   {employee.name} moves from the default schedule. Next run picks them up automatically.
                 </p>
               </div>
             ))}
             {movers.length > 6 && (
-              <p className="text-paragraph-xs text-text-muted">+ {movers.length - 6} more, same change</p>
+              <p className="text-paragraph-xsmall text-muted">+ {movers.length - 6} more, same change</p>
             )}
           </div>
         ) : (
-          <p className="mt-4 text-paragraph-xs text-text-muted">
+          <p className="mt-4 text-paragraph-xsmall text-muted">
             No one matches yet - the schedule is still valid, it fills in as people match the rule.
           </p>
         )}
@@ -919,15 +919,15 @@ function ConflictsStep({
           return (
             <FormCard key={employee.id} className="p-4">
               <div className="flex items-center gap-2.5">
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-muted text-label-xs text-brand-text">
+                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-brand-muted text-label-xsmall text-brand">
                   {employee.name
                     .split(' ')
                     .map((p) => p[0])
                     .join('')}
                 </span>
                 <div className="min-w-0">
-                  <p className="truncate text-label-xs text-text-primary">{employee.name}</p>
-                  <p className="truncate text-paragraph-xs text-text-muted">
+                  <p className="truncate text-label-xsmall text-primary">{employee.name}</p>
+                  <p className="truncate text-paragraph-xsmall text-muted">
                     {employee.jobTitle} · {employee.employeeType}
                   </p>
                 </div>
@@ -978,10 +978,10 @@ function ReviewStep({
   const memberCount = matched.length
   return (
     <FormCard>
-      <h2 className="text-title-h5 text-text-primary">
+      <h2 className="text-title-h5 text-primary">
         {editing ? 'Review your changes' : 'Review your schedule'}
       </h2>
-      <p className="mt-1 text-paragraph-sm text-text-muted">
+      <p className="mt-1 text-paragraph-small text-muted">
         Check everything before saving.
       </p>
 
@@ -997,7 +997,7 @@ function ReviewStep({
 
         <ReviewSection title="Membership" onEdit={() => onEdit(isFirst ? 'A3' : 'B2')}>
           <div className="flex items-center justify-between gap-6">
-            <p className="min-w-0 text-paragraph-sm text-brand-text">
+            <p className="min-w-0 text-paragraph-small text-brand">
               “
               {isFirst
                 ? 'All employees - everyone joins the first schedule automatically'
@@ -1008,7 +1008,7 @@ function ReviewStep({
             </p>
             <span className="flex shrink-0 items-center gap-3">
               <AvatarStack names={memberNames} />
-              <span className="text-label-xs text-text-primary">
+              <span className="text-label-xsmall text-primary">
                 {memberCount} employees
               </span>
             </span>
@@ -1016,7 +1016,7 @@ function ReviewStep({
         </ReviewSection>
 
         <ReviewSection title="When you save">
-          <div className="rounded-lg bg-background-highlight p-3 text-paragraph-sm text-text-primary">
+          <div className="rounded-lg bg-highlight p-3 text-paragraph-small text-primary">
             {isFirst
               ? `${memberCount} employees assigned to ${draft.name}. Nothing is paid until you approve the first run.`
               : editing

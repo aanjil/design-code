@@ -27,9 +27,9 @@ export function Step({
   return (
     <div>
       <div className="mb-2.5 flex items-baseline gap-2.5">
-        <span className="font-mono text-label-xs text-text-disabled">{n}</span>
-        <b className="text-label-md text-text-primary">{title}</b>
-        <span className="ml-auto font-mono text-[11px] text-text-muted">{summary}</span>
+        <span className="tabular-nums text-label-xsmall text-disabled">{n}</span>
+        <b className="text-label-medium text-primary">{title}</b>
+        <span className="ml-auto font-mono text-[11px] text-muted">{summary}</span>
       </div>
       {children}
     </div>
@@ -37,22 +37,22 @@ export function Step({
 }
 
 export function Locked({ children }: { children: React.ReactNode }) {
-  return <p className="font-mono text-[11px] text-text-disabled">{children}</p>
+  return <p className="font-mono text-[11px] text-disabled">{children}</p>
 }
 
 export function Collapsed({ children, changeLabel }: { children: React.ReactNode; changeLabel?: string }) {
   return (
-    <div className="flex items-center gap-2.5 rounded-lg border border-border-base bg-background-base px-3 py-2.5 text-paragraph-xs text-text-muted">
-      <Check weight="bold" className="size-3.5 shrink-0 text-text-success-base" />
+    <div className="flex items-center gap-2.5 rounded-lg border border-base bg-base px-3 py-2.5 text-paragraph-xsmall text-muted">
+      <Check weight="bold" className="size-3.5 shrink-0 text-success" />
       <span className="min-w-0 flex-1">{children}</span>
-      {changeLabel && <span className="shrink-0 font-mono text-[10.5px] text-text-disabled">{changeLabel}</span>}
+      {changeLabel && <span className="shrink-0 font-mono text-[10.5px] text-disabled">{changeLabel}</span>}
     </div>
   )
 }
 
 export function SectionLabel({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
-    <p className={cn('mb-2.5 font-mono text-[10px] tracking-wide text-text-disabled', className)}>
+    <p className={cn('mb-2.5 font-mono text-[10px] tracking-wide text-disabled', className)}>
       {children}
     </p>
   )
@@ -62,7 +62,7 @@ export function SectionLabel({ className, children }: { className?: string; chil
  *  step, always led by a bold all-caps clause. */
 export function Note({ className, children }: { className?: string; children: React.ReactNode }) {
   return (
-    <p className={cn('max-w-[80ch] font-mono text-[10.5px] leading-[1.6] text-text-muted', className)}>
+    <p className={cn('max-w-[80ch] font-mono text-[10.5px] leading-[1.6] text-muted', className)}>
       {children}
     </p>
   )

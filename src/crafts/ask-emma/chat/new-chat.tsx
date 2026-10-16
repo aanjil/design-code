@@ -9,7 +9,7 @@ import type { DocSuggestion } from './data'
 /**
  * New chat (Figma "Niural-AI", node 6479:82938) - no sidebar, no history:
  * a brand-new session opens with a big prompt (glow treatment, the same
- * `shadow-ai` token the appbar's Ask Emma button uses) and suggestions
+ * `elevation-ai` token the appbar's Ask Emma button uses) and suggestions
  * grouped by which agent would answer them. Distinct from the launcher
  * (home.tsx, grain-flows_2.html) - this is what "+ New" in the chat
  * sidebar opens into, once a thread exists (see thread.tsx).
@@ -24,18 +24,18 @@ export function NewChatScreen() {
           <PageBody className="mx-auto flex w-full max-w-[720px] flex-col items-center gap-16 pt-12">
             <div className="flex flex-col items-center gap-8 text-center">
               <div>
-                <p className="text-title-h5 text-text-muted">Hello, John 👋🏻</p>
-                <p className="text-title-h4 text-text-primary">What do you want to do today?</p>
+                <p className="text-title-h5 text-muted">Hello, John 👋🏻</p>
+                <p className="text-title-h4 text-primary">What do you want to do today?</p>
               </div>
               <PromptBar
                 sources={promptBar.sources}
                 placeholder="Ask Emma"
-                className="w-full rounded-2xl p-3 shadow-ai"
+                className="w-full rounded-2xl p-3 elevation-ai"
               />
             </div>
 
             <section className="flex w-full flex-col gap-3">
-              <p className="text-label-md text-text-primary">Create HR documents</p>
+              <p className="text-label-medium text-primary">Create HR documents</p>
               <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
                 {HR_DOCUMENTS.map((doc) => (
                   <DocCard key={doc.title} doc={doc} />
@@ -45,8 +45,8 @@ export function NewChatScreen() {
 
             <section className="flex w-full flex-col gap-3">
               <div className="flex items-center gap-2">
-                <ChatCircle className="size-4.5 text-text-primary" />
-                <p className="text-label-md text-text-primary">Benefits Agent</p>
+                <ChatCircle className="size-4.5 text-primary" />
+                <p className="text-label-medium text-primary">Benefits Agent</p>
               </div>
               <div className="flex flex-wrap gap-3">
                 {BENEFITS_PROMPTS.map((prompt) => (
@@ -56,7 +56,7 @@ export function NewChatScreen() {
             </section>
 
             <section className="flex w-full flex-col gap-3">
-              <p className="text-label-md text-text-primary">Time-off (PTO) agent</p>
+              <p className="text-label-medium text-primary">Time-off (PTO) agent</p>
               <div className="flex flex-wrap gap-3">
                 {PTO_PROMPTS.map((prompt) => (
                   <CardPrompt key={prompt}>{prompt}</CardPrompt>
@@ -74,19 +74,19 @@ function DocCard({ doc }: { doc: DocSuggestion }) {
   return (
     <button
       type="button"
-      className="relative flex flex-col gap-5 rounded-xl bg-background-base p-2 text-left shadow-card"
+      className="relative flex flex-col gap-5 rounded-xl bg-base p-2 text-left card"
     >
       {doc.badge && (
-        <span className="absolute top-1 right-1 rounded-lg bg-background-info-muted-hover px-1.5 py-0.5 text-caption-md text-text-info-base">
+        <span className="absolute top-1 right-1 rounded-lg bg-info-muted-hover px-1.5 py-0.5 text-caption-sm font-medium text-info">
           {doc.badge}
         </span>
       )}
-      <span className="flex size-[57px] items-center justify-center rounded-lg border border-border-base bg-background-highlight">
-        <FileText className="size-6 text-brand-text" />
+      <span className="flex size-[57px] items-center justify-center rounded-lg border border-base bg-highlight">
+        <FileText className="size-6 text-brand" />
       </span>
       <span className="flex flex-col">
-        <span className="text-label-sm text-text-primary">{doc.title}</span>
-        <span className="text-paragraph-xs text-text-muted">{doc.blurb}</span>
+        <span className="text-label-small text-primary">{doc.title}</span>
+        <span className="text-paragraph-xsmall text-muted">{doc.blurb}</span>
       </span>
     </button>
   )
@@ -96,7 +96,7 @@ function PillPrompt({ children }: { children: React.ReactNode }) {
   return (
     <button
       type="button"
-      className="rounded-full border border-border-base bg-background-base px-3 py-2 text-left text-label-sm text-text-primary hover:border-text-muted"
+      className="rounded-full border border-base bg-base px-3 py-2 text-left text-label-small text-primary hover:border-(--text-muted)"
     >
       {children}
     </button>
@@ -107,7 +107,7 @@ function CardPrompt({ children }: { children: React.ReactNode }) {
   return (
     <button
       type="button"
-      className="flex items-center gap-3 rounded-lg bg-background-base px-3 py-2 text-left text-label-sm text-text-primary shadow-button-gray"
+      className="flex items-center gap-3 rounded-lg bg-base px-3 py-2 text-left text-label-small text-primary borders-base"
     >
       <span className="size-4.5 shrink-0 rounded bg-gradient-to-br from-[#714dff] to-[#e151ff]" />
       {children}

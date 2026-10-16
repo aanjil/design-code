@@ -21,17 +21,17 @@ export function KycScreen({ view }: { view: KycView }) {
     return (
       <FlowShell title="Confirm your details" progress={`Step 1 of ${TOTAL_STEPS}`}>
         <div className="flex flex-col gap-4">
-          <p className="text-paragraph-xs text-text-muted">
+          <p className="text-paragraph-xsmall text-muted">
             We've filled in what we already know. Check everything and correct anything that's
             changed.
           </p>
           <FormCard className="flex flex-col gap-3">
-            <p className="text-label-xs text-text-muted">Personal</p>
+            <p className="text-label-xsmall text-muted">Personal</p>
             <div className="grid grid-cols-2 gap-3">
               <ReadonlyField label="Full name" value={SPLIT_EMPLOYEE.name} />
               <ReadonlyField label="Date of birth" value="18/04/1993" />
             </div>
-            <p className="pt-1 text-label-xs text-text-muted">Address</p>
+            <p className="pt-1 text-label-xsmall text-muted">Address</p>
             <ReadonlyField label="Home address" value={SPLIT_EMPLOYEE.address} />
             <ReadonlyField label="Country" value={SPLIT_EMPLOYEE.country} />
           </FormCard>
@@ -52,7 +52,7 @@ export function KycScreen({ view }: { view: KycView }) {
       <FlowShell title="Confirm your details" progress={`Step ${2 + idx} of ${TOTAL_STEPS}`}>
         <div className="flex flex-col gap-4">
           <FormCard className="flex flex-col gap-3">
-            <p className="text-label-sm text-text-primary">{q.question}</p>
+            <p className="text-label-small text-primary">{q.question}</p>
             <div className="flex flex-col gap-2">
               {q.options.map((opt) => (
                 <OptionRow key={opt} label={opt} selected={opt === q.answer} />
@@ -83,11 +83,11 @@ export function KycScreen({ view }: { view: KycView }) {
       <FlowShell title="Verify with a photo ID and selfie" progress={`Step ${TOTAL_STEPS} of ${TOTAL_STEPS}`}>
         <FormCard className="flex flex-col items-center gap-4 py-10 text-center">
           <span className="flex size-12 items-center justify-center rounded-full bg-brand-muted">
-            <IdentificationCard className="size-6 text-brand-text" />
+            <IdentificationCard className="size-6 text-brand" />
           </span>
           <div className="flex flex-col gap-1">
-            <p className="text-label-md text-text-primary">Verify with a photo ID and selfie</p>
-            <p className="max-w-sm text-paragraph-xs text-text-muted">
+            <p className="text-label-medium text-primary">Verify with a photo ID and selfie</p>
+            <p className="max-w-sm text-paragraph-xsmall text-muted">
               Transak uses Onfido to check your ID. Have your passport or driving licence ready.
               Takes about 5 minutes.
             </p>
@@ -104,12 +104,12 @@ export function KycScreen({ view }: { view: KycView }) {
     return (
       <FlowShell title="Verification submitted">
         <FormCard className="flex flex-col items-center gap-4 py-10 text-center">
-          <span className="flex size-12 items-center justify-center rounded-full bg-background-success-muted">
-            <IdentificationCard className="size-6 text-text-success-base" />
+          <span className="flex size-12 items-center justify-center rounded-full bg-success-muted">
+            <IdentificationCard className="size-6 text-success" />
           </span>
           <div className="flex flex-col gap-1">
-            <p className="text-label-md text-text-primary">Documents submitted</p>
-            <p className="max-w-sm text-paragraph-xs text-text-muted">
+            <p className="text-label-medium text-primary">Documents submitted</p>
+            <p className="max-w-sm text-paragraph-xsmall text-muted">
               Transak is reviewing your identity. Nothing needed from you - we'll email you as soon
               as it's done, usually within a few hours.
             </p>
@@ -126,17 +126,17 @@ export function KycScreen({ view }: { view: KycView }) {
   return (
     <FlowShell title="Identity verification">
       <FormCard className="flex flex-col items-center gap-4 py-10 text-center">
-        <span className="flex size-12 items-center justify-center rounded-full bg-background-error-highlight">
-          <IdentificationCard className="size-6 text-text-error-base" />
+        <span className="flex size-12 items-center justify-center rounded-full bg-error-highlight">
+          <IdentificationCard className="size-6 text-error" />
         </span>
         <div className="flex flex-col gap-1">
-          <p className="text-label-md text-text-primary">We couldn't verify your identity</p>
-          <p className="max-w-sm text-paragraph-xs text-text-muted">
+          <p className="text-label-medium text-primary">We couldn't verify your identity</p>
+          <p className="max-w-sm text-paragraph-xsmall text-muted">
             {view.retryBlocked
               ? "Verification can't be retried automatically. Our support team can help you finish this."
               : "This sometimes happens when a document is blurry or details don't match. You can try again."}
           </p>
-          <p className="pt-1 text-caption-md text-text-muted">
+          <p className="pt-1 text-caption-sm font-medium text-muted">
             Transak status: REJECTED · Document could not be read
           </p>
         </div>

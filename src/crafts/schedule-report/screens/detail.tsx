@@ -57,7 +57,7 @@ export function DetailScreen({
               leftIcon={<CalendarBlank className="size-4" />}
               rightIcon={
                 report.schedulable && (
-                  <span className="absolute -top-1.5 -right-1.5 rounded-full bg-brand-primary px-1.5 py-0.5 text-[9px] font-medium text-text-on-color">
+                  <span className="absolute -top-1.5 -right-1.5 rounded-full bg-brand px-1.5 py-0.5 text-[9px] font-medium text-on-color">
                     NEW
                   </span>
                 )
@@ -72,39 +72,39 @@ export function DetailScreen({
         }
       />
       <PageBody className="flex flex-col gap-3">
-        <div className="flex items-center justify-between rounded-xl border border-border-highlight p-3">
-          <div className="flex items-center gap-6 text-paragraph-xs">
+        <div className="flex items-center justify-between rounded-xl border border-base p-3">
+          <div className="flex items-center gap-6 text-paragraph-xsmall">
             {report.dateShape === 'range' && (
               <span>
-                <span className="text-text-muted">Date range: </span>
-                <span className="text-text-primary">{fmtHuman(dateRange.start)} - {fmtHuman(dateRange.end)}</span>
+                <span className="text-muted">Date range: </span>
+                <span className="text-primary">{fmtHuman(dateRange.start)} - {fmtHuman(dateRange.end)}</span>
               </span>
             )}
             {report.dateShape === 'single' && (
               <span>
-                <span className="text-text-muted">As of: </span>
-                <span className="text-text-primary">Jul 15, 2026 (run date)</span>
+                <span className="text-muted">As of: </span>
+                <span className="text-primary">Jul 15, 2026 (run date)</span>
               </span>
             )}
             {report.dateShape === 'none' && (
-              <span className="text-text-muted">Snapshot - no date param for this report.</span>
+              <span className="text-muted">Snapshot - no date param for this report.</span>
             )}
             {report.dateShape !== 'none' && (
               <span>
-                <span className="text-text-muted">Status: </span>
-                <span className="text-text-primary">All</span>
+                <span className="text-muted">Status: </span>
+                <span className="text-primary">All</span>
               </span>
             )}
           </div>
         </div>
 
-        <p className="text-caption-md text-text-muted">
+        <p className="text-caption-sm font-medium text-muted">
           The same parameters power three actions - Generate now, Regenerate after adjusting, or Schedule for later.
         </p>
 
-        <div className="overflow-hidden rounded-xl border border-border-highlight">
-          <table className="w-full text-left text-paragraph-xs">
-            <thead className="bg-background-highlight text-text-muted">
+        <div className="overflow-hidden rounded-xl border border-base">
+          <table className="w-full text-left text-paragraph-xsmall">
+            <thead className="bg-highlight text-muted">
               <tr>
                 {MOCK_ROWS.map((r) => (
                   <th key={r.label} className="px-3 py-2 font-medium">{r.label}</th>
@@ -113,7 +113,7 @@ export function DetailScreen({
             </thead>
             <tbody>
               {Array.from({ length: 6 }).map((_, i) => (
-                <tr key={i} className="border-t border-border-highlight text-text-primary">
+                <tr key={i} className="border-t border-base text-primary">
                   {MOCK_ROWS.map((r) => (
                     <td key={r.label} className="px-3 py-2">{r.value}</td>
                   ))}
@@ -121,7 +121,7 @@ export function DetailScreen({
               ))}
             </tbody>
           </table>
-          <div className="flex items-center justify-between border-t border-border-highlight px-3 py-2 text-caption-md text-text-muted">
+          <div className="flex items-center justify-between border-t border-base px-3 py-2 text-caption-sm font-medium text-muted">
             28 records
           </div>
         </div>

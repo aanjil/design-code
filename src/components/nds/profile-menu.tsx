@@ -56,8 +56,8 @@ export function ProfileAvatar({ square, size = 'md' }: { square?: boolean; size?
   return (
     <span
       className={cn(
-        'flex shrink-0 items-center justify-center bg-brand-muted text-brand-text shadow-[0px_0px_0px_1px_var(--elevation-alpha-16)]',
-        size === 'lg' ? 'size-10 text-label-sm' : 'size-9 text-label-xs',
+        'flex shrink-0 items-center justify-center bg-brand-muted text-brand shadow-[0px_0px_0px_1px_var(--elevation-alpha-16)]',
+        size === 'lg' ? 'size-10 text-label-small' : 'size-9 text-label-xsmall',
         square ? 'rounded-[8px]' : 'rounded-full',
       )}
     >
@@ -114,7 +114,7 @@ export function ProfileMenu({
       <PopoverTrigger
         aria-label="Profile menu"
         className={cn(
-          'shrink-0 transition-shadow focus-visible:shadow-border-focus data-popup-open:shadow-border-brand',
+          'shrink-0 transition-shadow focus-visible:borders-focus data-popup-open:borders-shadow',
           square ? 'rounded-[8px]' : 'rounded-full',
         )}
       >
@@ -126,8 +126,8 @@ export function ProfileMenu({
             <div className="flex items-center gap-3 px-4 py-3.5">
               <ProfileAvatar square={square} size="lg" />
               <div className="min-w-0">
-                <p className="truncate text-label-md text-text-primary">{p.name}</p>
-                <p className="truncate text-paragraph-xs text-text-muted">{p.role} · {p.org}</p>
+                <p className="truncate text-label-medium text-primary">{p.name}</p>
+                <p className="truncate text-paragraph-xsmall text-muted">{p.role} · {p.org}</p>
               </div>
             </div>
             <Divider />
@@ -141,9 +141,9 @@ export function ProfileMenu({
                 }}
               />
               <div className="flex h-11 items-center gap-3 rounded-lg px-2.5">
-                <Palette className="size-[18px] shrink-0 text-text-primary" />
-                <span className="flex-1 text-label-sm text-text-primary">Appearance</span>
-                <div role="radiogroup" aria-label="Appearance" className="flex items-center gap-0.5 rounded-full bg-background-highlight p-0.5">
+                <Palette className="size-[18px] shrink-0 text-primary" />
+                <span className="flex-1 text-label-small text-primary">Appearance</span>
+                <div role="radiogroup" aria-label="Appearance" className="flex items-center gap-0.5 rounded-full bg-highlight p-0.5">
                   {THEMES.map((t) => (
                     <button
                       key={t.mode}
@@ -155,7 +155,7 @@ export function ProfileMenu({
                       onClick={() => setMode(t.mode)}
                       className={cn(
                         'flex size-7 items-center justify-center rounded-full transition-colors',
-                        mode === t.mode ? 'bg-background-base text-text-primary shadow-button-gray' : 'text-text-muted hover:text-text-primary',
+                        mode === t.mode ? 'bg-base text-primary borders-base' : 'text-muted hover:text-primary',
                       )}
                     >
                       <t.icon className="size-4" />
@@ -166,13 +166,13 @@ export function ProfileMenu({
               <button
                 type="button"
                 onClick={() => setView('language')}
-                className="flex h-11 items-center gap-3 rounded-lg px-2.5 text-left transition-colors hover:bg-background-highlight"
+                className="flex h-11 items-center gap-3 rounded-lg px-2.5 text-left transition-colors hover:bg-highlight"
               >
-                <GlobeHemisphereWest className="size-[18px] shrink-0 text-text-primary" />
-                <span className="text-label-sm text-text-primary">Language</span>
-                <span className="rounded-md bg-background-success-muted px-1.5 text-caption-md text-text-success-base">BETA</span>
-                <span className="ml-auto text-paragraph-sm text-text-muted">{current.native}</span>
-                <CaretRight className="size-4 text-text-muted" />
+                <GlobeHemisphereWest className="size-[18px] shrink-0 text-primary" />
+                <span className="text-label-small text-primary">Language</span>
+                <span className="rounded-md bg-success-muted px-1.5 text-caption-sm font-medium text-success">BETA</span>
+                <span className="ml-auto text-paragraph-small text-muted">{current.native}</span>
+                <CaretRight className="size-4 text-muted" />
               </button>
             </div>
             <Divider />
@@ -191,12 +191,12 @@ export function ProfileMenu({
                 type="button"
                 aria-label="Back"
                 onClick={() => setView('main')}
-                className="flex size-8 items-center justify-center rounded-lg text-text-primary hover:bg-background-highlight"
+                className="flex size-8 items-center justify-center rounded-lg text-primary hover:bg-highlight"
               >
                 <CaretLeft className="size-4" />
               </button>
-              <p className="text-label-sm text-text-primary">Language</p>
-              <span className="rounded-md bg-background-success-muted px-1.5 text-caption-md text-text-success-base">BETA</span>
+              <p className="text-label-small text-primary">Language</p>
+              <span className="rounded-md bg-success-muted px-1.5 text-caption-sm font-medium text-success">BETA</span>
             </div>
             <div className="flex flex-col p-1.5 pt-0">
               {LANGUAGES.map((l) => (
@@ -204,16 +204,16 @@ export function ProfileMenu({
                   key={l.code}
                   type="button"
                   onClick={() => pickLang(l.code)}
-                  className="flex h-10 items-center gap-3 rounded-lg px-2.5 text-left transition-colors hover:bg-background-highlight"
+                  className="flex h-10 items-center gap-3 rounded-lg px-2.5 text-left transition-colors hover:bg-highlight"
                 >
-                  <span className="flex-1 text-label-sm text-text-primary">{l.native}</span>
-                  {l.code !== 'en' && <span className="text-paragraph-xs text-text-muted">{l.label}</span>}
-                  <span className="flex w-4 justify-center">{lang === l.code && <Check weight="bold" className="size-4 text-brand-text" />}</span>
+                  <span className="flex-1 text-label-small text-primary">{l.native}</span>
+                  {l.code !== 'en' && <span className="text-paragraph-xsmall text-muted">{l.label}</span>}
+                  <span className="flex w-4 justify-center">{lang === l.code && <Check weight="bold" className="size-4 text-brand" />}</span>
                 </button>
               ))}
             </div>
             <Divider />
-            <p className="px-4 py-3 text-paragraph-xs text-text-muted">
+            <p className="px-4 py-3 text-paragraph-xsmall text-muted">
               Translations are in beta. Some screens and emails may still show in English.
             </p>
           </>
@@ -228,7 +228,7 @@ function Row({ icon: I, label, onClick }: { icon: typeof Sun; label: string; onC
     <button
       type="button"
       onClick={onClick}
-      className="flex h-11 w-full items-center gap-3 rounded-lg px-2.5 text-left text-label-sm text-text-primary transition-colors hover:bg-background-highlight"
+      className="flex h-11 w-full items-center gap-3 rounded-lg px-2.5 text-left text-label-small text-primary transition-colors hover:bg-highlight"
     >
       <I className="size-[18px] shrink-0" />
       {label}
@@ -237,5 +237,5 @@ function Row({ icon: I, label, onClick }: { icon: typeof Sun; label: string; onC
 }
 
 function Divider() {
-  return <span className="h-px shrink-0 bg-border-highlight" />
+  return <span className="h-px shrink-0 bg-(--border-highlight)" />
 }

@@ -57,29 +57,29 @@ function DocsOverview() {
           <Link
             key={to}
             to={to}
-            className="group flex flex-col gap-2 rounded-xl bg-background-base p-3 shadow-card transition-shadow hover:shadow-card-hover"
+            className="group flex flex-col gap-2 rounded-xl bg-base p-3 card transition-shadow hover:card-hover"
           >
             <div className="flex items-center justify-between">
-              <Icon className="size-5 text-brand-text" />
-              <ArrowUpRight className="size-4 text-text-disabled transition-colors group-hover:text-text-muted" />
+              <Icon className="size-5 text-brand" />
+              <ArrowUpRight className="size-4 text-disabled transition-colors group-hover:text-muted" />
             </div>
             <div>
-              <p className="text-label-md text-text-primary">{title}</p>
-              <p className="text-paragraph-xs text-text-muted">{desc}</p>
+              <p className="text-label-medium text-primary">{title}</p>
+              <p className="text-paragraph-xsmall text-muted">{desc}</p>
             </div>
           </Link>
         ))}
         <Link
           to="/docs/components"
-          className="group flex flex-col gap-2 rounded-xl bg-brand-base p-3 shadow-card transition-shadow hover:shadow-card-hover"
+          className="group flex flex-col gap-2 rounded-xl bg-brand-base p-3 card transition-shadow hover:card-hover"
         >
           <div className="flex items-center justify-between">
-            <CirclesFour className="size-5 text-brand-text" weight="duotone" />
-            <ArrowUpRight className="size-4 text-text-disabled transition-colors group-hover:text-text-muted" />
+            <CirclesFour className="size-5 text-brand" weight="duotone" />
+            <ArrowUpRight className="size-4 text-disabled transition-colors group-hover:text-muted" />
           </div>
           <div>
-            <p className="text-label-md text-text-primary">Components</p>
-            <p className="text-paragraph-xs text-text-muted">
+            <p className="text-label-medium text-primary">Components</p>
+            <p className="text-paragraph-xsmall text-muted">
               The component inventory - full variant &amp; prop docs are the
               next milestone.
             </p>
@@ -87,9 +87,9 @@ function DocsOverview() {
         </Link>
       </div>
 
-      <div className="rounded-xl bg-surface-1 p-4">
-        <p className="text-label-sm text-text-primary">How this stays true</p>
-        <p className="mt-1 max-w-[640px] text-paragraph-xs text-text-muted">
+      <div className="rounded-xl bg-surface-frame p-4">
+        <p className="text-label-small text-primary">How this stays true</p>
+        <p className="mt-1 max-w-[640px] text-paragraph-xsmall text-muted">
           Source foundations live in <InlineCode>docs/foundations/*.md</InlineCode>,
           get encoded as tokens in <InlineCode>src/styles.css</InlineCode>, and these
           pages render from those tokens directly - color values are measured from

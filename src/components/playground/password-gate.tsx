@@ -22,6 +22,10 @@ import {
  * Unlock state persists in localStorage until cleared.
  */
 
+/** Gate is suppressed for now - every craft renders unlocked. Flip to true
+ *  to bring the password prompt back. */
+const GATE_ENABLED = false
+
 const ADMIN_KEY = 'nds-auth:admin'
 const expKey = (slug: string) => `nds-auth:exp:${slug}`
 
@@ -73,7 +77,7 @@ export function PasswordGate({
     if (isUnlocked(slug)) setUnlocked(true)
   }, [slug])
 
-  if (unlocked) return <>{children}</>
+  if (!GATE_ENABLED || unlocked) return <>{children}</>
 
   async function submit(e: React.FormEvent) {
     e.preventDefault()
@@ -99,7 +103,7 @@ export function PasswordGate({
   }
 
   return (
-    <div className="flex h-dvh w-dvw items-center justify-center bg-surface-0 p-4">
+    <div className="flex h-dvh w-dvw items-center justify-center bg-surface-app p-4">
       <Card className="w-full max-w-sm">
         <CardHeader>
           <CardTitle title={title} />

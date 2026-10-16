@@ -1,8 +1,8 @@
-import { ArrowsLeftRight, Bank, CaretLeft, Check, Info } from '@phosphor-icons/react'
+import { ArrowsLeftRight, Bank, CaretLeft, CaretUpDown, Check, Info } from '@phosphor-icons/react'
 import { usePayment } from '../app'
 import { railInSentence, round2 } from '../engine'
 import type { FundDraft } from '../types'
-import { CopyButton, CurrencyMark, Money, ModalShell, RadioDot, RecipientDetails } from '../ui'
+import { Banner, CopyButton, CurrencyMark, Money, ModalShell, RecipientDetails } from '../ui'
 import { Button } from '@niural/components'
 import {
   BANK_ACCOUNTS,
@@ -14,6 +14,14 @@ import {
   fmtDateTime,
 } from '@/mocks/payment-flow'
 import { cn } from '@/lib/utils'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu'
 
 /**
  * Fund wallet (PRD F2): currency → single method per local currency
@@ -48,33 +56,33 @@ export function FundWalletModal({ draft }: { draft: FundDraft }) {
     return (
       <ModalShell width="w-[440px]" footer={<Button type="button" width="full" onClick={close}>Done</Button>}>
         <div className="flex flex-col items-center gap-3 pt-1 text-center">
-          <span className="flex size-12 items-center justify-center rounded-full bg-background-success-base text-text-on-color"><Check weight="bold" className="size-6" /></span>
-          <p className="text-title-h4 text-text-primary">Wallet fund initiated</p>
+          <span className="flex size-12 items-center justify-center rounded-full bg-success text-on-color"><Check weight="bold" className="size-6" /></span>
+          <p className="text-title-h4 text-primary">Wallet fund initiated</p>
         </div>
         <div className="mt-5 flex flex-col gap-4">
           {draft.method !== 'ach' && (
-            <div className="flex flex-col gap-2 rounded-2xl bg-background-base p-3 shadow-card">
-              <p className="text-caption text-text-muted">Reference</p>
-              <div className="flex items-center justify-between rounded-lg border border-dashed border-brand-primary bg-brand-base px-3 py-2">
-                <Money className="text-mono-md text-brand-text">{req.reference}</Money>
+            <div className="flex flex-col gap-2 rounded-2xl bg-base p-3 card">
+              <p className="text-caption-sm text-muted">Reference</p>
+              <div className="flex items-center justify-between rounded-lg border border-dashed border-brand bg-brand-base px-3 py-2">
+                <Money className="text-label-medium text-brand">{req.reference}</Money>
                 <CopyButton value={req.reference} />
               </div>
-              <p className="flex items-start gap-1.5 text-paragraph-xs text-text-muted">
+              <p className="flex items-start gap-1.5 text-paragraph-xsmall text-muted">
                 <Info className="mt-0.5 size-3.5 shrink-0" /> Add this reference to your transfer so we can match your payment.
               </p>
             </div>
           )}
-          <div className="flex flex-col gap-1.5 text-paragraph-sm">
-            <Kv k="Transaction ID" v={<Money className="text-mono-xs">{req.id.replace('fr-', '67fbd406…')}</Money>} />
+          <div className="flex flex-col gap-1.5 text-paragraph-small">
+            <Kv k="Transaction ID" v={<Money className="text-paragraph-xsmall">{req.id.replace('fr-', '67fbd406…')}</Money>} />
             <Kv k="Wallet currency" v={req.ccy} />
             <Kv k="Payment method" v={m.short} />
             <Kv k="Transaction time" v={fmtDateTime(req.createdAt)} />
           </div>
-          <div className="flex items-end justify-between border-t border-border-highlight pt-3">
-            <span className="text-label-sm text-text-primary">{draft.method === 'ach' ? 'Amount to debit' : 'Amount to send'}</span>
-            <Money className="text-mono-lg text-text-primary">{fmt(req.amount + req.fee, req.ccy)}</Money>
+          <div className="flex items-end justify-between border-t border-base pt-3">
+            <span className="text-label-small text-primary">{draft.method === 'ach' ? 'Amount to debit' : 'Amount to send'}</span>
+            <Money className="text-paragraph-large text-primary">{fmt(req.amount + req.fee, req.ccy)}</Money>
           </div>
-          <p className="text-right text-caption text-text-muted">
+          <p className="text-right text-caption-sm text-muted">
             {fmt(req.amount, req.ccy)} will be added to your wallet {draft.method === 'ach' ? 'in 3 to 5 business days' : 'once received and approved'}.
           </p>
         </div>
@@ -105,52 +113,55 @@ export function FundWalletModal({ draft }: { draft: FundDraft }) {
       >
         <div className="grid grid-cols-2 gap-8">
           <div className="flex flex-col gap-5">
-            <div className="grid grid-cols-2 gap-3 rounded-2xl bg-background-base p-4 shadow-card">
+            <div className="grid grid-cols-2 gap-3 rounded-2xl bg-base p-4 card">
               <div>
-                <p className="text-caption text-text-muted">Currency</p>
-                <p className="flex items-center gap-1.5 text-label-sm text-text-primary"><CurrencyMark ccy={draft.ccy} size="sm" />{CCY_NAME[draft.ccy]}</p>
+                <p className="text-caption-sm text-muted">Currency</p>
+                <p className="flex items-center gap-1.5 text-label-small text-primary"><CurrencyMark ccy={draft.ccy} size="sm" />{CCY_NAME[draft.ccy]}</p>
               </div>
               <div>
-                <p className="text-caption text-text-muted">Payment method</p>
-                <p className="text-label-sm text-text-primary">{m.label}</p>
+                <p className="text-caption-sm text-muted">Payment method</p>
+                <p className="text-label-small text-primary">{m.label}</p>
               </div>
             </div>
             {draft.memo && (
               <div>
-                <p className="text-caption text-text-muted">Memo</p>
-                <p className="text-paragraph-sm text-text-primary">{draft.memo}</p>
+                <p className="text-caption-sm text-muted">Memo</p>
+                <p className="text-paragraph-small text-primary">{draft.memo}</p>
               </div>
             )}
             <div className="flex flex-col gap-1.5">
-              <p className="mb-1 text-label-md text-text-primary">Payment summary</p>
-              <Kv k="Funding amount" v={<Money className="text-mono-xs">{fmt(amount, draft.ccy)}</Money>} />
-              <Kv k="Fee" v={<Money className="text-mono-xs">{fmt(m.fee, draft.ccy)}</Money>} />
-              <div className="mt-1 flex items-end justify-between border-t border-border-highlight pt-3">
-                <span className="text-label-sm text-text-primary">{draft.method === 'ach' ? 'Amount to debit' : 'Amount to send'}</span>
-                <Money className="text-mono-lg text-text-primary">{fmt(toSend, draft.ccy)}</Money>
+              <p className="mb-1 text-label-medium text-primary">Payment summary</p>
+              <Kv k="Funding amount" v={<Money className="text-paragraph-xsmall">{fmt(amount, draft.ccy)}</Money>} />
+              <Kv k="Fee" v={<Money className="text-paragraph-xsmall">{fmt(m.fee, draft.ccy)}</Money>} />
+              <div className="mt-1 flex items-end justify-between border-t border-base pt-3">
+                <span className="text-label-small text-primary">{draft.method === 'ach' ? 'Amount to debit' : 'Amount to send'}</span>
+                <Money className="text-paragraph-large text-primary">{fmt(toSend, draft.ccy)}</Money>
               </div>
-              <p className="text-caption text-text-muted">{fmt(amount, draft.ccy)} is credited to your wallet. The fee is added on top.</p>
+              <p className="text-caption-sm text-muted">{fmt(amount, draft.ccy)} is credited to your wallet. The fee is added on top.</p>
             </div>
           </div>
           <div className="flex flex-col gap-2">
             {draft.method === 'ach' ? (
               <>
-                <p className="text-label-md text-text-primary">Debit from</p>
-                <p className="text-paragraph-sm text-text-muted">{BANK_ACCOUNTS[0].name} ••{BANK_ACCOUNTS[0].last4} by ACH. Usually arrives in 3 to 5 business days.</p>
+                <p className="text-label-medium text-primary">Debit from</p>
+                <p className="text-paragraph-small text-muted">{BANK_ACCOUNTS[0].name} ••{BANK_ACCOUNTS[0].last4} by ACH. Usually arrives in 3 to 5 business days.</p>
               </>
             ) : (
               <>
                 <div className="flex items-center justify-between">
-                  <p className="text-label-md text-text-primary">Recipient details</p>
+                  <p className="text-label-medium text-primary">Recipient details</p>
                   <CopyButton value={COLLECTION_ACCOUNT[draft.ccy].map(([k, v]) => `${k}: ${v}`).join('\n')} label="Copy all" />
                 </div>
                 <RecipientDetails fields={COLLECTION_ACCOUNT[draft.ccy]} />
-                <p className="mt-2 flex items-start gap-2 rounded-lg bg-background-info-highlight p-3 text-paragraph-xs text-text-primary">
-                  <Info weight="fill" className="mt-0.5 size-4 shrink-0 text-text-info-base" />
-                  {draft.ccy === 'USD'
-                    ? 'Send this by wire from your bank. Add the reference from the next screen to your transfer so we can match your payment.'
-                    : LOCAL_RAIL[draft.ccy].instruction.replace('the reference', 'the reference from the next screen')}
-                </p>
+                <Banner
+                  tone="info"
+                  className="mt-2"
+                  title={
+                    draft.ccy === 'USD'
+                      ? 'Send this by wire from your bank. Add the reference from the next screen to your transfer so we can match your payment.'
+                      : LOCAL_RAIL[draft.ccy].instruction.replace('the reference', 'the reference from the next screen')
+                  }
+                />
               </>
             )}
           </div>
@@ -173,36 +184,36 @@ export function FundWalletModal({ draft }: { draft: FundDraft }) {
       >
         <div className="flex flex-col gap-5">
           <label className="flex flex-col gap-1.5">
-            <span className="text-label-sm text-text-primary">Funding amount</span>
-            <span className="flex h-9 items-center gap-2 rounded-btn bg-background-base px-3 shadow-button-gray focus-within:shadow-border-focus">
-              <span className="text-label-sm text-text-muted">{draft.ccy}</span>
+            <span className="text-label-small text-primary">Funding amount</span>
+            <span className="flex h-9 items-center gap-2 rounded-control bg-base px-3 borders-base focus-within:borders-focus">
+              <span className="text-label-small text-muted">{draft.ccy}</span>
               <input
                 value={draft.amount}
                 inputMode="decimal"
                 onChange={(e) => update({ amount: e.target.value.replace(/[^\d.]/g, '') })}
                 onBlur={() => amount > 0 && update({ amount: amount.toFixed(2) })}
                 placeholder="0.00"
-                className="min-w-0 flex-1 bg-transparent font-mono text-mono-sm text-text-primary outline-none"
+                className="min-w-0 flex-1 bg-transparent tabular-nums text-label-small text-primary outline-none"
               />
             </span>
             {draft.shortfall !== undefined && (
-              <span className="text-caption text-text-muted">
+              <span className="text-caption-sm text-muted">
                 Prefilled with what you're short to pay the selected invoices. You can send more.
               </span>
             )}
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-label-sm text-text-primary">Memo <span className="text-text-muted">(optional)</span></span>
+            <span className="text-label-small text-primary">Memo <span className="text-muted">(optional)</span></span>
             <textarea
               value={draft.memo}
               onChange={(e) => update({ memo: e.target.value })}
               placeholder="e.g. Oct payroll top up"
-              className="min-h-20 rounded-btn bg-background-base px-3 py-2 text-paragraph-sm text-text-primary shadow-button-gray outline-none placeholder:text-text-muted focus:shadow-border-focus"
+              className="min-h-20 rounded-control bg-base px-3 py-2 text-paragraph-small text-primary borders-base outline-none placeholder:text-muted focus:borders-focus"
             />
           </label>
-          <div className="flex items-center justify-between rounded-xl bg-surface-2 px-3 py-2.5 text-paragraph-sm">
-            <span className="text-text-muted">{m.label} fee, added on top</span>
-            <Money className="text-mono-xs text-text-primary">{fmt(m.fee, draft.ccy)}</Money>
+          <div className="flex items-center justify-between rounded-xl bg-surface-page px-3 py-2.5 text-paragraph-small">
+            <span className="text-muted">{m.label} fee, added on top</span>
+            <Money className="text-paragraph-xsmall text-primary">{fmt(m.fee, draft.ccy)}</Money>
           </div>
         </div>
       </ModalShell>
@@ -223,34 +234,19 @@ export function FundWalletModal({ draft }: { draft: FundDraft }) {
     >
       <div className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
-          <span className="text-label-sm text-text-primary">Wallet currency</span>
-          <div className="flex flex-col gap-2">
-            {enabled.map((c) => {
-              const w = data.wallets.find((x) => x.ccy === c && !x.network)
-              const on = draft.ccy === c
-              return (
-                <button
-                  key={c}
-                  type="button"
-                  onClick={() => update({ ccy: c, method: 'rail' })}
-                  className={cn('flex items-center gap-3 rounded-xl bg-background-base p-3 text-left transition-shadow', on ? 'shadow-border-brand' : 'shadow-card hover:shadow-card-hover')}
-                >
-                  <CurrencyMark ccy={c} />
-                  <span className="min-w-0 flex-1">
-                    <span className="block text-label-sm text-text-primary">{CCY_NAME[c]}</span>
-                    <span className="block text-paragraph-xs text-text-muted">
-                      Available balance: <Money className="text-text-primary">{fmt(w?.available ?? 0, c)}</Money>
-                    </span>
-                  </span>
-                  <RadioDot on={on} />
-                </button>
-              )
-            })}
-          </div>
-          {enabled.length === 1 && <span className="text-caption text-text-muted">Only currencies enabled for your account are listed.</span>}
+          <span className="text-label-small text-primary">Wallet</span>
+          {/* One wallet, not a list: you opened Fund from a wallet, so that
+              wallet is already the answer. Change is there for the rare
+              case you meant another - it doesn't compete with the default. */}
+          <WalletPicker
+            value={draft.ccy}
+            options={enabled.map((c) => ({ ccy: c, available: data.wallets.find((x) => x.ccy === c && !x.network)?.available ?? 0 }))}
+            onChange={(c) => update({ ccy: c, method: 'rail' })}
+          />
+          {enabled.length === 1 && <span className="text-caption-sm text-muted">Only currencies enabled for your account are listed.</span>}
         </div>
         <div className="flex flex-col gap-1.5">
-          <span className="text-label-sm text-text-primary">Payment method</span>
+          <span className="text-label-small text-primary">Payment method</span>
           {draft.ccy === 'USD' ? (
             <div className="flex flex-col gap-2">
               <MethodRow icon={ArrowsLeftRight} label="Wire transfer" sub={`Total fee: ${fmt(USD_WIRE_FEE, 'USD')}`} on={draft.method === 'rail'} onClick={() => update({ method: 'rail' })} />
@@ -259,14 +255,14 @@ export function FundWalletModal({ draft }: { draft: FundDraft }) {
           ) : (
             <>
               <MethodRow icon={ArrowsLeftRight} label={m.label} sub={`Total fee: ${fmt(m.fee, draft.ccy)}`} on onClick={() => {}} />
-              <span className="text-caption text-text-muted">{CCY_NAME[draft.ccy]} wallets are funded by {railInSentence(m.label)} only.</span>
+              <span className="text-caption-sm text-muted">{CCY_NAME[draft.ccy]} wallets are funded by {railInSentence(m.label)} only.</span>
             </>
           )}
         </div>
         {wallet && wallet.pending > 0 && (
-          <p className="flex items-start gap-1.5 text-paragraph-xs text-text-muted">
+          <p className="flex items-start gap-1.5 text-paragraph-xsmall text-muted">
             <Info className="mt-0.5 size-3.5 shrink-0" />
-            You already have <Money className="text-text-primary">{fmt(wallet.pending, wallet.ccy)}</Money> pending approval in this wallet.
+            You already have <Money className="text-primary">{fmt(wallet.pending, wallet.ccy)}</Money> pending approval in this wallet.
           </p>
         )}
       </div>
@@ -274,15 +270,74 @@ export function FundWalletModal({ draft }: { draft: FundDraft }) {
   )
 }
 
+type FundCcy = FundDraft['ccy']
+
+function WalletPicker({
+  value,
+  options,
+  onChange,
+}: {
+  value: FundCcy
+  options: Array<{ ccy: FundCcy; available: number }>
+  onChange: (ccy: FundCcy) => void
+}) {
+  const current = options.find((o) => o.ccy === value) ?? options[0]
+  const body = (
+    <>
+      <CurrencyMark ccy={current.ccy} size="lg" />
+      <span className="min-w-0 flex-1">
+        <span className="block text-label-medium text-primary">{CCY_NAME[current.ccy]}</span>
+        <span className="block text-paragraph-xsmall text-muted">
+          Available balance: <Money className="text-primary">{fmt(current.available, current.ccy)}</Money>
+        </span>
+      </span>
+    </>
+  )
+  const cardClass = 'flex w-full items-center gap-3 rounded-xl bg-base p-3 text-left card'
+
+  if (options.length < 2) return <div className={cardClass}>{body}</div>
+
+  return (
+    <DropdownMenu>
+      {/* The whole card is the trigger (bigger target, and the menu takes
+          the card's width); "Change" is the visible affordance. */}
+      <DropdownMenuTrigger
+        render={<button type="button" />}
+        className={cn(cardClass, 'group transition-shadow hover:card-hover data-popup-open:borders-shadow')}
+      >
+        {body}
+        <span className="flex shrink-0 items-center gap-1 rounded-control px-2 py-1 text-label-small text-brand transition-colors group-hover:bg-brand-base">
+          Change
+          <CaretUpDown className="size-3.5" />
+        </span>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" sideOffset={6} className="p-1.5">
+        <DropdownMenuRadioGroup value={value} onValueChange={(v) => onChange(v as FundCcy)}>
+          <DropdownMenuLabel>Available wallets</DropdownMenuLabel>
+          {options.map((o) => (
+            <DropdownMenuRadioItem key={o.ccy} value={o.ccy} closeOnClick className="gap-3 py-2">
+              <CurrencyMark ccy={o.ccy} />
+              <span className="min-w-0 flex-1">
+                <span className="block text-label-small text-primary">{CCY_NAME[o.ccy]}</span>
+                <Money className="block text-paragraph-xsmall text-muted">{fmt(o.available, o.ccy)}</Money>
+              </span>
+            </DropdownMenuRadioItem>
+          ))}
+        </DropdownMenuRadioGroup>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+
 function MethodRow({ icon: I, label, sub, on, onClick }: { icon: typeof Bank; label: string; sub: string; on: boolean; onClick: () => void }) {
   return (
-    <button type="button" onClick={onClick} className={cn('flex items-center gap-3 rounded-xl bg-background-base p-3 text-left transition-shadow', on ? 'shadow-border-brand' : 'shadow-card hover:shadow-card-hover')}>
-      <span className="flex size-8 items-center justify-center rounded-full bg-brand-muted text-brand-text"><I className="size-4" /></span>
+    <button type="button" onClick={onClick} className={cn('flex items-center gap-3 rounded-xl bg-base p-3 text-left transition-shadow', on ? 'borders-shadow' : 'card hover:card-hover')}>
+      <span className="flex size-8 items-center justify-center rounded-full bg-brand-muted text-brand"><I className="size-4" /></span>
       <span className="min-w-0 flex-1">
-        <span className="block text-label-sm text-text-primary">{label}</span>
-        <span className="block text-paragraph-xs text-text-muted">{sub}</span>
+        <span className="block text-label-small text-primary">{label}</span>
+        <span className="block text-paragraph-xsmall text-muted">{sub}</span>
       </span>
-      {on && <span className="flex size-5 items-center justify-center rounded-full bg-background-success-base text-text-on-color"><Check weight="bold" className="size-3" /></span>}
+      {on && <span className="flex size-5 items-center justify-center rounded-full bg-success text-on-color"><Check weight="bold" className="size-3" /></span>}
     </button>
   )
 }
@@ -290,8 +345,8 @@ function MethodRow({ icon: I, label, sub, on, onClick }: { icon: typeof Bank; la
 function Kv({ k, v }: { k: string; v: React.ReactNode }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <span className="text-paragraph-sm text-text-muted">{k}</span>
-      <span className="text-right text-paragraph-sm text-text-primary">{v}</span>
+      <span className="text-paragraph-small text-muted">{k}</span>
+      <span className="text-right text-paragraph-small text-primary">{v}</span>
     </div>
   )
 }

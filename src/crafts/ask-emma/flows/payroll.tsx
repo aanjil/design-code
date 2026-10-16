@@ -39,7 +39,7 @@ export function PayrollWhichScreen({ state }: { state: 'ask' | 'done' }) {
         </Step>
       </Timeline>
       <Note className="mt-4">
-        <b className="text-text-primary">NOT A CHAT TURN.</b> the system knows which payroll is due and says so;
+        <b className="text-primary">NOT A CHAT TURN.</b> the system knows which payroll is due and says so;
         the other four are one click, priced. typing "run the january payroll" would be slower and could be
         misparsed.
       </Note>
@@ -81,14 +81,14 @@ export function PayrollPrepareScreen({ state }: { state: 'locked' | 'loading' | 
               <div className="mt-1 flex items-center gap-2.5">
                 <button
                   type="button"
-                  className="rounded-md bg-grain-ink px-2.5 py-1.5 text-label-xs text-grain-ink-foreground"
+                  className="rounded-md bg-(--text-base) px-2.5 py-1.5 text-label-xsmall text-(--background-base)"
                 >
                   Start with the 3 →
                 </button>
-                <span className="font-mono text-[10.5px] text-text-muted">41 people need nothing from you</span>
+                <span className="font-mono text-[10.5px] text-muted">41 people need nothing from you</span>
               </div>
               <Note className="mt-1">
-                <b className="text-text-primary">SEVEN STEPS COLLAPSED TO ZERO.</b> gross pay, taxes, earnings and
+                <b className="text-primary">SEVEN STEPS COLLAPSED TO ZERO.</b> gross pay, taxes, earnings and
                 deductions all ran. none needed you, so none got a step. the traditional flow is this same run
                 with every step forced open.
               </Note>
@@ -120,11 +120,11 @@ export function PayrollResolveScreen({ resolvedCount }: { resolvedCount: 0 | 1 |
             <div className="mt-2.5 flex items-center gap-2.5">
               <button
                 type="button"
-                className="rounded-md bg-grain-ink px-2.5 py-1.5 text-label-xs text-grain-ink-foreground"
+                className="rounded-md bg-(--text-base) px-2.5 py-1.5 text-label-xsmall text-(--background-base)"
               >
                 Confirm and run →
               </button>
-              <span className="font-mono text-[10.5px] text-text-muted">3 resolved · nothing submitted yet</span>
+              <span className="font-mono text-[10.5px] text-muted">3 resolved · nothing submitted yet</span>
             </div>
           )}
         </Step>
@@ -169,12 +169,12 @@ export function PayrollConfirmScreen({ state }: { state: 'locked' | 'open' | 'do
               <Grain
                 claim={PAYROLL_APPROVAL.claim}
                 badge="READY"
-                body={<p className="text-paragraph-xs text-text-muted">{PAYROLL_APPROVAL.body}</p>}
+                body={<p className="text-paragraph-xsmall text-muted">{PAYROLL_APPROVAL.body}</p>}
                 provenance={PAYROLL_APPROVAL.provenance}
                 exits={PAYROLL_APPROVAL.exits}
               />
               <Note className="mt-1">
-                <b className="text-text-primary">ONE TOTAL, RECONCILED IN PUBLIC.</b> the consequence grain shows
+                <b className="text-primary">ONE TOTAL, RECONCILED IN PUBLIC.</b> the consequence grain shows
                 637,150 → 634,078 with the reason on its own row, and the approval repeats the same number. two
                 adjacent totals that disagree is the fastest way to lose a payroll manager.
               </Note>
@@ -193,7 +193,7 @@ export function PayrollConfirmScreen({ state }: { state: 'locked' | 'open' | 'do
                 ]}
               />
               <Note className="mt-1">
-                <b className="text-text-primary">THE RUN IS NOW CLOSED.</b> returns, failures and settlement land
+                <b className="text-primary">THE RUN IS NOW CLOSED.</b> returns, failures and settlement land
                 as new items in the history — not as new rows at the bottom of this timeline. an open-ended
                 timeline slowly becomes a chat log, which is the thing we were escaping.
               </Note>

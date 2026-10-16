@@ -40,9 +40,12 @@ export function Thread({
   onDismissPinned,
   turns,
   height,
+  actions,
   className,
 }: {
   title: string
+  /** Extra header controls before collapse/close (e.g. a placement menu). */
+  actions?: React.ReactNode
   /** Sends the whole thing back down to the line-density bar (⌄). */
   onCollapse?: () => void
   onClose?: () => void
@@ -58,20 +61,21 @@ export function Thread({
   return (
     <div
       className={cn(
-        'flex flex-col overflow-hidden rounded-xl border border-border-highlight bg-background-base shadow-flyout',
+        'flex flex-col overflow-hidden rounded-xl border border-base bg-base flyout',
         className,
       )}
       style={height != null ? { height } : undefined}
     >
-      <div className="flex flex-none items-center gap-1 border-b border-border-highlight px-3 py-2.5">
-        <b className="min-w-0 flex-1 truncate text-label-sm font-medium text-text-primary">{title}</b>
+      <div className="flex flex-none items-center gap-1 border-b border-base px-3 py-2.5">
+        <b className="min-w-0 flex-1 truncate text-label-small font-medium text-primary">{title}</b>
+        {actions}
         {onCollapse && (
           <button
             type="button"
             onClick={onCollapse}
             title="Send back to the bar"
             aria-label="Collapse to bar"
-            className="flex size-6.5 shrink-0 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+            className="flex size-6.5 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-highlight hover:text-primary"
           >
             <CaretDown className="size-3.5" />
           </button>
@@ -81,7 +85,7 @@ export function Thread({
             type="button"
             onClick={onClose}
             aria-label="Close"
-            className="flex size-6.5 shrink-0 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+            className="flex size-6.5 shrink-0 items-center justify-center rounded-md text-muted transition-colors hover:bg-highlight hover:text-primary"
           >
             <X className="size-3.5" />
           </button>
@@ -89,9 +93,9 @@ export function Thread({
       </div>
 
       {pinned.length > 0 && (
-        <div className="flex-none border-b border-border-highlight">
+        <div className="flex-none border-b border-base">
           <div className="flex items-center gap-2 px-3 pt-2.5">
-            <span className="font-mono text-[9px] font-semibold tracking-wide text-text-disabled">
+            <span className="font-mono text-[9px] font-semibold tracking-wide text-disabled">
               NEEDS YOU · {pinned.length + pinnedOverflow}
             </span>
             <span className="flex-1" />
@@ -99,7 +103,7 @@ export function Thread({
               <button
                 type="button"
                 onClick={onDismissPinned}
-                className="font-mono text-[9px] font-semibold tracking-wide text-text-muted transition-colors hover:text-text-primary"
+                className="font-mono text-[9px] font-semibold tracking-wide text-muted transition-colors hover:text-primary"
               >
                 DISMISS ALL
               </button>
@@ -110,7 +114,7 @@ export function Thread({
               <Grain key={p.key} {...p.grain} />
             ))}
             {pinnedOverflow > 0 && (
-              <div className="rounded-lg border border-dashed border-border-base p-2 text-center font-mono text-[10.5px] text-text-muted">
+              <div className="rounded-lg border border-dashed border-base p-2 text-center font-mono text-[10.5px] text-muted">
                 +{pinnedOverflow} more waiting
               </div>
             )}
@@ -123,7 +127,7 @@ export function Thread({
           <Turn key={i} turn={turn} />
         ))}
       </div>
-      <p className="flex-none px-3 pb-2.5 text-center font-mono text-[9px] tracking-wide text-text-disabled">
+      <p className="flex-none px-3 pb-2.5 text-center font-mono text-[9px] tracking-wide text-disabled">
         NEWEST BELOW · YOU OWN WHAT COMES NEXT
       </p>
     </div>
@@ -135,7 +139,7 @@ function Turn({ turn }: { turn: ThreadTurn }) {
     return (
       <p
         className={cn(
-          'max-w-[86%] self-end rounded-2xl rounded-br-sm bg-brand-base px-3 py-2 text-paragraph-sm text-brand-text',
+          'max-w-[86%] self-end rounded-2xl rounded-br-sm bg-brand-base px-3 py-2 text-paragraph-small text-brand',
           turn.className,
         )}
       >
@@ -145,7 +149,7 @@ function Turn({ turn }: { turn: ThreadTurn }) {
   }
   return (
     <div className={cn('flex flex-col gap-2', turn.className)}>
-      {turn.text && <p className="text-paragraph-sm text-text-primary">{turn.text}</p>}
+      {turn.text && <p className="text-paragraph-small text-primary">{turn.text}</p>}
       {turn.grain && <Grain {...turn.grain} />}
     </div>
   )

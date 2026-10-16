@@ -119,29 +119,29 @@ function MoveTimeline({
 
   return (
     <div className="mt-3">
-      <div className="relative h-4 text-caption-md text-text-muted">
+      <div className="relative h-4 text-caption-sm font-medium text-muted">
         <span className="absolute left-0">{fmtShort(spanStart)}</span>
         <span
-          className="absolute font-medium text-brand-text"
+          className="absolute font-medium text-brand"
           style={{ left: `${effLeft}%`, transform: 'translateX(-50%)' }}
         >
           {fmtShort(effectiveDate)} · effective
         </span>
         <span className="absolute right-0">{fmtShort(spanEnd)}</span>
       </div>
-      <p className="mt-3 text-caption-md text-text-muted">
+      <p className="mt-3 text-caption-sm font-medium text-muted">
         Current · {oldSchedule.name} ({oldSchedule.frequency})
       </p>
-      <div className="relative mt-1 h-9 rounded-lg bg-background-highlight">
+      <div className="relative mt-1 h-9 rounded-lg bg-highlight">
         <div
-          className="absolute inset-y-1 flex items-center justify-center overflow-hidden rounded-md border border-border-base bg-background-base px-1 text-caption-md text-text-muted"
+          className="absolute inset-y-1 flex items-center justify-center overflow-hidden rounded-md border border-base bg-base px-1 text-caption-sm font-medium text-muted"
           style={{ left: `${pct(oldPeriod.start)}%`, width: `${widthPct(oldPeriod.start, oldPeriod.end)}%` }}
         >
           {fmtShort(oldPeriod.start)}–{fmtShort(oldPeriod.end)}
         </div>
         {isGap && (
           <div
-            className="absolute -top-1 -bottom-1 rounded-md bg-background-warning-highlight"
+            className="absolute -top-1 -bottom-1 rounded-md bg-warning-highlight"
             style={{ left: `${bandLeft}%`, width: `${bandWidth}%` }}
           />
         )}
@@ -151,33 +151,33 @@ function MoveTimeline({
             style={{ left: `${bandLeft}%`, width: `${bandWidth}%` }}
           />
         )}
-        <div className="absolute -top-1.5 -bottom-1.5 w-0.5 bg-brand-primary" style={{ left: `${effLeft}%` }} />
+        <div className="absolute -top-1.5 -bottom-1.5 w-0.5 bg-brand" style={{ left: `${effLeft}%` }} />
       </div>
-      <p className="mt-3 text-caption-md text-text-muted">
+      <p className="mt-3 text-caption-sm font-medium text-muted">
         New · {newSchedule.name} ({newSchedule.frequency})
       </p>
-      <div className="relative mt-1 h-9 rounded-lg bg-background-highlight">
+      <div className="relative mt-1 h-9 rounded-lg bg-highlight">
         <div
-          className="absolute inset-y-1 flex items-center justify-center overflow-hidden rounded-md border border-brand-primary/40 bg-brand-muted px-1 text-caption-md text-brand-text"
+          className="absolute inset-y-1 flex items-center justify-center overflow-hidden rounded-md border border-brand/40 bg-brand-muted px-1 text-caption-sm font-medium text-brand"
           style={{ left: `${pct(newPeriod.start)}%`, width: `${widthPct(newPeriod.start, newPeriod.end)}%` }}
         >
           {fmtShort(newPeriod.start)}–{fmtShort(newPeriod.end)}
         </div>
         {isOverlap && (
           <div
-            className="absolute -top-1 -bottom-1 rounded-md bg-brand-primary/40"
+            className="absolute -top-1 -bottom-1 rounded-md bg-brand/40"
             style={{ left: `${bandLeft}%`, width: `${bandWidth}%` }}
           />
         )}
-        <div className="absolute -top-1.5 -bottom-1.5 w-0.5 bg-brand-primary" style={{ left: `${effLeft}%` }} />
+        <div className="absolute -top-1.5 -bottom-1.5 w-0.5 bg-brand" style={{ left: `${effLeft}%` }} />
       </div>
-      <div className="mt-3 flex flex-wrap gap-4 text-caption-md text-text-muted">
+      <div className="mt-3 flex flex-wrap gap-4 text-caption-sm font-medium text-muted">
         <span className="flex items-center gap-1.5">
-          <span className="inline-block size-3 rounded-sm border border-border-base bg-background-base" /> period
+          <span className="inline-block size-3 rounded-sm border border-base bg-base" /> period
         </span>
         {isGap && (
           <span className="flex items-center gap-1.5">
-            <span className="inline-block size-3 rounded-sm bg-background-warning-highlight" /> uncovered → becomes
+            <span className="inline-block size-3 rounded-sm bg-warning-highlight" /> uncovered → becomes
             retro
           </span>
         )}
@@ -187,7 +187,7 @@ function MoveTimeline({
           </span>
         )}
         <span className="flex items-center gap-1.5">
-          <span className="inline-block h-0.5 w-3 bg-brand-primary" /> effective date
+          <span className="inline-block h-0.5 w-3 bg-brand" /> effective date
         </span>
       </div>
     </div>
@@ -252,7 +252,7 @@ function MoveFlowScreen({
           <FreqTag>
             {fromSchedule.name} · {view.from}
           </FreqTag>
-          <ArrowRight className="size-3.5 shrink-0 text-text-muted" />
+          <ArrowRight className="size-3.5 shrink-0 text-muted" />
           <FreqTag>
             {toSchedule.name} · {toSchedule.frequency}
           </FreqTag>
@@ -270,9 +270,9 @@ function MoveFlowScreen({
                 type="date"
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
-                className="h-9 w-56 rounded-btn bg-background-base px-3 text-paragraph-sm text-text-primary shadow-button-gray transition-shadow outline-none focus:shadow-border-focus"
+                className="h-9 w-56 rounded-control bg-base px-3 text-paragraph-small text-primary borders-base transition-shadow outline-none focus:borders-focus"
               />
-              <p className="text-paragraph-xs text-text-muted">
+              <p className="text-paragraph-xsmall text-muted">
                 Hired {fmtHireDate(employee.hireDate)} · validation runs as you type.
               </p>
             </div>
@@ -288,11 +288,11 @@ function MoveFlowScreen({
             )}
 
             <div className="mt-5 flex items-center justify-between">
-              <p className="text-label-xs text-text-primary">Move to schedule</p>
+              <p className="text-label-xsmall text-primary">Move to schedule</p>
               <ShowAllToggle showAll={showAll} onChange={setShowAll} />
             </div>
             {shownSchedules.length > 0 ? (
-              <div className="mt-2 overflow-hidden rounded-lg border border-border-highlight">
+              <div className="mt-2 overflow-hidden rounded-lg border border-base">
                 {shownSchedules.map((s) => (
                   <ScheduleRow
                     key={s.id}
@@ -305,9 +305,9 @@ function MoveFlowScreen({
                 ))}
               </div>
             ) : (
-              <p className="mt-2 text-paragraph-xs text-text-muted">
+              <p className="mt-2 text-paragraph-xsmall text-muted">
                 No other schedule's rule matches this employee.{' '}
-                <button type="button" className="text-brand-text" onClick={() => setShowAll(true)}>
+                <button type="button" className="text-brand" onClick={() => setShowAll(true)}>
                   Show all schedules
                 </button>
                 .
@@ -384,20 +384,20 @@ function MoveFlowScreen({
                     {money(impact.regularPay)}
                   </KV>
                   {impact.retro > 0 && !retroSkipped && (
-                    <div className="flex items-baseline justify-between gap-4 border-b border-border-highlight py-2">
-                      <span className="shrink-0 text-paragraph-xs text-text-muted">
+                    <div className="flex items-baseline justify-between gap-4 border-b border-base py-2">
+                      <span className="shrink-0 text-paragraph-xsmall text-muted">
                         Retro pay · {fmtShort(impact.gapStart)} to {fmtHuman(impact.gapEnd)}
                       </span>
                       <span className="flex items-center gap-2">
                         {!editingRetro ? (
-                          <span className="text-label-xs text-text-primary">{money(retroOverride ?? impact.retro)}</span>
+                          <span className="text-label-xsmall text-primary">{money(retroOverride ?? impact.retro)}</span>
                         ) : (
                           <input
                             type="number"
                             step="0.01"
                             value={retroOverride ?? impact.retro}
                             onChange={(e) => setRetroOverride(Number(e.target.value))}
-                            className="h-7 w-24 rounded-lg bg-background-base px-2 text-right text-label-xs text-text-primary shadow-button-gray outline-none focus:shadow-border-focus"
+                            className="h-7 w-24 rounded-lg bg-base px-2 text-right text-label-xsmall text-primary borders-base outline-none focus:borders-focus"
                           />
                         )}
                         <Button
@@ -405,7 +405,7 @@ function MoveFlowScreen({
                           variant="ghost"
                           shade="neutral"
                           size="sm"
-                          className="h-6 px-0.5 text-brand-text"
+                          className="h-6 px-0.5 text-brand"
                           onClick={() => setEditingRetro((v) => !v)}
                         >
                           {editingRetro ? 'Done' : 'Edit'}
@@ -415,7 +415,7 @@ function MoveFlowScreen({
                           variant="ghost"
                           shade="neutral"
                           size="sm"
-                          className="h-6 px-0.5 text-text-error-base"
+                          className="h-6 px-0.5 text-error"
                           onClick={() => setConfirmingSkip(true)}
                         >
                           Skip
@@ -424,18 +424,18 @@ function MoveFlowScreen({
                     </div>
                   )}
                   {impact.retro > 0 && retroSkipped && (
-                    <div className="flex items-baseline justify-between gap-4 border-b border-border-highlight py-2">
-                      <span className="shrink-0 text-paragraph-xs text-text-disabled line-through">
+                    <div className="flex items-baseline justify-between gap-4 border-b border-base py-2">
+                      <span className="shrink-0 text-paragraph-xsmall text-disabled line-through">
                         Retro pay · {fmtShort(impact.gapStart)} to {fmtHuman(impact.gapEnd)}
                       </span>
                       <span className="flex items-center gap-2">
-                        <span className="text-label-xs text-text-disabled">Skipped</span>
+                        <span className="text-label-xsmall text-disabled">Skipped</span>
                         <Button
                           type="button"
                           variant="ghost"
                           shade="neutral"
                           size="sm"
-                          className="h-6 px-0.5 text-brand-text"
+                          className="h-6 px-0.5 text-brand"
                           onClick={() => setRetroSkipped(false)}
                         >
                           Undo
@@ -447,7 +447,7 @@ function MoveFlowScreen({
                     {money(round2(effectiveRetro + impact.regularPay))}
                   </KV>
                 </Card>
-                <p className="text-paragraph-xs text-text-muted">
+                <p className="text-paragraph-xsmall text-muted">
                   {view.hourly
                     ? `Hourly employee - computed at ${money(rate)}/h from timesheets.`
                     : `Salaried - hourly equivalent ${money(rate)}/h (annual ÷ 2080).`}
@@ -456,9 +456,9 @@ function MoveFlowScreen({
             </div>
 
             {confirmingSkip && (
-              <div className="fixed inset-0 z-40 grid place-items-center bg-overlay-background-base p-6 backdrop-blur-[2px]">
-                <div className="w-full max-w-[420px] rounded-2xl bg-background-base p-5 shadow-flyout">
-                  <p className="text-label-md text-text-primary">Skip retro pay?</p>
+              <div className="fixed inset-0 z-40 grid place-items-center bg-overlay p-6 backdrop-blur-[2px]">
+                <div className="w-full max-w-[420px] rounded-2xl bg-base p-5 flyout">
+                  <p className="text-label-medium text-primary">Skip retro pay?</p>
                   <Banner tone="error" title="This can't be undone after you confirm the move" className="mt-3">
                     Skipping retro advances {employee.name}&apos;s paid-through date to {fmtHuman(impact.gapEnd)}{' '}
                     permanently. The {impact.gapHours} hrs ({money(impact.retro)}) for {fmtShort(impact.gapStart)} to{' '}
@@ -590,19 +590,19 @@ function MemberRow({
   return (
     <tr
       className={cn(
-        'border-b border-border-highlight transition-colors hover:bg-surface-2',
-        flagged && 'bg-background-warning-highlight',
+        'border-b border-base transition-colors hover:bg-surface-page',
+        flagged && 'bg-warning-highlight',
       )}
     >
       <td className="px-4 py-3">
-        <p className="truncate text-label-xs text-text-primary">{employee.name}</p>
-        <p className="truncate text-paragraph-xs text-text-muted">{employee.jobTitle}</p>
+        <p className="truncate text-label-xsmall text-primary">{employee.name}</p>
+        <p className="truncate text-paragraph-xsmall text-muted">{employee.jobTitle}</p>
       </td>
-      <td className="px-4 py-3 text-paragraph-xs text-text-primary">{fmtCompensation(employee)}</td>
-      <td className="px-4 py-3 text-paragraph-xs text-text-muted">{fmtHireDate(employee.hireDate)}</td>
+      <td className="px-4 py-3 text-paragraph-xsmall text-primary">{fmtCompensation(employee)}</td>
+      <td className="px-4 py-3 text-paragraph-xsmall text-muted">{fmtHireDate(employee.hireDate)}</td>
       <td className="px-4 py-3">
         {flagged && (
-          <span className="inline-flex items-center gap-1 rounded-full bg-background-warning-muted px-2 py-0.5 text-caption-md text-text-primary">
+          <span className="inline-flex items-center gap-1 rounded-full bg-warning-muted px-2 py-0.5 text-caption-sm font-medium text-primary">
             <Flag className="size-3" />
             Re-eval flagged
           </span>
@@ -614,7 +614,7 @@ function MemberRow({
           variant="ghost"
           shade="neutral"
           size="sm"
-          className="text-brand-text"
+          className="text-brand"
           onClick={() => show('D2', 'valid', { employeeId: employee.id, from: schedule.frequency })}
           leftIcon={<ArrowsLeftRight className="size-4" />}
         >
@@ -671,7 +671,7 @@ export function ScheduleDetailScreen({ view }: { view: ScheduleDetailView }) {
           ) : undefined
         }
       />
-      <PageBody className="relative flex flex-col gap-3 bg-surface-1">
+      <PageBody className="relative flex flex-col gap-3 bg-surface-frame">
         {view.reeval === 'prompt' && (
           <Banner
             tone="info"
@@ -748,19 +748,19 @@ export function ScheduleDetailScreen({ view }: { view: ScheduleDetailView }) {
           <div className="flex items-start justify-between gap-4">
             <div className="min-w-0">
               <div className="flex items-baseline gap-2">
-                <p className="text-label-sm text-text-primary">{schedule.name}</p>
+                <p className="text-label-small text-primary">{schedule.name}</p>
                 {schedule.isDefault && (
-                  <span className="shrink-0 text-label-xs text-brand-text">Default · everyone else</span>
+                  <span className="shrink-0 text-label-xsmall text-brand">Default · everyone else</span>
                 )}
               </div>
-              <p className="mt-1 text-paragraph-xs text-text-muted">{describeRule(schedule.rule)}</p>
+              <p className="mt-1 text-paragraph-xsmall text-muted">{describeRule(schedule.rule)}</p>
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <AvatarStack names={members.map((e) => e.name)} max={4} />
-              <span className="text-label-xs text-text-primary">{members.length} people</span>
+              <span className="text-label-xsmall text-primary">{members.length} people</span>
             </div>
           </div>
-          <div className="mt-4 grid grid-cols-3 gap-4 border-t border-border-highlight pt-4">
+          <div className="mt-4 grid grid-cols-3 gap-4 border-t border-base pt-4">
             <KV label="Pay frequency">{schedule.frequency}</KV>
             <KV label="Current pay period">
               {fmtHuman(period.start)} – {fmtHuman(period.end)}
@@ -775,20 +775,20 @@ export function ScheduleDetailScreen({ view }: { view: ScheduleDetailView }) {
         <Card title={`Members · ${members.length}`}>
           {members.length === 0 ? (
             <div className="flex flex-col items-center gap-1.5 py-8">
-              <UsersThree className="size-5 text-text-disabled" />
-              <p className="text-label-xs text-text-primary">No members yet</p>
-              <p className="max-w-72 text-center text-paragraph-xs text-text-muted">
+              <UsersThree className="size-5 text-disabled" />
+              <p className="text-label-xsmall text-primary">No members yet</p>
+              <p className="max-w-72 text-center text-paragraph-xsmall text-muted">
                 People join automatically once they match this schedule's rule.
               </p>
             </div>
           ) : (
-            <div className="overflow-hidden rounded-xl border border-border-highlight">
-              <table className="w-full border-collapse bg-background-base">
-                <thead className="bg-surface-1">
-                  <tr className="border-b border-border-base text-left">
-                    <th className="px-4 py-2 text-label-xs font-[530] text-text-muted">Employee</th>
-                    <th className="px-4 py-2 text-label-xs font-[530] text-text-muted">Compensation</th>
-                    <th className="px-4 py-2 text-label-xs font-[530] text-text-muted">Hired on</th>
+            <div className="overflow-hidden rounded-xl border border-base">
+              <table className="w-full border-collapse bg-base">
+                <thead className="bg-surface-frame">
+                  <tr className="border-b border-base text-left">
+                    <th className="px-4 py-2 text-label-xsmall font-[530] text-muted">Employee</th>
+                    <th className="px-4 py-2 text-label-xsmall font-[530] text-muted">Compensation</th>
+                    <th className="px-4 py-2 text-label-xsmall font-[530] text-muted">Hired on</th>
                     <th className="px-4 py-2" />
                     <th className="w-24 px-4 py-2" />
                   </tr>

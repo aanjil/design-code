@@ -21,8 +21,8 @@ import { cn } from '@/lib/utils'
  * A CSS grid with 1px gaps over a hairline background = the grid lines.
  * Cells are 44px (headers 32px); Paragraph/Small for values - the DS spec
  * deliberately uses Inter (not mono) inside editable cells.
- * States: hover = highlight bg · editing = shadow-border-brand ·
- * open select / keyboard focus = shadow-border-active.
+ * States: hover = highlight bg · editing = borders-shadow ·
+ * open select / keyboard focus = borders-active.
  */
 
 export function EditableTable({
@@ -39,7 +39,7 @@ export function EditableTable({
     <div
       role="table"
       className={cn(
-        'grid gap-px overflow-hidden rounded-lg border border-border-base bg-border-base',
+        'grid gap-px overflow-hidden rounded-lg border border-base bg-(--border-default)',
         className,
       )}
       style={{ gridTemplateColumns: columns }}
@@ -82,7 +82,7 @@ export function HeaderCell({
     <div
       role="columnheader"
       className={cn(
-        'flex h-8 items-center bg-background-highlight px-3 py-1.5 text-label-xs text-text-primary',
+        'flex h-8 items-center bg-highlight px-3 py-1.5 text-label-xsmall text-primary',
         align === 'right' && 'justify-end text-right',
         className,
       )}
@@ -96,7 +96,7 @@ export function HeaderIconCell({ collapse }: { collapse?: boolean }) {
   return (
     <div
       role="columnheader"
-      className="flex h-8 items-center justify-center bg-background-highlight px-2 py-1.5 text-text-muted"
+      className="flex h-8 items-center justify-center bg-highlight px-2 py-1.5 text-muted"
     >
       {collapse && <CaretDoubleRight className="size-4" />}
     </div>
@@ -107,9 +107,9 @@ export function HeaderIconCell({ collapse }: { collapse?: boolean }) {
 
 function cellShell(interactive = true) {
   return cn(
-    'relative flex h-11 min-w-0 items-center bg-background-base px-3 py-1.5 text-paragraph-sm text-text-primary',
+    'relative flex h-11 min-w-0 items-center bg-base px-3 py-1.5 text-paragraph-small text-primary',
     interactive &&
-      'transition-[background-color,box-shadow] hover:bg-background-highlight focus-within:z-10 focus-within:bg-background-base focus-within:shadow-border-brand',
+      'transition-[background-color,box-shadow] hover:bg-highlight focus-within:z-10 focus-within:bg-base focus-within:borders-shadow',
   )
 }
 
@@ -132,7 +132,7 @@ export function TextCell({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}
-        className="w-full min-w-0 bg-transparent outline-none placeholder:text-text-muted"
+        className="w-full min-w-0 bg-transparent outline-none placeholder:text-muted"
       />
     </div>
   )
@@ -175,7 +175,7 @@ export function NumberCell({
           onChange?.(Number.isFinite(parsed) ? parsed : 0)
           setDraft(null)
         }}
-        className="w-full min-w-0 bg-transparent text-right outline-none placeholder:text-text-muted"
+        className="w-full min-w-0 bg-transparent text-right outline-none placeholder:text-muted"
         placeholder="0.00"
       />
     </div>
@@ -204,26 +204,26 @@ export function SelectAndTypeCell({
 
   const unitSelect = (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex shrink-0 cursor-pointer items-center gap-1 text-text-muted outline-none hover:text-text-primary data-popup-open:text-text-primary">
+      <DropdownMenuTrigger className="flex shrink-0 cursor-pointer items-center gap-1 text-muted outline-none hover:text-primary data-popup-open:text-primary">
         {unit}
         <CaretDown className="size-4" />
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align={unitPosition === 'start' ? 'start' : 'end'}
-        className="min-w-20 bg-surface-2"
+        className="min-w-20 bg-surface-page"
       >
         {units.map((u) => (
           <DropdownMenuItem key={u} onClick={() => onUnitChange(u)}>
             <span className="flex-1">{u}</span>
             {u === unit && (
-              <Check className="size-4 text-brand-text" weight="bold" />
+              <Check className="size-4 text-brand" weight="bold" />
             )}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>
     </DropdownMenu>
   )
-  const divider = <span className="h-4 w-px shrink-0 bg-background-muted" />
+  const divider = <span className="h-4 w-px shrink-0 bg-muted" />
 
   return (
     <div role="cell" className={cn(cellShell(), 'gap-2', className)}>
@@ -247,7 +247,7 @@ export function SelectAndTypeCell({
           onChange(Number.isFinite(parsed) ? parsed : 0)
           setDraft(null)
         }}
-        className="w-full min-w-0 flex-1 bg-transparent text-right outline-none placeholder:text-text-muted"
+        className="w-full min-w-0 flex-1 bg-transparent text-right outline-none placeholder:text-muted"
         placeholder="0.00"
       />
       {unitPosition === 'end' && (
@@ -277,26 +277,26 @@ export function SelectCell({
   return (
     <div role="cell" className={cn(cellShell(), 'p-0', className)}>
       <DropdownMenu>
-        <DropdownMenuTrigger className="flex h-full w-full cursor-pointer items-center gap-2 px-3 py-1.5 outline-none data-popup-open:shadow-border-active">
+        <DropdownMenuTrigger className="flex h-full w-full cursor-pointer items-center gap-2 px-3 py-1.5 outline-none data-popup-open:borders-active">
           <span
             className={cn(
               'min-w-0 flex-1 truncate text-left',
-              value ? 'text-text-primary' : 'text-text-muted',
+              value ? 'text-primary' : 'text-muted',
             )}
           >
             {value ?? placeholder}
           </span>
-          <CaretDown className="size-4 shrink-0 text-text-muted" />
+          <CaretDown className="size-4 shrink-0 text-muted" />
         </DropdownMenuTrigger>
         <DropdownMenuContent
           align="start"
-          className="w-(--anchor-width) min-w-44 bg-surface-2"
+          className="w-(--anchor-width) min-w-44 bg-surface-page"
         >
           {options.map((option) => (
             <DropdownMenuItem key={option} onClick={() => onChange(option)}>
               <span className="min-w-0 flex-1 truncate">{option}</span>
               {option === value && (
-                <Check className="size-4 shrink-0 text-brand-text" weight="bold" />
+                <Check className="size-4 shrink-0 text-brand" weight="bold" />
               )}
             </DropdownMenuItem>
           ))}
@@ -323,9 +323,9 @@ export function DateCell({
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder="YYYY-MM-DD"
-        className="w-full min-w-0 flex-1 bg-transparent outline-none placeholder:text-text-muted"
+        className="w-full min-w-0 flex-1 bg-transparent outline-none placeholder:text-muted"
       />
-      <CalendarBlank className="size-4 shrink-0 text-text-muted" />
+      <CalendarBlank className="size-4 shrink-0 text-muted" />
     </div>
   )
 }
@@ -348,7 +348,7 @@ export function IconCell({
     <div
       role="cell"
       className={cn(
-        'flex h-11 items-center justify-center bg-background-base px-2 py-1.5',
+        'flex h-11 items-center justify-center bg-base px-2 py-1.5',
         className,
       )}
     >
@@ -357,10 +357,10 @@ export function IconCell({
         aria-label={label}
         onClick={onClick}
         className={cn(
-          'flex size-6 items-center justify-center rounded-md text-text-muted transition-colors',
+          'flex size-6 items-center justify-center rounded-md text-muted transition-colors',
           destructive
-            ? 'hover:bg-background-error-highlight hover:text-text-error-base'
-            : 'hover:bg-background-highlight hover:text-text-primary',
+            ? 'hover:bg-error-highlight hover:text-error'
+            : 'hover:bg-highlight hover:text-primary',
         )}
       >
         {children ?? <Trash className="size-4" />}
@@ -380,14 +380,14 @@ export function CaretCell({
   return (
     <div
       role="cell"
-      className="flex h-11 items-center justify-center bg-background-base px-2 py-1.5"
+      className="flex h-11 items-center justify-center bg-base px-2 py-1.5"
     >
       <button
         type="button"
         aria-label={expanded ? 'Collapse row' : 'Expand row'}
         aria-expanded={expanded}
         onClick={onToggle}
-        className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+        className="flex size-6 items-center justify-center rounded-md text-muted transition-colors hover:bg-highlight hover:text-primary"
       >
         {expanded ? (
           <CaretDown className="size-4" />
@@ -411,7 +411,7 @@ export function ExpandedRowPanel({
     <div
       role="cell"
       className={cn(
-        'col-span-full flex flex-wrap items-start gap-x-4 gap-y-3 bg-background-highlight p-4',
+        'col-span-full flex flex-wrap items-start gap-x-4 gap-y-3 bg-highlight p-4',
         className,
       )}
     >
@@ -434,14 +434,14 @@ export function AddRowFooter({
     <div
       role="row"
       className={cn(
-        'col-span-full flex h-11 items-center bg-background-base px-3 py-1.5',
+        'col-span-full flex h-11 items-center bg-base px-3 py-1.5',
         align === 'center' ? 'justify-center' : 'justify-start',
       )}
     >
       <button
         type="button"
         onClick={onClick}
-        className="flex h-8 min-w-8 items-center gap-1 rounded-md px-2 text-label-sm text-brand-text transition-colors hover:bg-brand-base"
+        className="flex h-8 min-w-8 items-center gap-1 rounded-md px-2 text-label-small text-brand transition-colors hover:bg-brand-base"
       >
         <ListPlus className="size-[18px]" />
         <span className="px-1">{label}</span>

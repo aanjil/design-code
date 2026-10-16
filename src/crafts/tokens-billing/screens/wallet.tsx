@@ -24,8 +24,8 @@ export function WalletScreen({ balances }: { balances: Balances }) {
       onNavigate={(key) => show(settingsNavTarget(key) ?? 'C1')}
     >
       <div className="flex items-start gap-2.5 rounded-lg bg-brand-muted p-3.5">
-        <ArrowRight className="mt-px size-4 shrink-0 text-brand-text" />
-        <p className="text-paragraph-xs text-brand-text">
+        <ArrowRight className="mt-px size-4 shrink-0 text-brand" />
+        <p className="text-paragraph-xsmall text-brand">
           <b className="font-medium">Credit and Emma tokens are in Settings now.</b> Neither can be withdrawn or
           transferred, so they sit with your Niural relationship rather than with your own money. Payment methods
           moved too - the same accounts are used across the product, not just here.{' '}
@@ -39,21 +39,21 @@ export function WalletScreen({ balances }: { balances: Balances }) {
       </div>
 
       <div className="mt-4 grid grid-cols-2 gap-3">
-        <div className="rounded-2xl bg-background-base p-4.5 shadow-card">
-          <div className="flex items-center gap-1.5 text-text-primary">
+        <div className="rounded-2xl bg-base p-4.5 card">
+          <div className="flex items-center gap-1.5 text-primary">
             <CurrencyDollar className="size-4" />
-            <span className="text-label-xs text-text-muted">US Dollar</span>
+            <span className="text-label-xsmall text-muted">US Dollar</span>
           </div>
-          <p className="mt-1.5 text-title-h5 text-text-primary">{usd(balances.wallet)}</p>
-          <p className="mt-1.5 text-paragraph-xs text-text-muted">Withdrawable · funds payroll and vendor payments</p>
+          <p className="mt-1.5 text-title-h5 text-primary">{usd(balances.wallet)}</p>
+          <p className="mt-1.5 text-paragraph-xsmall text-muted">Withdrawable · funds payroll and vendor payments</p>
         </div>
-        <div className="rounded-2xl bg-background-base p-4.5 shadow-card">
-          <div className="flex items-center gap-1.5 text-text-primary">
+        <div className="rounded-2xl bg-base p-4.5 card">
+          <div className="flex items-center gap-1.5 text-primary">
             <Coin className="size-4" />
-            <span className="text-label-xs text-text-muted">USDC</span>
+            <span className="text-label-xsmall text-muted">USDC</span>
           </div>
-          <p className="mt-1.5 text-title-h5 text-text-primary">$4,100.00</p>
-          <p className="mt-1.5 text-paragraph-xs text-text-muted">Withdrawable</p>
+          <p className="mt-1.5 text-title-h5 text-primary">$4,100.00</p>
+          <p className="mt-1.5 text-paragraph-xsmall text-muted">Withdrawable</p>
         </div>
       </div>
 

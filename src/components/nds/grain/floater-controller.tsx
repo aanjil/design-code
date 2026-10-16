@@ -31,7 +31,7 @@ export function FloaterController() {
       <div className="flex w-full flex-col gap-5 lg:w-[300px] lg:shrink-0">
         <Control label="Size">
           <VariantPills options={['pill', 'default'] as const} value={size} onChange={setSize} />
-          <p className="mt-1.5 text-paragraph-xs text-text-muted">
+          <p className="mt-1.5 text-paragraph-xsmall text-muted">
             Click the pill in the preview to expand it - that's the real{' '}
             <code className="text-[11px]">onExpand</code> callback, not a separate demo path.
           </p>
@@ -41,7 +41,7 @@ export function FloaterController() {
           <select
             value={docked}
             onChange={(e) => setDocked(e.target.value as DockedOption)}
-            className="h-8 w-full rounded-lg border border-border-base bg-background-base px-2 text-paragraph-sm text-text-primary outline-none focus:shadow-border-focus"
+            className="h-8 w-full rounded-lg border border-base bg-base px-2 text-paragraph-small text-primary outline-none focus:borders-focus"
           >
             <option value="none">Nothing found yet</option>
             {GRAIN_SCENARIOS.map((s) => (
@@ -50,7 +50,7 @@ export function FloaterController() {
               </option>
             ))}
           </select>
-          <p className="mt-1.5 text-paragraph-xs text-text-muted">
+          <p className="mt-1.5 text-paragraph-xsmall text-muted">
             Once a grain docks, the shell always renders at default size - a launcher can't host
             evidence, so <code className="text-[11px]">size="pill"</code> is ignored while docked.
           </p>
@@ -58,7 +58,7 @@ export function FloaterController() {
 
         <Control label="Emma off">
           <div className="flex items-center justify-between">
-            <span className="text-paragraph-xs text-text-muted">Degrades to a plain search input</span>
+            <span className="text-paragraph-xsmall text-muted">Degrades to a plain search input</span>
             <Switch isChecked={off} onChange={setOff} />
           </div>
         </Control>
@@ -68,7 +68,7 @@ export function FloaterController() {
         </Control>
       </div>
 
-      <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-2xl bg-surface-1 p-8">
+      <div className="flex min-w-0 flex-1 flex-col items-center justify-center gap-4 rounded-2xl bg-surface-frame p-8">
         <div style={{ width: WIDTH_PX[width], maxWidth: '100%' }} className="flex justify-center">
           <Shell
             size={size}
@@ -93,7 +93,7 @@ export function FloaterController() {
 function Control({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="mb-1.5 text-label-xs text-text-muted">{label}</p>
+      <p className="mb-1.5 text-label-xsmall text-muted">{label}</p>
       {children}
     </div>
   )

@@ -48,7 +48,7 @@ export function CraftCommandPalette({
                   )}
                 />
                 {e.title}
-                <span className="ml-auto text-caption text-text-muted">
+                <span className="ml-auto text-caption-sm text-muted">
                   {e.tags.join(' · ')}
                 </span>
               </CommandItem>

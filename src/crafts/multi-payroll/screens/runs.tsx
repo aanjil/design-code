@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { CalendarBlank, CaretRight, Play, Stack } from '@phosphor-icons/react'
-import type { RunsView } from '../types'
+import type { RunDetailView, RunsView } from '../types'
 import { Banner, FreqTag, ModalShell } from '../ui'
 import { WORLD_TODAY, addDaysISO, fmtHuman, money, periodOf } from '../engine'
 import { SCHEDULES } from '@/mocks/payroll'
@@ -8,6 +8,7 @@ import { PageBody, PageHeader } from '@/components/nds/layouts'
 import { useExplorer } from '@/components/playground/explorer'
 import { cn } from '@/lib/utils'
 import { Button, IconButton } from '@niural/components'
+import { DynamicTimeline } from '@/crafts/dynamic-timeline/timeline'
 
 /**
  * F group: runs list per schedule + the run-type picker. `full` adds the
@@ -26,8 +27,11 @@ interface RunRow {
 
 function buildRuns(
   variant: RunsView['variant'],
-  schedules: Array<(typeof SCHEDULES)[number]> = SCHEDULES,
+  live?: Array<(typeof SCHEDULES)[number]>,
 ): Array<RunRow> {
+  // No schedules created in the live store yet = everyone is still on the
+  // seeded default schedule, which still runs - never an empty runs list.
+  const schedules = live?.length ? live : SCHEDULES
   return schedules.map((s, i) => {
     const period = periodOf(s.frequency, WORLD_TODAY)
     const needs = variant === 'needs-action' && i === 0
@@ -46,15 +50,15 @@ function buildRuns(
 const STATUS_PILL: Record<RunRow['status'], { label: string; cls: string }> = {
   'needs-approval': {
     label: 'Needs approval',
-    cls: 'bg-background-warning-muted text-text-primary',
+    cls: 'bg-warning-muted text-primary',
   },
   scheduled: {
     label: 'Scheduled',
-    cls: 'bg-background-highlight text-text-muted',
+    cls: 'bg-highlight text-muted',
   },
   processing: {
     label: 'Processing',
-    cls: 'bg-background-info-muted text-text-primary',
+    cls: 'bg-info-muted text-primary',
   },
 }
 
@@ -106,27 +110,27 @@ function RunPickerModal({
             className={cn(
               'flex w-full items-center gap-3 rounded-xl p-3 text-left transition-shadow',
               choice === o.id
-                ? 'shadow-border-brand'
-                : 'shadow-button-gray hover:bg-background-highlight',
+                ? 'borders-shadow'
+                : 'borders-base hover:bg-highlight',
             )}
           >
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-background-highlight">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-highlight">
               {o.id === 'across' ? (
-                <Stack className="size-4 text-brand-text" />
+                <Stack className="size-4 text-brand" />
               ) : (
-                <CalendarBlank className="size-4 text-text-muted" />
+                <CalendarBlank className="size-4 text-muted" />
               )}
             </span>
             <span className="min-w-0 flex-1">
-              <span className="flex items-center gap-1.5 text-label-xs text-text-primary">
+              <span className="flex items-center gap-1.5 text-label-xsmall text-primary">
                 {o.title}
                 {o.v2 && (
-                  <span className="rounded bg-brand-muted px-1 text-caption-md text-brand-text">
+                  <span className="rounded bg-brand-muted px-1 text-caption-sm font-medium text-brand">
                     v2
                   </span>
                 )}
               </span>
-              <span className="block truncate text-paragraph-xs text-text-muted">
+              <span className="block truncate text-paragraph-xsmall text-muted">
                 {o.sub}
               </span>
             </span>
@@ -156,7 +160,7 @@ export function RunsScreen({ view }: { view: RunsView }) {
           </Button>
         }
       />
-      <PageBody className="relative flex flex-col gap-3 bg-surface-1">
+      <PageBody className="relative flex flex-col gap-3 bg-surface-frame">
         {needsAction.length > 0 && (
           <Banner
             tone="warning"
@@ -172,35 +176,37 @@ export function RunsScreen({ view }: { view: RunsView }) {
             return (
               <div
                 key={run.schedule.id}
-                className="flex items-center gap-4 rounded-xl bg-background-base p-4 shadow-card"
+                className="flex items-center gap-4 rounded-xl bg-base p-4 card"
               >
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-2">
-                    <p className="truncate text-label-sm text-text-primary">
+                    <p className="truncate text-label-small text-primary">
                       {run.schedule.name}
                     </p>
                     <FreqTag>{run.schedule.frequency}</FreqTag>
                   </div>
-                  <p className="mt-0.5 text-paragraph-xs text-text-muted">
+                  <p className="mt-0.5 text-paragraph-xsmall text-muted">
                     {run.window} · payday {run.payday} · {run.people} people
                   </p>
                 </div>
-                <p className="shrink-0 font-mono text-mono-xs text-text-primary">
+                <p className="shrink-0 tabular-nums text-paragraph-xsmall text-primary">
                   {money(run.amount)}
                 </p>
                 <span
                   className={cn(
-                    'inline-flex h-6 shrink-0 items-center rounded-full px-2 text-caption-md',
+                    'inline-flex h-6 shrink-0 items-center rounded-full px-2 text-caption-sm font-medium',
                     pill.cls,
                   )}
                 >
                   {pill.label}
                 </span>
                 {run.status === 'needs-approval' ? (
-                  <Button type="button" size="sm">Review & approve</Button>
+                  <Button type="button" size="sm" data-agent="review-run" onClick={() => show('F3')}>
+                    Review & approve
+                  </Button>
                 ) : (
                   <IconButton variant="ghost" shade="neutral" size="small" aria-label="Open run">
-                    <CaretRight className="size-4 text-text-muted" />
+                    <CaretRight className="size-4 text-muted" />
                   </IconButton>
                 )}
               </div>
@@ -214,6 +220,25 @@ export function RunsScreen({ view }: { view: RunsView }) {
             onClose={() => show('F1', 'needs-action')}
           />
         )}
+      </PageBody>
+    </>
+  )
+}
+
+/** F3: the run the list said needs approval - Prepare ran itself, the three
+ *  tensions wait in Resolve, Confirm is the one irreversible step. */
+export function RunDetailScreen({ view }: { view: RunDetailView }) {
+  const { show } = useExplorer()
+  const run = buildRuns('needs-action', view.schedules)[0]
+  return (
+    <>
+      <PageHeader
+        title={`Run payroll · ${run.schedule.name}`}
+        subtitle={`${run.window} · payday ${run.payday} · approve by ${run.deadline}`}
+        onBack={() => show('F1', 'needs-action')}
+      />
+      <PageBody className="bg-surface-frame">
+        <DynamicTimeline />
       </PageBody>
     </>
   )

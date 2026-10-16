@@ -106,9 +106,9 @@ function AgentStatusDoc() {
         </div>
       </ShowcaseSection>
 
-      <section className="border-t border-dashed border-border-muted pt-8">
-        <h2 className="text-title-h5 text-text-primary">Rules</h2>
-        <ul className="mt-3 flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-muted marker:text-text-disabled">
+      <section className="border-t border-dashed border-muted pt-8">
+        <h2 className="text-title-h5 text-primary">Rules</h2>
+        <ul className="mt-3 flex list-disc flex-col gap-1.5 pl-5 text-paragraph-small text-muted marker:text-disabled">
           <li>Thinking traces start collapsed - reasoning is scaffolding, not the answer.</li>
           <li>Task row status colors always pair with the same icon (check / spinner / dot / warning / clock for deferred) so state reads without color alone.</li>
           <li>Deferred is not completed - a row someone explicitly punted on ("asked, moved on") should never collapse into the same look as one that was resolved.</li>

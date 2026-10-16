@@ -73,7 +73,7 @@ function EditableTableDoc() {
       </DocSection>
 
       <DocSection title="Rules">
-        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-muted marker:text-text-disabled">
+        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-small text-muted marker:text-disabled">
           <li>
             <InlineCode>columns</InlineCode> is a grid-template string on{' '}
             <InlineCode>EditableTable</InlineCode>; rows use{' '}

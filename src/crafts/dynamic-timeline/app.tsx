@@ -13,7 +13,7 @@ import { makeView } from './catalog'
 
 function Screen({ view }: { view: DynamicTimelineView }) {
   return (
-    <div className="h-full min-h-0 overflow-y-auto bg-background-highlight/30 p-8">
+    <div className="h-full min-h-0 overflow-y-auto bg-highlight/30 p-8">
       <DynamicTimeline initialDraft={view.draft} initialApproved={view.approved} />
     </div>
   )

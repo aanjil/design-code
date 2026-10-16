@@ -165,14 +165,14 @@ export function UsersPage() {
             <EmptyTable colSpan={4} icon={UsersIcon} title="No users here" description={EMPTY_COPY[tab]} />
           ) : (
             paging.visible.map((u) => (
-              <tr key={u.id} className="transition-colors hover:bg-background-highlight">
+              <tr key={u.id} className="transition-colors hover:bg-highlight">
                 <Td>
                   <span className="flex items-center gap-2">
                     <Avatar name={u.name} />
                     <span className="min-w-0">
-                      <span className="block text-label-sm">{u.name}</span>
+                      <span className="block text-label-small">{u.name}</span>
                       {u.since && (
-                        <span className="block text-caption text-text-muted">
+                        <span className="block text-caption-sm text-muted">
                           {u.status === 'pending' ? 'Invited' : 'Deactivated'} {u.since}
                         </span>
                       )}
@@ -182,7 +182,7 @@ export function UsersPage() {
                 <Td>
                   <RoleTags roles={u.roles} />
                 </Td>
-                <Td className="text-label-sm">{u.email}</Td>
+                <Td className="text-label-small">{u.email}</Td>
                 <Td align="right">
                   <RowMenu label={u.name} actions={actionsFor(u)} />
                 </Td>
@@ -216,12 +216,12 @@ export function UsersPage() {
 }
 
 function CountBadge({ n }: { n: number }) {
-  return <span className="ml-1.5 rounded-full bg-background-highlight px-1.5 font-mono text-mono-xs text-text-muted">{n}</span>
+  return <span className="ml-1.5 rounded-full bg-highlight px-1.5 tabular-nums text-paragraph-xsmall text-muted">{n}</span>
 }
 
 /** Two tags, then a +N chip whose tooltip lists the rest - matches the screenshot. */
 function RoleTags({ roles }: { roles: Array<UserRole> }) {
-  if (roles.length === 0) return <span className="text-paragraph-sm text-text-muted">No role</span>
+  if (roles.length === 0) return <span className="text-paragraph-small text-muted">No role</span>
   const shown = roles.slice(0, 2)
   const rest = roles.slice(2)
   return (
@@ -234,7 +234,7 @@ function RoleTags({ roles }: { roles: Array<UserRole> }) {
       {rest.length > 0 && (
         <span
           title={rest.join(', ')}
-          className="inline-flex h-6 items-center rounded-full bg-background-base px-2 font-mono text-mono-xs text-text-primary shadow-button-gray"
+          className="inline-flex h-6 items-center rounded-full bg-base px-2 tabular-nums text-paragraph-xsmall text-primary borders-base"
         >
           +{rest.length}
         </span>
@@ -306,7 +306,7 @@ function UserModal({
               onBlur={() => setTouched(true)}
               onChange={(e) => setEmail(e.target.value)}
             />
-            {emailError && <p className="text-caption text-text-error-base">{emailError}</p>}
+            {emailError && <p className="text-caption-sm text-error">{emailError}</p>}
           </div>
         </>
       )}
@@ -322,8 +322,8 @@ function UserModal({
                 aria-pressed={on}
                 onClick={() => setRoles((all) => (on ? all.filter((x) => x !== r) : [...all, r]))}
                 className={cn(
-                  'h-8 rounded-full px-3 text-label-sm transition-colors',
-                  on ? 'bg-brand-muted text-brand-text shadow-border-brand' : 'bg-background-base text-text-primary shadow-button-gray hover:bg-background-highlight',
+                  'h-8 rounded-full px-3 text-label-small transition-colors',
+                  on ? 'bg-brand-muted text-brand borders-shadow' : 'bg-base text-primary borders-base hover:bg-highlight',
                 )}
               >
                 {r}
@@ -331,7 +331,7 @@ function UserModal({
             )
           })}
         </div>
-        <p className="text-caption text-text-muted">Roles stack - a People manager who is also a Payroll admin gets both.</p>
+        <p className="text-caption-sm text-muted">Roles stack - a People manager who is also a Payroll admin gets both.</p>
       </div>
     </Modal>
   )

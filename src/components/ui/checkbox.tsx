@@ -8,7 +8,7 @@ function Checkbox({ className, ...props }: CheckboxPrimitive.Root.Props) {
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        "peer relative flex size-3.5 shrink-0 items-center justify-center rounded-[4px] bg-background-base shadow-button-gray transition-colors outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-[5px] focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:shadow-border-error data-checked:bg-brand-primary data-checked:text-text-on-color data-checked:shadow-button-primary",
+        "peer relative flex size-3.5 shrink-0 items-center justify-center rounded-[4px] bg-base borders-base transition-colors outline-none group-has-disabled/field:opacity-50 after:absolute after:-inset-[5px] focus-visible:ring-3 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:borders-error data-checked:bg-brand data-checked:text-on-color data-checked:buttons-primary",
         className
       )}
       {...props}

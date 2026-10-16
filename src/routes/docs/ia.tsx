@@ -27,7 +27,7 @@ function MasterIAGraph() {
   const { nodes, edges } = useMemo(() => buildMasterIAGraph(), [])
 
   return (
-    <div className="h-[560px] overflow-hidden rounded-xl border border-border-base bg-surface-1">
+    <div className="h-[560px] overflow-hidden rounded-xl border border-base bg-surface-frame">
       <ReactFlowProvider>
         <ReactFlow
           nodes={nodes}
@@ -59,8 +59,8 @@ function MasterIADoc() {
       <DocSection title="Detail">
         {MASTER_IA.map((section) => (
           <div key={section.key} className="mt-8 first:mt-0">
-            <p className="text-label-sm text-text-primary">{section.label}</p>
-            <p className="mt-1 text-paragraph-xs text-text-muted">
+            <p className="text-label-small text-primary">{section.label}</p>
+            <p className="mt-1 text-paragraph-xsmall text-muted">
               {section.sidebarGroups
                 ? `Sidebar: ${section.sidebarGroups
                     .flatMap((g) => g.items.map((i) => i.label))
@@ -68,7 +68,7 @@ function MasterIADoc() {
                 : 'No contextual sidebar designed yet.'}
             </p>
             {section.crafts.length === 0 ? (
-              <p className="mt-2 text-paragraph-xs text-text-muted">
+              <p className="mt-2 text-paragraph-xsmall text-muted">
                 No craft maps here yet.
               </p>
             ) : (
@@ -81,7 +81,7 @@ function MasterIADoc() {
                       <Link
                         key="link"
                         to={meta.to}
-                        className="text-label-sm text-brand-text hover:underline"
+                        className="text-label-small text-brand hover:underline"
                       >
                         {meta.title}
                       </Link>,
@@ -102,7 +102,7 @@ function MasterIADoc() {
         title="Not in the Information Architecture"
         note="The reference/meta craft has no home in the real product - it's the copyable template for starting a new craft, not a feature."
       >
-        <p className="text-paragraph-xs text-text-muted">
+        <p className="text-paragraph-xsmall text-muted">
           <InlineCode>demo-annotations</InlineCode>
         </p>
       </DocSection>

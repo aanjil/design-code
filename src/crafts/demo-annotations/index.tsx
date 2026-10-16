@@ -35,10 +35,10 @@ export function DemoAnnotations() {
 
 const personStatusClass: Record<Person['status'], string> = {
   active:
-    'bg-background-success-highlight text-text-success-base border-border-success-muted',
+    'bg-success-highlight text-success border-success-muted',
   invited:
-    'bg-background-info-highlight text-text-info-base border-border-info-muted',
-  offboarded: 'bg-background-highlight text-text-muted border-border-base',
+    'bg-info-highlight text-info border-info-muted',
+  offboarded: 'bg-highlight text-muted border-base',
 }
 
 function TeamCard({ density }: { density: 'comfortable' | 'compact' }) {
@@ -50,11 +50,11 @@ function TeamCard({ density }: { density: 'comfortable' | 'compact' }) {
       <Annotate
         n={1}
         title="Card recipe"
-        note="bg-background-base + shadow-card + 12px padding. The 1px ring is part of the shadow token - no border class on top."
+        note="bg-base + card + 12px padding. The 1px ring is part of the shadow token - no border class on top."
       >
-        <div className="rounded-xl bg-background-base p-3 shadow-card">
+        <div className="rounded-xl bg-base p-3 card">
           <div className="flex items-center justify-between gap-3 pb-2">
-            <p className="text-label-sm">Team members</p>
+            <p className="text-label-small">Team members</p>
             <Annotate
               n={2}
               inline
@@ -78,7 +78,7 @@ function TeamCard({ density }: { density: 'comfortable' | 'compact' }) {
               >
                 <span
                   className={cn(
-                    'flex shrink-0 items-center justify-center rounded-full bg-brand-muted text-caption-md text-brand-text',
+                    'flex shrink-0 items-center justify-center rounded-full bg-brand-muted text-caption-sm font-medium text-brand',
                     comfortable ? 'size-8' : 'size-6',
                   )}
                 >
@@ -106,14 +106,14 @@ function TeamCard({ density }: { density: 'comfortable' | 'compact' }) {
                     n={4}
                     inline
                     title="Mono for money"
-                    note="Every numeric value uses Geist Mono (font-mono text-mono-xs) so digits align across rows."
+                    note="Every numeric value stays in Inter with tabular-nums (tabular-nums text-paragraph-xsmall) so digits align across rows."
                   >
-                    <span className="font-mono text-mono-xs">
+                    <span className="tabular-nums text-paragraph-xsmall">
                       {fmtMoney(person.salary)}
                     </span>
                   </Annotate>
                 ) : (
-                  <span className="font-mono text-mono-xs">
+                  <span className="tabular-nums text-paragraph-xsmall">
                     {fmtMoney(person.salary)}
                   </span>
                 )}
@@ -149,9 +149,9 @@ function PersonCell({
 }) {
   return (
     <>
-      <p className="truncate text-label-sm">{person.name}</p>
+      <p className="truncate text-label-small">{person.name}</p>
       {comfortable && (
-        <p className="truncate text-paragraph-xs text-text-muted">
+        <p className="truncate text-paragraph-xsmall text-muted">
           {person.role}
         </p>
       )}
@@ -163,7 +163,7 @@ function PersonStatus({ person }: { person: Person }) {
   return (
     <span
       className={cn(
-        'rounded-full border px-2 py-px text-caption-md capitalize',
+        'rounded-full border px-2 py-px text-caption-sm font-medium capitalize',
         personStatusClass[person.status],
       )}
     >

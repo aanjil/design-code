@@ -31,6 +31,8 @@ export const AppBarLinksContext = createContext<{
   onSettingsClick?: () => void
   /** Highlights the gear while the Settings area is open. */
   settingsActive?: boolean
+  /** Ask Emma pill - the Master App summons the Bezel (same as ⌘E). */
+  onAiClick?: () => void
 }>({})
 
 // ─── types ────────────────────────────────────────────────────────────────────
@@ -94,15 +96,16 @@ export function AppBarNavItem({
     <button
       type="button"
       onClick={onClick}
+      data-appbar-item={label}
       className={cn(
-        'flex h-[34px] shrink-0 cursor-pointer items-center gap-2 rounded-full px-3 text-label-sm transition-colors',
+        'flex h-[34px] shrink-0 cursor-pointer items-center gap-2 rounded-full px-3 text-label-small transition-colors',
         active
-          ? 'bg-brand-base font-[530] text-brand-text'
+          ? 'bg-brand-base font-[530] text-brand'
           : cn(
-              'hover:bg-background-highlight',
+              'hover:bg-highlight',
               muted
-                ? 'text-text-muted hover:text-text-primary'
-                : 'text-text-primary',
+                ? 'text-muted hover:text-primary'
+                : 'text-primary',
             ),
       )}
     >
@@ -132,20 +135,20 @@ export function WalletButton({
       className={cn(
         'flex h-9 shrink-0 items-center gap-1 rounded-full px-3 transition-all',
         active
-          ? 'bg-brand-wallet-primary shadow-[0px_3px_4px_0px_rgba(11,193,90,0.11),inset_0px_1px_1px_rgba(255,255,255,0.25)]'
-          : 'bg-background-base shadow-button-gray hover:shadow-button-gray',
+          ? 'bg-wallet shadow-[0px_3px_4px_0px_rgba(11,193,90,0.11),inset_0px_1px_1px_rgba(255,255,255,0.25)]'
+          : 'bg-base borders-base hover:borders-base',
       )}
     >
       <Wallet
-        className={cn('size-5 shrink-0', active ? 'text-white' : 'text-brand-wallet-primary')}
+        className={cn('size-5 shrink-0', active ? 'text-white' : 'text-wallet')}
         weight="duotone"
       />
-      <span className={cn('px-1 text-label-sm', active ? 'text-text-on-color' : 'text-text-primary')}>
+      <span className={cn('px-1 text-label-small', active ? 'text-on-color' : 'text-primary')}>
         {amount}
       </span>
-      <span className={cn('h-2.5 w-px shrink-0', active ? 'bg-white/30' : 'bg-border-muted')} />
+      <span className={cn('h-2.5 w-px shrink-0', active ? 'bg-white/30' : 'bg-(--border-muted)')} />
       <CaretUpDown
-        className={cn('size-[18px] shrink-0', active ? 'text-white' : 'text-text-muted')}
+        className={cn('size-[18px] shrink-0', active ? 'text-white' : 'text-muted')}
       />
     </button>
   )
@@ -255,7 +258,7 @@ export function AiButton({
         'flex h-9 shrink-0 items-center overflow-hidden rounded-full transition-all',
         selected
           ? 'shadow-[0px_3px_4px_0px_rgba(113,77,255,0.2),inset_0px_3px_4px_rgba(255,255,255,0.25)]'
-          : 'bg-background-base shadow-button-gray',
+          : 'bg-base borders-base',
       )}
       style={
         selected
@@ -271,11 +274,11 @@ export function AiButton({
             className="flex h-full shrink-0 items-center gap-1.5 pl-3 pr-2.5"
           >
             <EmmaMark className="size-5 shrink-0" />
-            <span className={cn('text-label-sm font-[530]', selected ? 'text-white' : 'text-text-primary')}>
+            <span className={cn('text-label-small font-[530]', selected ? 'text-white' : 'text-primary')}>
               {formatCompactCount(tokens)}
             </span>
           </button>
-          <span className={cn('h-4 w-px shrink-0', selected ? 'bg-white/30' : 'bg-border-muted')} />
+          <span className={cn('h-4 w-px shrink-0', selected ? 'bg-white/30' : 'bg-(--border-muted)')} />
         </>
       )}
       <button
@@ -287,7 +290,7 @@ export function AiButton({
       >
         {!hasTokens && <EmmaMark className="size-5 shrink-0" />}
         <span
-          className="text-label-sm font-[530]"
+          className="text-label-small font-[530]"
           style={
             selected
               ? { color: 'white' }
@@ -298,7 +301,7 @@ export function AiButton({
                   WebkitTextFillColor: 'transparent',
                   backgroundClip: 'text',
                 }
-              : { color: 'var(--text-primary)' }
+              : { color: 'var(--text-base)' }
           }
         >
           Ask Emma
@@ -324,10 +327,10 @@ export interface AppBarNotification {
 }
 
 const NOTIFICATION_TONE_CLASSES: Record<NotificationTone, string> = {
-  success: 'bg-background-success-highlight text-text-success-base',
-  accent: 'bg-brand-muted text-brand-text',
-  warning: 'bg-background-warning-highlight text-text-warning-base',
-  error: 'bg-background-error-highlight text-text-error-base',
+  success: 'bg-success-highlight text-success',
+  accent: 'bg-brand-muted text-brand',
+  warning: 'bg-warning-highlight text-warning',
+  error: 'bg-error-highlight text-error',
 }
 
 export function NotificationButton({
@@ -344,21 +347,21 @@ export function NotificationButton({
           <button
             type="button"
             aria-label="Notifications"
-            className="relative flex size-9 shrink-0 items-center justify-center rounded-full bg-background-base shadow-button-gray"
+            className="relative flex size-9 shrink-0 items-center justify-center rounded-full bg-base borders-base"
           />
         }
       >
         <Bell className="size-[18px]" />
         {notifications.length > 0 && (
-          <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-text-error-base px-1 text-[10px] font-medium text-text-on-color">
+          <span className="absolute -top-1 -right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-(--text-error-base) px-1 text-[10px] font-medium text-on-color">
             {notifications.length}
           </span>
         )}
       </PopoverTrigger>
       <PopoverContent align="end" className="w-[344px] p-0">
-        <div className="flex items-center justify-between border-b border-border-highlight px-3.5 py-2.5">
-          <p className="text-label-sm text-text-primary">Notifications</p>
-          <button type="button" onClick={onExportClick} className="text-caption-md text-brand-text">
+        <div className="flex items-center justify-between border-b border-base px-3.5 py-2.5">
+          <p className="text-label-small text-primary">Notifications</p>
+          <button type="button" onClick={onExportClick} className="text-caption-sm font-medium text-brand">
             Export history
           </button>
         </div>
@@ -366,7 +369,7 @@ export function NotificationButton({
           {notifications.map((n) => {
             const NotifIcon = n.icon
             return (
-              <div key={n.id} className="flex gap-2.5 border-b border-border-highlight px-3.5 py-3 last:border-b-0">
+              <div key={n.id} className="flex gap-2.5 border-b border-base px-3.5 py-3 last:border-b-0">
                 <span
                   className={cn(
                     'flex size-6 shrink-0 items-center justify-center rounded-full',
@@ -376,9 +379,9 @@ export function NotificationButton({
                   <NotifIcon weight="fill" className="size-3.5" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-label-xs text-text-primary">{n.title}</p>
-                  <p className="mt-0.5 text-caption-md text-text-muted">{n.description}</p>
-                  <p className="mt-1.5 text-caption-md text-text-muted">{n.date}</p>
+                  <p className="text-label-xsmall text-primary">{n.title}</p>
+                  <p className="mt-0.5 text-caption-sm font-medium text-muted">{n.description}</p>
+                  <p className="mt-1.5 text-caption-sm font-medium text-muted">{n.date}</p>
                 </div>
               </div>
             )
@@ -392,7 +395,7 @@ export function NotificationButton({
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
 function AppBarDivider() {
-  return <span className="h-4 w-px shrink-0 bg-border-muted" />
+  return <span className="h-4 w-px shrink-0 bg-(--border-muted)" />
 }
 
 /** Niural mark - fixed brand-purple + white fills (not token-driven), same
@@ -432,7 +435,7 @@ function AppBarLogo({ compact }: { compact?: boolean }) {
   return (
     <div className="flex shrink-0 items-center gap-2">
       <NiuralMark className="size-6 shrink-0" />
-      <span className="text-label-sm font-[550] text-text-primary">Niural AI</span>
+      <span className="text-label-small font-[550] text-primary">Niural AI</span>
     </div>
   )
 }
@@ -444,15 +447,15 @@ function OrgSwitcher({ name = DEFAULT_ORG_NAME }: { name?: string }) {
   return (
     <button
       type="button"
-      className="flex h-9 w-[190px] shrink-0 items-center gap-2 rounded-btn bg-background-base px-2 py-1 shadow-button-gray"
+      className="flex h-9 w-[190px] shrink-0 items-center gap-2 rounded-control bg-base px-2 py-1 borders-base"
     >
-      <span className="min-w-0 flex-1 truncate text-left text-label-xs text-text-muted">
+      <span className="min-w-0 flex-1 truncate text-left text-label-xsmall text-muted">
         {name}
       </span>
-      <span className="shrink-0 rounded-full border border-border-success-muted bg-background-success-muted px-[7px] py-px text-[10px] leading-[1.6] tracking-tight text-text-success-base">
+      <span className="shrink-0 rounded-full border border-success-muted bg-success-muted px-[7px] py-px text-[10px] leading-[1.6] tracking-tight text-success">
         HQ
       </span>
-      <CaretUpDown className="size-4 shrink-0 text-text-muted" />
+      <CaretUpDown className="size-4 shrink-0 text-muted" />
     </button>
   )
 }
@@ -462,7 +465,7 @@ function IconBtn({ icon: Icon, label }: { icon: React.ElementType; label: string
     <button
       type="button"
       aria-label={label}
-      className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background-base shadow-button-gray"
+      className="flex size-9 shrink-0 items-center justify-center rounded-full bg-base borders-base"
     >
       <Icon className="size-[18px]" />
     </button>
@@ -504,7 +507,7 @@ function RailNavButton({
             ? 'bg-background/70 text-[#183F68]'
             : cn(
                 'hover:cursor-pointer',
-                muted ? 'text-text-muted hover:text-text-primary' : 'text-text-primary',
+                muted ? 'text-muted hover:text-primary' : 'text-primary',
               ),
         )}
       >
@@ -536,7 +539,7 @@ function RailIconButton({
         type="button"
         aria-label={label}
         onClick={onClick}
-        className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background-base shadow-button-gray"
+        className="flex size-9 shrink-0 items-center justify-center rounded-full bg-base borders-base"
       >
         <Icon className="size-[18px]" weight={weight} />
       </button>
@@ -564,12 +567,12 @@ function RailWalletButton({
         className={cn(
           'flex size-9 shrink-0 items-center justify-center rounded-full transition-all',
           active
-            ? 'bg-brand-wallet-primary shadow-[0px_3px_4px_0px_rgba(11,193,90,0.11),inset_0px_1px_1px_rgba(255,255,255,0.25)]'
-            : 'bg-background-base shadow-button-gray',
+            ? 'bg-wallet shadow-[0px_3px_4px_0px_rgba(11,193,90,0.11),inset_0px_1px_1px_rgba(255,255,255,0.25)]'
+            : 'bg-base borders-base',
         )}
       >
         <Wallet
-          className={cn('size-5 shrink-0', active ? 'text-white' : 'text-brand-wallet-primary')}
+          className={cn('size-5 shrink-0', active ? 'text-white' : 'text-wallet')}
           weight="duotone"
         />
       </button>
@@ -604,7 +607,7 @@ function RailAiButton({
           'relative flex size-9 shrink-0 items-center justify-center overflow-hidden rounded-full transition-all',
           selected
             ? 'shadow-[0px_3px_4px_0px_rgba(113,77,255,0.2),inset_0px_3px_4px_rgba(255,255,255,0.25)]'
-            : 'bg-background-base shadow-button-gray',
+            : 'bg-base borders-base',
         )}
         style={
           selected
@@ -614,7 +617,7 @@ function RailAiButton({
       >
         <EmmaMark className="size-5 shrink-0" />
         {hasTokens && (
-          <span className="absolute -bottom-1 -right-1 rounded-full bg-background-base px-1 text-[9px] font-medium text-text-primary shadow-button-gray">
+          <span className="absolute -bottom-1 -right-1 rounded-full bg-base px-1 text-[9px] font-medium text-primary borders-base">
             {formatCompactCount(tokens)}
           </span>
         )}
@@ -689,7 +692,7 @@ export function AppBar({
 
   function handleAiClick() {
     setAiOn((v) => !v)
-    onAiClick?.()
+    ;(onAiClick ?? links.onAiClick)?.()
   }
 
   const isEmployee = role === 'employee'
@@ -699,7 +702,7 @@ export function AppBar({
   if (mini) {
     return (
       <>
-        <aside className="flex h-full w-16 shrink-0 flex-col items-center gap-1 border-r border-border-base bg-surface-2 py-3">
+        <aside className="flex h-full w-16 shrink-0 flex-col items-center gap-1 border-r border-base bg-surface-page py-3">
           <div className="flex h-9 shrink-0 items-center justify-center">
             <NiuralMark className="size-6 shrink-0" />
           </div>
@@ -714,14 +717,14 @@ export function AppBar({
               <button
                 type="button"
                 aria-label={DEFAULT_ORG_NAME}
-                className="mt-1 flex h-6 shrink-0 items-center justify-center rounded-full border border-border-success-muted bg-background-success-muted px-2 text-[10px] leading-[1.6] tracking-tight text-text-success-base"
+                className="mt-1 flex h-6 shrink-0 items-center justify-center rounded-full border border-success-muted bg-success-muted px-2 text-[10px] leading-[1.6] tracking-tight text-success"
               >
                 HQ
               </button>
             </Tooltip>
           )}
 
-          <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
+          <span className="my-2 h-px w-8 shrink-0 bg-(--border-muted)" />
 
           <nav className="flex flex-col items-center gap-1">
             {navItems.map(({ label, icon, muted }) => (
@@ -766,7 +769,7 @@ export function AppBar({
 
           {!isEmployee && (
             <>
-              <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
+              <span className="my-2 h-px w-8 shrink-0 bg-(--border-muted)" />
               <div className="flex flex-col items-center gap-2">
                 {isMultiEntity && (
                   <RailAiButton selected={aiOn} onClick={handleAiClick} tokens={tokenBalance?.tokens} />
@@ -779,7 +782,7 @@ export function AppBar({
             </>
           )}
 
-          <span className="my-2 h-px w-8 shrink-0 bg-border-muted" />
+          <span className="my-2 h-px w-8 shrink-0 bg-(--border-muted)" />
           <ProfileMenu role={role} square={isEmployee} side="right" onAccountSettings={settingsClick} />
         </aside>
       </>
@@ -828,22 +831,22 @@ export function AppBar({
             <>
               <button
                 type="button"
-                className="flex h-9 shrink-0 items-center gap-2 rounded-btn bg-background-base px-3 shadow-button-gray"
+                className="flex h-9 shrink-0 items-center gap-2 rounded-control bg-base px-3 borders-base"
               >
                 <CurrencyEth className="size-[18px]" />
-                <span className="text-label-sm text-text-primary">Connect Wallet</span>
+                <span className="text-label-small text-primary">Connect Wallet</span>
               </button>
               <button
                 type="button"
                 aria-label="Menu"
-                className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background-base shadow-button-gray"
+                className="flex size-9 shrink-0 items-center justify-center rounded-full bg-base borders-base"
               >
                 <DotsThree className="size-4" weight="bold" />
               </button>
               <button
                 type="button"
                 aria-label="Notifications"
-                className="flex size-9 shrink-0 items-center justify-center rounded-full bg-background-base shadow-button-gray"
+                className="flex size-9 shrink-0 items-center justify-center rounded-full bg-base borders-base"
               >
                 <DotsThree className="size-4" weight="bold" />
               </button>
@@ -887,8 +890,8 @@ export function AppBar({
                   aria-current={links.settingsActive ? 'page' : undefined}
                   onClick={settingsClick}
                   className={cn(
-                    'flex size-9 shrink-0 items-center justify-center rounded-full bg-background-base transition-colors hover:bg-background-highlight',
-                    links.settingsActive ? 'text-brand-text shadow-border-brand' : 'shadow-button-gray',
+                    'flex size-9 shrink-0 items-center justify-center rounded-full bg-base transition-colors hover:bg-highlight',
+                    links.settingsActive ? 'text-brand borders-shadow' : 'borders-base',
                   )}
                 >
                   <Gear className="size-[18px]" />

@@ -34,7 +34,7 @@ export function AiFilter({
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="flex h-9 items-center gap-1 rounded-md px-2 text-label-sm text-brand-text transition-colors hover:bg-brand-base"
+        className="flex h-9 items-center gap-1 rounded-md px-2 text-label-small text-brand transition-colors hover:bg-brand-base"
       >
         <Sparkle className="size-4" weight="fill" />
         <span className="px-1">AI filter</span>
@@ -45,7 +45,7 @@ export function AiFilter({
   return (
     <form
       onSubmit={submit}
-      className="flex h-9 w-[360px] items-center gap-1 rounded-md bg-background-base py-1 pr-1 pl-2 shadow-button-gray transition-shadow focus-within:shadow-ai"
+      className="flex h-9 w-[360px] items-center gap-1 rounded-md bg-base py-1 pr-1 pl-2 borders-base transition-shadow focus-within:elevation-ai"
     >
       <Sparkle className="size-4 shrink-0 text-brand-primary" weight="fill" />
       <input
@@ -63,7 +63,7 @@ export function AiFilter({
             ? 'Nothing matched - try a job title, location, type…'
             : 'Try “EOR account executives in London hired in 2024”'
         }
-        className="min-w-0 flex-1 bg-transparent px-1 text-paragraph-sm text-text-primary outline-none placeholder:text-text-muted"
+        className="min-w-0 flex-1 bg-transparent px-1 text-paragraph-small text-primary outline-none placeholder:text-muted"
       />
       <Button size="sm" type="submit">
         Apply

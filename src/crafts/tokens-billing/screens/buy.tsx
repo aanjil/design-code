@@ -43,14 +43,14 @@ function AmountPicker({ qty, onChange }: { qty: number; onChange: (n: number) =>
   const bad = qty < MIN_PURCHASE
   const nx = nextTier(qty)
   return (
-    <div className="rounded-2xl bg-background-base p-4.5 shadow-card">
+    <div className="rounded-2xl bg-base p-4.5 card">
       <div className="mb-1.5 flex items-center justify-between">
-        <span className="text-label-sm text-text-primary">Amount</span>
-        <span className="inline-flex items-center gap-1 rounded-md bg-background-success-highlight px-2 py-0.5 text-caption-md text-text-success-base">
+        <span className="text-label-small text-primary">Amount</span>
+        <span className="inline-flex items-center gap-1 rounded-md bg-success-highlight px-2 py-0.5 text-caption-sm font-medium text-success">
           {p.discountPct ? `${p.discountPct}% off` : 'no discount yet'}
         </span>
       </div>
-      <div className={`flex h-14 items-baseline gap-2 rounded-lg border px-3 ${bad ? 'border-text-error-base' : 'border-border-highlight'}`}>
+      <div className={`flex h-14 items-baseline gap-2 rounded-lg border px-3 ${bad ? 'border-(--text-error-base)' : 'border-base'}`}>
         <input
           type="text"
           inputMode="numeric"
@@ -59,11 +59,11 @@ function AmountPicker({ qty, onChange }: { qty: number; onChange: (n: number) =>
             const digits = e.target.value.replace(/[^0-9]/g, '')
             onChange(digits === '' ? 0 : Math.min(parseInt(digits, 10), MAX_PURCHASE))
           }}
-          className="min-w-0 flex-1 bg-transparent text-title-h4 text-text-primary outline-none"
+          className="min-w-0 flex-1 bg-transparent text-title-h4 text-primary outline-none"
         />
-        <span className="text-paragraph-sm text-text-muted">tokens</span>
+        <span className="text-paragraph-small text-muted">tokens</span>
       </div>
-      <p className={`mt-1.5 text-caption-md ${bad ? 'text-text-error-base' : 'text-text-muted'}`}>
+      <p className={`mt-1.5 text-caption-sm font-medium ${bad ? 'text-error' : 'text-muted'}`}>
         {bad ? 'Minimum purchase is 250 tokens' : `${usd(p.total)} at $${perTokenRate(qty).toFixed(3)} per token`}
       </p>
       <div className="mt-2.5 flex flex-wrap gap-1.5">
@@ -72,10 +72,10 @@ function AmountPicker({ qty, onChange }: { qty: number; onChange: (n: number) =>
             key={t.threshold}
             type="button"
             onClick={() => onChange(t.threshold)}
-            className={`rounded-full border px-2.5 py-1 text-caption-md ${
+            className={`rounded-full border px-2.5 py-1 text-caption-sm font-medium ${
               qty === t.threshold
-                ? 'border-brand-primary bg-brand-muted text-brand-text'
-                : 'border-border-highlight text-text-muted'
+                ? 'border-brand bg-brand-muted text-brand'
+                : 'border-base text-muted'
             }`}
           >
             {num(t.threshold)}
@@ -83,7 +83,7 @@ function AmountPicker({ qty, onChange }: { qty: number; onChange: (n: number) =>
           </button>
         ))}
       </div>
-      <div className="mt-2.5 flex items-center gap-1.5 rounded-lg bg-brand-muted px-3 py-2 text-caption-md text-brand-text">
+      <div className="mt-2.5 flex items-center gap-1.5 rounded-lg bg-brand-muted px-3 py-2 text-caption-sm font-medium text-brand">
         {bad ? (
           <>
             <Warning weight="fill" className="size-3.5 shrink-0" />
@@ -104,7 +104,7 @@ function AmountPicker({ qty, onChange }: { qty: number; onChange: (n: number) =>
           </>
         )}
       </div>
-      <p className="mt-2 text-caption-md text-text-muted">250 - 5,000 tokens per purchase</p>
+      <p className="mt-2 text-caption-sm font-medium text-muted">250 - 5,000 tokens per purchase</p>
     </div>
   )
 }
@@ -150,8 +150,8 @@ export function BuyScreen({ view }: { view: BuyView }) {
         <div>
           <AmountPicker qty={qty} onChange={setQty} />
 
-          <p className="mt-4 mb-1.5 text-label-sm text-text-primary">Payment</p>
-          <div className="rounded-2xl bg-background-base p-4 shadow-card">
+          <p className="mt-4 mb-1.5 text-label-small text-primary">Payment</p>
+          <div className="rounded-2xl bg-base p-4 card">
             <div className="flex flex-col gap-2.5">
               {breakdown.credit > 0 && (
                 <PaymentRow icon={Gift} tone="success" label="Credit balance" value={usd(breakdown.credit)} />
@@ -171,7 +171,7 @@ export function BuyScreen({ view }: { view: BuyView }) {
                 />
               )}
             </div>
-            <p className={`mt-2.5 border-t border-border-highlight pt-2.5 text-paragraph-xs ${breakdown.add > 0 ? 'text-text-error-base' : 'text-text-muted'}`}>
+            <p className={`mt-2.5 border-t border-base pt-2.5 text-paragraph-xsmall ${breakdown.add > 0 ? 'text-error' : 'text-muted'}`}>
               {breakdown.add > 0
                 ? `Credit is applied first, then your wallet. You'll add the remaining ${usd(breakdown.add)}.`
                 : "Credit is always applied first. Anything left over comes from your wallet."}
@@ -188,7 +188,7 @@ export function BuyScreen({ view }: { view: BuyView }) {
                   { value: 'wire', label: 'Wire transfer' },
                 ]}
               />
-              <p className="text-paragraph-xs text-text-muted">
+              <p className="text-paragraph-xsmall text-muted">
                 {method === 'ach'
                   ? `We debit ${usd(breakdown.add)} from your linked account. Tokens are credited when it settles.`
                   : `You send ${usd(breakdown.add)} to Niural. We show the details and a reference code on the next screen.`}
@@ -196,8 +196,8 @@ export function BuyScreen({ view }: { view: BuyView }) {
             </div>
           )}
 
-          <div className="mt-4 rounded-2xl bg-background-base p-4 shadow-card">
-            <p className="mb-2.5 text-paragraph-xs text-text-muted">After this purchase</p>
+          <div className="mt-4 rounded-2xl bg-base p-4 card">
+            <p className="mb-2.5 text-paragraph-xsmall text-muted">After this purchase</p>
             <DeltaRow
               label="Emma tokens"
               before={num(b.tokens)}
@@ -206,7 +206,7 @@ export function BuyScreen({ view }: { view: BuyView }) {
             />
             {breakdown.credit > 0 && <DeltaRow label="Credit" before={usd(b.credit)} after={usd(b.credit - breakdown.credit)} />}
             {breakdown.wallet > 0 && <DeltaRow label="Wallet" before={usd(b.wallet)} after={usd(b.wallet - breakdown.wallet)} />}
-            <p className="mt-3 border-t border-border-highlight pt-2.5 text-paragraph-xs text-text-muted">
+            <p className="mt-3 border-t border-base pt-2.5 text-paragraph-xsmall text-muted">
               {breakdown.credit > 0
                 ? `${usd(b.credit - breakdown.credit)} credit left after this. Credit also goes toward your Niural fee, so spending it here leaves less for that.`
                 : `Your credit is untouched at ${usd(b.credit)} and stays available for your Niural fee.`}
@@ -214,12 +214,12 @@ export function BuyScreen({ view }: { view: BuyView }) {
           </div>
         </div>
 
-        <aside className="rounded-2xl bg-background-base p-4 shadow-card">
-          <p className="mb-3.5 text-label-sm text-text-primary">Summary</p>
+        <aside className="rounded-2xl bg-base p-4 card">
+          <p className="mb-3.5 text-label-small text-primary">Summary</p>
           <SummaryRow label="Tokens" value={num(qty)} />
           <SummaryRow label="Base price" value={usd(p.base)} />
           <SummaryRow label="Volume discount" value={p.discountPct ? `-${usd(p.base - p.total)}` : '—'} success={!!p.discountPct} />
-          <div className="mt-2 flex items-center justify-between border-t border-border-highlight pt-2.5 text-label-md text-text-primary">
+          <div className="mt-2 flex items-center justify-between border-t border-base pt-2.5 text-label-medium text-primary">
             <span>Total</span>
             <span>{usd(p.total)}</span>
           </div>
@@ -264,38 +264,38 @@ function PaymentRow({
 }) {
   const color =
     tone === 'success'
-      ? 'text-text-success-base'
+      ? 'text-success'
       : tone === 'error'
-        ? 'text-text-error-base'
+        ? 'text-error'
         : tone === 'muted'
-          ? 'text-text-muted'
-          : 'text-text-muted'
+          ? 'text-muted'
+          : 'text-muted'
   return (
-    <div className={`flex items-center gap-2 text-paragraph-sm ${tone === 'muted' ? 'opacity-50' : ''}`}>
+    <div className={`flex items-center gap-2 text-paragraph-small ${tone === 'muted' ? 'opacity-50' : ''}`}>
       <RowIcon weight="fill" className={`size-4 shrink-0 ${color}`} />
-      <span className="flex-1 text-text-primary">{label}</span>
-      <span className="font-medium text-text-primary">{value}</span>
+      <span className="flex-1 text-primary">{label}</span>
+      <span className="font-medium text-primary">{value}</span>
     </div>
   )
 }
 
 function DeltaRow({ label, before, after, trail }: { label: string; before: string; after: string; trail?: string }) {
   return (
-    <div className="flex flex-wrap items-baseline gap-2 py-1 text-paragraph-xs">
-      <span className="w-20 shrink-0 text-text-muted">{label}</span>
-      <span className="text-text-muted">{before}</span>
-      <ArrowLeft className="size-3.5 rotate-180 text-text-muted" />
-      <span className="font-medium text-text-primary">{after}</span>
-      {trail && <span className="text-caption-md text-text-muted">{trail}</span>}
+    <div className="flex flex-wrap items-baseline gap-2 py-1 text-paragraph-xsmall">
+      <span className="w-20 shrink-0 text-muted">{label}</span>
+      <span className="text-muted">{before}</span>
+      <ArrowLeft className="size-3.5 rotate-180 text-muted" />
+      <span className="font-medium text-primary">{after}</span>
+      {trail && <span className="text-caption-sm font-medium text-muted">{trail}</span>}
     </div>
   )
 }
 
 function SummaryRow({ label, value, success }: { label: string; value: string; success?: boolean }) {
   return (
-    <div className="flex items-center justify-between py-1 text-paragraph-xs">
-      <span className="text-text-muted">{label}</span>
-      <span className={success ? 'text-text-success-base' : 'text-text-primary'}>{value}</span>
+    <div className="flex items-center justify-between py-1 text-paragraph-xsmall">
+      <span className="text-muted">{label}</span>
+      <span className={success ? 'text-success' : 'text-primary'}>{value}</span>
     </div>
   )
 }
@@ -328,22 +328,22 @@ function ReviewModal({
     return (
       <ModalShell title="Purchase didn't go through" onClose={onClose}>
         <div className="py-4 text-center">
-          <span className="mx-auto flex size-11 items-center justify-center rounded-full bg-background-error-highlight text-text-error-base">
+          <span className="mx-auto flex size-11 items-center justify-center rounded-full bg-error-highlight text-error">
             <X weight="bold" className="size-5" />
           </span>
-          <p className="mt-3 text-label-md text-text-primary">Your bank declined the {usd(breakdown.total)} debit</p>
-          <p className="mx-auto mt-1.5 max-w-[340px] text-paragraph-xs text-text-muted">
+          <p className="mt-3 text-label-medium text-primary">Your bank declined the {usd(breakdown.total)} debit</p>
+          <p className="mx-auto mt-1.5 max-w-[340px] text-paragraph-xsmall text-muted">
             No tokens were added and nothing left your account. Your credit balance is untouched at {usd(balances.credit)}.
           </p>
-          <dl className="mx-auto mt-3.5 max-w-[340px] rounded-lg bg-background-highlight p-3 text-left text-paragraph-xs">
+          <dl className="mx-auto mt-3.5 max-w-[340px] rounded-lg bg-highlight p-3 text-left text-paragraph-xsmall">
             <div className="flex justify-between py-0.5">
-              <dt className="text-text-muted">Reason given</dt>
+              <dt className="text-muted">Reason given</dt>
               <dd>Insufficient funds at Chase ···· 4417</dd>
             </div>
             <div className="flex justify-between py-0.5">
-              <dt className="text-text-muted">Reference</dt>
+              <dt className="text-muted">Reference</dt>
               <dd>
-                <code className="text-caption-md">TKN-FAIL-2291</code>
+                <code className="text-caption-sm font-medium">TKN-FAIL-2291</code>
               </dd>
             </div>
           </dl>
@@ -367,23 +367,23 @@ function ReviewModal({
         <div className="py-4 text-center">
           <span
             className={`mx-auto flex size-11 items-center justify-center rounded-full ${
-              showPending ? 'bg-brand-muted text-brand-text' : 'bg-background-success-highlight text-text-success-base'
+              showPending ? 'bg-brand-muted text-brand' : 'bg-success-highlight text-success'
             }`}
           >
             {showPending ? <Clock weight="fill" className="size-5" /> : <Check weight="bold" className="size-5" />}
           </span>
-          <p className="mt-3 text-label-md text-text-primary">
+          <p className="mt-3 text-label-medium text-primary">
             {showPending ? 'Waiting for your funds' : `${num(qty)} tokens added`}
           </p>
-          <p className="mx-auto mt-1.5 max-w-[340px] text-paragraph-xs text-text-muted">
+          <p className="mx-auto mt-1.5 max-w-[340px] text-paragraph-xsmall text-muted">
             {showPending
               ? `We'll add ${num(qty)} tokens as soon as ${usd(breakdown.add)} arrives, and email you when it does.`
               : `Your balance is now ${num(balances.tokens + qty)} tokens.`}
           </p>
           {(wasBlocked || variant === 'resume') && !showPending && (
-            <div className="mx-auto mt-3.5 max-w-[360px] rounded-lg border border-brand-primary bg-brand-muted p-3 text-left">
-              <p className="text-label-xs text-brand-text">Emma was part-way through your July payroll</p>
-              <p className="mt-1 text-paragraph-xs text-brand-text">
+            <div className="mx-auto mt-3.5 max-w-[360px] rounded-lg border border-brand bg-brand-muted p-3 text-left">
+              <p className="text-label-xsmall text-brand">Emma was part-way through your July payroll</p>
+              <p className="mt-1 text-paragraph-xsmall text-brand">
                 Steps 1 and 2 are still saved. Resuming picks up at step 3 rather than starting over.
               </p>
               <Button type="button" size="sm" className="mt-2">
@@ -407,13 +407,13 @@ function ReviewModal({
     <ModalShell title="Review purchase" onClose={onClose} width="w-[640px]">
       <div className="grid grid-cols-2 gap-6">
         <div>
-          <p className="text-caption-md text-text-muted">You're buying</p>
+          <p className="text-caption-sm font-medium text-muted">You're buying</p>
           <div className="my-0.5 flex items-baseline gap-1.5">
-            <span className="text-title-h4 text-text-primary">{num(qty)}</span>
-            <span className="text-paragraph-sm text-text-muted">tokens</span>
+            <span className="text-title-h4 text-primary">{num(qty)}</span>
+            <span className="text-paragraph-small text-muted">tokens</span>
           </div>
-          <p className="text-caption-md text-text-muted">for {usd(breakdown.total)}</p>
-          <p className="mt-4 mb-1.5 text-label-xs text-text-primary">Paying with</p>
+          <p className="text-caption-sm font-medium text-muted">for {usd(breakdown.total)}</p>
+          <p className="mt-4 mb-1.5 text-label-xsmall text-primary">Paying with</p>
           <div className="flex flex-col gap-2">
             {breakdown.credit > 0 && <SourceLine icon={Gift} label="Credit balance" value={usd(breakdown.credit)} tone="success" />}
             {breakdown.wallet > 0 && <SourceLine icon={WalletIcon} label="Wallet balance" value={usd(breakdown.wallet)} />}
@@ -425,73 +425,73 @@ function ReviewModal({
               />
             )}
           </div>
-          <div className="mt-3.5 rounded-lg bg-background-error-highlight p-2.5 text-caption-md text-text-error-base">
+          <div className="mt-3.5 rounded-lg bg-error-highlight p-2.5 text-caption-sm font-medium text-error">
             This purchase is final. Tokens can't be refunded to cash or moved to another account.
           </div>
         </div>
         <div>
           {wire ? (
             <div>
-              <p className="mb-1.5 text-label-xs text-text-primary">Wire transfer details</p>
-              <dl className="rounded-lg bg-background-highlight p-3 text-paragraph-xs">
+              <p className="mb-1.5 text-label-xsmall text-primary">Wire transfer details</p>
+              <dl className="rounded-lg bg-highlight p-3 text-paragraph-xsmall">
                 <div className="flex justify-between py-0.5">
-                  <dt className="text-text-muted">Amount to send</dt>
+                  <dt className="text-muted">Amount to send</dt>
                   <dd className="font-medium">{usd(breakdown.add)}</dd>
                 </div>
                 <div className="flex justify-between py-0.5">
-                  <dt className="text-text-muted">Reference</dt>
+                  <dt className="text-muted">Reference</dt>
                   <dd>
-                    <code className="rounded bg-brand-muted px-1 text-brand-text">{WIRE_REFERENCE}</code>
+                    <code className="rounded bg-brand-muted px-1 text-brand">{WIRE_REFERENCE}</code>
                   </dd>
                 </div>
                 {WIRE_DETAILS.map(([label, value]) => (
                   <div key={label} className="flex justify-between py-0.5">
-                    <dt className="text-text-muted">{label}</dt>
+                    <dt className="text-muted">{label}</dt>
                     <dd>{value}</dd>
                   </div>
                 ))}
               </dl>
-              <div className="mt-2.5 rounded-lg bg-brand-muted p-2.5 text-caption-md text-brand-text">
+              <div className="mt-2.5 rounded-lg bg-brand-muted p-2.5 text-caption-sm font-medium text-brand">
                 Include the reference code. Without it we can't match your transfer and it may be returned.
               </div>
             </div>
           ) : breakdown.add > 0 ? (
             <div>
-              <p className="mb-1.5 text-label-xs text-text-primary">ACH debit</p>
-              <dl className="rounded-lg bg-background-highlight p-3 text-paragraph-xs">
+              <p className="mb-1.5 text-label-xsmall text-primary">ACH debit</p>
+              <dl className="rounded-lg bg-highlight p-3 text-paragraph-xsmall">
                 <div className="flex justify-between py-0.5">
-                  <dt className="text-text-muted">Amount</dt>
+                  <dt className="text-muted">Amount</dt>
                   <dd className="font-medium">{usd(breakdown.add)}</dd>
                 </div>
                 <div className="flex justify-between py-0.5">
-                  <dt className="text-text-muted">From</dt>
+                  <dt className="text-muted">From</dt>
                   <dd>Chase ···· 4417</dd>
                 </div>
                 <div className="flex justify-between py-0.5">
-                  <dt className="text-text-muted">Expected</dt>
+                  <dt className="text-muted">Expected</dt>
                   <dd>1-3 business days</dd>
                 </div>
               </dl>
-              <div className="mt-2.5 rounded-lg bg-brand-muted p-2.5 text-caption-md text-brand-text">
+              <div className="mt-2.5 rounded-lg bg-brand-muted p-2.5 text-caption-sm font-medium text-brand">
                 We'll complete this purchase once the debit settles.
               </div>
             </div>
           ) : (
             <div>
-              <p className="mb-1.5 text-label-xs text-text-primary">What happens next</p>
-              <dl className="rounded-lg bg-background-highlight p-3 text-paragraph-xs">
+              <p className="mb-1.5 text-label-xsmall text-primary">What happens next</p>
+              <dl className="rounded-lg bg-highlight p-3 text-paragraph-xsmall">
                 <div className="flex justify-between py-0.5">
-                  <dt className="text-text-muted">Tokens</dt>
+                  <dt className="text-muted">Tokens</dt>
                   <dd>Added right away</dd>
                 </div>
                 <div className="flex justify-between py-0.5">
-                  <dt className="text-text-muted">Balance</dt>
+                  <dt className="text-muted">Balance</dt>
                   <dd>
                     {num(balances.tokens)} → {num(balances.tokens + qty)}
                   </dd>
                 </div>
                 <div className="flex justify-between py-0.5">
-                  <dt className="text-text-muted">Receipt</dt>
+                  <dt className="text-muted">Receipt</dt>
                   <dd>In your activity log</dd>
                 </div>
               </dl>
@@ -523,10 +523,10 @@ function SourceLine({
   tone?: 'success'
 }) {
   return (
-    <div className="flex items-center gap-2 text-paragraph-xs">
-      <LineIcon weight="fill" className={`size-4 shrink-0 ${tone === 'success' ? 'text-text-success-base' : 'text-text-muted'}`} />
-      <span className="flex-1 text-text-primary">{label}</span>
-      <span className="font-medium text-text-primary">{value}</span>
+    <div className="flex items-center gap-2 text-paragraph-xsmall">
+      <LineIcon weight="fill" className={`size-4 shrink-0 ${tone === 'success' ? 'text-success' : 'text-muted'}`} />
+      <span className="flex-1 text-primary">{label}</span>
+      <span className="font-medium text-primary">{value}</span>
     </div>
   )
 }

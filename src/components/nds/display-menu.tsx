@@ -30,7 +30,7 @@ import { cn } from '@/lib/utils'
 
 /*
  * Fields and chips here sit on the flyout surface, so the form-field tokens
- * (background-base fill + shadow-button-gray ring) read as floating cutouts.
+ * (background-base fill + borders-base ring) read as floating cutouts.
  * They need their own hairline treatment instead.
  * TODO: Fix color - rgba values below are hardcoded until proper
  * on-flyout surface/border tokens exist in foundations.
@@ -39,9 +39,9 @@ const flyoutControl =
   'border border-[rgba(20,20,22,0.1)] bg-transparent hover:bg-[rgba(20,20,22,0.03)] dark:border-[rgba(255,255,255,0.12)] dark:hover:bg-[rgba(255,255,255,0.05)]'
 // TODO: Fix color - chip fills on flyout surface, same story as above.
 const chipOn =
-  'border-transparent bg-[rgba(20,20,22,0.07)] text-text-primary hover:bg-[rgba(20,20,22,0.11)] dark:bg-[rgba(255,255,255,0.1)] dark:hover:bg-[rgba(255,255,255,0.15)]'
+  'border-transparent bg-[rgba(20,20,22,0.07)] text-primary hover:bg-[rgba(20,20,22,0.11)] dark:bg-[rgba(255,255,255,0.1)] dark:hover:bg-[rgba(255,255,255,0.15)]'
 const chipOff =
-  'border-[rgba(20,20,22,0.1)] bg-transparent text-text-muted hover:bg-[rgba(20,20,22,0.03)] hover:text-text-primary dark:border-[rgba(255,255,255,0.12)] dark:hover:bg-[rgba(255,255,255,0.05)]'
+  'border-[rgba(20,20,22,0.1)] bg-transparent text-muted hover:bg-[rgba(20,20,22,0.03)] hover:text-primary dark:border-[rgba(255,255,255,0.12)] dark:hover:bg-[rgba(255,255,255,0.05)]'
 
 export interface DisplayOption {
   value: string
@@ -97,12 +97,12 @@ export function DisplayMenu({
         <span className="@max-3xl/toolbar:hidden">Display</span>
       </PopoverTrigger>
       <PopoverContent align="end" className="w-[352px] gap-7 p-5">
-        <p className="text-label-lg text-text-primary">Display options</p>
+        <p className="text-label-large text-primary">Display options</p>
 
         <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between gap-3">
-            <span className="flex items-center gap-2 text-label-sm text-text-primary">
-              <List className="size-4 text-text-muted" />
+            <span className="flex items-center gap-2 text-label-small text-primary">
+              <List className="size-4 text-muted" />
               Group by
             </span>
             <OptionSelect
@@ -113,8 +113,8 @@ export function DisplayMenu({
           </div>
 
           <div className="flex items-center justify-between gap-3">
-            <span className="flex items-center gap-2 text-label-sm text-text-primary">
-              <ArrowsDownUp className="size-4 text-text-muted" />
+            <span className="flex items-center gap-2 text-label-small text-primary">
+              <ArrowsDownUp className="size-4 text-muted" />
               Sort by
             </span>
             <div className="flex items-center gap-2">
@@ -133,7 +133,7 @@ export function DisplayMenu({
                   }))
                 }
                 className={cn(
-                  'flex size-9 shrink-0 items-center justify-center rounded-[10px] text-text-primary transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                  'flex size-9 shrink-0 items-center justify-center rounded-[10px] text-primary transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
                   flyoutControl,
                 )}
               >
@@ -148,7 +148,7 @@ export function DisplayMenu({
         </div>
 
         <div className="flex flex-col gap-3">
-          <p className="text-label-sm text-text-muted">Table columns</p>
+          <p className="text-label-small text-muted">Table columns</p>
           <div className="flex flex-wrap gap-2">
             {columns.map((column) => {
               const visible = draft.visibleColumns.includes(column.value)
@@ -166,7 +166,7 @@ export function DisplayMenu({
                     }))
                   }
                   className={cn(
-                    'flex h-9 items-center rounded-full border px-3.5 text-paragraph-sm transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
+                    'flex h-9 items-center rounded-full border px-3.5 text-paragraph-small transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50',
                     visible ? chipOn : chipOff,
                   )}
                 >
@@ -220,12 +220,12 @@ function OptionSelect({
       {/* TODO: Fix color - open-state fill is hardcoded like flyoutControl above */}
       <DropdownMenuTrigger
         className={cn(
-          'flex h-9 items-center gap-2 rounded-[10px] pr-2.5 pl-3.5 text-paragraph-sm text-text-primary transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 data-[popup-open]:bg-[rgba(20,20,22,0.05)] dark:data-[popup-open]:bg-[rgba(255,255,255,0.07)]',
+          'flex h-9 items-center gap-2 rounded-[10px] pr-2.5 pl-3.5 text-paragraph-small text-primary transition-colors outline-none focus-visible:ring-3 focus-visible:ring-ring/50 data-[popup-open]:bg-[rgba(20,20,22,0.05)] dark:data-[popup-open]:bg-[rgba(255,255,255,0.07)]',
           flyoutControl,
         )}
       >
         {current?.label ?? value}
-        <CaretDown className="size-4 text-text-muted" />
+        <CaretDown className="size-4 text-muted" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-44 ">
         {options.map((option) => (
@@ -235,7 +235,7 @@ function OptionSelect({
           >
             <span className="min-w-0 flex-1 truncate">{option.label}</span>
             {option.value === value && (
-              <Check className="size-4 text-brand-text" weight="bold" />
+              <Check className="size-4 text-brand" weight="bold" />
             )}
           </DropdownMenuItem>
         ))}

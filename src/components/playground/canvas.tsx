@@ -154,8 +154,8 @@ const clampZoomTo = (z: number, minZoom: number) =>
 /* Blueprint grid: fine 20px lines + stronger 100px majors, token-driven. */
 const BLUEPRINT_BG: React.CSSProperties = {
   backgroundImage: [
-    'linear-gradient(var(--border-base) 1px, transparent 1px)',
-    'linear-gradient(90deg, var(--border-base) 1px, transparent 1px)',
+    'linear-gradient(var(--border-default) 1px, transparent 1px)',
+    'linear-gradient(90deg, var(--border-default) 1px, transparent 1px)',
     'linear-gradient(var(--border-highlight) 1px, transparent 1px)',
     'linear-gradient(90deg, var(--border-highlight) 1px, transparent 1px)',
   ].join(', '),
@@ -957,7 +957,7 @@ export function PlaygroundCanvas({
       <div
         ref={scrollerRef}
         className={cn(
-          'h-full min-h-0 bg-surface-0',
+          'h-full min-h-0 bg-surface-app',
           fullscreenId ? 'overflow-hidden' : 'overflow-auto',
         )}
       >
@@ -984,7 +984,7 @@ export function PlaygroundCanvas({
           >
             {fullscreenId && (
               <div
-                className="absolute bg-elevation-alpha-60 backdrop-blur-[2px]"
+                className="absolute bg-(--elevation-alpha-60) backdrop-blur-[2px]"
                 style={{
                   left: viewport.left / zoom,
                   top: viewport.top / zoom,
@@ -1011,7 +1011,7 @@ export function PlaygroundCanvas({
               return (
                 <div
                   key={group.id}
-                  className="absolute rounded-[28px] bg-background-emphasis shadow-border-base"
+                  className="absolute rounded-[28px] bg-emphasis borders-base"
                   style={{
                     left: minX,
                     top: minY,
@@ -1024,10 +1024,10 @@ export function PlaygroundCanvas({
                     className="absolute left-0 flex origin-bottom-left -translate-y-full cursor-grab items-center gap-2 pb-1.5 select-none active:cursor-grabbing"
                     style={{ transform: `translateY(-100%) scale(${1 / zoom})` }}
                   >
-                    <span className="text-label-xs whitespace-nowrap text-text-muted">
+                    <span className="text-label-xsmall whitespace-nowrap text-muted">
                       {group.label}
                     </span>
-                    <span className="text-caption-md text-text-disabled">
+                    <span className="text-caption-sm font-medium text-disabled">
                       {group.windowIds.length}
                     </span>
                     {group.onPlay && (
@@ -1037,7 +1037,7 @@ export function PlaygroundCanvas({
                         title="Present fullscreen"
                         onPointerDown={(e) => e.stopPropagation()}
                         onClick={group.onPlay}
-                        className="flex size-5 shrink-0 items-center justify-center rounded-full bg-brand-primary text-text-on-color transition-transform hover:scale-110"
+                        className="flex size-5 shrink-0 items-center justify-center rounded-full bg-brand text-on-color transition-transform hover:scale-110"
                       >
                         <Play weight="fill" className="size-2.5" />
                       </button>
@@ -1166,12 +1166,12 @@ export function PlaygroundCanvas({
             zenMode ? 'pointer-events-none opacity-0' : 'opacity-100',
           )}
         >
-          <div className="flex items-center gap-0.5 rounded-full bg-background-base/90 p-1 shadow-flyout backdrop-blur">
+          <div className="flex items-center gap-0.5 rounded-full bg-base/90 p-1 flyout backdrop-blur">
             <button
               type="button"
               aria-label="Zoom out (⌘−)"
               onClick={() => zoomAt(zoomRef.current / ZOOM_STEP)}
-              className="flex size-7 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-background-highlight"
+              className="flex size-7 items-center justify-center rounded-full text-primary transition-colors hover:bg-highlight"
             >
               <Minus className="size-3.5" />
             </button>
@@ -1179,7 +1179,7 @@ export function PlaygroundCanvas({
               type="button"
               onClick={() => zoomAt(1)}
               title="Reset to 100% (⌘0)"
-              className="min-w-[46px] text-center text-label-xs text-text-muted transition-colors hover:text-text-primary"
+              className="min-w-[46px] text-center text-label-xsmall text-muted transition-colors hover:text-primary"
             >
               {Math.round(zoom * 100)}%
             </button>
@@ -1187,17 +1187,17 @@ export function PlaygroundCanvas({
               type="button"
               aria-label="Zoom in (⌘+)"
               onClick={() => zoomAt(zoomRef.current * ZOOM_STEP)}
-              className="flex size-7 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-background-highlight"
+              className="flex size-7 items-center justify-center rounded-full text-primary transition-colors hover:bg-highlight"
             >
               <Plus className="size-3.5" />
             </button>
-            <span className="mx-0.5 h-3 w-px bg-border-muted" />
+            <span className="mx-0.5 h-3 w-px bg-(--border-muted)" />
             <button
               type="button"
               aria-label="Fit all windows"
               title="Fit all windows (Shift+2)"
               onClick={fitToContent}
-              className="flex size-7 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-background-highlight"
+              className="flex size-7 items-center justify-center rounded-full text-primary transition-colors hover:bg-highlight"
             >
               <FrameCorners className="size-3.5" />
             </button>
@@ -1206,11 +1206,11 @@ export function PlaygroundCanvas({
               aria-label="Tidy up windows"
               title="Tidy up - arrange left to right"
               onClick={tidyUp}
-              className="flex size-7 items-center justify-center rounded-full text-text-primary transition-colors hover:bg-background-highlight"
+              className="flex size-7 items-center justify-center rounded-full text-primary transition-colors hover:bg-highlight"
             >
               <Broom className="size-3.5" />
             </button>
-            <span className="mx-0.5 h-3 w-px bg-border-muted" />
+            <span className="mx-0.5 h-3 w-px bg-(--border-muted)" />
             <button
               type="button"
               aria-label="Cursor tool"
@@ -1220,8 +1220,8 @@ export function PlaygroundCanvas({
               className={cn(
                 'flex size-7 items-center justify-center rounded-full transition-colors',
                 tool === 'cursor'
-                  ? 'bg-brand-primary text-text-on-color'
-                  : 'text-text-primary hover:bg-background-highlight',
+                  ? 'bg-brand text-on-color'
+                  : 'text-primary hover:bg-highlight',
               )}
             >
               <Cursor weight="fill" className="size-3.5" />
@@ -1235,8 +1235,8 @@ export function PlaygroundCanvas({
               className={cn(
                 'flex size-7 items-center justify-center rounded-full transition-colors',
                 tool === 'hand'
-                  ? 'bg-brand-primary text-text-on-color'
-                  : 'text-text-primary hover:bg-background-highlight',
+                  ? 'bg-brand text-on-color'
+                  : 'text-primary hover:bg-highlight',
               )}
             >
               <Hand className="size-3.5" />
@@ -1250,8 +1250,8 @@ export function PlaygroundCanvas({
               className={cn(
                 'flex size-7 items-center justify-center rounded-full transition-colors',
                 tool === 'annotate'
-                  ? 'bg-brand-primary text-text-on-color'
-                  : 'text-text-primary hover:bg-background-highlight',
+                  ? 'bg-brand text-on-color'
+                  : 'text-primary hover:bg-highlight',
               )}
             >
               <ChatTeardropText className="size-3.5" />
@@ -1290,7 +1290,7 @@ function PresentExitHint({ onExit }: { onExit: () => void }) {
         type="button"
         onClick={onExit}
         className={cn(
-          'flex h-8 items-center gap-2 rounded-full bg-background-base/90 pr-1.5 pl-3 text-label-xs text-text-primary shadow-flyout backdrop-blur transition-opacity duration-300 hover:bg-background-highlight',
+          'flex h-8 items-center gap-2 rounded-full bg-base/90 pr-1.5 pl-3 text-label-xsmall text-primary flyout backdrop-blur transition-opacity duration-300 hover:bg-highlight',
           announcing ? 'opacity-100' : 'opacity-0 group-hover:opacity-100 focus-visible:opacity-100',
         )}
       >
@@ -1355,7 +1355,7 @@ function Minimap({
       role="presentation"
       aria-label="Canvas minimap"
       onPointerDown={navigate}
-      className="relative cursor-pointer touch-none overflow-hidden rounded-xl bg-background-base/90 shadow-flyout backdrop-blur"
+      className="relative cursor-pointer touch-none overflow-hidden rounded-xl bg-base/90 flyout backdrop-blur"
       style={{ width: MINIMAP_W, height }}
     >
       {windows.map((w) => {
@@ -1368,7 +1368,7 @@ function Minimap({
               'absolute rounded-[2px]',
               focusedId === w.id
                 ? 'bg-brand-surface/70'
-                : 'bg-background-emphasis',
+                : 'bg-emphasis',
             )}
             style={{
               left: g.x * k,
@@ -1380,7 +1380,7 @@ function Minimap({
         )
       })}
       <span
-        className="absolute rounded-[3px] border border-brand-primary bg-brand-primary/10"
+        className="absolute rounded-[3px] border border-brand bg-brand/10"
         style={{
           left: (viewport.left / zoom) * k,
           top: (viewport.top / zoom) * k,
@@ -1523,17 +1523,17 @@ function BrowserWindow({
       {/* blueprint readout: content viewport size + position */}
       {!fullscreen && (
         <div
-          className="pointer-events-none absolute flex items-baseline gap-2 font-mono text-caption whitespace-nowrap"
+          className="pointer-events-none absolute flex items-baseline gap-2 tabular-nums text-caption-sm whitespace-nowrap"
           style={{
             left: geometry.x + 2,
             top: geometry.y - 22,
             zIndex: geometry.z,
           }}
         >
-          <span className={focused ? 'text-brand-text' : 'text-text-muted'}>
+          <span className={focused ? 'text-brand' : 'text-muted'}>
             {Math.round(geometry.width)} × {Math.round(geometry.height - 36)}
           </span>
-          <span className="text-text-muted/70">
+          <span className="text-muted/70">
             x{Math.round(geometry.x)} · y{Math.round(geometry.y)}
           </span>
         </div>
@@ -1544,9 +1544,9 @@ function BrowserWindow({
         data-window-id={def.id}
         onPointerDown={onFocus}
         className={cn(
-          'absolute flex flex-col overflow-hidden bg-background-base',
-          !fullscreen && 'rounded-xl shadow-border-base',
-          focused && !fullscreen && 'shadow-border-active',
+          'absolute flex flex-col overflow-hidden bg-base',
+          !fullscreen && 'rounded-xl borders-base',
+          focused && !fullscreen && 'borders-active',
           interacting && 'select-none',
         )}
         style={
@@ -1567,7 +1567,7 @@ function BrowserWindow({
           onPointerDown={startDrag}
           onDoubleClick={onToggleFullscreen}
           className={cn(
-            'flex h-9 shrink-0 items-center gap-2 border-b border-border-highlight bg-surface-1 px-3 select-none',
+            'flex h-9 shrink-0 items-center gap-2 border-b border-base bg-surface-frame px-3 select-none',
             fullscreen
               ? 'cursor-default'
               : interacting
@@ -1577,8 +1577,8 @@ function BrowserWindow({
           title={`${def.title} - double-click to toggle app view`}
         >
           <span className="flex shrink-0 items-center gap-1.5" data-no-drag>
-            <span className="size-3 rounded-full bg-background-error-base" />
-            <span className="size-3 rounded-full bg-background-warning-base" />
+            <span className="size-3 rounded-full bg-error" />
+            <span className="size-3 rounded-full bg-warning" />
             <button
               type="button"
               aria-label={
@@ -1586,13 +1586,13 @@ function BrowserWindow({
               }
               title={fullscreen ? 'Exit fullscreen (Esc)' : 'Fullscreen preview'}
               onClick={onToggleFullscreen}
-              className="size-3 cursor-pointer rounded-full bg-background-success-base transition-transform hover:scale-110"
+              className="size-3 cursor-pointer rounded-full bg-success transition-transform hover:scale-110"
             />
           </span>
           <span className="flex min-w-0 flex-1 justify-center">
-            <span className="flex h-6 max-w-[60%] min-w-[220px] items-center justify-center gap-1 truncate rounded-lg bg-background-highlight px-3 text-caption text-text-muted">
+            <span className="flex h-6 max-w-[60%] min-w-[220px] items-center justify-center gap-1 truncate rounded-lg bg-highlight px-3 text-caption-sm text-muted">
               {kind === 'snapshot' ? (
-                <Camera className="size-3 shrink-0 text-brand-text" />
+                <Camera className="size-3 shrink-0 text-brand" />
               ) : (
                 <Lock className="size-3 shrink-0" weight="fill" />
               )}
@@ -1600,7 +1600,7 @@ function BrowserWindow({
             </span>
           </span>
           <span className="flex shrink-0 items-center gap-1" data-no-drag>
-            <span className="max-w-[96px] truncate text-caption text-text-muted">
+            <span className="max-w-[96px] truncate text-caption-sm text-muted">
               {def.title.split('-')[0]?.trim()}
             </span>
             {onSnapshot && !fullscreen && (
@@ -1609,7 +1609,7 @@ function BrowserWindow({
                 aria-label="Snapshot this window"
                 title="Snapshot - freeze this state as a new window"
                 onClick={onSnapshot}
-                className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+                className="flex size-6 items-center justify-center rounded-md text-muted transition-colors hover:bg-highlight hover:text-primary"
               >
                 <Camera className="size-3.5" />
               </button>
@@ -1634,12 +1634,12 @@ function BrowserWindow({
               onClick={copyScreenshot}
               disabled={screenshotState === 'busy'}
               className={cn(
-                'flex size-6 items-center justify-center rounded-md transition-colors hover:bg-background-highlight hover:text-text-primary',
+                'flex size-6 items-center justify-center rounded-md transition-colors hover:bg-highlight hover:text-primary',
                 screenshotState === 'done'
-                  ? 'text-text-success-base'
+                  ? 'text-success'
                   : screenshotState === 'error'
-                    ? 'text-text-error-base'
-                    : 'text-text-muted',
+                    ? 'text-error'
+                    : 'text-muted',
               )}
             >
               {screenshotState === 'done' ? (
@@ -1661,7 +1661,7 @@ function BrowserWindow({
                   : 'Open as app - fills the screen'
               }
               onClick={onToggleFullscreen}
-              className="flex size-6 items-center justify-center rounded-md text-text-muted transition-colors hover:bg-background-highlight hover:text-text-primary"
+              className="flex size-6 items-center justify-center rounded-md text-muted transition-colors hover:bg-highlight hover:text-primary"
             >
               {fullscreen ? (
                 <CornersIn className="size-3.5" />
@@ -1706,7 +1706,7 @@ function BrowserWindow({
             aria-hidden
             className="absolute right-0 bottom-0 z-10 size-4 cursor-nwse-resize"
           >
-            <span className="absolute right-1 bottom-1 block size-2 rounded-[2px] border-r-2 border-b-2 border-border-muted" />
+            <span className="absolute right-1 bottom-1 block size-2 rounded-[2px] border-r-2 border-b-2 border-muted" />
           </div>
         )}
       </section>
@@ -1756,7 +1756,7 @@ function CanvasWindowsStack({
         type="button"
         onClick={() => setOpen((v) => !v)}
         title={open ? 'Collapse windows list' : 'Expand windows list (Space = zen mode)'}
-        className="flex items-center gap-2 rounded-xl bg-background-base/90 px-2.5 py-2 shadow-border-base backdrop-blur transition-colors hover:bg-background-base"
+        className="flex items-center gap-2 rounded-xl bg-base/90 px-2.5 py-2 borders-base backdrop-blur transition-colors hover:bg-base"
       >
         {/* Stacked card thumbnails */}
         <span
@@ -1766,7 +1766,7 @@ function CanvasWindowsStack({
           {Array.from({ length: stackDepth }).map((_, i) => (
             <span
               key={i}
-              className="absolute rounded-[3px] border border-border-base"
+              className="absolute rounded-[3px] border border-base"
               style={{
                 width: 16,
                 height: 12,
@@ -1775,17 +1775,17 @@ function CanvasWindowsStack({
                 background:
                   i === stackDepth - 1
                     ? 'var(--background-emphasis)'
-                    : 'var(--surface-1)',
+                    : 'var(--surface-frame)',
                 opacity: 0.55 + i * 0.22,
               }}
             />
           ))}
         </span>
-        <span className="tabular-nums text-label-xs text-text-muted">{count}</span>
+        <span className="tabular-nums text-label-xsmall text-muted">{count}</span>
         {open ? (
-          <CornersIn className="size-3 shrink-0 text-text-muted" />
+          <CornersIn className="size-3 shrink-0 text-muted" />
         ) : (
-          <CornersOut className="size-3 shrink-0 text-text-muted" />
+          <CornersOut className="size-3 shrink-0 text-muted" />
         )}
       </button>
 

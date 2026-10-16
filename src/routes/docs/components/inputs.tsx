@@ -21,7 +21,7 @@ function InputsDoc() {
   return (
     <DocPage
       title="Form controls"
-      description="36px fields on background-base with the gray ring shadow; focus swaps to the brand focus ring (shadow-border-focus). No borders - elevation ring shadows only."
+      description="36px fields on bg-base with the gray ring shadow; focus swaps to the brand focus ring (borders-focus). No borders - elevation ring shadows only."
     >
       <DocSection title="SearchField" note="Toolbar search with the ⌘ hint. Type in it.">
         <Specimen>
@@ -72,7 +72,7 @@ function InputsDoc() {
         <div className="mt-4">
           <PropsTable
             props={[
-              { name: 'TextInput invalid', type: 'boolean', default: 'false', description: 'Error ring (shadow-border-error), kept on focus.' },
+              { name: 'TextInput invalid', type: 'boolean', default: 'false', description: 'Error ring (borders-error), kept on focus.' },
               { name: 'FieldLabel required', type: 'boolean', default: 'false', description: 'Appends the red asterisk.' },
               { name: '…rest', type: "ComponentProps<'input' | 'textarea'>", description: 'Native props pass through.' },
             ]}
@@ -116,7 +116,7 @@ function InputsDoc() {
       </DocSection>
 
       <DocSection title="Rules">
-        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-sm text-text-muted marker:text-text-disabled">
+        <ul className="flex list-disc flex-col gap-1.5 pl-5 text-paragraph-small text-muted marker:text-disabled">
           <li>
             Fields sitting ON a flyout surface need the hairline treatment instead of
             the white ring - see the Display menu (<InlineCode>TODO: Fix color</InlineCode>{' '}

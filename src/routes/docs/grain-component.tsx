@@ -21,45 +21,45 @@ function GrainComponentDoc() {
       </DocSection>
 
       <DocSection title="Reading the controls">
-        <ul className="flex max-w-[640px] list-disc flex-col gap-2 pl-5 text-paragraph-sm text-text-muted marker:text-text-disabled">
+        <ul className="flex max-w-[640px] list-disc flex-col gap-2 pl-5 text-paragraph-small text-muted marker:text-disabled">
           <li>
-            <b className="text-text-primary">Use case</b> loads a scenario from{' '}
+            <b className="text-primary">Use case</b> loads a scenario from{' '}
             <InlineCode>src/mocks/grain.ts</InlineCode> - claim, facts, provenance, and exits all come
             from it. Confidence and liveness reset to the scenario's own values.
           </li>
           <li>
-            <b className="text-text-primary">Confidence</b> drives density automatically
+            <b className="text-primary">Confidence</b> drives density automatically
             (<InlineCode>densityFromConfidence()</InlineCode>: high ≥ .88, medium .55-.87, low below).
-            <b className="text-text-primary"> Density override</b> forces a band regardless, to see a
+            <b className="text-primary"> Density override</b> forces a band regardless, to see a
             high-confidence scenario rendered as if it were low, or the reverse.
           </li>
           <li>
-            <b className="text-text-primary">Risk footer</b> auto-tints red at low density (an unresolved,
+            <b className="text-primary">Risk footer</b> auto-tints red at low density (an unresolved,
             narrow question) - the override lets you force it either way.
           </li>
           <li>
-            <b className="text-text-primary">Streaming</b> reveals the claim character by character via{' '}
+            <b className="text-primary">Streaming</b> reveals the claim character by character via{' '}
             <InlineCode>useStreamedText</InlineCode> - the mocked "live answer" effect. Replay restarts it
             without re-loading the scenario.
           </li>
           <li>
-            <b className="text-text-primary">Live undo window</b> adds a real countdown
+            <b className="text-primary">Live undo window</b> adds a real countdown
             (<InlineCode>ExitButton</InlineCode>'s <InlineCode>countdownSeconds</InlineCode>) to the
             scenario's first exit - it disables itself and reads "Window closed" at zero, same as a real
             Approval or Tension undo.
           </li>
           <li>
-            <b className="text-text-primary">Shell</b> docks the same content into{' '}
+            <b className="text-primary">Shell</b> docks the same content into{' '}
             <InlineCode>{'<Shell>'}</InlineCode> at line density, above a composer - toggling{' '}
-            <b className="text-text-primary">Emma off</b> degrades it to a bare search input with nothing
+            <b className="text-primary">Emma off</b> degrades it to a bare search input with nothing
             else missing (ship-gate question 3).
           </li>
         </ul>
       </DocSection>
 
       <DocSection title="See it composed into real screens">
-        <p className="max-w-[640px] text-paragraph-sm text-text-muted">
-          <Link to="/crafts/ask-emma" className="text-brand-text hover:underline">
+        <p className="max-w-[640px] text-paragraph-small text-muted">
+          <Link to="/crafts/ask-emma" className="text-brand hover:underline">
             The Ask Emma craft
           </Link>{' '}
           runs the launcher, the payroll run, the expense run and the PTO ask-thread entirely on{' '}
